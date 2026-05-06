@@ -31,8 +31,6 @@ export const STORE_MAINTAIN: StoreMaintain[] = [
   { id: 28, date: '2026-01-18', vendorCode: 'VEN002', vendorName: 'Metro Steel',    productCode: 'PRD200', productName: 'Steel Rod 10mm',   type: 'OUT', quantity: 20  },
   { id: 29, date: '2026-02-01', vendorCode: 'VEN002', vendorName: 'Metro Steel',    productCode: 'PRD200', productName: 'Steel Rod 10mm',   type: 'IN',  quantity: 50  },
   { id: 30, date: '2026-02-10', vendorCode: 'VEN002', vendorName: 'Metro Steel',    productCode: 'PRD200', productName: 'Steel Rod 10mm',   type: 'OUT', quantity: 10  },
-
-  // ── PRD305 · PVC Pipe 25mm (extra product for demo) ────
   { id: 31, date: '2026-01-08', vendorCode: 'VEN003', vendorName: 'PipeMart Co',    productCode: 'PRD305', productName: 'PVC Pipe 25mm',    type: 'IN',  quantity: 200 },
   { id: 32, date: '2026-01-15', vendorCode: 'VEN003', vendorName: 'PipeMart Co',    productCode: 'PRD305', productName: 'PVC Pipe 25mm',    type: 'OUT', quantity: 30  },
   { id: 33, date: '2026-01-25', vendorCode: 'VEN003', vendorName: 'PipeMart Co',    productCode: 'PRD305', productName: 'PVC Pipe 25mm',    type: 'OUT', quantity: 25  },

@@ -13,79 +13,68 @@ declare var bootstrap: any;
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './product-create.html',
-  styleUrl:    './product-create.css',
+  styleUrl: './product-create.css',
 })
 export class ProductCreateComponent implements OnInit {
 
-  /* ── Edit-mode inputs ── */
-  @Input() editMode   = false;
+  @Input() editMode = false;
   @Input() productData: Partial<Product> | null = null;
 
   private fb = inject(FormBuilder);
   private router = inject(Router);
-  private route  = inject(ActivatedRoute); 
+  private route = inject(ActivatedRoute);
 
- service = inject(ProductDataClient);
+  service = inject(ProductDataClient);
   editId!: number;
-
-  /* ──────────────── Signal State ──────────────── */
-
-  activeTab          = signal<TabId>('general');
-  isDragging         = signal(false);
-  imagePreviews      = signal<string[]>([]);
-  selectedFiles      = signal<File[]>([]);
-  currentIndex       = signal(0);
-  primaryIndex       = signal(0);
-  dragStartX         = signal(0);
+  activeTab = signal<TabId>('general');
+  isDragging = signal(false);
+  imagePreviews = signal<string[]>([]);
+  selectedFiles = signal<File[]>([]);
+  currentIndex = signal(0);
+  primaryIndex = signal(0);
+  dragStartX = signal(0);
   pendingDeleteIndex = signal<number | null>(null);
 
   readonly maxImages = 5;
 
-  categoryOptions:  ISelectOption[]  = CATEGORY_OPTIONS;
-  brandOptions:     ISelectOption[]  = BRAND_OPTIONS;
-  unitOptions:      ISelectOption[]  = UNIT_OPTIONS;
-  taxOptions:       ISelectOption[]  = TAX_OPTIONS;
-  discountTypes:    IDiscountOption[] = DISCOUNT_OPTIONS;
-  statusOptions:    IStatusOption[]  = STATUS_OPTIONSPRODUCT;
-  templateOptions:  ISelectOption[]  = TEMPLATE_OPTIONS;
-  ProductType:  ISelectOption[]  = PRODUCT_TYPE_OPTIONS;
+  categoryOptions: ISelectOption[] = CATEGORY_OPTIONS;
+  brandOptions: ISelectOption[] = BRAND_OPTIONS;
+  unitOptions = UNIT_OPTIONS;
+  taxOptions: ISelectOption[] = TAX_OPTIONS;
+  discountTypes: IDiscountOption[] = DISCOUNT_OPTIONS;
+  statusOptions: IStatusOption[] = STATUS_OPTIONSPRODUCT;
+  templateOptions: ISelectOption[] = TEMPLATE_OPTIONS;
+  ProductType: ISelectOption[] = PRODUCT_TYPE_OPTIONS;
 
   productForm: FormGroup = this.fb.group({
 
-    // ── Product Identity ──
-    productCode:  ['', [Validators.required, Validators.maxLength(30)]],
-    productName:  ['', [Validators.required, Validators.maxLength(200)]],
-    categoryId:   ['', Validators.required],
-    brandId:      [''],
-    unitId:       ['', Validators.required],
-    barcode:      ['', Validators.maxLength(50)],
-
-    // ── Pricing ──
-    costPrice:      [null, [Validators.required, Validators.min(0.01)]],
-    sellingPrice:   [null, [Validators.required, Validators.min(0.01)]],
-    taxId:          [''],
+    productCode: ['', [Validators.required, Validators.maxLength(30)]],
+    productName: ['', [Validators.required, Validators.maxLength(200)]],
+    categoryId: ['', Validators.required],
+    brandId: [''],
+    unitId: ['', Validators.required],
+    barcode: ['', Validators.maxLength(50)],
+    costPrice: [null, [Validators.required, Validators.min(0.01)]],
+    sellingPrice: [null, [Validators.required, Validators.min(0.01)]],
+    taxId: [''],
     isInclusiveTax: [false],
-    discountType:   ['none'],
-    discountValue:  [null],
-
-    // ── Stock ──
+    discountType: ['none'],
+    discountValue: [null],
     reorderLevel: [0],
-  maxStockLevel: [0],
-currentStock: [0],
-    // ── Advanced / Meta ──
-    description:        [''],
-    metaTagTitle:       [''],
+    maxStockLevel: [0],
+    currentStock: [0],
+    description: [''],
+    metaTagTitle: [''],
     metaTagDescription: [''],
-    isPhysical:         [false],
-    productTemplate:    [''],
-ProductType:[''],
-    // ── Status ──
+    isPhysical: [false],
+    productTemplate: [''],
+    ProductType: [''],
     status: ['active'],
     mediaFiles: [[]],
   });
 
 
-  pageTitle    = computed(() => this.editMode ? 'Edit Product'   : 'Create Product');
+  pageTitle = computed(() => this.editMode ? 'Edit Product' : 'Create Product');
   pageSubtitle = computed(() =>
     this.editMode
       ? 'Update existing product details and manage your inventory.'
@@ -104,65 +93,62 @@ ProductType:[''],
     this.productForm.get('discountType')?.value !== 'none'
   );
 
-  /* ──────────────── Lifecycle ──────────────── */
 
-ngOnInit(): void {
-  const id = this.route.snapshot.paramMap.get('id');
-  if (id) {
-    this.editMode = true;
-    this.editId   = +id;
-    const product = this.service.getById(+id);
-    console.log(product);
-    
-    if (product) {
-      this.productForm.patchValue(product);
-    this.productForm.get('currentStock')?.setValue(product.currentStock ?? 0);
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.editMode = true;
+      this.editId = +id;
+      const product = this.service.getById(+id);
+      console.log(product);
+
+      if (product) {
+        this.productForm.patchValue(product);
+        this.productForm.get('currentStock')?.setValue(product.currentStock ?? 0);
+      } else {
+        this.router.navigate(['/products']);
+      }
     } else {
-      this.router.navigate(['/productlist']);
-    }
-  } else {
-    this.generateProductCode();
-  }
-  this.productForm.get('categoryId')?.valueChanges.subscribe(() => {
-    if (!this.editMode) {
       this.generateProductCode();
     }
-  });
-}
+    this.productForm.get('categoryId')?.valueChanges.subscribe(() => {
+      if (!this.editMode) {
+        this.generateProductCode();
+      }
+    });
+  }
 
 
-generateProductCode(): void {
-  const categoryId = this.productForm.get('categoryId')?.value;
-  const prefixMap: Record<number, string> = {
-    1: 'ELEC',
-    2: 'CLTH',
-    3: 'FOOD',
-    4: 'BOOK',
-  };
-  const prefix = prefixMap[categoryId] ?? 'PROD';
-  const existingCount = this.service.products()
-    .filter(p => p.categoryId === +categoryId).length;
-  const nextNum = String(existingCount + 1).padStart(3, '0');
+  generateProductCode(): void {
+    const categoryId = this.productForm.get('categoryId')?.value;
+    const prefixMap: Record<number, string> = {
+      1: 'ELEC',
+      2: 'CLTH',
+      3: 'FOOD',
+      4: 'BOOK',
+    };
+    const prefix = prefixMap[categoryId] ?? 'PROD';
+    const existingCount = this.service.products()
+      .filter(p => p.categoryId === +categoryId).length;
+    const nextNum = String(existingCount + 1).padStart(3, '0');
 
-  const code = `${prefix}${nextNum}`; 
+    const code = `${prefix}${nextNum}`;
 
-  this.productForm.get('productCode')?.setValue(code);
-}
+    this.productForm.get('productCode')?.setValue(code);
+  }
 
 
-  /* ──────────────── Tabs ──────────────── */
 
   setTab(tab: TabId) {
     this.activeTab.set(tab);
   }
 
-  /* ──────────────── Image: Upload ──────────────── */
 
   onMultipleSelect(e: Event) {
     const input = e.target as HTMLInputElement;
     if (!input.files) return;
 
-    const files     = Array.from(input.files);
+    const files = Array.from(input.files);
     const remaining = this.maxImages - this.imagePreviews().length;
 
     files.slice(0, remaining).forEach(file => {
@@ -186,7 +172,6 @@ generateProductCode(): void {
     }
   }
 
-  /* ──────────────── Image: Delete ──────────────── */
 
   removeImage(index: number, event: Event) {
     event.stopPropagation();
@@ -225,46 +210,42 @@ generateProductCode(): void {
     }
   }
 
-  /* ──────────────── Image: Slider ──────────────── */
 
-  prev()   { if (this.currentIndex() > 0) this.currentIndex.update(v => v - 1); }
-  next()   { if (this.currentIndex() < this.imagePreviews().length - 1) this.currentIndex.update(v => v + 1); }
+  prev() { if (this.currentIndex() > 0) this.currentIndex.update(v => v - 1); }
+  next() { if (this.currentIndex() < this.imagePreviews().length - 1) this.currentIndex.update(v => v + 1); }
   goTo(i: number) { this.currentIndex.set(i); }
-  setPrimary()    { this.primaryIndex.set(this.currentIndex()); }
+  setPrimary() { this.primaryIndex.set(this.currentIndex()); }
 
-  /* ──────────────── Image: Drag on Slider ──────────────── */
 
   onDragStart(e: MouseEvent) { this.dragStartX.set(e.clientX); }
   onDragEnd(e: MouseEvent) {
     const dx = e.clientX - this.dragStartX();
-    if      (dx < -50 && this.currentIndex() < this.imagePreviews().length - 1) this.currentIndex.update(v => v + 1);
-    else if (dx >  50 && this.currentIndex() > 0)                               this.currentIndex.update(v => v - 1);
+    if (dx < -50 && this.currentIndex() < this.imagePreviews().length - 1) this.currentIndex.update(v => v + 1);
+    else if (dx > 50 && this.currentIndex() > 0) this.currentIndex.update(v => v - 1);
   }
 
-/* ──────────────── Image: File Drop Zone ──────────────── */
-onDragOver(e: DragEvent)  { e.preventDefault(); this.isDragging.set(true); }
-onDragLeave()              { this.isDragging.set(false); }
-onDrop(e: DragEvent) {
-  e.preventDefault();
-  this.isDragging.set(false);
+  onDragOver(e: DragEvent) { e.preventDefault(); this.isDragging.set(true); }
+  onDragLeave() { this.isDragging.set(false); }
+  onDrop(e: DragEvent) {
+    e.preventDefault();
+    this.isDragging.set(false);
 
-  const files     = Array.from(e.dataTransfer?.files ?? []);
-  const remaining = this.maxImages - this.imagePreviews().length;
+    const files = Array.from(e.dataTransfer?.files ?? []);
+    const remaining = this.maxImages - this.imagePreviews().length;
 
-  files.slice(0, remaining).forEach(file => {
-    if (!file.type.startsWith('image/')) return;
+    files.slice(0, remaining).forEach(file => {
+      if (!file.type.startsWith('image/')) return;
 
-    this.selectedFiles.update(arr => [...arr, file]);
+      this.selectedFiles.update(arr => [...arr, file]);
 
-    const reader  = new FileReader();
-    reader.onload = ev => {
-      this.imagePreviews.update(arr => [...arr, ev.target?.result as string]);
-      this.currentIndex.set(this.imagePreviews().length - 1);
-    };
-    reader.readAsDataURL(file);
-  });
-}
-  /* ──────────────── Helper ──────────────── */
+      const reader = new FileReader();
+      reader.onload = ev => {
+        this.imagePreviews.update(arr => [...arr, ev.target?.result as string]);
+        this.currentIndex.set(this.imagePreviews().length - 1);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
 
   hasError(field: string): boolean {
     const c = this.productForm.get(field);
@@ -273,16 +254,15 @@ onDrop(e: DragEvent) {
 
 
   buildImagesPayload() {
-  return this.imagePreviews().map((img, index) => ({
-    id: index + 1,
-    url: img, 
-    isPrimary: index === this.primaryIndex()
-  }));
-}
+    return this.imagePreviews().map((img, index) => ({
+      id: index + 1,
+      url: img,
+      isPrimary: index === this.primaryIndex()
+    }));
+  }
 
 
-  /* ──────────────── Actions ──────────────── */
- onSave() {
+  onSave() {
     if (!this.productForm.valid) {
       this.productForm.markAllAsTouched();
       return;
@@ -298,7 +278,7 @@ onDrop(e: DragEvent) {
       const updated: Product = {
         ...existing,
         ...formVal,
-        status: formVal.status, 
+        status: formVal.status,
         images: imagesPayload,
         updatedAt: new Date().toISOString()
       };
@@ -311,7 +291,7 @@ onDrop(e: DragEvent) {
         ...formVal,
         status: formVal.status,
         images: imagesPayload,
-currentStock: formVal.currentStock ?? 0,
+        currentStock: formVal.currentStock ?? 0,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
@@ -319,19 +299,11 @@ currentStock: formVal.currentStock ?? 0,
       this.service.addProduct(newProduct);
     }
 
-    this.router.navigate(['/productlist']);
+    this.router.navigate(['/products']);
   }
 
-
-  
   onCancel() {
-    // this.productForm.reset({ status: 'active', discountType: 'none', isInclusiveTax: false });
-    // this.imagePreviews.set([]);
-    // this.selectedFiles.set([]);
-    // this.currentIndex.set(0);
-    // this.primaryIndex.set(0);
-    // this.activeTab.set('general');
-    this.router.navigate(['/productlist']);
+    this.router.navigate(['/products']);
 
   }
 }

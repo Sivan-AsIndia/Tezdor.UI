@@ -45,7 +45,7 @@ export class ProductViewComponent implements OnInit {
 
         this.selectedIndex.set(primaryIndex !== -1 ? primaryIndex : 0);
       } else {
-        this.router.navigate(['/productlist']);
+        this.router.navigate(['/products']);
       }
     }
   }

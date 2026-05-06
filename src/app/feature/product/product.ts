@@ -77,12 +77,12 @@ export const PRODUCT_TYPE_OPTIONS: ISelectOption[] = [
 ];
 
 
-export const UNIT_OPTIONS: ISelectOption[] = [
-  { value: '1', label: 'Pcs' },
-  { value: '2', label: 'Kg' },
-  { value: '3', label: 'Litre' },
-  { value: '4', label: 'Box' },
-  { value: '5', label: 'Dozen' },
+export const UNIT_OPTIONS:{ value: number; label: string }[] = [
+  { value: 1, label: 'Pcs' },
+  { value: 2, label: 'Kg' },
+  { value: 3, label: 'Litre' },
+  { value: 4, label: 'Box' },
+  { value:5, label: 'Dozen' },
 ];
 
 export const TAX_OPTIONS: ISelectOption[] = [
@@ -118,3 +118,15 @@ export const TEMPLATE_OPTIONS: ISelectOption[] = [
   { value: 'minimal', label: 'Minimal' },
   { value: 'detailed', label: 'Detailed' },
 ];
+export interface ProductSummary {
+  productCode: string;
+  productName: string;
+  vendorCode: string;
+  vendorName: string;
+  totalIn: number;
+  unitId:number;
+  totalOut: number;
+  closingStock: number;
+  transactionCount: number;
+}
+export interface DropdownOption { value: string | number; label: string; }

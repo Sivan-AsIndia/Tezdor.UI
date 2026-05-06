@@ -13,17 +13,17 @@ export class PurchaseInvoiceDataClient {
     return this.invoices().find(i => i.id === id);
   }
 
-  // Auto-compute paymentStatus from amountPaid vs grandTotal
   computePaymentStatus(grandTotal: number, amountPaid: number): PaymentStatus {
     if (amountPaid <= 0)              return 'unpaid';
     if (amountPaid >= grandTotal)     return 'paid';
     return 'partial';
   }
 
-  addInvoice(inv: Omit<PurchaseInvoice, 'id'>): void {
-    const newId = Math.max(0, ...this.invoices().map(i => i.id)) + 1;
-    this.invoices.update(list => [...list, { id: newId, ...inv }]);
+  add(data: any) {
+   const newId = Math.max(0, ...this.invoices().map(i => i.id)) + 1;
+    this.invoices.update(list => [...list, { id: newId, ...data }]);
   }
+
 
   updateInvoice(id: number, changes: Partial<PurchaseInvoice>): void {
     this.invoices.update(list =>

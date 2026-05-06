@@ -24,7 +24,7 @@ export class HorizontalSidebarComponent implements OnInit {
     createEmployee: ['/employee/create', '/employee/stepper', '/product/create-category'],
     viewEmployee:   ['/employee/view', '/product/view-model', '/employee/view1', '/vendor'],
     viewEmployees:  ['/employees', '/employees/create', '/employee/edit'],
-    productMenu:    ['/productlist', '/productCreate', '/productEdit', '/product/view', '/product'],
+    productMenu:    ['/products', '/productCreate', '/productEdit', '/product/view', '/product'],
   };
 
  private readonly menuColorMap: Record<string, { active: string; text: string; hover: string,before:string }> = {

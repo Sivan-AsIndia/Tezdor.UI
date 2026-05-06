@@ -1,16 +1,123 @@
 <style>
   @media (max-width:1299px) {
-    .logo-img { display: none; }
-    .tezdor-logo1 { display: flex !important; flex-direction: column; }
-  }
-  .left-sidebar { left: 20px; top: 20px; border-radius: 20px; padding-bottom: 22px; }
-  .fixed-profile { position: absolute; bottom: 0; left: 0; right: 0; padding-bottom: 16px; z-index: 111111; }
-  .sidebar-link .hide-menu { font-weight: 600; font-size: 13.5px; }
-  .sidebar-link.active-link { background-color: var(--bs-primary-bg-subtle, #e7f1ff); border-radius: 8px; }
-  .sidebar-link.active-link .hide-menu { color: var(--bs-primary, #4f46e5) !important; font-weight: 700; }
-  .sidebar-link.active-link .aside-icon iconify-icon { color: var(--bs-primary, #4f46e5); }
-</style>
+    .logo-img {
+      display: none;
+    }
 
+    .tezdor-logo1 {
+      display: flex !important;
+      flex-direction: column;
+    }
+
+
+  }
+
+  .first-level .sidebar-link .hide-menu {
+    font-weight: 600;
+    font-size: 13.5px;
+    color: black;
+  }
+
+  .left-sidebar {
+    left: 20px;
+    top: 20px;
+    border-radius: 20px;
+    padding-bottom: 22px;
+  }
+
+  .fixed-profile {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding-bottom: 16px;
+    z-index: 111111;
+  }
+
+
+
+  /* Per-menu active dot color */
+  .menu-warning .first-level .sidebar-link.active-submenu .sidebar-icon {
+    background-color: #ffc107;
+  }
+
+  .menu-success .first-level .sidebar-link.active-submenu .sidebar-icon {
+    background-color: #13a65b;
+  }
+
+  .menu-info .first-level .sidebar-link.active-submenu .sidebar-icon {
+    background-color: #01b8d8;
+  }
+
+  /* Per-menu active text color */
+  .menu-warning .first-level .sidebar-link.active-submenu .hide-menu {
+    font-weight: 700;
+    color: #e6a817;
+  }
+
+  .menu-success .first-level .sidebar-link.active-submenu .hide-menu {
+    font-weight: 700;
+    color: #13a65b;
+  }
+
+  .menu-error .first-level .sidebar-link.active-submenu .hide-menu {
+    font-weight: 700;
+    color: red;
+  }
+
+  .menu-info .first-level .sidebar-link.active-submenu .hide-menu {
+    font-weight: 700;
+    color: #01b8d8;
+  }
+
+  @media (prefers-color-scheme: dark) {
+
+    .sidebar-link.before\:bg-lightprimary:hover,
+    .sidebar-link.bg-lightprimary:hover {
+      background-color: rgba(93, 135, 255, 0.15) !important;
+    }
+
+    .sidebar-link.before\:bg-lightsuccess:hover,
+    .sidebar-link.bg-lightsuccess:hover {
+      background-color: rgba(19, 166, 91, 0.15) !important;
+    }
+
+    .sidebar-link.before\:bg-lightinfo:hover,
+    .sidebar-link.bg-lightinfo:hover {
+      background-color: rgba(1, 184, 216, 0.15) !important;
+    }
+
+    .sidebar-link.before\:bg-lighterror:hover,
+    .sidebar-link.bg-lighterror:hover {
+      background-color: rgba(250, 82, 82, 0.15) !important;
+    }
+
+    .sidebar-link.before\:bg-lightwarning:hover,
+    .sidebar-link.bg-lightwarning:hover {
+      background-color: rgba(255, 165, 0, 0.15) !important;
+    }
+
+    .first-level .sidebar-link .hide-menu {
+      color: #a0aec0;
+    }
+
+    .first-level .sidebar-link .sidebar-icon {
+      background-color: #4a5568;
+    }
+
+    .menu-warning .first-level .sidebar-link.active-submenu .hide-menu {
+      color: #ffc107;
+    }
+
+    .menu-success .first-level .sidebar-link.active-submenu .hide-menu {
+      color: #13a65b;
+    }
+
+    .menu-info .first-level .sidebar-link.active-submenu .hide-menu {
+      color: #01b8d8;
+    }
+  }
+</style>
 <aside class="left-sidebar with-vertical"
   (mouseenter)="sidebar.isHovered.set(true)"
   (mouseleave)="sidebar.isHovered.set(false)">
@@ -64,9 +171,9 @@
         </li>
 
         <li class="sidebar-item">
-          <a class="sidebar-link before:bg-lightwarning hover:text-warning"
-            routerLink="/products"
-            routerLinkActive="active-link text-warning">
+          <a     routerLink="/products" class="cursor-pointer sidebar-link before:bg-lightwarning hover:text-warning dark:hover:text-warning"
+             [class.active]="openMenu() === 'productMenu'" [class.text-warning]="openMenu() === 'productMenu'"
+            [class.activebg]="openMenu() === 'productMenu'" (click)="toggle('productMenu')">
             <span class="aside-icon p-2 bg-warning-subtle rounded-1">
               <iconify-icon icon="solar:box-line-duotone" class="fs-6"></iconify-icon>
             </span>
@@ -75,9 +182,9 @@
         </li>
 
         <li class="sidebar-item">
-          <a class="sidebar-link before:bg-lightsuccess hover:text-success"
-            routerLink="/store"
-            routerLinkActive="active-link text-success">
+          <a    routerLink="/store" class="cursor-pointer sidebar-link before:bg-lightsuccess hover:text-success dark:hover:text-success"
+            [class.active]="openMenu() === 'storeMenu'" [class.text-success]="openMenu() === 'storeMenu'"
+            [class.activebg]="openMenu() === 'storeMenu'" (click)="toggle('storeMenu')">
             <span class="aside-icon p-2 bg-success-subtle rounded-1">
               <iconify-icon icon="mdi:warehouse" class="fs-6"></iconify-icon>
             </span>
@@ -86,9 +193,9 @@
         </li>
 
         <li class="sidebar-item">
-          <a class="sidebar-link before:bg-lightinfo hover:text-info"
-            routerLink="/purchase-order"
-            routerLinkActive="active-link text-info">
+          <a    routerLink="/purchase-order" class="cursor-pointer sidebar-link  before:bg-lightinfo hover:text-info dark:hover:text-info"
+            [class.active]="openMenu() === 'purchaseMenu'" [class.text-info]="openMenu() === 'purchaseMenu'"
+            [class.activebg]="openMenu() === 'purchaseMenu'" (click)="toggle('purchaseMenu')">
             <span class="aside-icon p-2 bg-info-subtle rounded-1">
               <iconify-icon icon="solar:cart-3-line-duotone" class="fs-6"></iconify-icon>
             </span>
@@ -97,9 +204,9 @@
         </li>
 
         <li class="sidebar-item">
-          <a class="sidebar-link before:bg-lighterror hover:text-danger"
-            routerLink="/purchase-invoice"
-            routerLinkActive="active-link text-danger">
+          <a    routerLink="/purchase-invoice" class="cursor-pointer sidebar-link before:bg-lightsuccess hover:text-success dark:hover:text-success"
+            [class.active]="openMenu() === 'purchaseinvoice'" [class.text-success]="openMenu() === 'purchaseinvoice'"
+            [class.activebg]="openMenu() === 'purchaseinvoice'" (click)="toggle('purchaseinvoice')">
             <span class="aside-icon p-2 bg-danger-subtle rounded-1">
               <iconify-icon icon="solar:document-text-line-duotone" class="fs-6"></iconify-icon>
             </span>
@@ -114,9 +221,9 @@
         </li>
 
         <li class="sidebar-item">
-          <a class="sidebar-link before:bg-lightwarning hover:text-warning"
-            routerLink="/employees"
-            routerLinkActive="active-link text-warning">
+          <a routerLink="/employees" class="cursor-pointer sidebar-link  before:bg-lightwarning hover:text-warning dark:hover:text-warning"
+            [class.active]="isHighlighted('viewEmployees')" [class.text-warning]="isHighlighted('viewEmployees')"
+            [class.activebg]="isHighlighted('viewEmployees')" (click)="toggle('viewEmployees')">
             <span class="aside-icon p-2 bg-warning-subtle rounded-1">
               <iconify-icon icon="solar:users-group-rounded-line-duotone" class="fs-6"></iconify-icon>
             </span>
@@ -125,9 +232,9 @@
         </li>
 
         <li class="sidebar-item">
-          <a class="sidebar-link before:bg-lightsuccess hover:text-success"
-            routerLink="/attendance"
-            routerLinkActive="active-link text-success">
+          <a routerLink="/attendance" class="cursor-pointer sidebar-link before:bg-lightprimary hover:text-primary dark:hover:text-primary"
+            [class.active]="isHighlighted('attendance')" [class.text-primary]="isHighlighted('attendance')"
+            [class.activebg]="isHighlighted('attendance')" (click)="toggle('attendance')">
             <span class="aside-icon p-2 bg-success-subtle rounded-1">
               <iconify-icon icon="solar:calendar-date-line-duotone" class="fs-6"></iconify-icon>
             </span>
@@ -136,9 +243,9 @@
         </li>
 
         <li class="sidebar-item">
-          <a class="sidebar-link before:bg-lightinfo hover:text-info"
-            routerLink="/salary"
-            routerLinkActive="active-link text-info">
+          <a routerLink="/salary" class="cursor-pointer sidebar-link before:bg-lightsuccess hover:text-success dark:hover:text-success"
+            [class.active]="isHighlighted('salary')" [class.text-success]="isHighlighted('salary')"
+            [class.activebg]="isHighlighted('salary')" (click)="toggle('salary')">
             <span class="aside-icon p-2 bg-info-subtle rounded-1">
               <iconify-icon icon="solar:wallet-money-line-duotone" class="fs-6"></iconify-icon>
             </span>
@@ -147,9 +254,9 @@
         </li>
 
         <li class="sidebar-item">
-          <a class="sidebar-link before:bg-lighterror hover:text-danger"
-            routerLink="/petty-cash"
-            routerLinkActive="active-link text-danger">
+          <a routerLink="/petty-cash" class="cursor-pointer sidebar-link before:bg-lighterror hover:text-error dark:hover:text-error"
+            [class.active]="isHighlighted('petty-cash')" [class.text-error]="isHighlighted('petty-cash')"
+            [class.activebg]="isHighlighted('petty-cash')" (click)="toggle('petty-cash')">
             <span class="aside-icon p-2 bg-danger-subtle rounded-1">
               <iconify-icon icon="solar:hand-money-line-duotone" class="fs-6"></iconify-icon>
             </span>

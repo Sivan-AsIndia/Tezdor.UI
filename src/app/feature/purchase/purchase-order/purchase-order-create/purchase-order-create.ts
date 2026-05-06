@@ -92,7 +92,7 @@ export class PurchaseOrderCreateComponent {
 
       if (!po) {
         this.toast.error('Purchase Order not found.');
-        this.router.navigate(['/purchase-order-list']);
+        this.router.navigate(['/purchase-order']);
         return;
       }
 
@@ -243,11 +243,11 @@ export class PurchaseOrderCreateComponent {
       this.toast.success('Purchase Order created successfully!');
     }
 
-    this.router.navigate(['/purchase-order-list']);
+    this.router.navigate(['/purchase-order']);
   }
 
   onCancel(): void {
-    this.router.navigate(['/purchase-order-list']);
+    this.router.navigate(['/purchase-order']);
   }
 
   hasError(controlName: string) {
