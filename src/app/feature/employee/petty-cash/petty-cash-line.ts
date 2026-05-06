@@ -1,23 +1,30 @@
 export interface PettyCashLine {
 
-  // ===== CORE =====
-  pettyCashLineId?: string;
-  pettyCashId?: string;
+  pettyCashLineId: string;
+  pettyCashId: string; // FK → Header
 
-  // ===== EXPENSE =====
-  expenseAccountId: string;
-  description: string;
 
-  amount: number;           // required
+  // ===== AMOUNTS =====
+  requestedAmount?: number;
+  approvedAmount?: number;
+  disbursedAmount?: number;
 
-  // ===== TAX =====
-  taxId?: string;
-  taxAmount?: number;       // derived
+  expenseAmount?: number;
+  taxAmount?: number;
 
-  // ===== TOTAL =====
-  totalLineAmount?: number; // amount + tax
+  returnedAmount?: number;
+  replenishmentAmount?: number;
 
-  // ===== SYSTEM =====
-  createdAt?: Date;
-  updatedAt?: Date;
+
+  // ===== AUDIT =====
+  createdAt: string;
+  createdByUserId: string;
+
+  updatedAt?: string;
+  updatedByUserId?: string;
+
+  isDeleted: boolean;
+
+  deletedAt?: string;
+  deletedByUserId?: string;
 }

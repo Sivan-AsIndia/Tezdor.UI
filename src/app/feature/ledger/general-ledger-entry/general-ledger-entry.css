@@ -329,36 +329,40 @@ position: absolute;
   color: #d1d5db;
 }
 
-.badge.open {
-  background: #e8f5e9;
-  color: #2e7d32;
+.source-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
 
-.badge.active {
-  background: #e3f2fd;
-  color: #1565c0;
+.source-icon i {
+  font-size: 15px;
 }
 
-.badge.inactive {
-  background: #eeeeee;
-  color: #616161;
-}
-
-.badge.submitted {
-  background: #fff3e0;
-  color: #ef6c00;
-}
-.badge.draft {
-  background: #fff8e1;
-  color: #f9a825;
-}
-
-  @media (max-width: 576px) {
-.topbar-actions{
-    flex-wrap: wrap;
-}
+/* GREEN (Journal) */
+.source-icon.green {
+  background: #dcfce7;
+  color: #16a34a;
 }
 
 .filter-btn {
     width: 40px;
+}
+
+/* BLUE (Petty Cash) */
+.source-icon.blue {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+/* GRAY (Fallback) */
+.source-icon.gray {
+  background: #f3f4f6;
+  color: #6b7280;
 }

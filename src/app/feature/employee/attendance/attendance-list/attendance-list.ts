@@ -30,6 +30,9 @@ export class AttendanceListComponent {
   isEditMode = signal(false);
   offCanvas = signal(false);
 
+  filterTop = 0;
+  filterRight = 0;
+
   sortColumn = signal<keyof Attendance | ''>('');
   sortDirection = signal<'asc' | 'desc'>('asc');
   selectedAttendance = signal<Attendance | null>(null);
@@ -61,34 +64,34 @@ export class AttendanceListComponent {
 
   showFilter = signal(false);
 
-filters = signal<{
-  status: AttendanceStatus | null;
-}>({
-  status: null
-});
+  filters = signal<{
+    status: AttendanceStatus | null;
+  }>({
+    status: null
+  });
 
   statusTouched = signal(false);
   // ===== FILTER =====
   filtered = computed(() => {
 
-  const search = this.searchValue().toLowerCase().trim();
-  const filter = this.filters();
+    const search = this.searchValue().toLowerCase().trim();
+    const filter = this.filters();
 
-  return this.attendances().filter((a: Attendance) => {
+    return this.attendances().filter((a: Attendance) => {
 
-    const number = a.attendanceNumber?.toLowerCase() ?? '';
-    const attendancePeriodName = a.attendancePeriodName?.toLowerCase() ?? '';
+      const number = a.attendanceNumber?.toLowerCase() ?? '';
+      const attendancePeriodName = a.attendancePeriodName?.toLowerCase() ?? '';
 
-    const matchesSearch =
-      number.includes(search) || attendancePeriodName.includes(search);
+      const matchesSearch =
+        number.includes(search) || attendancePeriodName.includes(search);
 
-    const matchesStatus =
-      !filter.status || a.status === filter.status;
+      const matchesStatus =
+        !filter.status || a.status === filter.status;
 
-    return matchesSearch && matchesStatus;
+      return matchesSearch && matchesStatus;
 
+    });
   });
-});
 
   // ===== SORT =====
   sorted = computed(() => {
@@ -125,21 +128,21 @@ filters = signal<{
     this.searchValue.set(val);
     this.page.set(1);
   }
-  
+
   selectStatus(status: number) {
-  this.filters.update(f => ({
-    ...f,
-    status: f.status === status ? null : status
-  }));
-}
+    this.filters.update(f => ({
+      ...f,
+      status: f.status === status ? null : status
+    }));
+  }
 
-closeFilter() {
-  this.showFilter.set(false);
-}
+  closeFilter() {
+    this.showFilter.set(false);
+  }
 
-resetFilters() {
-  this.filters.set({ status: null });
-}
+  resetFilters() {
+    this.filters.set({ status: null });
+  }
 
   sortBy(column: keyof Attendance) {
     if (this.sortColumn() === column) {
@@ -166,22 +169,22 @@ resetFilters() {
     this.router.navigate(['/attendance/create']);
   }
 
-onEdit(a: Attendance) {
+  onEdit(a: Attendance) {
 
-  const clone: Attendance = {
-    ...a,
-    attendanceLines: [...(a.attendanceLines ?? [])]
-  };
+    const clone: Attendance = {
+      ...a,
+      attendanceLines: [...(a.attendanceLines ?? [])]
+    };
 
-  this.model.set(clone);
+    this.model.set(clone);
 
-  this.isEditMode.set(true);
+    this.isEditMode.set(true);
 
-  this.errors.set({});
-  this.statusTouched.set(true);
+    this.errors.set({});
+    this.statusTouched.set(true);
 
-  this.offCanvas.set(true);
-}
+    this.offCanvas.set(true);
+  }
 
   onView(a: Attendance) {
     this.router.navigate(['/attendance', a.attendanceId]);
@@ -219,8 +222,8 @@ onEdit(a: Attendance) {
       'badge bg-info': status === AttendanceStatus.Submitted,
       'badge bg-success': status === AttendanceStatus.Approved,
       'badge bg-dark': status === AttendanceStatus.Locked,
-       'badge bg-primary': status === AttendanceStatus.Open,
-      
+      'badge bg-primary': status === AttendanceStatus.Open,
+
     };
   }
 
@@ -230,7 +233,7 @@ onEdit(a: Attendance) {
       case AttendanceStatus.Submitted: return 'Submitted';
       case AttendanceStatus.Approved: return 'Approved';
       case AttendanceStatus.Locked: return 'Locked';
-       case AttendanceStatus.Open: return 'Open';
+      case AttendanceStatus.Open: return 'Open';
       default: return '';
     }
   }
@@ -323,21 +326,21 @@ onEdit(a: Attendance) {
 
 
     try {
-    if (this.isEditMode()) {
+      if (this.isEditMode()) {
 
-      this.service.updateAttendance({ ...m });
-      this.toast.success('Attendance updated successfully');
+        this.service.updateAttendance({ ...m });
+        this.toast.success('Attendance updated successfully');
 
-    } else {
+      } else {
 
-      this.service.addAttendance({ ...m });
-      this.toast.success('Attendance created successfully');
+        this.service.addAttendance({ ...m });
+        this.toast.success('Attendance created successfully');
 
+      }
+    } catch (err: any) {
+      this.toast.error(err.message);
+      return;
     }
-} catch (err: any) {
-  this.toast.error(err.message);
-  return;
-}
 
     this.close();
     this.isEditMode.set(false);
@@ -377,11 +380,11 @@ onEdit(a: Attendance) {
 
 
 
-close() {
-  this.reset();          
-  this.isEditMode.set(false); 
-  this.offCanvas.set(false);  
-}
+  close() {
+    this.reset();
+    this.isEditMode.set(false);
+    this.offCanvas.set(false);
+  }
 
 
   hasError(field: string): boolean {
@@ -394,6 +397,16 @@ close() {
 
   setError(field: string, message: string) {
     this.errors.update(e => ({ ...e, [field]: message }));
+  }
+
+  toggleFilter(): void {
+    const btn = document.querySelector('.filter-btn') as HTMLElement;
+    const rect = btn?.getBoundingClientRect();
+    if (rect) {
+      this.filterTop = rect.bottom + 8;
+      this.filterRight = window.innerWidth - rect.right + -65;
+    }
+    this.showFilter.set(true);
   }
 
   clearError(field: string) {

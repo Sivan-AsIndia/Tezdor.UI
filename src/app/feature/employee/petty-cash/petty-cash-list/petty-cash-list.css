@@ -330,32 +330,40 @@ position: absolute;
   color: #d1d5db;
 }
 
-.badge.open {
-  background: #e8f5e9;
-  color: #2e7d32;
+.badge {
+  padding: 4px 10px;
+  font-size: 11px;
+  border-radius: 12px;
+  font-weight: 500;
 }
 
-.badge.active {
-  background: #e3f2fd;
-  color: #1565c0;
-}
+/* COLORS */
+.badge-draft { background: #f1f3f5; color: #6c757d; }
+.badge-submitted { background: #e7f1ff; color: #0d6efd; }
+.badge-review { background: #fff3cd; color: #856404; }
 
-.badge.inactive {
-  background: #eeeeee;
-  color: #616161;
-}
+.badge-approved { background: #d1e7dd; color: #0f5132; }
+.badge-rejected { background: #f8d7da; color: #842029; }
 
-.badge.submitted {
-  background: #fff3e0;
-  color: #ef6c00;
-}
-.badge.draft {
-  background: #fff8e1;
-  color: #f9a825;
-}
+.badge-info { background: #cff4fc; color: #055160; }
+.badge-warning { background: #fff3cd; color: #664d03; }
+.badge-pending { background: #ffe5b4; color: #8a6d3b; }
+.badge-verified { background: #e2f0ff; color: #084298; }
 
+.badge-posted { background: #d1e7dd; color: #0f5132; }
+.badge-reversed { background: #f8d7da; color: #842029; }
+
+.badge-success { background: #d1e7dd; color: #0f5132; }
+.badge-cancelled { background: #f8d7da; color: #842029; }
+.badge-closed { background: #e2e3e5; color: #41464b; }
+
+.badge-default { background: #f1f3f5; color: #6c757d; }
   @media (max-width: 576px) {
 .topbar-actions{
     flex-wrap: wrap;
 }
+}
+
+.filter-btn {
+    width: 40px;
 }

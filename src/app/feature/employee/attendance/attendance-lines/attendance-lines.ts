@@ -1,12 +1,12 @@
 import { Component, computed, effect, inject, signal, viewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { AttendanceDataClient } from '../attendance-data-client';
-import { AttendanceType, AttendanceLine } from '../attendance-line';
-import { ToastNotifier } from '../../../../core/services/toast';
+import { AttendanceLine, AttendanceType } from '../attendance-line';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ConfirmModalComponent } from '../../../../shared/components/confirm-modal/confirm-modal';
 import { AttendanceStatus } from '../attendance';
+import { AttendanceDataClient } from '../attendance-data-client';
 import { EmployeeDataClient } from '../../employee-data-client';
+import { ToastNotifier } from '../../../../core/services/toast';
 
 @Component({
   selector: 'app-attendance-lines',
@@ -15,7 +15,6 @@ import { EmployeeDataClient } from '../../employee-data-client';
   styleUrl: './attendance-lines.css',
 })
 export class AttendanceLinesComponent {
-
 
   private readonly service = inject(AttendanceDataClient);
   private readonly router = inject(Router);
@@ -34,32 +33,6 @@ export class AttendanceLinesComponent {
   selectedLine = signal<AttendanceLine | null>(null);
   filterDate = signal<string>('');
 
-dates = computed(() => {
-  const att = this.attendance();
-  if (!att?.fromDate || !att?.toDate) return [];
-
-  const start = new Date(att.fromDate);
-  const end = new Date(att.toDate);
-
-  const result: string[] = [];
-  const d = new Date(start);
-
-  while (d <= end) {
-    result.push(d.toISOString().split('T')[0]); // YYYY-MM-DD
-    d.setDate(d.getDate() + 1);
-  }
-
-  return result;
-});
-
-  employeeMap = computed(() => {
-    const map: Record<string, any> = {};
-    this.employees().forEach(e => {
-      map[e.employeeId!] = e;
-    });
-    return map;
-  });
-
   errors = signal<Record<string, string>>({});
   selectedRow = signal<AttendanceLine | null>(null);
 
@@ -67,24 +40,15 @@ dates = computed(() => {
   page = signal(1);
   pageSize = signal(10);
 
-  sortColumn = signal<keyof AttendanceLine | ''>('');
-  sortDirection = signal<'asc' | 'desc'>('asc');
+  attendancePage = signal(1);
+  attendancePageSize = signal(10);
 
-canAdd = computed(() => {
-  const att = this.attendance();
-  if (!att) return false;
+  editingLineId = signal<string | null>(null);
 
-  const today = new Date().toISOString().split('T')[0];
-
-  return (
-    att.status === AttendanceStatus.Open && // Open
-    !!att.fromDate &&
-    !!att.toDate &&
-    today >= att.fromDate &&
-    today <= att.toDate
-  );
-});
-
+  editForm = signal({
+    inTime: '',
+    outTime: ''
+  });
 
   // use service signal
   employees = this.empService.employees;
@@ -99,14 +63,6 @@ canAdd = computed(() => {
   });
   viewMode = signal<'table' | 'grid'>('table');
 
-
-
-  getLine(empId: string, date: string) {
-    return this.lines().find(x =>
-      x.employeeId === empId &&
-      x.attendanceDate === date
-    );
-  }
 
 
   constructor() {
@@ -126,39 +82,153 @@ canAdd = computed(() => {
 
       this.loadAttendance(id);
     });
+
+    effect(() => {
+      this.selectedEmployee();
+      this.attendancePage.set(1); // reset when opening modal
+    });
   }
 
 
-  loadAttendance(id: string) {
-    const data = this.service.attendanceList()
-      .find(x => x.attendanceId === id);
 
-    if (data) {
-      this.service.setAttendance(data);      // header
-      this.service.loadLinesByAttendanceId(id); // 🔥 attach lines
+
+  // == computed ===
+
+  dates = computed(() => {
+    const att = this.attendance();
+    if (!att?.fromDate || !att?.toDate) return [];
+
+    const start = new Date(att.fromDate);
+    const end = new Date(att.toDate);
+
+    const result: string[] = [];
+    const d = new Date(start);
+
+    while (d <= end) {
+      result.push(d.toISOString().split('T')[0]); // YYYY-MM-DD
+      d.setDate(d.getDate() + 1);
     }
-  }
-  // ===== FILTER =====
-filtered = computed(() => {
-  const search = this.searchValue().trim().toLowerCase();
-  const dateFilter = this.filterDate();
 
-  return this.lines().filter(l => {
-
-    const emp = this.getEmployeeName(l.employeeId)?.toLowerCase() ?? '';
-    const date = l.attendanceDate ?? '';
-
-    const matchesSearch =
-      !search ||
-      emp.includes(search) ||
-      date.toLowerCase().includes(search);
-
-    const matchesDate =
-      !dateFilter || date === dateFilter;
-
-    return matchesSearch && matchesDate;
+    return result;
   });
-});
+
+  employeeMap = computed(() => {
+    const map: Record<string, any> = {};
+    this.employees().forEach(e => {
+      map[e.employeeId!] = e;
+    });
+    return map;
+  });
+
+  paginatedEmployeeAttendance = computed(() => {
+    const start = (this.attendancePage() - 1) * this.attendancePageSize();
+    return this.employeeAttendanceLine().slice(start, start + this.attendancePageSize());
+  });
+
+  attendanceTotalPages = computed(() =>
+    Math.ceil(this.employeeAttendanceLine().length / this.attendancePageSize())
+  );
+
+  attendancePageNumbers = computed(() => {
+    return Array.from(
+      { length: this.attendanceTotalPages() },
+      (_, i) => i + 1
+    );
+  });
+
+
+
+
+
+
+  onAttendancePageSizeChange(size: number) {
+    this.attendancePageSize.set(size);
+    this.attendancePage.set(1); // reset page
+  }
+
+
+  goToLedgerPage(page: number) {
+    if (page < 1 || page > this.attendanceTotalPages()) return;
+    this.attendancePage.set(page);
+  }
+
+
+
+  sortColumn = signal<keyof AttendanceLine | ''>('');
+  sortDirection = signal<'asc' | 'desc'>('asc');
+
+  selectedEmployee = signal<string | null>(null);
+
+  canAdd = computed(() => {
+    const att = this.attendance();
+    if (!att) return false;
+
+    const today = new Date().toISOString().split('T')[0];
+
+    return (
+      att.status === AttendanceStatus.Open && // Open
+      !!att.fromDate &&
+      !!att.toDate &&
+      today >= att.fromDate &&
+      today <= att.toDate
+    );
+  });
+
+
+  employeeSummary = computed(() => {
+    const map = new Map<string, any>();
+
+    this.filtered().forEach(a => {
+
+      if (!map.has(a.employeeId)) {
+        map.set(a.employeeId, {
+          employeeId: a.employeeId,
+          fromDate: a.attendanceDate,
+          toDate: a.attendanceDate,
+          totalPresent: 0,
+          totalWorkingHours: 0,
+          totalOtMinutes: 0
+        });
+      }
+
+      const item = map.get(a.employeeId);
+
+      if (a.attendanceDate < item.fromDate) item.fromDate = a.attendanceDate;
+      if (a.attendanceDate > item.toDate) item.toDate = a.attendanceDate;
+
+      if (a.attendanceType === AttendanceType.Present) {
+        item.totalPresent++;
+      }
+
+      item.totalWorkingHours += a.workingHours || 0;
+      item.totalOtMinutes += a.overtimeHours || 0;
+    });
+
+    return Array.from(map.values());
+  });
+
+
+  // ===== FILTER =====
+  filtered = computed(() => {
+    const search = this.searchValue().trim().toLowerCase();
+    const dateFilter = this.filterDate();
+
+    return this.lines().filter(l => {
+
+      const emp = this.getEmployeeName(l.employeeId)?.toLowerCase() ?? '';
+      const date = l.attendanceDate ?? '';
+
+      const matchesSearch =
+        !search ||
+        emp.includes(search) ||
+        date.toLowerCase().includes(search);
+
+      const matchesDate =
+        !dateFilter || date === dateFilter;
+
+      return matchesSearch && matchesDate;
+    });
+  });
 
   // ===== SORT =====
   sorted = computed(() => {
@@ -178,8 +248,26 @@ filtered = computed(() => {
     });
   });
 
+  sortedSummary = computed(() => {
+    const data = [...this.employeeSummary()];
+    const dir = this.sortDirection();
+
+    return data.sort((a, b) => {
+      const valA = a.totalWorkingHours;
+      const valB = b.totalWorkingHours;
+
+      return dir === 'asc' ? valA - valB : valB - valA;
+    });
+  });
+  paginatedSummary = computed(() => {
+    const start = (this.page() - 1) * this.pageSize();
+    return this.sortedSummary().slice(start, start + this.pageSize());
+  });
+
   // ===== PAGINATION =====
   total = computed(() => this.sorted().length);
+
+  totalEmployees = computed(() => this.employeeSummary().length);
 
   paginated = computed(() => {
     const start = (this.page() - 1) * this.pageSize();
@@ -187,13 +275,75 @@ filtered = computed(() => {
   });
 
   totalPages = computed(() =>
-    Math.ceil(this.total() / this.pageSize())
+    Math.ceil(this.employeeSummary().length / this.pageSize())
   );
 
   paginatedEmployees = computed(() => {
-  const start = (this.page() - 1) * this.pageSize();
-  return this.employees().slice(start, start + this.pageSize());
-});
+    const start = (this.page() - 1) * this.pageSize();
+    return this.employees().slice(start, start + this.pageSize());
+  });
+
+  employeeAttendanceLine = computed(() => {
+    const empId = this.selectedEmployee();
+    if (!empId) return [];
+
+    return this.lines()   // FIX HERE
+      .filter(x => x.employeeId === empId)
+      .sort((a, b) => a.attendanceDate.localeCompare(b.attendanceDate));
+  });
+
+  empTotalPresent = computed(() =>
+    this.employeeAttendanceLine().filter(x => x.attendanceType === AttendanceType.Present).length
+  );
+
+  empTotalHours = computed(() =>
+    this.employeeAttendanceLine().reduce((sum, x) => sum + (x.workingHours || 0), 0)
+  );
+
+  empTotalOT = computed(() =>
+    this.employeeAttendanceLine().reduce((sum, x) => sum + (x.overtimeHours || 0), 0)
+  );
+
+  empFromDate = computed(() => this.employeeAttendanceLine()[0]?.attendanceDate);
+  empToDate = computed(() => this.employeeAttendanceLine().at(-1)?.attendanceDate);
+
+
+  workingHours = computed(() => {
+    const f = this.form();
+    if (!f.inTime || !f.outTime) return 0;
+
+    const [h1, m1] = f.inTime.split(':').map(Number);
+    const [h2, m2] = f.outTime.split(':').map(Number);
+
+    return ((h2 * 60 + m2) - (h1 * 60 + m1)) / 60;
+  });
+
+
+
+
+
+
+  getLine(empId: string, date: string) {
+    return this.lines().find(x =>
+      x.employeeId === empId &&
+      x.attendanceDate === date
+    );
+  }
+
+
+
+  // load data for edit
+
+  loadAttendance(id: string) {
+    const data = this.service.attendanceList()
+      .find(x => x.attendanceId === id);
+
+    if (data) {
+      this.service.setAttendance(data);      // header
+      this.service.loadLinesByAttendanceId(id); // 🔥 attach lines
+    }
+  }
+
 
   // ===== ACTIONS =====
   onSearch(val: string) {
@@ -230,19 +380,52 @@ filtered = computed(() => {
 
 
   openRowDetails(row: AttendanceLine) {
-  this.selectedRow.set(row);
-}
+    this.selectedRow.set(row);
+  }
   // ===== LINE ACTIONS =====
+  startEdit(row: AttendanceLine) {
+    this.editingLineId.set(row.attendanceLineId);
 
-  // onEmployeeChange(value: string) {
-  //   this.toast.success(value);
+    this.editForm.set({
+      inTime: row.inTime ?? '',
+      outTime: row.outTime ?? ''
+    });
+  }
 
-  //   this.form.set({
-  //     ...this.form(),
-  //     employeeId: value
-  //   });
-  // }
+  cancelEdit() {
+    this.editingLineId.set(null);
+  }
 
+  saveEdit(row: AttendanceLine) {
+    const f = this.editForm();
+
+    if (!f.inTime || !f.outTime) return;
+    if (f.inTime >= f.outTime) {
+      this.toast.error('Out time must be greater');
+      return;
+    }
+
+    const inT = new Date(`1970-01-01T${f.inTime}`);
+    const outT = new Date(`1970-01-01T${f.outTime}`);
+
+    const totalMinutes = (outT.getTime() - inT.getTime()) / 60000;
+    const workingHours = totalMinutes / 60;
+
+    const updated: AttendanceLine = {
+      ...row,
+      inTime: f.inTime,
+      outTime: f.outTime,
+      workingHours: Math.round(workingHours * 100) / 100,
+      overtimeHours: totalMinutes > 480 ? Math.round(totalMinutes - 480) : 0,
+      isLate: f.inTime > '09:00',
+      isEarlyExit: f.outTime < '18:00',
+      isHalfDay: workingHours < 5
+    };
+
+    this.service.updateLine(updated);
+
+    this.editingLineId.set(null);
+  }
 
   onEdit(line: AttendanceLine) {
 
@@ -270,6 +453,12 @@ filtered = computed(() => {
       }
     });
   }
+
+  onView(emp: AttendanceLine) {
+    this.selectedEmployee.set(emp.employeeId);
+  }
+
+
 
   delete(line: AttendanceLine) {
     this.service.removeLine(line.attendanceLineId);
@@ -309,18 +498,18 @@ filtered = computed(() => {
     this.service.clear();
   }
 
-openAddModal() {
-  if (!this.canAdd()) return; 
+  openAddModal() {
+    if (!this.canAdd()) return;
 
-  this.form.set({
-    employeeId: '',
-    attendanceDate: new Date().toISOString().split('T')[0],
-    inTime: '',
-    outTime: ''
-  });
+    this.form.set({
+      employeeId: '',
+      attendanceDate: new Date().toISOString().split('T')[0],
+      inTime: '',
+      outTime: ''
+    });
 
-  this.showModal.set(true);
-}
+    this.showModal.set(true);
+  }
 
   closeModal() {
     this.showModal.set(false);
@@ -343,15 +532,6 @@ openAddModal() {
     this.form.update(f => ({ ...f, attendanceDate: value }));
   }
 
-  workingHours = computed(() => {
-    const f = this.form();
-    if (!f.inTime || !f.outTime) return 0;
-
-    const [h1, m1] = f.inTime.split(':').map(Number);
-    const [h2, m2] = f.outTime.split(':').map(Number);
-
-    return ((h2 * 60 + m2) - (h1 * 60 + m1)) / 60;
-  });
 
   saveAttendance() {
     const f = this.form();
@@ -465,25 +645,25 @@ openAddModal() {
     this.viewMode.update(v => v === 'table' ? 'grid' : 'table');
   }
 
-getDateForDay(day: number): string {
-  const base = this.attendance(); // current header
+  getDateForDay(day: number): string {
+    const base = this.attendance(); // current header
 
-  if (!base?.fromDate) return '';
+    if (!base?.fromDate) return '';
 
-  const d = new Date(base.fromDate);
-  d.setDate(day);
+    const d = new Date(base.fromDate);
+    d.setDate(day);
 
-  return d.toISOString().split('T')[0]; // YYYY-MM-DD
-}
+    return d.toISOString().split('T')[0]; // YYYY-MM-DD
+  }
 
-getLineForDay(empId: string, day: number) {
-  const date = this.getDateForDay(day);
+  getLineForDay(empId: string, day: number) {
+    const date = this.getDateForDay(day);
 
-  return this.lines().find(x =>
-    x.employeeId === empId &&
-    x.attendanceDate === date
-  );
-}
+    return this.lines().find(x =>
+      x.employeeId === empId &&
+      x.attendanceDate === date
+    );
+  }
 
   hasError(field: string): boolean {
     return !!this.errors()[field];
@@ -517,7 +697,7 @@ getLineForDay(empId: string, day: number) {
     return `${h}:${m.toString().padStart(2, '0')}`;
   }
 
-    getAvatarColor(name: string): string {
+  getAvatarColor(name: string): string {
     if (!name) return '#ccc';
 
     // generate hash from name
@@ -532,12 +712,12 @@ getLineForDay(empId: string, day: number) {
   }
 
   openDatePicker(input: HTMLInputElement) {
-  input.showPicker?.(); // modern browsers
-  input.focus();        // fallback
-}
+    input.showPicker?.(); // modern browsers
+    input.focus();        // fallback
+  }
 
-clearDate(event: Event) {
-  event.stopPropagation(); // 🔥 prevent opening picker
-  this.filterDate.set('');
-}
+  clearDate(event: Event) {
+    event.stopPropagation(); // prevent opening picker
+    this.filterDate.set('');
+  }
 }

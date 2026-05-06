@@ -11,13 +11,13 @@
       </small>
     </div>
 
-                    <!-- BREADCRUMB -->
-                <div class="arrow-steps d-none d-md-flex">
-                    <ul id="breadcrumb">
-                        <li><a routerLink="/dashboard"><i class="fa fa-home me-1"></i> Home</a></li>
-                        <li><a routerLink="/petty-cash"><i class="bi bi-receipt me-1"></i> Petty Cash</a></li>
-                    </ul>
-                </div>
+    <!-- BREADCRUMB -->
+    <div class="arrow-steps d-none d-md-flex">
+      <ul id="breadcrumb">
+        <li><a routerLink="/dashboard"><i class="fa fa-home me-1"></i> Home</a></li>
+        <li><a routerLink="/petty-cash"><i class="bi bi-receipt me-1"></i> Petty Cash</a></li>
+      </ul>
+    </div>
   </div>
 
   <!-- HEADER CARD -->
@@ -35,8 +35,9 @@
           <span class="small"> • {{ pc.transactionDate | date }}</span>
         </h5>
 
+
         <div class="mt-2 d-flex gap-2">
-          <span class="badge" [ngClass]="getStatusClass(pc.pettyCashStatus)">
+          <span class="badge" [class]="getStatusClass(pc.pettyCashStatus)">
             {{ pc.pettyCashStatus }}
           </span>
 
@@ -57,7 +58,7 @@
 
       <!-- CORE -->
       <div class="card mb-3">
-        <div class="card-header fw-semibold small text-primary">
+        <div class="card-header fw-semibold  text-primary">
           Core Information
         </div>
 
@@ -113,7 +114,7 @@
 
       <!-- EXPENSE -->
       <div class="card mb-3">
-        <div class="card-header fw-semibold small text-primary">
+        <div class="card-header fw-semibold  text-primary">
           Expense Details
         </div>
 
@@ -121,22 +122,22 @@
 
           <div class="col-md-4 info-box">
             <label>Category</label>
-            <div>{{ pc.expenseCategoryId }}</div>
+            <div>{{ getCategoryName(pc.expenseCategoryId) }}</div>
           </div>
 
           <div class="col-md-4 info-box">
-            <label>Ledger</label>
-            <div>{{ pc.expenseLedgerAccountId }}</div>
+            <label>Account</label>
+            <div>{{ getAccountName(pc.expenseLedgerAccountId) }}</div>
           </div>
 
           <div class="col-md-4 info-box">
             <label>Vendor</label>
-            <div>{{ pc.vendorNameOnReceipt }}</div>
+            <div>{{ pc.vendorNameOnReceipt || "-" }}</div>
           </div>
 
           <div class="col-md-4 info-box">
             <label>Receipt No</label>
-            <div>{{ pc.receiptNumber }}</div>
+            <div>{{ pc.receiptNumber || "-" }}</div>
           </div>
 
           <div class="col-md-4 info-box">
@@ -152,34 +153,208 @@
         </div>
       </div>
 
-      <!-- TRANSACTION -->
+      <!-- ===== TRANSACTION ===== -->
       <div class="card">
-        <div class="card-header fw-semibold small text-primary">
-          Transaction Summary
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span class="fw-semibold  text-primary">Transaction Summary</span>
+
+          <button class="btn btn-sm btn-primary" (click)="addLine()">
+            + Add Line
+          </button>
         </div>
 
         <div class="table-responsive">
           <table class="table align-middle mb-0">
 
-            <thead class="table-light">
+            <thead class="table-light" style="--bs-table-bg: #f4f4f4;">
               <tr>
-                <th>Opening</th>
+
+
+                @if(showRequested()){
+                <th>Requested</th>
+                }
+
+
+                <th>Disbursed</th>
+
+                @if(isExpense()){
                 <th>Expense</th>
                 <th>Tax</th>
-                <th>Closing</th>
+                }
+
+                @if(isReturn()){
+                <th>Returned</th>
+                }
+
+                @if(isReplenishment()){
+                <th>Replenishment</th>
+                }
+                <th>Approved</th>
+
+                <th>Net</th>
+                <th></th>
+
               </tr>
             </thead>
 
             <tbody>
+              @for(line of lines(); track line.pettyCashLineId; let i = $index){
               <tr>
-                <td>{{ formatAmount(pc.openingCashBalance) }}</td>
-                <td>{{ formatAmount(pc.expenseAmount) }}</td>
-                <td>{{ formatAmount(pc.taxAmount) }}</td>
-                <td class="fw-semibold text-success">
-                  {{ formatAmount(closingBalance()) }}
+
+                <!-- Requested -->
+                @if(showRequested()){
+                <td>
+                  @if(isEditing(i)){
+                  <input type="number" class="form-control form-control-sm" [value]="line.requestedAmount"
+                    (input)="updateLine(i,'requestedAmount',+$any($event.target).value)">
+                  } @else {
+                  {{ formatAmount(line.requestedAmount) }}
+                  }
                 </td>
+                }
+
+                <!-- Disbursed -->
+                <td>
+                  @if(isEditing(i)){
+                  <input type="number" class="form-control form-control-sm" [value]="line.disbursedAmount"
+                    (input)="updateLine(i,'disbursedAmount',+$any($event.target).value)">
+                  } @else {
+                  {{ formatAmount(line.disbursedAmount) }}
+                  }
+                </td>
+
+                <!-- Expense -->
+                @if(isExpense()){
+                <td>
+                  @if(isEditing(i)){
+                  <input type="number" class="form-control form-control-sm" [value]="line.expenseAmount"
+                    (input)="updateLine(i,'expenseAmount',+$any($event.target).value)">
+                  } @else {
+                  {{ formatAmount(line.expenseAmount) }}
+                  }
+                </td>
+
+                <td>
+                  @if(isEditing(i)){
+                  <input type="number" class="form-control form-control-sm" [value]="line.taxAmount"
+                    (input)="updateLine(i,'taxAmount',+$any($event.target).value)">
+                  } @else {
+                  {{ formatAmount(line.taxAmount) }}
+                  }
+                </td>
+                }
+
+                <!-- Returned -->
+                @if(isReturn()){
+                <td>
+                  @if(isEditing(i)){
+                  <input type="number" class="form-control form-control-sm" [value]="line.returnedAmount"
+                    (input)="updateLine(i,'returnedAmount',+$any($event.target).value)">
+                  } @else {
+                  {{ formatAmount(line.returnedAmount) }}
+                  }
+                </td>
+                }
+
+                <!-- Replenishment -->
+                @if(isReplenishment()){
+                <td>
+                  @if(isEditing(i)){
+                  <input type="number" class="form-control form-control-sm" [value]="line.replenishmentAmount"
+                    (input)="updateLine(i,'replenishmentAmount',+$any($event.target).value)">
+                  } @else {
+                  {{ formatAmount(line.replenishmentAmount) }}
+                  }
+                </td>
+                }
+
+                <!-- Approved (readonly always) -->
+                <td>
+                  @if(isEditing(i)){
+                  <input type="number" class="form-control form-control-sm" [value]="line.approvedAmount"
+                    (input)="updateLine(i,'approvedAmount',+$any($event.target).value)">
+                  }@else {
+                  {{ formatAmount(line.approvedAmount) }}
+                  }
+                </td>
+
+                <!-- Net -->
+                <td>
+                  <span class="fw-semibold" [class.text-success]="getLineNet(line) >= 0"
+                    [class.text-danger]="getLineNet(line) < 0">
+                    ₹ {{ formatAmount(getLineNet(line)) }}
+                  </span>
+                </td>
+
+                <!-- ACTIONS -->
+                <td class="d-flex gap-2">
+
+                  <!-- EDIT -->
+                  @if(!isEditing(i)){
+                  <button class="btn btn-sm btn-light text-dark" (click)="startEdit(i)">
+                    <i class="ti ti-pencil"></i>
+                  </button>
+                  }
+
+                  <!-- SAVE -->
+                  @if(isEditing(i)){
+                  <button class="btn btn-sm btn-success" (click)="saveEdit(i)">
+                    <i class="ti ti-check"></i>
+                  </button>
+
+                  <!-- CANCEL -->
+                  <button class="btn btn-sm btn-warning" (click)="cancelEdit()">
+                    <i class="ti ti-x"></i>
+                  </button>
+                  }
+
+                  <!-- DELETE -->
+                  <button class="btn btn-sm btn-light text-danger" (click)="removeLine(i)">
+                    <i class="ti ti-trash"></i>
+                  </button>
+
+                </td>
+
               </tr>
+              }
             </tbody>
+
+            <!-- TOTAL -->
+            <!-- <tfoot class="table-light">
+        <tr>
+
+          <th>Total</th>
+
+          @if(showRequested()){
+            <th>{{ formatAmount(getTotalRequested()) }}</th>
+          }
+
+
+          <th>{{ formatAmount(getTotalDisbursed()) }}</th>
+
+          @if(isExpense()){
+            <th>{{ formatAmount(getTotalExpense()) }}</th>
+            <th>{{ formatAmount(getTotalTax()) }}</th>
+          }
+
+          @if(isReturn()){
+            <th>{{ formatAmount(getTotalReturned()) }}</th>
+          }
+
+          @if(isReplenishment()){
+            <th>{{ formatAmount(getTotalReplenishment()) }}</th>
+          }
+          
+            <th>{{ formatAmount(getTotalApproved()) }}</th>
+
+          <th class="fw-bold text-success">
+            {{ formatAmount(closingBalance()) }}
+          </th>
+
+          <th></th>
+
+        </tr>
+      </tfoot> -->
 
           </table>
         </div>
@@ -189,125 +364,275 @@
 
     <!-- RIGHT -->
     <div class="col-lg-4">
-<div class="card mb-3">
-  <div class="card-header small text-primary fw-semibold">
-    Actions
-  </div>
-
-  <div class="card-body d-flex flex-column gap-2">
-
-    <!-- SUBMIT -->
-    @if (pc.pettyCashStatus === 'Draft') {
-      <button class="btn btn-primary w-100"
-              (click)="submit(pc.pettyCashId)">
-        Submit
-      </button>
-    }
-
-    <!-- APPROVE / REJECT -->
-    @if (pc.approvalStatus === 'Submitted' || pc.approvalStatus === 'UnderReview') {
-
-      <button class="btn btn-success w-100"
-              (click)="approve(pc.pettyCashId)">
-        Approve
-      </button>
-
-      <button class="btn btn-outline-danger w-100"
-              (click)="reject(pc.pettyCashId)">
-        Reject
-      </button>
-    }
-
-    <!-- FINANCE VERIFY -->
-    @if (pc.approvalStatus === 'Approved' && pc.financeVerificationStatus !== 'Verified') {
-      <button class="btn btn-info w-100"
-              (click)="verifyReceipt(pc.pettyCashId)">
-        Verify Receipt
-      </button>
-    }
-
-    <!-- POST -->
-    @if (pc.financeVerificationStatus === 'Verified' && pc.postingStatus !== 'Posted') {
-      <button class="btn btn-success w-100"
-              (click)="post(pc.pettyCashId)">
-        Post Transaction
-      </button>
-    }
-
-    <!-- REPLENISH -->
-    @if (pc.replenishmentStatus === 'Required') {
-      <button class="btn btn-warning w-100"
-              (click)="requestReplenishment(pc.pettyCashId)">
-        Request Replenishment
-      </button>
-    }
-
-    <!-- RECONCILE -->
-    @if (pc.postingStatus === 'Posted' && pc.reconciliationStatus !== reconciliationStatuses.Pending) {
-      <button class="btn btn-dark w-100"
-              (click)="reconcile(pc.pettyCashId)">
-        Reconcile Cash
-      </button>
-    }
-
-    <!-- CLOSE -->
-    @if (pc.reconciliationStatus === reconciliationStatuses.Pending) {
-      <button class="btn btn-secondary w-100"
-              (click)="close(pc.pettyCashId)">
-        Close Fund
-      </button>
-    }
-
-    <!-- CANCEL -->
-    @if (pc.pettyCashStatus !== 'Closed') {
-      <button class="btn btn-outline-danger w-100 btn-clr"
-              (click)="cancel(pc.pettyCashId)">
-        Cancel
-      </button>
-    }
-
-  </div>
-</div>
-      <!-- CASH SUMMARY -->
       <div class="card mb-3">
-        <div class="card-header small text-primary fw-semibold">
-          Cash Summary
+        <div class="card-header  text-primary fw-semibold">
+          Actions
         </div>
 
-        <div class="card-body">
+        <div class="card-body d-flex flex-column gap-2">
 
-          <div class="d-flex justify-content-between mb-2">
-            <span>Opening</span>
-            <span>{{ formatAmount(pc.openingCashBalance) }}</span>
-          </div>
+          <!-- ===== SUBMIT ===== -->
+          @if (pc.pettyCashStatus === 'Draft') {
+          <button class="btn btn-primary w-100" (click)="submit(pc.pettyCashId)">
+            Submit
+          </button>
+          }
 
-          <div class="d-flex justify-content-between mb-2">
-            <span>Expense</span>
-            <span class="text-danger">
-              - {{ formatAmount(pc.expenseAmount) }}
-            </span>
-          </div>
+          <!-- ===== APPROVAL ===== -->
+          @if (pc.approvalStatus === 'Submitted' || pc.approvalStatus === 'UnderReview') {
 
-          <hr>
+          <button class="btn btn-success w-100" (click)="approve(pc.pettyCashId)">
+            Approve
+          </button>
 
-          <div class="d-flex justify-content-between fw-bold text-success">
-            <span>Closing Balance</span>
-            <span>{{ formatAmount(closingBalance()) }}</span>
-          </div>
+          <button class="btn btn-outline-danger w-100 btn-clr" (click)="openReasonPopup('reject', pc.pettyCashId)">>
+            Reject
+          </button>
+          }
+
+          <!-- ===== FINANCE VERIFICATION ===== -->
+          @if (
+          pc.approvalStatus === 'Approved' &&
+          pc.financeVerificationStatus !== 'Verified'
+          ) {
+          <button class="btn btn-info w-100" (click)="verifyReceipt(pc.pettyCashId)">
+            Verify Receipt
+          </button>
+          }
+
+          <!-- ===== POSTING ===== -->
+          @if (
+          pc.approvalStatus === 'Approved' &&
+          pc.financeVerificationStatus === 'Verified' &&
+          pc.postingStatus !== 'Posted'
+          ) {
+          <button class="btn btn-success w-100" (click)="post(pc.pettyCashId)">
+            Post Transaction
+          </button>
+          }
+
+          <!-- ===== REPLENISHMENT ===== -->
+          @if (
+          pc.postingStatus === 'Posted' &&
+          pc.replenishmentStatus === 'Required'
+          ) {
+          <button class="btn btn-warning w-100" (click)="requestReplenishment(pc.pettyCashId)">
+            Request Replenishment
+          </button>
+          }
+
+          <!-- ===== RECONCILIATION ===== -->
+          @if (
+          pc.postingStatus === 'Posted' &&
+          pc.reconciliationStatus !== reconciliationStatuses.Matched &&
+          pc.reconciliationStatus !== reconciliationStatuses.Closed
+          ) {
+          <button class="btn btn-dark w-100" (click)="reconcile(pc.pettyCashId)">
+            Reconcile Cash
+          </button>
+          }
+
+          <!-- ===== CLOSE ===== -->
+          @if (
+          pc.reconciliationStatus === reconciliationStatuses.Matched
+          ) {
+          <button class="btn btn-secondary w-100" (click)="openReasonPopup('close', pc.pettyCashId)">
+            Close Fund
+          </button>
+          }
+
+          <!-- ===== CANCEL ===== -->
+          @if (
+          pc.pettyCashStatus !== 'Closed' &&
+          pc.pettyCashStatus !== 'Posted'
+          ) {
+          <button class="btn btn-outline-danger w-100 btn-clr" (click)="openReasonPopup('cancel', pc.pettyCashId)">
+            Cancel
+          </button>
+          }
+
+          @if (
+          pc.postingStatus === 'Posted' &&
+          pc.pettyCashStatus === 'Posted'
+          ) {
+          <button class="btn btn-outline-warning w-100 btn-clr" (click)="openReasonPopup('reverse', pc.pettyCashId)">
+            Reverse
+          </button>
+          }
 
         </div>
       </div>
+      <div class="sticky-summary">
 
-      <!-- OWNERSHIP -->
-      <div class="card mb-3">
-        <div class="card-header small text-primary fw-semibold">
-          Ownership
+        <!-- CASH SUMMARY -->
+        <div class="card mb-3">
+          <div class="card-header  text-primary fw-semibold">
+            Cash Summary
+          </div>
+
+          <div class="card-body">
+
+            <div class="d-flex justify-content-between mb-2">
+              <span>Opening</span>
+              <span>{{ formatAmount(pc.openingCashBalance) }}</span>
+            </div>
+
+            <hr>
+
+            <div class="d-flex justify-content-between fw-bold text-success">
+              <span>Closing Balance</span>
+              <span>{{ formatAmount(closingBalance()) }}</span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="card mb-3 audit-card">
+        <div class="card-header fw-semibold text-primary">
+          Audit Trail
         </div>
 
         <div class="card-body">
-          <div><small>Department</small><div>{{ pc.departmentId }}</div></div>
-          <div class="mt-2"><small>Cost Center</small><div>{{ pc.costCenterId }}</div></div>
-          <div class="mt-2"><small>Project</small><div>{{ pc.projectId }}</div></div>
+
+          <div class="audit-timeline">
+
+            <!-- CREATED -->
+            <div class="audit-item">
+              <div class="dot created"></div>
+              <div class="content">
+                <div class="title">Created</div>
+                <div class="meta">
+                  {{ pc.createdAt | date:'dd/MM/yyyy HH:mm' }}
+                </div>
+              </div>
+            </div>
+
+            <!-- SUBMITTED -->
+            @if(pc.submittedOn){
+            <div class="audit-item">
+              <div class="dot submitted"></div>
+              <div class="content">
+                <div class="title">Submitted</div>
+                <div class="meta">
+                  {{ pc.submittedOn | date:'dd/MM/yyyy HH:mm' }}
+                </div>
+              </div>
+            </div>
+            }
+
+            <!-- APPROVED -->
+            @if(pc.approvedOn){
+            <div class="audit-item">
+              <div class="dot approved"></div>
+              <div class="content">
+                <div class="title">Approved</div>
+                <div class="meta">
+                  {{ pc.approvedOn | date:'dd/MM/yyyy HH:mm' }}
+                </div>
+              </div>
+            </div>
+            }
+
+            <!-- REJECTED -->
+            @if(pc.rejectedOn){
+            <div class="audit-item">
+              <div class="dot rejected"></div>
+              <div class="content">
+                <div class="title text-danger">Rejected</div>
+                <div class="meta">
+                  {{ pc.rejectedOn | date:'dd/MM/yyyy HH:mm' }}
+                </div>
+
+                @if(pc.rejectionReason){
+                <div class="reason">
+                  {{ pc.rejectionReason }}
+                </div>
+                }
+              </div>
+            </div>
+            }
+
+            <!-- VERIFIED -->
+            @if(pc.receiptVerifiedOn){
+            <div class="audit-item">
+              <div class="dot verified"></div>
+              <div class="content">
+                <div class="title">Finance Verified</div>
+                <div class="meta">
+                  {{ pc.receiptVerifiedOn | date:'dd/MM/yyyy HH:mm' }}
+                </div>
+              </div>
+            </div>
+            }
+
+            <!-- POSTED -->
+            @if(pc.postedOn){
+            <div class="audit-item">
+              <div class="dot posted"></div>
+              <div class="content">
+                <div class="title">Posted</div>
+                <div class="meta">
+                  {{ pc.postedOn | date:'dd/MM/yyyy HH:mm' }}
+                </div>
+              </div>
+            </div>
+            }
+
+            <!-- CANCELLED -->
+            <!-- @if(pc.cancelledOn){
+      <div class="audit-item">
+        <div class="dot cancelled"></div>
+        <div class="content">
+          <div class="title text-danger">Cancelled</div>
+          <div class="meta">
+            {{ pc.cancelledOn | date:'dd/MM/yyyy HH:mm' }}
+          </div>
+
+          @if(pc.cancellationReason){
+          <div class="reason">
+            {{ pc.cancellationReason }}
+          </div>
+          }
+        </div>
+      </div>
+      } -->
+
+            <!-- REVERSED -->
+            @if(pc.pettyCashStatus === 'Reversed'){
+            <div class="audit-item">
+              <div class="dot reversed"></div>
+              <div class="content">
+                <div class="title text-warning">Reversed</div>
+
+                @if(pc.reversalReason){
+                <div class="reason">
+                  {{ pc.reversalReason }}
+                </div>
+                }
+              </div>
+            </div>
+            }
+
+            <!-- CLOSED -->
+            @if(pc.pettyCashStatus === 'Closed'){
+            <div class="audit-item">
+              <div class="dot closed"></div>
+              <div class="content">
+                <div class="title">Closed</div>
+
+                @if(pc.closureReason){
+                <div class="reason">
+                  {{ pc.closureReason }}
+                </div>
+                }
+              </div>
+            </div>
+            }
+
+          </div>
+
         </div>
       </div>
 
@@ -316,5 +641,50 @@
   </div>
 
 </div>
+
+}
+
+@if(showReasonModal()){
+
+<div class="modal fade show d-block">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">
+          Enter Reason
+        </h5>
+        <button class="btn-close" (click)="closeModal()"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <label class="form-label required">Reason</label>
+
+        <textarea class="form-control" rows="3" [value]="reasonText()"
+          (input)="reasonText.set($any($event.target).value)" [class.is-invalid]="reasonError()">
+        </textarea>
+
+        @if(reasonError()){
+        <small class="text-danger">Reason is required</small>
+        }
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button class="btn btn-cancel" (click)="closeModal()">Cancel</button>
+
+        <button class="btn btn-primary" (click)="confirmAction()">
+          Confirm
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop fade show"></div>
 
 }

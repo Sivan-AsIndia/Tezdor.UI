@@ -21,6 +21,9 @@ export class EmployeeListComponent {
   private readonly master = inject(MasterDataClient);
 
   modal = viewChild<ConfirmModalComponent>('modal');
+  filterTop = 0;
+  filterRight = 0;
+
 
   // ===== STATE =====
   employees = this.empService.employees;
@@ -115,8 +118,8 @@ export class EmployeeListComponent {
   }
 
   getDepartmentName(id: string): string {
-  return this.departments().find(d => d.id === id)?.name ?? id;
-}
+    return this.departments().find(d => d.id === id)?.name ?? id;
+  }
 
 
 
@@ -126,7 +129,7 @@ export class EmployeeListComponent {
 
   onSearch(value: string) {
     this.searchValue.set(value);
-    this.page.set(1); // 🔥 reset page
+    this.page.set(1); // reset page
   }
 
 
@@ -152,7 +155,7 @@ export class EmployeeListComponent {
 
     return data.sort((a, b) => {
 
-      // 🔥 Handle date separately
+      //  Handle date separately
       if (column === 'dateOfJoining') {
         const aTime = new Date(a.dateOfJoining).getTime();
         const bTime = new Date(b.dateOfJoining).getTime();
@@ -177,7 +180,7 @@ export class EmployeeListComponent {
 
 
   onEdit(emp: Employee) {
-    this.router.navigate(['/employees/edit', emp.employeeId]);
+    this.router.navigate(['/employee/edit', emp.employeeId]);
   }
 
   onAddEmp() {
@@ -226,6 +229,16 @@ export class EmployeeListComponent {
       status: null,
       departmentId: null
     });
+  }
+
+  toggleFilter(): void {
+    const btn = document.querySelector('.filter-btn') as HTMLElement;
+    const rect = btn?.getBoundingClientRect();
+    if (rect) {
+      this.filterTop = rect.bottom + 8;
+      this.filterRight = window.innerWidth - rect.right + -65;
+    }
+    this.showFilter.set(true);
   }
 
   closeFilter() {

@@ -1,3 +1,4 @@
+import { PettyCashLine } from "./petty-cash-line";
 
 export interface PettyCash {
 
@@ -53,16 +54,6 @@ sourceDocumentType?: PettyCashSourceDocumentType;
   exchangeRate: number;
 
   openingCashBalance: number;
-
-  requestedAmount?: number;
-  approvedAmount?: number;
-  disbursedAmount?: number;
-
-  expenseAmount?: number;
-  taxAmount?: number;
-
-  returnedAmount?: number;
-  replenishmentAmount?: number;
 
   closingCashBalance: number;
 
@@ -177,6 +168,8 @@ reconciliationStatus: ReconciliationStatus;
 
   isDeleted: boolean;
   rowVersion: string;
+
+  lines?: PettyCashLine[];
 }
 
 export enum PettyCashStatus {

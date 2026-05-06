@@ -18,9 +18,10 @@ export class PettyCashListComponent {
   private readonly service = inject(PettyCashDataClient);
   private readonly empService = inject(EmployeeDataClient);
   private readonly router = inject(Router);
-       private readonly toast = inject(ToastNotifier);
+  private readonly toast = inject(ToastNotifier);
 
-         modal = viewChild<ConfirmModalComponent>('modal');
+
+  modal = viewChild<ConfirmModalComponent>('modal');
   // ===== STATE =====
   list = this.service.list;
   employees = this.empService.employees;
@@ -31,11 +32,18 @@ export class PettyCashListComponent {
   page = signal(1);
   pageSize = signal(10);
 
+
+  filterTop = 0;
+  filterRight = 0;
+
+
   sortColumn = signal<keyof PettyCash | ''>('');
   sortDirection = signal<'asc' | 'desc'>('asc');
 
 
   statuses = Object.values(PettyCashStatus);
+
+  PettyCashStatus = PettyCashStatus;
 
   // ===== MAP =====
   employeeMap = computed(() => {
@@ -99,34 +107,34 @@ export class PettyCashListComponent {
 
   showFilter = signal(false);
   filters = signal<{
-  status: PettyCashStatus | null;
-  type: string | null;
-}>({
-  status: null,
-  type: null
-});
+    status: PettyCashStatus | null;
+    type: string | null;
+  }>({
+    status: null,
+    type: null
+  });
 
-transactionTypes = Object.values(PettyCashTransactionType);
+  transactionTypes = Object.values(PettyCashTransactionType);
 
-selectStatus(val: any) {
-  this.filters.update(f => ({ ...f, status: val || null }));
-}
+  selectStatus(val: any) {
+    this.filters.update(f => ({ ...f, status: val || null }));
+  }
 
-selectType(val: any) {
-  this.filters.update(f => ({ ...f, type: val || null }));
-}
+  selectType(val: any) {
+    this.filters.update(f => ({ ...f, type: val || null }));
+  }
 
-resetFilters() {
-  this.filters.set({ status: null, type: null });
-}
+  resetFilters() {
+    this.filters.set({ status: null, type: null });
+  }
 
-closeFilter() {
-  this.showFilter.set(false);
-}
+  closeFilter() {
+    this.showFilter.set(false);
+  }
 
-clearSearch() {
-  this.searchValue.set('');
-}
+  clearSearch() {
+    this.searchValue.set('');
+  }
 
   // ===== ACTIONS =====
   onSearch(val: string) {
@@ -156,7 +164,7 @@ clearSearch() {
     }
   }
 
-    changePageSize(size: number) {
+  changePageSize(size: number) {
     this.pageSize.set(+size);
     this.page.set(1);
   }
@@ -175,21 +183,21 @@ clearSearch() {
     this.router.navigate(['/petty-cash', pc.pettyCashId]);
   }
 
-    onDelete(pc: PettyCash) {
-      this.modal()?.open({
-        type: 'delete',
-        title: 'Delete',
-        message: `Are you sure you want to delete ${pc.pettyCashId}?`,
-        onConfirm: () => {
-          this.delete(pc);
-        }
-      });
-    }
+  onDelete(pc: PettyCash) {
+    this.modal()?.open({
+      type: 'delete',
+      title: 'Delete',
+      message: `Are you sure you want to delete ${pc.pettyCashId}?`,
+      onConfirm: () => {
+        this.delete(pc);
+      }
+    });
+  }
 
   delete(pc: PettyCash) {
     this.service.delete(pc.pettyCashId);
 
-  this.toast.success("Petty-Cash deleted successfully");
+    this.toast.success("Petty-Cash deleted successfully");
   }
 
   openRowDetails(pc: PettyCash) {
@@ -198,14 +206,19 @@ clearSearch() {
 
   // ===== HELPERS =====
   getAmount(pc: PettyCash): number {
-    return (
-      pc.expenseAmount ??
-      pc.requestedAmount ??
-      pc.disbursedAmount ??
-      pc.replenishmentAmount ??
-      pc.returnedAmount ??
-      0
-    );
+
+    const lines = this.service.getLines(pc.pettyCashId)();
+
+    return lines.reduce((sum, l) => {
+
+      return sum +
+        (l.disbursedAmount || 0) +
+        (l.replenishmentAmount || 0) -
+        (l.expenseAmount || 0) -
+        (l.returnedAmount || 0);
+
+    }, 0);
+
   }
 
   formatAmount(val?: number) {
@@ -218,14 +231,53 @@ clearSearch() {
     return status;
   }
 
-  getStatusClass(status: PettyCashStatus) {
+  getStatusClass(status: PettyCashStatus | string): string {
+
     switch (status) {
-      case PettyCashStatus.Draft: return 'bg-secondary';
-      case PettyCashStatus.Approved: return 'bg-info';
-      case PettyCashStatus.Posted: return 'bg-success';
-      case PettyCashStatus.Cancelled: return 'bg-danger';
-      default: return 'bg-dark';
+
+      // ===== BASIC =====
+      case 'Draft': return 'badge badge-draft';
+      case 'Submitted': return 'badge badge-submitted';
+      case 'UnderReview': return 'badge badge-review';
+
+      // ===== APPROVAL =====
+      case 'Approved': return 'badge badge-approved';
+      case 'Rejected': return 'badge badge-rejected';
+
+      // ===== CASH FLOW =====
+      case 'CashIssued': return 'badge badge-info';
+      case 'ExpenseRecorded': return 'badge badge-warning';
+      case 'ReceiptPending': return 'badge badge-pending';
+      case 'FinanceVerified': return 'badge badge-verified';
+
+      // ===== POSTING =====
+      case 'Posted': return 'badge badge-posted';
+      case 'Reversed': return 'badge badge-reversed';
+
+      // ===== REPLENISH =====
+      case 'ReplenishmentPending': return 'badge badge-pending';
+      case 'Replenished': return 'badge badge-success';
+
+      // ===== RECON =====
+      case 'ReconciliationPending': return 'badge badge-pending';
+      case 'Reconciled': return 'badge badge-success';
+
+      // ===== FINAL =====
+      case 'Cancelled': return 'badge badge-cancelled';
+      case 'Closed': return 'badge badge-closed';
+
+      default: return 'badge badge-default';
     }
+  }
+
+  toggleFilter(): void {
+    const btn = document.querySelector('.filter-btn') as HTMLElement;
+    const rect = btn?.getBoundingClientRect();
+    if (rect) {
+      this.filterTop = rect.bottom + 8;
+      this.filterRight = window.innerWidth - rect.right + -65;
+    }
+    this.showFilter.set(true);
   }
 
   getEmployeeName(id: string) {

@@ -16,12 +16,17 @@ export class SalaryListComponent {
   private readonly router = inject(Router);
   private readonly salaryService = inject(SalaryDataClient);
 
+
   // ===== STATE =====
   salaryList = this.salaryService.salaryList;
 
   searchValue = signal('');
   page = signal(1);
   pageSize = signal(10);
+
+    filterTop   = 0;
+  filterRight = 0;
+
 
   sortColumn = signal<keyof Salary | ''>('');
 sortDirection = signal<'asc' | 'desc'>('asc');
@@ -226,6 +231,16 @@ resetFilters() {
       case SalaryStatus.Paid: return 'badge bg-success';
       default: return 'badge';
     }
+  }
+
+       toggleFilter(): void {
+    const btn  = document.querySelector('.filter-btn') as HTMLElement;
+    const rect = btn?.getBoundingClientRect();
+    if (rect) {
+      this.filterTop   = rect.bottom + 8;
+      this.filterRight = window.innerWidth - rect.right+ -65;
+    }
+    this.showFilter.set(true);
   }
 
   canEdit(status: SalaryStatus) {

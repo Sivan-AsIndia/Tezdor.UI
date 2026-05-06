@@ -45,7 +45,7 @@
 
                         <div class="table-title-badge">
                             <h5 class="tableheading">Attendance Entries</h5>
-                            <span class="count-badge">{{ total() }}</span>
+                            <span class="count-badge">{{ totalEmployees() }}</span>
                         </div>
 
                         <div class="topbar-actions">
@@ -109,22 +109,15 @@
                                 <table>
                                     <thead>
                                         <tr style="background: #8080800d;">
+
                                             <th class="d-xl-none" style="width:40px"></th>
                                             <th>Employee</th>
-
-
-                                            <th (click)="sortBy('attendanceDate')" class="sortable">
-                                                Date
-                                            </th>
-
-
-                                            <th class="d-none d-md-table-cell">In</th>
-                                            <th class="d-none d-md-table-cell">Out</th>
-
-                                            <th class="d-none d-xl-table-cell">Hours</th>
-                                            <th class="d-none d-xl-table-cell">OT</th>
-                                            <th class="d-none d-xl-table-cell">Status</th>
-
+                                            <th (click)="sortBy('attendanceDate')"
+                                                class="d-none d-md-table-cell sortable">From Date</th>
+                                            <th class="d-none d-md-table-cell">To Date</th>
+                                            <th class="d-none d-xl-table-cell">Total Present</th>
+                                            <th class="d-none d-xl-table-cell">Total Hours</th>
+                                            <th class="d-none d-xl-table-cell">Total OT</th>
 
                                             <th style="width:120px">Actions</th>
 
@@ -133,13 +126,13 @@
 
                                     <tbody>
 
-                                        @for(a of paginated(); track a.attendanceLineId){
+                                        @for(s of paginatedSummary(); track s.employeeId){
 
                                         <tr>
                                             <!-- PLUS ICON -->
                                             <td class="d-xl-none text-center" style="padding: 0;padding-left: 15px;">
                                                 <a href="javascript:void(0);" class="TablePlus" data-bs-toggle="modal"
-                                                    data-bs-target="#rowDetailsModal" (click)="openRowDetails(a)">
+                                                    data-bs-target="#rowDetailsModal" (click)="openRowDetails(s)">
                                                     <i class="ti ti-plus"></i>
                                                 </a>
                                             </td>
@@ -148,64 +141,42 @@
                                                 <div class="d-flex align-items-center gap-2">
 
                                                     <div class="avatar"
-                                                        [style.background]="getAvatarColor(getEmployeeName(a.employeeId))">
-                                                        {{ getEmployeeName(a.employeeId).charAt(0) }}
+                                                        [style.background]="getAvatarColor(getEmployeeName(s.employeeId))">
+                                                        {{ getEmployeeName(s.employeeId).charAt(0) }}
                                                     </div>
 
                                                     <div>
                                                         <div class="fw-semibold">
-                                                            {{ getEmployeeName(a.employeeId) }}
+                                                            {{ getEmployeeName(s.employeeId) }}
                                                         </div>
                                                     </div>
 
                                                 </div>
                                             </td>
 
-                                            <td>
-                                                {{ a.attendanceDate }}
+                                            <td class="d-none d-md-table-cell">{{ s.fromDate }}</td>
+                                            <td class="d-none d-md-table-cell">{{ s.toDate }}</td>
+                                            <td class="d-none d-xl-table-cell">{{ s.totalPresent }}</td>
+                                            <td class="d-none d-xl-table-cell">{{ formatHours(s.totalWorkingHours) }}
                                             </td>
-
-                                            <td class="d-none d-md-table-cell">
-                                                {{ a.inTime ?? '-' }}
-                                            </td>
-
-                                            <td class="d-none d-md-table-cell">
-                                                {{ a.outTime ?? '-' }}
-                                            </td>
-
-                                            <td class="d-none d-xl-table-cell">
-                                                {{ formatHours(a.workingHours) }}
-                                            </td>
-
-                                            <td class="d-none d-xl-table-cell">
-                                                {{ formatMinutes(a.overtimeHours) }}
-                                            </td>
-
-                                            <!-- STATUS -->
-                                            <td class="d-none d-xl-table-cell">
-                                                <span class="badge status-pill"
-                                                    [class.present]="a.attendanceType === AttendanceType.Present"
-                                                    [class.absent]="a.attendanceType === AttendanceType.Absent"
-                                                    [class.leave]="a.attendanceType === AttendanceType.Leave"
-                                                    [class.holiday]="a.attendanceType === AttendanceType.Holiday"
-                                                    [class.weekoff]="a.attendanceType === AttendanceType.WeekOff">
-
-                                                    {{ getStatusLabel(a.attendanceType) }}
-
-                                                </span>
+                                            <td class="d-none d-xl-table-cell">{{ formatMinutes(s.totalOtMinutes) }}
                                             </td>
 
                                             <!-- ACTIONS -->
                                             <td>
                                                 <div class="action-icons">
 
-                                                    <button class="icon-btn edit" (click)="onEdit(a)" title="Edit">
+                                                    <!-- <button class="icon-btn edit" (click)="onEdit(s)" title="Edit">
                                                         <i class="ti ti-pencil"></i>
                                                     </button>
 
-                                                    <button class="icon-btn delete" (click)="onDelete(a)"
+                                                    <button class="icon-btn delete" (click)="onDelete(s)"
                                                         title="Delete">
                                                         <i class="ti ti-trash"></i>
+                                                    </button> -->
+
+                                                    <button class="icon-btn view" (click)="onView(s)">
+                                                        <i class="ti ti-eye"></i>
                                                     </button>
 
                                                 </div>
@@ -215,7 +186,7 @@
 
                                         }
 
-                                        @if(paginated().length === 0){
+                                        @if(paginatedSummary().length === 0){
                                         <tr>
                                             <td colspan="8" class="text-center py-4">
                                                 <div class="empty-table">
@@ -519,3 +490,208 @@
         </div>
     </div>
 </div>
+
+@if (selectedEmployee()) {
+
+<div class="modal-backdrop-custom" (click)="selectedEmployee.set(null)"></div>
+
+<div class="modal-custom">
+    <div class="modal-custom-dialog modal-xl">
+        <div class="modal-custom-content">
+
+            <!-- HEADER -->
+            <div class="modal-custom-header">
+                <div>
+                    <h5>
+                        <i class="ti ti-user me-2"></i>
+                        Attendance History — {{ getEmployeeName(selectedEmployee()!) }}
+                    </h5>
+                    <small>
+                        {{ empFromDate() }} → {{ empToDate() }}
+                    </small>
+                </div>
+
+                <button class="btn-close-custom" (click)="selectedEmployee.set(null)">
+                    <i class="ti ti-x fs-5"></i>
+                </button>
+            </div>
+
+            <!-- SUMMARY -->
+            <div class="ledger-summary-strip">
+
+                <div class="ledger-chip chip-in">
+                    <span class="chip-label">Total Present</span>
+                    <strong class="chip-value">{{ empTotalPresent() }}</strong>
+                </div>
+
+                <div class="ledger-chip chip-closing">
+                    <span class="chip-label">Total Hours</span>
+                    <strong class="chip-value">{{ formatHours(empTotalHours()) }}</strong>
+                </div>
+
+                <div class="ledger-chip chip-out">
+                    <span class="chip-label">Total OT</span>
+                    <strong class="chip-value">{{ formatMinutes(empTotalOT()) }}</strong>
+                </div>
+
+                <div class="ledger-chip chip-count">
+                    <span class="chip-label">Entries</span>
+                    <strong class="chip-value">{{ employeeAttendanceLine().length }}</strong>
+                </div>
+
+            </div>
+
+            <!-- TABLE -->
+            <div class="modal-custom-body">
+                <div class="border-table">
+                    <div class="v-table v-theme--BLUE_THEME v-table--density-default">
+                        <div class="v-table__wrapper">
+                            <table>
+
+                                <thead>
+                                    <tr style="background:#8080800d;">
+                                        <th class="text-subtitle-1 font-weight-semibold">Date</th>
+                                        <th class="text-subtitle-1 font-weight-semibold">In</th>
+                                        <th class="text-subtitle-1 font-weight-semibold">Out</th>
+                                        <th class="text-subtitle-1 font-weight-semibold">Hours</th>
+                                        <th class="text-subtitle-1 font-weight-semibold">OT</th>
+                                        <th class="text-subtitle-1 font-weight-semibold">Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @for (row of paginatedEmployeeAttendance(); track row.attendanceLineId) {
+                                    <tr>
+                                        <td>{{ row.attendanceDate }}</td>
+                                        <!-- IN TIME -->
+                                        <td>
+                                            @if (editingLineId() === row.attendanceLineId) {
+                                            <input type="time" class="form-control form-control-sm"
+                                                [value]="editForm().inTime"
+                                                (input)="editForm.update(f => ({ ...f, inTime: $any($event.target).value }))" />
+                                            } @else {
+                                            {{ row.inTime || '-' }}
+                                            }
+                                        </td>
+
+                                        <!-- OUT TIME -->
+                                        <td>
+                                            @if (editingLineId() === row.attendanceLineId) {
+                                            <input type="time" class="form-control form-control-sm"
+                                                [value]="editForm().outTime"
+                                                (input)="editForm.update(f => ({ ...f, outTime: $any($event.target).value }))" />
+                                            } @else {
+                                            {{ row.outTime || '-' }}
+                                            }
+                                        </td>
+                                        <td>{{ formatHours(row.workingHours) }}</td>
+                                        <td>{{ formatMinutes(row.overtimeHours) }}</td>
+                                        <td> <span class="badge status-pill"
+                                                [class.present]="row.attendanceType === AttendanceType.Present"
+                                                [class.absent]="row.attendanceType === AttendanceType.Absent"
+                                                [class.leave]="row.attendanceType === AttendanceType.Leave"
+                                                [class.holiday]="row.attendanceType === AttendanceType.Holiday"
+                                                [class.weekoff]="row.attendanceType === AttendanceType.WeekOff">
+
+                                                {{ getStatusLabel(row.attendanceType) }}
+
+                                            </span></td>
+                                        <!-- ACTIONS -->
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+
+                                                @if (editingLineId() === row.attendanceLineId) {
+
+                                                <!-- SAVE -->
+                                                <button class="icon-btn success" title="Save" (click)="saveEdit(row)">
+                                                    <i class="ti ti-check"></i>
+                                                </button>
+
+                                                <!-- CANCEL -->
+                                                <button class="icon-btn danger" title="Cancel" (click)="cancelEdit()">
+                                                    <i class="ti ti-x"></i>
+                                                </button>
+
+                                                } @else {
+
+                                                <!-- EDIT -->
+                                                <button class="icon-btn edit" title="Edit" (click)="startEdit(row)">
+                                                    <i class="ti ti-pencil"></i>
+                                                </button>
+
+                                                }
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                @if (attendanceTotalPages() > 1) {
+                <div class="d-flex justify-content-between align-items-center mt-3">
+
+                    <!-- LEFT: Rows Per Page -->
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="text-muted">Rows Per Page</span>
+
+                        <select class="form-select form-select-sm w-auto"
+                            (change)="onAttendancePageSizeChange(+$any($event.target).value)">
+
+                            <option [selected]="attendancePageSize() === 10">10</option>
+                            <option [selected]="attendancePageSize() === 20">20</option>
+                            <option [selected]="attendancePageSize() === 50">50</option>
+                        </select>
+
+                        <span class="text-muted">Entries</span>
+                    </div>
+
+                    <!-- RIGHT: Pagination -->
+                    @if (attendanceTotalPages() > 1) {
+                    <nav class="v-pagination v-theme--BLUE_THEME">
+                        <ul class="pagination-list">
+
+                            <!-- PREV -->
+                            <li>
+                                <button class="page-btn" [disabled]="attendancePage() === 1"
+                                    (click)="goToLedgerPage(attendancePage() - 1)">
+                                    <span class="mdi mdi-chevron-left"></span>
+                                </button>
+                            </li>
+
+                            <!-- PAGES -->
+                            @for (page of attendancePageNumbers(); track page) {
+                            <li>
+                                <button class="page-btn" [class.active]="page === attendancePage()"
+                                    (click)="goToLedgerPage(page)">
+                                    {{ page }}
+                                </button>
+                            </li>
+                            }
+
+                            <!-- NEXT -->
+                            <li>
+                                <button class="page-btn" [disabled]="attendancePage() === attendanceTotalPages()"
+                                    (click)="goToLedgerPage(attendancePage() + 1)">
+                                    <span class="mdi mdi-chevron-right"></span>
+                                </button>
+                            </li>
+
+                        </ul>
+                    </nav>
+                    }
+
+                </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+
+}

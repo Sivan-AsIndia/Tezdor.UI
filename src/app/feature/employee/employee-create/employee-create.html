@@ -1,6 +1,6 @@
 <form [formGroup]="form" class="max-w-full">
 
-    <!-- 🔷 HEADER -->
+    <!-- HEADER -->
     <div class="d-flex justify-content-between align-items-center" id="TopHeading">
 
         <div>
@@ -10,7 +10,7 @@
             <small class="text-muted subdescription"> Define employee details, job info, and compliance
             </small>
         </div>
-        <!-- 🔷 ARROW BREADCRUMB -->
+        <!-- ARROW BREADCRUMB -->
         <div class="arrow-steps d-none d-md-flex">
 
             <ul id="breadcrumb">
@@ -601,6 +601,28 @@
                     }
                 </div>
 
+                <div class="col-md-3">
+                    <label>ESI Number</label>
+                    <input class="form-control" maxlength="10" formControlName="esiNumber" placeholder="31XXXXXX45"
+                        [class.is-invalid]="hasError('esiNumber')">
+                    @if(hasError('esiNumber')){
+                    <div class="text-danger mt-1">
+                        Enter valid esi number
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label>UAN Number</label>
+                    <input class="form-control" maxlength="12" formControlName="uanNumber" placeholder="10XXXXXXXX89"
+                        [class.is-invalid]="hasError('uanNumber')">
+                    @if(hasError('uanNumber')){
+                    <div class="text-danger mt-1">
+                        Enter valid uan number
+                    </div>
+                    }
+                </div>
+
                 <div class="col-md-6">
 
                     <div class="div-gap">
@@ -863,7 +885,7 @@
                             </div>
                         </div>
 
-                        <!-- 🔷 ACTION -->
+                        <!-- ACTION -->
                         <!-- <div class="text-start mt-4">
       <button type="button" (click)="save()" class="btn btn-primary px-4">
         Save Employee

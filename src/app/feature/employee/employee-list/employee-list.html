@@ -13,7 +13,7 @@
                             Track employee details, roles, and status across your organization.
                         </small>
                     </div>
-                    <!-- 🔷 ARROW BREADCRUMB -->
+                    <!--  ARROW BREADCRUMB -->
                     <div class="arrow-steps d-none d-md-flex">
 
 
@@ -33,7 +33,7 @@
                 <div class="content-card">
                     <div class="card-body-inner">
 
-                        <!-- 🔹 TOP BAR -->
+                        <!--  TOP BAR -->
                         <div class="table-topbar">
                             <div class="table-title-badge">
                                 <h5 class="tableheading">Employee List</h5>
@@ -42,7 +42,7 @@
 
                             <div class="topbar-actions">
 
-                                <!-- 🔍 SEARCH -->
+                                <!-- SEARCH -->
                                 <div class="search-box">
                                     <input type="text" placeholder="Search employees..." [value]="searchValue()"
                                         (input)="onSearch($any($event.target).value)" />
@@ -61,65 +61,65 @@
                                 <div class="filter-wrapper">
 
                                     <!-- FILTER BUTTON -->
-                                    <button class=" filter-btn" style="width: 35px;" (click)="showFilter.set(true)">
+                                    <button class=" filter-btn" (click)="toggleFilter()">
                                         <i class="ti ti-filter fs-5"></i>
                                     </button>
 
-                                    <!-- OVERLAY -->
-                                    @if(showFilter()){
-                                    <div class="filter-overlay" (click)="closeFilter()"></div>
-                                    }
 
-
-                                    <!-- FILTER PANEL -->
-                                    @if(showFilter()){
-                                    <div class="filter-panel">
-
-                                        <!-- HEADER -->
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <h5 class="fw-bold mb-0">Filter</h5>
-                                            <button class="btn btn-sm btn-cancel"
-                                                (click)="resetFilters()">Reset</button>
-                                        </div>
-
-                                        <!-- CLASS -->
-                                        <div class="mb-3">
-                                            <label class="fw-semibold mb-2">Status</label>
-
-                                            <div class="chip-group">
-                                                @for (s of statuses; track s) {
-                                                <span (click)="selectStatus(s)" [class.active]="filters().status === s">
-                                                    {{ s }}
-                                                </span>
-                                                }
-                                            </div>
-                                        </div>
-
-                                        <!-- SECTION -->
-                                        <div class="mb-3">
-                                            <label class="fw-semibold mb-2">Department</label>
-
-                                            <div class="chip-group">
-                                                @for (d of departments(); track d.id) {
-                                                <span (click)="selectDepartment(d.id)"
-                                                    [class.active]="filters().departmentId === d.id">
-                                                    {{ d.name }}
-                                                </span>
-                                                }
-                                            </div>
-                                        </div>
-
-
-                                        <!-- FOOTER -->
-                                        <div class="d-flex gap-2 mt-4">
-                                            <button class="btn btn-cancel w-50" (click)="closeFilter()">Cancel</button>
-                                            <button class="btn btn-primary w-50" (click)="closeFilter()">Apply</button>
-                                        </div>
-
-                                    </div>
-                                    }
 
                                 </div>
+                                <!-- OVERLAY -->
+                                @if(showFilter()){
+                                <div class="filter-overlay" (click)="closeFilter()"></div>
+                                }
+
+
+                                <!-- FILTER PANEL -->
+                                @if(showFilter()){
+                                <div class="filter-panel" [style.top.px]="filterTop" [style.right.px]="filterRight">
+
+                                    <!-- HEADER -->
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="fw-bold mb-0">Filter</h5>
+                                        <button class="btn btn-sm btn-cancel" (click)="resetFilters()">Reset</button>
+                                    </div>
+
+                                    <!-- CLASS -->
+                                    <div class="mb-3">
+                                        <label class="fw-semibold mb-2">Status</label>
+
+                                        <div class="chip-group">
+                                            @for (s of statuses; track s) {
+                                            <span (click)="selectStatus(s)" [class.active]="filters().status === s">
+                                                {{ s }}
+                                            </span>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <!-- SECTION -->
+                                    <div class="mb-3">
+                                        <label class="fw-semibold mb-2">Department</label>
+
+                                        <div class="chip-group">
+                                            @for (d of departments(); track d.id) {
+                                            <span (click)="selectDepartment(d.id)"
+                                                [class.active]="filters().departmentId === d.id">
+                                                {{ d.name }}
+                                            </span>
+                                            }
+                                        </div>
+                                    </div>
+
+
+                                    <!-- FOOTER -->
+                                    <div class="d-flex gap-2 mt-4">
+                                        <button class="btn btn-cancel w-50" (click)="closeFilter()">Cancel</button>
+                                        <button class="btn btn-primary w-50" (click)="closeFilter()">Apply</button>
+                                    </div>
+
+                                </div>
+                                }
                                 <button (click)="onAddEmp()"
                                     class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-primary v-btn--density-default  v-btn--size-default v-btn--variant-elevated ml-auto">
                                     <i class="mdi-account-multiple-plus mdi v-icon notranslate v-theme--BLUE_THEME v-icon--size-default mr-2"
@@ -127,7 +127,7 @@
                             </div>
                         </div>
 
-                        <!-- 🔹 TABLE -->
+                        <!--  TABLE -->
                         <div class="border-table">
                             <div class="v-table v-theme--BLUE_THEME v-table--density-default"><!---->
                                 <div class="v-table__wrapper">
@@ -265,7 +265,7 @@
                             </div>
                         </div>
 
-                        <!-- 🔹 PAGINATION -->
+                        <!--  PAGINATION -->
                         <div class="pagination-bar Pagination">
 
                             <!-- Page Size -->

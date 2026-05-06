@@ -4,55 +4,82 @@
     <!-- HEADER -->
     <div class="d-flex justify-content-between align-items-center mb-3">
       <div>
-        <h4 class="fw-bold">Create Petty Cash</h4>
+        <h4 class="fw-bold mb-1 mainheading">
+          {{ isEditMode() ? 'Edit Petty Cash' : 'Create Petty Cash' }}
+        </h4>
         <small class="text-muted">Manage petty cash transaction entry</small>
       </div>
+
+
+      <!-- 🔷 ARROW BREADCRUMB -->
+      <div class="arrow-steps d-none d-md-flex">
+
+
+        <ul id="breadcrumb">
+          <li><a routerLink="/dashboard"><span class="fa fa-home me-1"> </span>Home</a></li>
+          <li>
+            <a routerLink="/petty-cash">
+              <i class="bi bi-list-ul me-1"></i> List
+            </a>
+          </li>
+
+          <!-- CREATE / EDIT -->
+          <li class="active">
+            <a href="javascript:void(0)">
+              <span>
+                <i class="bi bi-pencil-square"></i>
+                {{ isEditMode() ? 'Edit' : 'Create' }}
+              </span>
+            </a>
+
+          </li>
+        </ul>
+
+      </div>
     </div>
-    <div class="pf-tabs">
-      <button class="pf-tab" [class.pf-tab--active]="activeTab() === 'general'" (click)="setTab('general')">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="2" y="7" width="20" height="14" rx="2" />
-          <path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z" />
-        </svg>
-        General
-      </button>
-      <button class="pf-tab"
-        [class.pf-tab--active]="activeTab() === 'ownership'"
-        (click)="setTab('ownership')">
+    <div class="pf-tabs-wrapper">
+      <div class="pf-tabs">
+        <button class="pf-tab" [class.pf-tab--active]="activeTab() === 'general'" (click)="setTab('general')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" />
+            <path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z" />
+          </svg>
+          General
+        </button>
+        <button class="pf-tab" [class.pf-tab--active]="activeTab() === 'ownership'" (click)="setTab('ownership')">
 
-  <svg width="15" height="15" viewBox="0 0 24 24">
-    <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5z"/>
-    <path d="M2 22c0-4 4-7 10-7s10 3 10 7"/>
-  </svg>
+          <svg width="15" height="15" viewBox="0 0 24 24">
+            <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5z" />
+            <path d="M2 22c0-4 4-7 10-7s10 3 10 7" />
+          </svg>
 
-  Ownership
-</button>
-      <button class="pf-tab" [class.pf-tab--active]="activeTab() === 'advanced'" (click)="setTab('advanced')">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="12" y1="1" x2="12" y2="23" />
-          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-        </svg>
-        Transaction
-      </button>
-<button class="pf-tab"
-        [class.pf-tab--active]="activeTab() === 'expense'"
-        (click)="setTab('expense')">
+          Ownership
+        </button>
+        <button class="pf-tab" [class.pf-tab--active]="activeTab() === 'advanced'" (click)="setTab('advanced')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23" />
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+          </svg>
+          Transaction
+        </button>
+        <button class="pf-tab" [class.pf-tab--active]="activeTab() === 'expense'" (click)="setTab('expense')">
 
-  <svg width="16" height="16" viewBox="0 0 24 24"
-       fill="none" stroke="currentColor"
-       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
 
-    <!-- receipt-like icon -->
-    <path d="M6 2h12v20l-3-2-3 2-3-2-3 2z"/>
-    <path d="M8 7h8"/>
-    <path d="M8 11h8"/>
-    <path d="M8 15h5"/>
+            <!-- receipt-like icon -->
+            <path d="M6 2h12v20l-3-2-3 2-3-2-3 2z" />
+            <path d="M8 7h8" />
+            <path d="M8 11h8" />
+            <path d="M8 15h5" />
 
-  </svg>
+          </svg>
 
-  Expense
-</button>
+          Expense
+        </button>
+      </div>
     </div>
+
     <div class="content-layout">
 
       <!-- ================= LEFT ================= -->
@@ -64,56 +91,21 @@
             <h3 class="cardheader">General</h3>
           </div>
 
-          <!-- <div class="form-group">
-            <label class="form-label required">Petty Cash Code</label>
-            <input class="form-control"
-                   [value]="form().pettyCashCode"
-                   (input)="update('pettyCashCode',$any($event.target).value)">
-          </div> -->
-
-
-
           <div class="form-row">
 
-
-            <!-- <div class="form-group flex-1">
-              <label class="form-label required">
-                Custodian
-              </label>
-
-              <select class="form-select" [value]="form().custodianEmployeeId"
-                (change)="update('custodianEmployeeId', $any($event.target).value)">
-
-                <option value="">Select Employee</option>
-
-                @for(e of employees(); track e.employeeId){
-                <option [value]="e.employeeId">
-                  {{ e.firstName }} {{ e.lastName }}
-                </option>
-                }
-
-              </select>
-            </div> -->
-                      <div class="form-group  flex-1">
-            <label class="form-label required">Petty Cash Name </label>
-            <input class="form-control" [value]="form().pettyCashName" placeholder="Enter the name"
-              (input)="update('pettyCashName',$any($event.target).value)">
-          </div>
-
             <div class="form-group flex-1">
-              <label class="form-label required">
-                Status
-              </label>
+              <label class="form-label required">Petty Cash Name</label>
 
-              <select class="form-select" [value]="form().pettyCashStatus"
-                (change)="update('pettyCashStatus', $any($event.target).value)">
+              <input class="form-control" [value]="form().pettyCashName" placeholder="Enter the name"
+                (input)="update('pettyCashName',$any($event.target).value)"
+                [class.is-invalid]="isSubmitted() && hasError('pettyCashName')">
 
-                @for(s of statuses; track s){
-                <option [value]="s">{{ s }}</option>
-                }
-
-              </select>
+              @if(isSubmitted() && hasError('pettyCashName')){
+              <small class="text-danger">Name is required</small>
+              }
             </div>
+
+
           </div>
         </div>
 
@@ -127,35 +119,56 @@
           <div class="form-row">
             <div class="form-group flex-1">
               <label class="form-label required">Mode</label>
+
               <select class="form-select" [value]="form().pettyCashMode"
-                (change)="update('pettyCashMode',$any($event.target).value)">
+                (change)="update('pettyCashMode',$any($event.target).value)"
+                [class.is-invalid]="isSubmitted() && hasError('pettyCashMode')">
+
+                <option value="">Select Mode</option>
                 <option value="Imprest">Imprest</option>
                 <option value="NonImprest">NonImprest</option>
+
               </select>
+
+              @if(isSubmitted() && hasError('pettyCashMode')){
+              <small class="text-danger">Mode is required</small>
+              }
             </div>
+
 
             <div class="form-group flex-1">
               <label class="form-label required">Fund Type</label>
+
               <select class="form-select" [value]="form().fundType"
-                (change)="update('fundType',$any($event.target).value)">
+                (change)="update('fundType',$any($event.target).value)"
+                [class.is-invalid]="isSubmitted() && hasError('fundType')">
+
+                <option value="">-- Select Fund Type --</option>
+
                 @for(f of fundTypes; track f){
-                <option [value]="f">{{f}}</option>
+                <option [value]="f" [selected]="f === form().fundType">{{f}}</option>
                 }
+
               </select>
+
+              @if(isSubmitted() && hasError('fundType')){
+              <small class="text-danger">Fund type is required</small>
+              }
             </div>
+
           </div>
 
           <!-- FLOAT + THRESHOLD -->
           <div class="form-row">
             <div class="form-group flex-1">
-              <label>Float Limit</label>
-              <input type="number" class="form-control" [value]="form().floatLimitAmount"
+              <label class="form-label">Float Limit</label>
+              <input type="number" min="0" class="form-control" [value]="form().floatLimitAmount"
                 (input)="update('floatLimitAmount',+$any($event.target).value)">
             </div>
 
             <div class="form-group flex-1">
-              <label>Threshold</label>
-              <input type="number" class="form-control" [value]="form().minimumThresholdAmount"
+              <label class="form-label">Threshold</label>
+              <input type="number" min="0" class="form-control" [value]="form().minimumThresholdAmount"
                 (input)="update('minimumThresholdAmount',+$any($event.target).value)">
             </div>
           </div>
@@ -165,23 +178,24 @@
 
             <!-- Effective From -->
             <div class="form-group flex-1">
-              <label class="form-label required">
-                Effective From
-              </label>
+              <label class="form-label required">Effective From</label>
 
               <input type="date" class="form-control" [value]="form().effectiveFromDate"
                 (change)="update('effectiveFromDate',$any($event.target).value)"
-                [class.is-invalid]="!form().effectiveFromDate">
+                [class.is-invalid]="isSubmitted() && hasError('effectiveFromDate')">
+
+              @if(isSubmitted() && hasError('effectiveFromDate')){
+              <small class="text-danger">Effective From is required</small>
+              }
             </div>
 
-            <!-- Effective To -->
+
             <div class="form-group flex-1">
               <label class="form-label">Effective To</label>
 
               <input type="date" class="form-control" [value]="form().effectiveToDate"
                 (change)="update('effectiveToDate',$any($event.target).value)" [class.is-invalid]="dateError()">
 
-              <!-- Validation Message -->
               @if(dateError()){
               <small class="text-danger">
                 Effective To cannot be earlier than Effective From
@@ -196,160 +210,158 @@
 
         @if (activeTab() === 'ownership') {
 
-<div class="card mt-3">
-  <div class="pf-card__header">
-    <h3 class="cardheader">Ownership</h3>
-  </div>
+        <div class="card mt-3">
+          <div class="pf-card__header">
+            <h3 class="cardheader">Ownership</h3>
+          </div>
 
-  <!-- ===== ORG STRUCTURE ===== -->
-  <div class="form-row">
+          <!-- ===== ORG STRUCTURE ===== -->
+          <div class="form-row">
 
-    <!-- Branch -->
-    <div class="form-group flex-1">
-      <label class="form-label required">Branch</label>
+            <!-- Branch -->
+            <div class="form-group flex-1">
+              <label class="form-label">Branch</label>
 
-      <select class="form-select"
-              [value]="form().branchId"
-              (change)="update('branchId', $any($event.target).value)">
+              <select class="form-select" [value]="form().branchId"
+                (change)="update('branchId', $any($event.target).value)">
 
-        <option value="">Select Branch</option>
+                <option value="">Select Branch</option>
 
-        @for(b of branches(); track b.branchId){
-          <option [value]="b.branchId">{{ b.branchName }}</option>
+                @for(b of branches(); track b.branchId){
+                <option [value]="b.branchId">{{ b.branchName }}</option>
+                }
+
+              </select>
+            </div>
+
+            <!-- Department -->
+            <div class="form-group flex-1">
+              <label class="form-label">Department</label>
+
+              <select class="form-select" [value]="form().departmentId"
+                (change)="update('departmentId', $any($event.target).value)">
+
+                <option value="">Select Department</option>
+
+                @for(d of departments(); track d.id){
+                <option [value]="d.id">{{ d.name }}</option>
+                }
+
+              </select>
+            </div>
+
+          </div>
+
+          <div class="form-row">
+
+            <!-- Cost Center -->
+            <div class="form-group flex-1">
+              <label class="form-label">Cost Center</label>
+
+              <select class="form-select" [value]="form().costCenterId"
+                (change)="update('costCenterId', $any($event.target).value)">
+
+                <option value="">Select Cost Center</option>
+
+                @for(c of costCenters(); track c.costCenterId){
+                <option [value]="c.costCenterId">{{ c.costCenterName }}</option>
+                }
+
+              </select>
+            </div>
+
+            <!-- Project -->
+            <div class="form-group flex-1">
+              <label class="form-label">Project</label>
+
+              <select class="form-select" [value]="form().projectId"
+                (change)="update('projectId', $any($event.target).value)">
+
+                <option value="">Select Project</option>
+
+                @for(p of projects(); track p.projectId){
+                <option [value]="p.projectId">{{ p.projectName }}</option>
+                }
+
+              </select>
+            </div>
+
+          </div>
+
+          <!-- ===== CUSTODIAN ===== -->
+          <div class="form-row">
+
+            <!-- Primary -->
+            <div class="form-group flex-1">
+              <label class="form-label required">Custodian</label>
+
+              <select class="form-select" [value]="form().custodianEmployeeId"
+                (change)="update('custodianEmployeeId', $any($event.target).value)"
+                [class.is-invalid]="isSubmitted() && hasError('custodianEmployeeId')">
+
+                <option value="">Select Employee</option>
+
+                @for(e of employees(); track e.employeeId){
+                <option [value]="e.employeeId" [selected]="e.employeeId === form().custodianEmployeeId">
+                  {{ e.firstName }} {{ e.lastName }}
+                </option>
+                }
+
+              </select>
+
+              @if(isSubmitted() && hasError('custodianEmployeeId')){
+              <small class="text-danger">Custodian is required</small>
+              }
+            </div>
+
+            <!-- Alternate -->
+            <div class="form-group flex-1">
+              <label class="form-label">Alternate Custodian</label>
+
+              <select class="form-select" [value]="form().alternateCustodianEmployeeId"
+                (change)="update('alternateCustodianEmployeeId', $any($event.target).value)"
+                [class.is-invalid]="custodianError()">
+
+                <option value="">Select Employee</option>
+
+                @for(e of employees(); track e.employeeId){
+                <option [value]="e.employeeId">
+                  {{ e.firstName }} {{ e.lastName }}
+                </option>
+                }
+
+              </select>
+
+              @if(custodianError()){
+              <small class="text-danger">
+                Alternate custodian cannot be same as primary
+              </small>
+              }
+            </div>
+
+          </div>
+
+          <!-- ===== FINANCE OWNER ===== -->
+          <div class="form-group">
+            <label class="form-label">Finance Owner</label>
+
+            <select class="form-select" [value]="form().financeOwnerUserId"
+              (change)="update('financeOwnerUserId', $any($event.target).value)">
+
+              <option value="">Select Finance Owner</option>
+
+              @for(e of employees(); track e.employeeId){
+              <option [value]="e.employeeId">
+                {{ e.firstName }} {{ e.lastName }}
+              </option>
+              }
+
+            </select>
+          </div>
+
+        </div>
+
         }
-
-      </select>
-    </div>
-
-    <!-- Department -->
-    <div class="form-group flex-1">
-      <label class="form-label">Department</label>
-
-      <select class="form-select"
-              [value]="form().departmentId"
-              (change)="update('departmentId', $any($event.target).value)">
-
-        <option value="">Select Department</option>
-
-        @for(d of departments(); track d.departmentId){
-          <option [value]="d.departmentId">{{ d.departmentName }}</option>
-        }
-
-      </select>
-    </div>
-
-  </div>
-
-  <div class="form-row">
-
-    <!-- Cost Center -->
-    <div class="form-group flex-1">
-      <label class="form-label">Cost Center</label>
-
-      <select class="form-select"
-              [value]="form().costCenterId"
-              (change)="update('costCenterId', $any($event.target).value)">
-
-        <option value="">Select Cost Center</option>
-
-        @for(c of costCenters(); track c.costCenterId){
-          <option [value]="c.costCenterId">{{ c.costCenterName }}</option>
-        }
-
-      </select>
-    </div>
-
-    <!-- Project -->
-    <div class="form-group flex-1">
-      <label class="form-label">Project</label>
-
-      <select class="form-select"
-              [value]="form().projectId"
-              (change)="update('projectId', $any($event.target).value)">
-
-        <option value="">Select Project</option>
-
-        @for(p of projects(); track p.projectId){
-          <option [value]="p.projectId">{{ p.projectName }}</option>
-        }
-
-      </select>
-    </div>
-
-  </div>
-
-  <!-- ===== CUSTODIAN ===== -->
-  <div class="form-row">
-
-    <!-- Primary -->
-    <div class="form-group flex-1">
-      <label class="form-label required">Custodian</label>
-
-      <select class="form-select"
-              [value]="form().custodianEmployeeId"
-              (change)="update('custodianEmployeeId', $any($event.target).value)">
-
-        <option value="">Select Employee</option>
-
-        @for(e of employees(); track e.employeeId){
-          <option [value]="e.employeeId">
-            {{ e.firstName }} {{ e.lastName }}
-          </option>
-        }
-
-      </select>
-    </div>
-
-    <!-- Alternate -->
-    <div class="form-group flex-1">
-      <label class="form-label">Alternate Custodian</label>
-
-      <select class="form-select"
-              [value]="form().alternateCustodianEmployeeId"
-              (change)="update('alternateCustodianEmployeeId', $any($event.target).value)"
-              [class.is-invalid]="custodianError()">
-
-        <option value="">Select Employee</option>
-
-        @for(e of employees(); track e.employeeId){
-          <option [value]="e.employeeId">
-            {{ e.firstName }} {{ e.lastName }}
-          </option>
-        }
-
-      </select>
-
-      @if(custodianError()){
-        <small class="text-danger">
-          Alternate custodian cannot be same as primary
-        </small>
-      }
-    </div>
-
-  </div>
-
-  <!-- ===== FINANCE OWNER ===== -->
-  <div class="form-group">
-    <label class="form-label">Finance Owner</label>
-
-    <select class="form-select"
-            [value]="form().financeOwnerUserId"
-            (change)="update('financeOwnerUserId', $any($event.target).value)">
-
-      <option value="">Select Finance Owner</option>
-
-      @for(e of employees(); track e.employeeId){
-        <option [value]="e.employeeId">
-          {{ e.firstName }} {{ e.lastName }}
-        </option>
-      }
-
-    </select>
-  </div>
-
-</div>
-
-}
         @if (activeTab() === 'advanced') {
         <!-- ===== TRANSACTION ===== -->
         <div class="card mt-3">
@@ -361,484 +373,518 @@
             <div class="form-group flex-1">
               <label class="form-label required">Type</label>
               <select class="form-select" (change)="update('pettyCashTransactionType',$any($event.target).value)">
+                <option [value]="">-- select type -- </option>
                 @for(t of transactionTypes; track t){
-                <option [value]="t">{{t}}</option>
+                <option [value]="t" [selected]="t=== form().pettyCashTransactionType">{{t}}</option>
                 }
               </select>
             </div>
 
             <div class="form-group flex-1">
-              <label class="form-label required"> Transaction Date</label>
-              <input type="date" class="form-control" (input)="update('transactionDate',$any($event.target).value)">
+              <label class="form-label required">Transaction Date</label>
+
+              <input type="date" class="form-control" [value]="form().transactionDate"
+                (change)="onTransactionDateChange($any($event.target).value)"
+                [class.is-invalid]="isSubmitted() && hasError('transactionDate')">
+
+              @if(isSubmitted() && hasError('transactionDate')){
+              <small class="text-danger">Transaction Date is required</small>
+              }
             </div>
+          </div>
+
+          <div class="form-row">
+
+            <!-- Fiscal Year -->
+            <div class="form-group flex-1">
+              <label class="form-label required">Fiscal Year</label>
+
+              <input class="form-control" [value]="getFiscalYearName(form().fiscalYearId)" readonly
+                [class.is-invalid]="isSubmitted() && hasError('fiscalYearId')">
+
+              @if(isSubmitted() && hasError('fiscalYearId')){
+              <small class="text-danger">Fiscal Year is required</small>
+              }
+            </div>
+
+            <!-- Accounting Period -->
+            <div class="form-group flex-1">
+              <label class="form-label required">Accounting Period</label>
+
+              <input class="form-control" [value]="getAccountingPeriodName(form().accountingPeriodId)" readonly
+                [class.is-invalid]="isSubmitted() && hasError('accountingPeriodId')">
+
+              @if(isSubmitted() && hasError('accountingPeriodId')){
+              <small class="text-danger">Accounting Period is required</small>
+              }
+            </div>
+
           </div>
 
           <div class="form-group">
             <label class="form-label required">Purpose</label>
-            <input class="form-control" placeholder="write the purpose of transaction..."
-              (input)="update('purposeTitle',$any($event.target).value)">
+
+            <input class="form-control" placeholder="Write the purpose of transaction..." [value]="form().purposeTitle"
+              (input)="update('purposeTitle',$any($event.target).value)"
+              [class.is-invalid]="isSubmitted() && hasError('purposeTitle')">
+
+            @if(isSubmitted() && hasError('purposeTitle')){
+            <small class="text-danger">Purpose is required</small>
+            }
           </div>
           <div class="form-row">
             <!-- Source Document Type -->
-  <div class="form-group flex-1">
-    <label class="form-label">Source Document Type</label>
+            <div class="form-group flex-1">
+              <label class="form-label">Source Document Type</label>
 
-    <select class="form-select"
-            [value]="form().sourceDocumentType"
-            (change)="update('sourceDocumentType', $any($event.target).value)">
+              <select class="form-select" [value]="form().sourceDocumentType"
+                (change)="update('sourceDocumentType', $any($event.target).value)">
 
-      <option value="">Select Type</option>
+                <option value="">Select Type</option>
 
-      @for(s of sourceDocumentTypes; track s){
-        <option [value]="s">{{ s }}</option>
-      }
+                @for(s of sourceDocumentTypes; track s){
+                <option [value]="s">{{ s }}</option>
+                }
 
-    </select>
-  </div>
+              </select>
+            </div>
 
-  <!-- Source Document Number -->
-  <div class="form-group flex-1">
-    <label class="form-label">Source Document Number</label>
+            <!-- Source Document Number -->
+            <div class="form-group flex-1">
+              <label class="form-label">Source Document Number</label>
 
-    <input class="form-control"
-           placeholder="Auto / Linked Document"
-           [value]="form().sourceDocumentNumber"
-           (input)="update('sourceDocumentNumber',$any($event.target).value)"
-           [readonly]="isAutoDocument()">
-  </div>
-  </div>
+              <input class="form-control" placeholder="Auto / Linked Document" [value]="form().sourceDocumentNumber"
+                (input)="update('sourceDocumentNumber',$any($event.target).value)" [readonly]="isAutoDocument()">
+            </div>
+          </div>
+          <div class="form-row">
+
+            <!-- Currency -->
+            <div class="form-group flex-1">
+              <label class="form-label required">Currency</label>
+
+              <select class="form-select" [value]="form().currencyId"
+                (change)="onCurrencyChange($any($event.target).value)">
+
+                @for(c of currencies(); track c.currencyId){
+                <option [value]="c.currencyId">{{ c.currencyCode }}</option>
+                }
+
+              </select>
+            </div>
+
+            <!-- Exchange Rate -->
+            <div class="form-group flex-1">
+              <label class="form-label required">Exchange Rate</label>
+
+              <input type="number" class="form-control" [value]="form().exchangeRate" readonly>
+            </div>
+
+          </div>
         </div>
 
         <!-- ===== AMOUNT ===== -->
-<div class="card mt-3">
-  <div class="pf-card__header">
-    <h3 class="cardheader">Amount</h3>
-  </div>
+        <div class="card mt-3">
 
-  <!-- ================= CURRENCY ================= -->
-  <div class="form-row">
+          <div class="pf-card__header d-flex justify-content-between align-items-center">
+            <h3 class="cardheader">Petty Cash Lines</h3>
 
-    <!-- Currency -->
-    <div class="form-group flex-1">
-      <label class="form-label required">Currency</label>
+            <button class="btn btn-primary btn-sm" (click)="addLine()">
+              + Add Line
+            </button>
+          </div>
 
-      <select class="form-select"
-              [value]="form().currencyId"
-              (change)="onCurrencyChange($any($event.target).value)">
+          <div class="table-responsive mt-2">
 
-        @for(c of currencies; track c.currencyId){
-          <option [value]="c.currencyId">{{ c.currencyCode }}</option>
-        }
+            <table class="table  align-middle">
 
-      </select>
-    </div>
+              <thead>
+                <tr>
 
-    <!-- Exchange Rate -->
-    <div class="form-group flex-1">
-      <label class="form-label required">Exchange Rate</label>
+                  @if(showRequested()){
+                  <th class="text-nowrap">Requested</th>
+                  }
 
-      <input type="number"
-             class="form-control"
-             [value]="form().exchangeRate"
-             readonly>
-    </div>
+                  <th class="text-nowrap">Disbursed</th>
 
-  </div>
+                  @if(isExpense()){
+                  <th class="text-nowrap">Expense</th>
+                  <th class="text-nowrap">Tax</th>
+                  }
 
-  <!-- ================= OPENING ================= -->
-  <div class="form-row mb-2">
+                  @if(isReturn()){
+                  <th class="text-nowrap">Returned</th>
+                  }
 
-    <div class="form-group flex-1">
-      <label class="form-label required">Opening Cash Balance</label>
+                  @if(isReplenishment()){
+                  <th class="text-nowrap">Replenishment</th>
+                  }
 
-      <input type="number"
-             class="form-control"
-             [value]="form().openingCashBalance"
-             readonly>
-    </div>
+                  <th class="text-nowrap">Approved</th>
 
-  </div>
 
-  <!-- ================= REQUEST / APPROVAL ================= -->
-  <div class="form-row mb-2">
+                  <th class="text-nowrap">Net Effect</th>
+                  <th style="width:60px"></th>
 
-    <div class="form-group flex-1">
-      <label class="form-label">Requested Amount</label>
+                </tr>
+              </thead>
 
-      <input type="number"
-             class="form-control"
-             (input)="update('requestedAmount', +$any($event.target).value)">
-    </div>
+              <tbody>
 
-    <div class="form-group flex-1">
-      <label class="form-label">Approved Amount</label>
+                @for(line of lines(); track line.pettyCashLineId; let i = $index){
 
-      <input type="number"
-             class="form-control"
-             [value]="form().approvedAmount"
-             [readonly]="true">
-    </div>
+                <tr>
 
-    <div class="form-group flex-1">
-      <label class="form-label">Disbursed Amount</label>
+                  <!-- Requested -->
+                  @if(showRequested()){
+                  <td>
+                    <input type="number" min="0" class="form-control form-control-sm"
+                      [class.is-invalid]="!line.requestedAmount" [value]="line.requestedAmount"
+                      (input)="updateLine(i,'requestedAmount',+$any($event.target).value)">
+                  </td>
+                  }
 
-      <input type="number"
-             class="form-control"
-             (input)="update('disbursedAmount', +$any($event.target).value)">
-    </div>
+                  <!-- Disbursed -->
+                  <td>
+                    <input type="number" min="0" class="form-control form-control-sm" [value]="line.disbursedAmount"
+                      (input)="updateLine(i,'disbursedAmount',+$any($event.target).value)">
+                  </td>
 
-  </div>
+                  <!-- Expense -->
+                  @if(isExpense()){
+                  <td>
+                    <input type="number" min="0" class="form-control form-control-sm"
+                      [class.is-invalid]="!line.expenseAmount" [value]="line.expenseAmount"
+                      (input)="updateLine(i,'expenseAmount',+$any($event.target).value)">
+                  </td>
 
-  <!-- ================= EXPENSE ================= -->
-  <div class="form-row">
+                  <td>
+                    <input type="number" min="0" class="form-control form-control-sm" [value]="line.taxAmount"
+                      (input)="updateLine(i,'taxAmount',+$any($event.target).value)">
+                  </td>
+                  }
 
-    <div class="form-group flex-1">
-      <label class="form-label">Expense Amount</label>
+                  <!-- Returned -->
+                  @if(isReturn()){
+                  <td>
+                    <input type="number" min="0" class="form-control form-control-sm"
+                      [class.is-invalid]="!line.returnedAmount" [value]="line.returnedAmount"
+                      (input)="updateLine(i,'returnedAmount',+$any($event.target).value)">
+                  </td>
+                  }
 
-      <input type="number"
-             class="form-control"
-             (input)="update('expenseAmount', +$any($event.target).value)">
-    </div>
+                  <!-- Replenishment -->
+                  @if(isReplenishment()){
+                  <td>
+                    <input type="number" min="0" class="form-control form-control-sm"
+                      [class.is-invalid]="!line.replenishmentAmount" [value]="line.replenishmentAmount"
+                      (input)="updateLine(i,'replenishmentAmount',+$any($event.target).value)">
+                  </td>
+                  }
 
-    <div class="form-group flex-1">
-      <label class="form-label">Tax Amount</label>
+                  <td>
+                    <input type="number" min="0" class="form-control form-control-sm" [value]="line.approvedAmount">
+                  </td>
+                  <!-- NET -->
+                  <td>
+                    <span class="fw-semibold" [class.text-success]="getLineNet(line) >= 0"
+                      [class.text-danger]="getLineNet(line) < 0">
 
-      <input type="number"
-             class="form-control"
-             (input)="update('taxAmount', +$any($event.target).value)">
-    </div>
+                      ₹ {{ formatAmount(getLineNet(line)) }}
+                    </span>
+                  </td>
 
-  </div>
+                  <!-- DELETE -->
+                  <td class="text-center">
+                    <button class="btn btn-sm btn-light text-danger" (click)="removeLine(i)">
+                      <i class="ti ti-trash"></i>
 
-  <!-- ================= RETURN / REPLENISH ================= -->
-  <div class="form-row">
+                    </button>
+                  </td>
 
-    <div class="form-group flex-1">
-      <label class="form-label">Returned Amount</label>
+                </tr>
 
-      <input type="number"
-             class="form-control"
-             (input)="update('returnedAmount', +$any($event.target).value)">
-    </div>
+                }
 
-    <div class="form-group flex-1">
-      <label class="form-label">Replenishment Amount</label>
+              </tbody>
 
-      <input type="number"
-             class="form-control"
-             [value]="form().replenishmentAmount"
-             readonly>
-    </div>
+            </table>
 
-  </div>
+          </div>
 
-  <!-- ================= CLOSING ================= -->
-  <div class="form-row">
-
-    <div class="form-group flex-1">
-      <label class="form-label required">Closing Cash Balance</label>
-
-      <input type="number"
-             class="form-control"
-             [value]="closingBalance()"
-             readonly
-             [class.is-invalid]="closingBalance() < 0">
-    </div>
-
-  </div>
-
-</div>
-
+        </div>
 
 
         }
-@if (activeTab() === 'expense') {
+        @if (activeTab() === 'expense') {
 
-<div class="card mt-3">
-  <div class="pf-card__header">
-    <h3 class="cardheader">Expense & Classification</h3>
-  </div>
+        <div class="card mt-3">
+          <div class="pf-card__header">
+            <h3 class="cardheader">Expense & Classification</h3>
+          </div>
 
-  <!-- ===== CATEGORY + LEDGER ===== -->
-  <div class="form-row">
+          <!-- ===== CATEGORY + LEDGER ===== -->
+          <div class="form-row">
 
-    <!-- Expense Category -->
-    <div class="form-group flex-1">
-      <label class="form-label">Expense Category</label>
+            <!-- Expense Category -->
+            <div class="form-group flex-1">
+              <label class="form-label">Expense Category</label>
 
-      <select class="form-select"
-              [value]="form().expenseCategoryId"
-              (change)="onCategoryChange($any($event.target).value)">
+              <select class="form-select" [value]="form().expenseCategoryId"
+                (change)="onCategoryChange($any($event.target).value)">
 
-        <option value="">Select Category</option>
+                <option value="">Select Category</option>
 
-        @for(c of expenseCategories(); track c.id){
-          <option [value]="c.id">{{ c.name }}</option>
-        }
+                @for(c of expenseCategories(); track c.id){
+                <option [value]="c.id" [selected]="c.id === form().expenseCategoryId">{{ c.name }}</option>
+                }
 
-      </select>
-    </div>
+              </select>
+            </div>
 
-    <!-- Ledger -->
-    <div class="form-group flex-1">
-      <label class="form-label">Expense Ledger</label>
+            <!-- Ledger -->
+            <div class="form-group flex-1">
+              <label class="form-label">Expense Ledger Account</label>
 
-      <select class="form-select"
-              [value]="form().expenseLedgerAccountId"
-              (change)="update('expenseLedgerAccountId', $any($event.target).value)">
+              <select class="form-select" [value]="form().expenseLedgerAccountId"
+                (change)="update('expenseLedgerAccountId', $any($event.target).value)">
 
-        <option value="">Select Ledger</option>
+                <option value="">Select Ledger</option>
 
-        @for(l of ledgers(); track l.id){
-          <option [value]="l.id">{{ l.name }}</option>
-        }
+                @for(l of expenseLedgerAccounts(); track l.accountId){
+                <option [value]="l.accountId" [selected]="l.accountId === form().expenseLedgerAccountId">{{
+                  l.accountName }}</option>
+                }
 
-      </select>
-    </div>
+              </select>
+            </div>
 
-  </div>
+          </div>
 
-  <!-- ===== TAX ===== -->
-  <div class="form-row mb-2">
+          <!-- ===== TAX ===== -->
+          <div class="form-row mb-2">
 
-    <!-- Tax Applicable -->
-    <div class="form-group flex-1">
-      <label class="form-label">Tax Applicable</label>
+            <!-- Tax Applicable -->
+            <div class="form-group flex-1">
+              <label class="form-label">Tax Applicable</label>
 
-      <input type="checkbox"
-             [checked]="form().taxApplicable"
-             (change)="update('taxApplicable', $any($event.target).checked)">
-    </div>
+              <input type="checkbox" [checked]="form().taxApplicable"
+                (change)="update('taxApplicable', $any($event.target).checked)">
+            </div>
 
-    <!-- Tax Code -->
-    <div class="form-group flex-1">
-      <label class="form-label">Tax Code</label>
+            <!-- Tax Code -->
+            <div class="form-group flex-1">
+              <label class="form-label">
+                Tax Code
+                @if(form().taxApplicable){
+                <span class="text-danger">*</span>
+                }
+              </label>
 
-      <select class="form-select"
-              [disabled]="!form().taxApplicable"
-              [value]="form().taxCodeId"
-              (change)="update('taxCodeId', $any($event.target).value)">
+              <select class="form-select" [disabled]="!form().taxApplicable" [value]="form().taxCodeId"
+                (change)="update('taxCodeId', $any($event.target).value)" [class.is-invalid]="taxCodeError()">
 
-        <option value="">Select Tax Code</option>
+                <option value="">Select Tax Code</option>
 
-        @for(t of taxCodes(); track t.id){
-          <option [value]="t.id">{{ t.name }}</option>
-        }
+                @for(t of taxCodes(); track t.id){
+                <option [value]="t.id">{{ t.name }}</option>
+                }
 
-      </select>
-    </div>
+              </select>
 
-  </div>
+              @if(taxCodeError()){
+              <small class="text-danger">Tax Code is required when tax is applicable</small>
+              }
+            </div>
 
-  <!-- ===== RECEIPT DETAILS ===== -->
-  <div class="form-row">
+          </div>
 
-    <!-- Vendor -->
-    <div class="form-group flex-1">
-      <label class="form-label">Vendor Name</label>
+          <!-- ===== RECEIPT DETAILS ===== -->
+          <div class="form-row">
 
-      <input class="form-control"
-             placeholder="Vendor name on receipt"
-             (input)="update('vendorNameOnReceipt', $any($event.target).value)">
-    </div>
+            <!-- Vendor -->
+            <div class="form-group flex-1">
+              <label class="form-label">Vendor Name</label>
 
-    <!-- Receipt Number -->
-    <div class="form-group flex-1">
-      <label class="form-label">Receipt Number</label>
+              <input class="form-control" placeholder="Vendor name on receipt"
+                (input)="update('vendorNameOnReceipt', $any($event.target).value)">
+            </div>
 
-      <input class="form-control"
-             placeholder="Receipt No"
-             (input)="update('receiptNumber', $any($event.target).value)">
-    </div>
+            <!-- Receipt Number -->
+            <div class="form-group flex-1">
+              <label class="form-label">Receipt Number</label>
 
-  </div>
+              <input class="form-control" placeholder="Receipt No"
+                (input)="update('receiptNumber', $any($event.target).value)">
+            </div>
 
-  <!-- ===== RECEIPT DATE ===== -->
-  <div class="form-row">
+          </div>
 
-    <div class="form-group flex-1">
-      <label class="form-label">Receipt Date</label>
+          <!-- ===== RECEIPT DATE ===== -->
+          <div class="form-row">
 
-      <input type="date"
-             class="form-control"
-             [value]="form().receiptDate"
-             (change)="update('receiptDate', $any($event.target).value)"
-             [class.is-invalid]="receiptDateError()">
+            <div class="form-group flex-1">
+              <label class="form-label">Receipt Date</label>
 
-      @if(receiptDateError()){
-        <small class="text-danger">
-          Receipt date cannot be in future or after transaction date
-        </small>
-      }
+              <input type="date" class="form-control" [value]="form().receiptDate"
+                (change)="update('receiptDate', $any($event.target).value)" [class.is-invalid]="receiptDateError()">
 
-    </div>
+              @if(receiptDateError()){
+              <small class="text-danger">
+                Receipt date cannot be in future or after transaction date
+              </small>
+              }
 
-  </div>
+            </div>
 
-</div>
+          </div>
 
-<!-- ===== RECEIPT ===== -->
-<div class="card mt-3">
-  <div class="pf-card__header">
-    <h3 class="cardheader">Receipt</h3>
-  </div>
+        </div>
 
-  <!-- BASIC -->
-  <div class="form-row">
+        <!-- ===== RECEIPT ===== -->
+        <div class="card mt-3">
+          <div class="pf-card__header">
+            <h3 class="cardheader">Receipt</h3>
+          </div>
 
-    <!-- Has Receipt -->
-    <div class="form-group flex-1">
-      <label class="form-label">Has Receipt</label>
+          <!-- BASIC -->
+          <div class="form-row">
 
-      <select class="form-select"
-              [value]="form().hasReceipt"
-              (change)="update('hasReceipt', $any($event.target).value === 'true')">
+            <!-- Has Receipt -->
+            <div class="form-group flex-1">
+              <label class="form-label required">Has Receipt</label>
 
-        <option value="true">Yes</option>
-        <option value="false">No</option>
+              <select class="form-select" [value]="form().hasReceipt"
+                (change)="update('hasReceipt', $any($event.target).value === 'true')">
 
-      </select>
-    </div>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
 
-    <!-- Receipt Number -->
-    <div class="form-group flex-1">
-      <label class="form-label">Receipt Number</label>
+              </select>
+            </div>
 
-      <input class="form-control"
-             placeholder="RCT-NO-2026-001"
-             [value]="form().receiptNumber"
-             (input)="update('receiptNumber',$any($event.target).value)">
-    </div>
+            <!-- Receipt Number -->
+            <div class="form-group flex-1">
+              <label class="form-label">Receipt Number</label>
 
-    <!-- Verification Status -->
-    <div class="form-group flex-1">
-      <label class="form-label">Verification Status</label>
+              <input class="form-control" placeholder="RCT-NO-2026-001" [value]="form().receiptNumber"
+                (input)="update('receiptNumber',$any($event.target).value)">
+            </div>
 
-      <select class="form-select"
-              [value]="form().receiptVerificationStatus"
-              (change)="update('receiptVerificationStatus',$any($event.target).value)">
+            <!-- Verification Status -->
+            <div class="form-group flex-1">
+              <label class="form-label required">Verification Status</label>
 
-        @for(r of receiptStatuses; track r){
-          <option [value]="r">{{r}}</option>
-        }
+              <select class="form-select" [value]="form().receiptVerificationStatus"
+                (change)="update('receiptVerificationStatus',$any($event.target).value)">
 
-      </select>
-    </div>
+                @for(r of receiptStatuses; track r){
+                <option [value]="r">{{r}}</option>
+                }
 
-  </div>
+              </select>
+            </div>
 
-  <!-- DATE + VENDOR -->
-  <div class="form-row">
+          </div>
 
-    <!-- Receipt Date -->
-    <div class="form-group flex-1">
-      <label class="form-label">Receipt Date</label>
+          <!-- DATE + VENDOR -->
+          <div class="form-row">
 
-      <input type="date"
-             class="form-control"
-             [value]="form().receiptDate"
-             (change)="update('receiptDate',$any($event.target).value)"
-             [class.is-invalid]="receiptDateError()">
+            <!-- Receipt Date -->
+            <div class="form-group flex-1">
+              <label class="form-label">Receipt Date</label>
 
-      @if(receiptDateError()){
-        <small class="text-danger">
-          Receipt date cannot be future or after transaction date
-        </small>
-      }
-    </div>
+              <input type="date" class="form-control" [value]="form().receiptDate"
+                (change)="update('receiptDate',$any($event.target).value)" [class.is-invalid]="receiptDateError()">
 
-    <!-- Vendor Name -->
-    <div class="form-group flex-1">
-      <label class="form-label">Vendor Name</label>
+              @if(receiptDateError()){
+              <small class="text-danger">
+                Receipt date cannot be future or after transaction date
+              </small>
+              }
+            </div>
 
-      <input class="form-control"
-             placeholder="Vendor name on receipt"
-             [value]="form().vendorNameOnReceipt"
-             (input)="update('vendorNameOnReceipt',$any($event.target).value)">
-    </div>
+            <!-- Vendor Name -->
+            <div class="form-group flex-1">
+              <label class="form-label">Vendor Name</label>
 
-  </div>
+              <input class="form-control" placeholder="Vendor name on receipt" [value]="form().vendorNameOnReceipt"
+                (input)="update('vendorNameOnReceipt',$any($event.target).value)">
+            </div>
 
-  <!-- ATTACHMENT -->
-  <div class="form-row">
+          </div>
 
-    <div class="form-group flex-1">
-      <label class="form-label">Attachment</label>
+          <!-- ATTACHMENT -->
+          <div class="form-row">
 
-      <input type="file"
-             class="form-control"
-             (change)="onFileUpload($event)">
-    </div>
+            <div class="form-group flex-1">
+              <label class="form-label">Attachment</label>
 
-    <div class="form-group flex-1">
-      <label class="form-label">File Count</label>
+              <input type="file" class="form-control" (change)="onFileUpload($event)">
+            </div>
 
-      <input class="form-control"
-             [value]="form().receiptFileCount"
-             readonly>
-    </div>
+            <div class="form-group flex-1">
+              <label class="form-label">File Count</label>
 
-  </div>
+              <input class="form-control" [value]="form().receiptFileCount" readonly>
+            </div>
 
-  <!-- MISSING RECEIPT -->
-  @if(!form().hasReceipt){
-  <div class="form-group mt-2">
-    <label class="form-label">Missing Receipt Reason</label>
+          </div>
 
-    <textarea class="form-control"
-              placeholder="Explain why receipt is missing"
+          <!-- MISSING RECEIPT -->
+          @if(!form().hasReceipt){
+          <div class="form-group mt-2">
+            <label class="form-label">Missing Receipt Reason</label>
+
+            <textarea class="form-control" placeholder="Explain why receipt is missing"
               (input)="update('missingReceiptReason',$any($event.target).value)">
     </textarea>
-  </div>
-  }
+          </div>
+          }
 
-  <!-- DUPLICATE CHECK -->
-  <div class="form-row mb-2">
+          <!-- DUPLICATE CHECK -->
+          <div class="form-row mb-2">
 
-    <div class="form-group flex-1">
-      <label class="form-label">Duplicate Suspected</label>
+            <div class="form-group flex-1">
+              <label class="form-label">Duplicate Suspected</label>
 
-      <input type="checkbox"
-             [checked]="form().duplicateReceiptSuspected"
-             (change)="update('duplicateReceiptSuspected',$any($event.target).checked)">
-    </div>
+              <input type="checkbox" [checked]="form().duplicateReceiptSuspected"
+                (change)="update('duplicateReceiptSuspected',$any($event.target).checked)">
+            </div>
 
-    @if(form().duplicateReceiptSuspected){
-    <div class="form-group flex-1">
-      <label class="form-label">Reference Receipt</label>
+            @if(form().duplicateReceiptSuspected){
+            <div class="form-group flex-1">
+              <label class="form-label">Reference Receipt</label>
 
-      <input class="form-control"
-             placeholder="Reference ID"
-             (input)="update('duplicateReceiptReferenceId',$any($event.target).value)">
-    </div>
-    }
+              <input class="form-control" placeholder="Reference ID"
+                (input)="update('duplicateReceiptReferenceId',$any($event.target).value)">
+            </div>
+            }
 
-  </div>
+          </div>
 
-  <!-- VERIFICATION -->
-  <div class="form-row">
+          <!-- VERIFICATION -->
+          <div class="form-row">
 
-    <div class="form-group flex-1">
-      <label class="form-label">Verified By</label>
+            <div class="form-group flex-1">
+              <label class="form-label">Verified By</label>
 
-      <input class="form-control"
-             placeholder="User ID"
-             (input)="update('receiptVerifiedByUserId',$any($event.target).value)">
-    </div>
+              <input class="form-control" placeholder="User ID"
+                (input)="update('receiptVerifiedByUserId',$any($event.target).value)">
+            </div>
 
-    <div class="form-group flex-1">
-      <label class="form-label">Verified On</label>
+            <div class="form-group flex-1">
+              <label class="form-label">Verified On</label>
 
-      <input type="datetime-local"
-             class="form-control"
-             (change)="update('receiptVerifiedOn',$any($event.target).value)">
-    </div>
+              <input type="datetime-local" class="form-control"
+                (change)="update('receiptVerifiedOn',$any($event.target).value)">
+            </div>
 
-  </div>
+          </div>
 
-</div>
+        </div>
 
-}
+        }
 
 
 
@@ -847,68 +893,76 @@
       <!-- ================= RIGHT ================= -->
       <div class="sidebar-column">
 
-<!-- ===== CONTROL STATUS ===== -->
-<div class="pf-card mt-3">
-  <div class="pf-card__header">
-    <h3 class="cardheader">Control Status</h3>
-  </div>
+        <!-- ===== CONTROL STATUS ===== -->
+        <div class="pf-card mt-3">
+          <div class="pf-card__header">
+            <h3 class="cardheader">Amount Summary</h3>
+          </div>
 
-  <div class="status-grid">
+          <div class="status-grid">
 
-    <div class="status-item">
-      <span>Approval</span>
-      <span class="badge badge-approval">
-        {{ form().approvalStatus }}
-      </span>
-    </div>
-
-    <div class="status-item">
-      <span>Finance</span>
-      <span class="badge badge-finance">
-        {{ form().financeVerificationStatus }}
-      </span>
-    </div>
-
-    <div class="status-item">
-      <span>Posting</span>
-      <span class="badge badge-posting">
-        {{ form().postingStatus }}
-      </span>
-    </div>
-
-    <div class="status-item">
-      <span>Reconciliation</span>
-      <span class="badge badge-recon">
-        {{ form().reconciliationStatus }}
-      </span>
-    </div>
-
-  </div>
-</div>
+            <!-- Opening Balance -->
+            <div class="status-item">
+              <span>Opening Balance</span>
+              <span class="fw-semibold">
+                ₹ {{ formatAmount(form().openingCashBalance) }}
+              </span>
+            </div>
 
 
-<!-- ===== AUDIT ===== -->
-<div class="pf-card mt-3">
-  <div class="pf-card__header">
-    <h3 class="cardheader">Audit</h3>
-  </div>
+            <!-- Closing Balance -->
+            <div class="status-item">
+              <span>Closing Balance</span>
+              <span class="fw-bold text-success">
+                ₹ {{ formatAmount(closingBalance()) }}
+              </span>
+            </div>
 
-  <div class="status-grid">
+          </div>
+        </div>
 
-    <div class="status-item">
-      <span>Created</span>
-      <span>{{ form().createdAt | date:'dd MMM yyyy, hh:mm a' }}</span>
-    </div>
 
-    <div class="status-item">
-      <span>Updated</span>
-      <span>{{ form().updatedAt | date:'dd MMM yyyy, hh:mm a' }}</span>
-    </div>
+        <!-- ===== AUDIT ===== -->
+        <!-- <div class="pf-card mt-3">
+          <div class="pf-card__header">
+            <h3 class="cardheader">Audit</h3>
+          </div>
 
-  </div>
-</div>
+          <div class="status-grid">
 
-</div>
+            <div class="status-item">
+              <span>Created</span>
+              <span>{{ form().createdAt | date:'dd MMM yyyy, hh:mm a' }}</span>
+            </div>
+
+            <div class="status-item">
+              <span>Updated</span>
+              <span>{{ form().updatedAt | date:'dd MMM yyyy, hh:mm a' }}</span>
+            </div>
+
+          </div>
+        </div> -->
+        <div class="pf-card mt-3">
+          <div class="form-group flex-1">
+            <label class="form-label required">Status</label>
+
+            <select class="form-select" [value]="form().pettyCashStatus"
+              (change)="update('pettyCashStatus',$any($event.target).value)"
+              [class.is-invalid]="isSubmitted() && hasError('pettyCashStatus')">
+
+              @for(s of statuses; track s){
+              <option [value]="s" [selected]="s=== form().pettyCashStatus">{{ s }}</option>
+              }
+
+            </select>
+
+            @if(isSubmitted() && hasError('pettyCashStatus')){
+            <small class="text-danger">Status is required</small>
+            }
+          </div>
+        </div>
+
+      </div>
 
     </div>
 

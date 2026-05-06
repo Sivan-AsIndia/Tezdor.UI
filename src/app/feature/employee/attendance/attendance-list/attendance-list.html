@@ -64,53 +64,52 @@
                             <div class="filter-wrapper">
 
                                 <!-- BUTTON -->
-                                <button class="filter-btn" style="width:35px;" (click)="showFilter.set(true)">
+                                <button class="filter-btn" (click)="toggleFilter()">
                                     <i class="ti ti-filter fs-5"></i>
                                 </button>
 
-                                <!-- OVERLAY -->
-                                @if(showFilter()){
-                                <div class="filter-overlay" (click)="closeFilter()"></div>
-                                }
+                            </div>
+                            <!-- OVERLAY -->
+                            @if(showFilter()){
+                            <div class="filter-overlay" (click)="closeFilter()"></div>
+                            }
 
-                                <!-- PANEL -->
-                                @if(showFilter()){
-                                <div class="filter-panel">
+                            <!-- PANEL -->
+                            @if(showFilter()){
+                            <div class="filter-panel" [style.top.px]="filterTop" [style.right.px]="filterRight">
 
-                                    <!-- HEADER -->
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <h5 class="fw-bold mb-0">Filter</h5>
-                                        <button class="btn btn-sm btn-cancel" (click)="resetFilters()">Reset</button>
-                                    </div>
-
-                                    <!-- STATUS -->
-                                    <div class="mb-3">
-                                        <label class="fw-semibold mb-2">Status</label>
-
-                                        <div class="chip-group">
-                                            @for (s of statusOptions; track s.value) {
-
-                                            <span (click)="selectStatus(s.value)"
-                                                [class.active]="filters().status === s.value">
-
-                                                {{ s.label }}
-
-                                            </span>
-
-                                            }
-                                        </div>
-                                    </div>
-
-                                    <!-- FOOTER -->
-                                    <div class="d-flex gap-2 mt-4">
-                                        <button class="btn btn-cancel w-50" (click)="closeFilter()">Cancel</button>
-                                        <button class="btn btn-primary w-50" (click)="closeFilter()">Apply</button>
-                                    </div>
-
+                                <!-- HEADER -->
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="fw-bold mb-0">Filter</h5>
+                                    <button class="btn btn-sm btn-cancel" (click)="resetFilters()">Reset</button>
                                 </div>
-                                }
+
+                                <!-- STATUS -->
+                                <div class="mb-3">
+                                    <label class="fw-semibold mb-2">Status</label>
+
+                                    <div class="chip-group">
+                                        @for (s of statusOptions; track s.value) {
+
+                                        <span (click)="selectStatus(s.value)"
+                                            [class.active]="filters().status === s.value">
+
+                                            {{ s.label }}
+
+                                        </span>
+
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- FOOTER -->
+                                <div class="d-flex gap-2 mt-4">
+                                    <button class="btn btn-cancel w-50" (click)="closeFilter()">Cancel</button>
+                                    <button class="btn btn-primary w-50" (click)="closeFilter()">Apply</button>
+                                </div>
 
                             </div>
+                            }
 
                             <!-- ADD BUTTON -->
                             <button (click)="offCanvas.set(true)"
@@ -201,7 +200,7 @@
                                                         <i class="ti ti-eye"></i>
                                                     </button> -->
 
-                                                    <button class="icon-btn edit" (click)="onViewLines(a)">
+                                                    <button class="icon-btn view" (click)="onViewLines(a)">
                                                         <i class="ti ti-stack"></i>
                                                     </button>
                                                     <!-- EDIT -->

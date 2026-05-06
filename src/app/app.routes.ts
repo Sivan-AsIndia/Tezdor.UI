@@ -227,6 +227,20 @@ export const routes: Routes = [
           import('./feature/employee/petty-cash/petty-cash-detail/petty-cash-detail')
             .then(m => m.PettyCashDetailComponent),
       },
+
+            // ── General ledger Entry ──────────────────────────────────────────────
+      {
+        path: 'general-ledger-entries',
+        loadComponent: () =>
+          import('./feature/ledger/general-ledger-entry/general-ledger-entry')
+            .then(m => m.GeneralLedgerEntryComponent),
+      },
+      {
+        path: 'general-ledger-entries/:id',
+        loadComponent: () =>
+          import('./feature/ledger/general-ledger-entry-detail/general-ledger-entry-detail')
+            .then(m => m.GeneralLedgerEntryDetailComponent),
+      },
     ],
   },
 

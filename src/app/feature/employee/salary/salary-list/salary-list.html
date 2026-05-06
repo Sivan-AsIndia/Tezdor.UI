@@ -65,18 +65,20 @@
 
                                     <!-- BUTTON -->
                                     <button class="filter-btn" [class.active]="filters().status || filters().period"
-                                        (click)="showFilter.set(true)">
+                                        (click)="toggleFilter()">
                                         <i class="ti ti-filter fs-5"></i>
                                     </button>
+                                </div>
 
-                                    <!-- OVERLAY -->
+                                                                    <!-- OVERLAY -->
                                     @if(showFilter()){
                                     <div class="filter-overlay" (click)="closeFilter()"></div>
                                     }
 
                                     <!-- PANEL -->
                                     @if(showFilter()){
-                                    <div class="filter-panel">
+                                    <div class="filter-panel" [style.top.px]="filterTop"
+                    [style.right.px]="filterRight">
 
                                         <!-- HEADER -->
                                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -126,7 +128,6 @@
                                     </div>
                                     }
 
-                                </div>
                                 <!-- ADD BUTTON -->
                                 <button (click)="onAddSalary()"
                                     class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-primary v-btn--density-default  v-btn--size-default v-btn--variant-elevated ml-auto">

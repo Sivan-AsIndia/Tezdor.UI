@@ -46,7 +46,7 @@ export class EmployeeCreateComponent {
   private readonly router = inject(Router);
   private readonly master = inject(MasterDataClient);
 
-  private readonly fb = new FormBuilder();
+   private readonly fb = new FormBuilder();
 
   private readonly route = inject(ActivatedRoute);
 
@@ -227,6 +227,14 @@ export class EmployeeCreateComponent {
       updateOn: 'blur'
     }),
 
+    esiNumber: this.fb.control('', {
+      nonNullable: true,
+    }),
+
+        uanNumber: this.fb.control('', {
+      nonNullable: true,
+    }),
+
     panNumber: this.fb.control('', {
       nonNullable: true,
       validators: [
@@ -391,6 +399,8 @@ export class EmployeeCreateComponent {
       panNumber: emp.panNumber,
       aadhaarNumber: emp.aadhaarNumber,
       micrNumber: emp.micrNumber,
+      uanNumber: emp.uanNumber,
+      esiNumber: emp.esiNumber,
 
       basicSalary: emp.basicSalary,
       paymentMode: emp.paymentMode ?? null,
@@ -651,6 +661,8 @@ copyAddress() {
       panNumber: data.panNumber,
       aadhaarNumber: data.aadhaarNumber,
       micrNumber: data.micrNumber,
+      uanNumber: data.uanNumber,
+      esiNumber: data.esiNumber,
       upiIds: data.upiIds ?? [],
 
       // ===== SALARY =====

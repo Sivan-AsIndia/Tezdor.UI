@@ -5,10 +5,12 @@ import { ToastNotifier } from '../../../../core/services/toast';
 import { ApprovalStatus, FinanceVerificationStatus, PettyCash, PettyCashFundType, PettyCashSourceDocumentType, PettyCashStatus, PettyCashTransactionType, PostingStatus, ReceiptVerificationStatus, ReconciliationStatus, ReplenishmentStatus } from '../petty-cash';
 import { EmployeeDataClient } from '../../employee-data-client';
 import { CommonModule } from '@angular/common';
+import { MasterDataClient } from '../../../../core/services/master-data';
+import { PettyCashLine } from '../petty-cash-line';
 
 @Component({
   selector: 'app-petty-cash-create',
-  imports: [RouterModule,CommonModule],
+  imports: [RouterModule, CommonModule],
   templateUrl: './petty-cash-create.html',
   styleUrl: './petty-cash-create.css',
 })
@@ -17,343 +19,461 @@ export class PettyCashCreateComponent {
   private readonly service = inject(PettyCashDataClient);
   private readonly router = inject(Router);
   private readonly employeeService = inject(EmployeeDataClient);
-    private readonly toast = inject(ToastNotifier);
+  private readonly toast = inject(ToastNotifier);
+  private readonly route = inject(ActivatedRoute);
+  private readonly master = inject(MasterDataClient);
+
+  id = this.route.snapshot.paramMap.get('id');
+  isEditMode = signal(false);
+
+  // ================= INIT =================
+  constructor() {
+    if (this.id) {
+      this.isEditMode.set(true);
+
+      const data = this.service.getById(this.id);
+
+      if (data) {
+        this.form.set({ ...data });
+
+        const existingLines = this.service.getLines(this.id)();
+        this.lines.set(existingLines);
+      }
+    }
+  }
 
   // ===== TABS =====
-  tabs = ['general','advanced','ownership','expense'];
+  tabs = ['general', 'advanced', 'ownership', 'expense'];
   activeTab = signal('general');
+
+
+
+  // ================= LINES =================
+  lines = signal<PettyCashLine[]>([]);
+
+
+  branches = this.master.branches;
+  departments = this.master.departments;
+  costCenters = this.master.costCenters;
+
+  projects = this.master.projects;
+
+  expenseCategories = this.master.expenseCategories;
+
+  expenseLedgerAccounts = this.master.expenseLedgerAccount;
+
+  taxCodes = this.master.taxCodes;
+
+  currencies = this.master.currencies;
+
+  fiscalYears = this.master.fiscalYears;
+
+  accountingPeriods = this.master.accountingPeriods;
+
+
+
+
+  addLine() {
+    this.lines.update(list => [
+      ...list,
+      {
+        pettyCashLineId: crypto.randomUUID(),
+        pettyCashId: this.id ?? this.form().pettyCashId,
+
+        createdAt: new Date().toISOString(),
+        createdByUserId: 'SYSTEM',
+        isDeleted: false
+      }
+    ]);
+  }
+
+  updateLine(index: number, field: keyof PettyCashLine, value: any) {
+
+    this.lines.update(list => {
+      const updated = [...list];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+
+  }
+
+  removeLine(index: number) {
+    this.lines.update(list => list.filter((_, i) => i !== index));
+  }
+
+  getLineNet(l: PettyCashLine) {
+    return (
+      (l.disbursedAmount || 0)
+      + (l.replenishmentAmount || 0)
+      - (l.expenseAmount || 0)
+      - (l.returnedAmount || 0)
+    );
+  }
+
+  // ================= TOTAL / CLOSING =================
+  closingBalance = computed(() => {
+
+    const f = this.form();
+    const lines = this.lines();
+
+    const totalReplenishment = lines.reduce((s, l) => s + (l.replenishmentAmount || 0), 0);
+    const totalExpense = lines.reduce((s, l) => s + (l.expenseAmount || 0), 0);
+    const totalReturned = lines.reduce((s, l) => s + (l.returnedAmount || 0), 0);
+    const totalDisbursed = lines.reduce((s, l) => s + (l.disbursedAmount || 0), 0);
+
+    return (
+      (f.openingCashBalance || 0)
+      + totalReplenishment
+      + totalDisbursed
+      - totalExpense
+      - totalReturned
+    );
+  });
 
   custodianError = computed(() => {
 
-  const f = this.form();
+    const f = this.form();
 
-  if (!f.custodianEmployeeId || !f.alternateCustodianEmployeeId)
-    return false;
+    if (!f.custodianEmployeeId || !f.alternateCustodianEmployeeId)
+      return false;
 
-  return f.custodianEmployeeId === f.alternateCustodianEmployeeId;
+    return f.custodianEmployeeId === f.alternateCustodianEmployeeId;
 
-});
+  });
 
-branches = signal([
-  { branchId: 'B1', branchName: 'Head Office' },
-  { branchId: 'B2', branchName: 'Chennai Branch' },
-  { branchId: 'B3', branchName: 'Coimbatore Branch' },
-  { branchId: 'B4', branchName: 'Madurai Branch' }
-]);
+  isAutoDocument = computed(() => {
+    const type = this.form().sourceDocumentType;
 
-departments = signal([
-  { departmentId: 'D1', departmentName: 'Finance' },
-  { departmentId: 'D2', departmentName: 'HR' },
-  { departmentId: 'D3', departmentName: 'Operations' },
-  { departmentId: 'D4', departmentName: 'Sales' }
-]);
-
-costCenters = signal([
-  { costCenterId: 'CC1', costCenterName: 'Admin Cost Center' },
-  { costCenterId: 'CC2', costCenterName: 'Project Cost Center' },
-  { costCenterId: 'CC3', costCenterName: 'Branch Operations' }
-]);
-
-projects = signal([
-  { projectId: 'P1', projectName: 'Construction Project' },
-  { projectId: 'P2', projectName: 'IT Implementation' },
-  { projectId: 'P3', projectName: 'Retail Expansion' }
-]);
-
-expenseCategories = signal([
-  { id: 'EC1', name: 'Stationery' },
-  { id: 'EC2', name: 'Courier' },
-  { id: 'EC3', name: 'Transport' },
-  { id: 'EC4', name: 'Refreshments' },
-  { id: 'EC5', name: 'Parking' }
-]);
-
-ledgers = signal([
-  { id: 'L1', name: 'Stationery Expense' },
-  { id: 'L2', name: 'Courier Charges' },
-  { id: 'L3', name: 'Travel Expense' }
-]);
-
-taxCodes = signal([
-  { id: 'GST5', name: 'GST 5%' },
-  { id: 'GST12', name: 'GST 12%' },
-  { id: 'GST18', name: 'GST 18%' }
-]);
-
-isAutoDocument = computed(() => {
-  const type = this.form().sourceDocumentType;
-
-  return type && type !== 'ManualPettyCashEntry' && type !== 'Other';
-});
+    return type && type !== 'ManualPettyCashEntry' && type !== 'Other';
+  });
   setTab(tab: string) {
     this.activeTab.set(tab);
   }
+
+  isSubmitted = signal(false);
+
 
   // ===== ENUMS =====
   statuses = Object.values(PettyCashStatus);
   fundTypes = Object.values(PettyCashFundType);
   transactionTypes = Object.values(PettyCashTransactionType);
   receiptStatuses = Object.values(ReceiptVerificationStatus);
-financeStatuses = Object.values(FinanceVerificationStatus);
-postingStatuses = Object.values(PostingStatus);
-approvalStatuses = Object.values(ApprovalStatus);
-reconciliationStatuses = Object.values(ReconciliationStatus);
-replenishmentStatuses = Object.values(ReplenishmentStatus);
-sourceDocumentTypes = [
-  'ManualPettyCashEntry',
-  'EmployeeClaim',
-  'ExpenseVoucher',
-  'CashAdvanceRequest',
-  'ReplenishmentRequest',
-  'ReconciliationAdjustment',
-  'Other'
-];
-employees = this.employeeService.employees;
+  financeStatuses = Object.values(FinanceVerificationStatus);
+  postingStatuses = Object.values(PostingStatus);
+  approvalStatuses = Object.values(ApprovalStatus);
+  reconciliationStatuses = Object.values(ReconciliationStatus);
+  replenishmentStatuses = Object.values(ReplenishmentStatus);
+  sourceDocumentTypes = [
+    'ManualPettyCashEntry',
+    'EmployeeClaim',
+    'ExpenseVoucher',
+    'CashAdvanceRequest',
+    'ReplenishmentRequest',
+    'ReconciliationAdjustment',
+    'Other'
+  ];
+  employees = this.employeeService.employees;
 
-currencies = [
-  { currencyId: 'INR', currencyCode: 'INR' },
-  { currencyId: 'USD', currencyCode: 'USD' },
-  { currencyId: 'EUR', currencyCode: 'EUR' }
-];
-  // ===== FORM =====
-form = signal<PettyCash>({
-  pettyCashId: '',
-  tenantId: 'T1',
-  companyId: 'C1',
 
-  pettyCashCode: '',
-  pettyCashName: '',
-  pettyCashStatus: PettyCashStatus.Draft,
+  transactionType = computed(() => this.form().pettyCashTransactionType);
+  // ================= FORM =================
+  form = signal<PettyCash>({
+    pettyCashId: '',
+    tenantId: 'T1',
+    companyId: 'C1',
 
-  pettyCashMode: 'Imprest',
-  fundType: PettyCashFundType.BranchFund,
+    pettyCashCode: '',
+    pettyCashName: '',
+    pettyCashStatus: PettyCashStatus.Draft,
 
-  floatLimitAmount: 0,
-  minimumThresholdAmount: 0,
-  effectiveFromDate: '',
-  effectiveToDate: '',
+    pettyCashMode: 'Imprest',
+    fundType: PettyCashFundType.BranchFund,
 
-  branchId: '',
-  departmentId: '',
-  costCenterId: '',
-  projectId: '',
+    floatLimitAmount: 0,
+    minimumThresholdAmount: 0,
 
-  custodianEmployeeId: '',
-  alternateCustodianEmployeeId: '',
-  financeOwnerUserId: '',
+    effectiveFromDate: new Date().toLocaleDateString('en-CA'),
+    effectiveToDate: '',
 
-  pettyCashTransactionType: PettyCashTransactionType.ExpenseRecording,
-  transactionDate: '',
-  fiscalYearId: '',
-  accountingPeriodId: '',
+    branchId: '',
+    departmentId: '',
+    costCenterId: '',
+    projectId: '',
 
-  purposeTitle: '',
-  purposeDescription: '',
+    custodianEmployeeId: '',
 
-  sourceDocumentType: PettyCashSourceDocumentType.ManualPettyCashEntry,
-  sourceDocumentId: '',
-  sourceDocumentNumber: '',
+    pettyCashTransactionType: PettyCashTransactionType.ExpenseRecording,
+    transactionDate: '',
+    fiscalYearId: '',
+    accountingPeriodId: '',
 
-  currencyId: 'INR',
-  exchangeRateId: '',
-  exchangeRate: 1,
+    purposeTitle: '',
 
-  openingCashBalance: 0,
-  requestedAmount: 0,
-  approvedAmount: 0,
-  disbursedAmount: 0,
-  expenseAmount: 0,
-  taxAmount: 0,
-  returnedAmount: 0,
-  replenishmentAmount: 0,
-  closingCashBalance: 0,
+    currencyId: 'INR',
+    exchangeRate: 1,
 
-  expenseCategoryId: '',
-  expenseLedgerAccountId: '',
+    openingCashBalance: 0,
+    closingCashBalance: 0,
 
-  taxApplicable: false,
-  taxCodeId: '',
+    taxApplicable: false,
+    duplicateReceiptSuspected: false,
+    taxCodeId: '',
 
-  vendorNameOnReceipt: '',
-  receiptNumber: '',
-  receiptDate: '',
+    hasReceipt: false,
 
-  hasReceipt: false,
-  receiptAttachmentId: '',
-  receiptFileCount: 0,
-  missingReceiptReason: '',
+    receiptVerificationStatus: ReceiptVerificationStatus.NotRequired,
 
-  receiptVerificationStatus: ReceiptVerificationStatus.NotRequired,
-  receiptVerifiedByUserId: '',
-  receiptVerifiedOn: '',
-  duplicateReceiptSuspected: false,
-  duplicateReceiptReferenceId: '',
+    approvalStatus: ApprovalStatus.Draft,
+    financeVerificationStatus: FinanceVerificationStatus.NotStarted,
+    postingStatus: PostingStatus.NotPosted,
+    replenishmentStatus: ReplenishmentStatus.NotRequired,
+    reconciliationStatus: ReconciliationStatus.NotRequired,
 
-  approvalStatus: ApprovalStatus.Draft,
-  approvalWorkflowId: '',
-  approvalInstanceId: '',
-  submittedByUserId: '',
-  submittedOn: '',
-  approvedByUserId: '',
-  approvedOn: '',
-  rejectedByUserId: '',
-  rejectedOn: '',
-  rejectionReason: '',
+    pettyCashLedgerAccountId: '',
 
-  financeVerificationStatus: FinanceVerificationStatus.NotStarted,
-  financeVerifiedByUserId: '',
-  financeVerifiedOn: '',
-  financeVerificationRemarks: '',
+    isLocked: false,
 
-  postingStatus: PostingStatus.NotPosted,
-  postingProfileId: '',
-  postingRuleId: '',
-  pettyCashLedgerAccountId: '',
-  bankAccountId: '',
-  journalId: '',
-  journalEntryId: '',
-  postedByUserId: '',
-  postedOn: '',
-  postingFailureReason: '',
+    createdAt: '',
+    createdByUserId: 'SYSTEM',
+    isDeleted: false,
+    rowVersion: '1'
+  });
 
-  replenishmentStatus: ReplenishmentStatus.NotRequired,
-  lastReplenishmentDate: '',
-  lastReplenishmentAmount: 0,
-
-  reconciliationStatus: ReconciliationStatus.NotRequired,
-  systemCashBalance: 0,
-  physicalCashCount: 0,
-  cashDifferenceAmount: 0,
-  differenceReason: '',
-  reconciledByUserId: '',
-  reconciledOn: '',
-
-  isLocked: false,
-  lockedByUserId: '',
-  lockedOn: '',
-  cancellationReason: '',
-  reversalReason: '',
-  closureReason: '',
-  overrideReason: '',
-
-  notes: '',
-  internalFinanceRemarks: '',
-  attachmentCount: 0,
-
-  createdAt: new Date().toISOString(),
-  createdByUserId: 'SYSTEM',
-  updatedAt: '',
-  updatedByUserId: '',
-  deletedAt: '',
-  deletedByUserId: '',
-  isDeleted: false,
-  rowVersion: '1'
-});
-
-dateError = computed(() => {
-
-  const from = this.form().effectiveFromDate;
-  const to = this.form().effectiveToDate;
-
-  if (!from || !to) return false;
-
-  return new Date(to) < new Date(from);
-
-});
-
-onCurrencyChange(currencyId: string) {
-
-  this.update('currencyId', currencyId);
-
-  if (currencyId === 'INR') {
-    this.update('exchangeRate', 1);
-  } else {
-    // mock exchange rate
-    this.update('exchangeRate', 83.25);
-  }
-}
-closingBalance = computed(() => {
-
-  const f = this.form();
-
-  return (
-    (f.openingCashBalance || 0)
-    + (f.disbursedAmount || 0)
-    + (f.replenishmentAmount || 0)
-    - (f.expenseAmount || 0)
-    - (f.returnedAmount || 0)
-  );
-
-});
-
-  // ===== UPDATE =====
+  // ================= UPDATE =================
   update(field: keyof PettyCash, value: any) {
     this.form.update(f => ({ ...f, [field]: value }));
   }
 
-  // ===== SAVE =====
+  // ================= VALIDATION =================
 
+  markSubmitted() {
+    this.isSubmitted.set(true);
+  }
+  dateError = computed(() => {
+
+    const from = this.form().effectiveFromDate;
+    const to = this.form().effectiveToDate;
+
+    if (!from || !to) return false;
+
+    return new Date(to) < new Date(from);
+
+  });
+
+
+  taxCodeError = computed(() => {
+
+    const f = this.form();
+
+    return (
+      this.isSubmitted() &&
+      f.taxApplicable === true &&
+      (!f.taxCodeId || f.taxCodeId.trim() === '')
+    );
+
+  });
+
+  onCurrencyChange(currencyId: string) {
+
+    this.update('currencyId', currencyId);
+
+    if (currencyId === 'INR') {
+      this.update('exchangeRate', 1);
+    } else {
+      // mock exchange rate
+      this.update('exchangeRate', 83.25);
+    }
+  }
+  hasError(field: keyof PettyCash): boolean {
+    const value = this.form()[field];
+    if (value === null || value === undefined) return true;
+    if (typeof value === 'string' && value.trim() === '') return true;
+    return false;
+  }
+
+  // ================= SAVE =================
   onSave() {
+    const isDraft = this.form().pettyCashStatus === 'Draft';
 
-  const f = this.form();
+    // 🔥 LINE VALIDATION
+    if (!isDraft) {
 
-  if (!f.effectiveFromDate) {
-    this.toast.error('Effective From is required');
-    return;
-  }
+      if (!this.lines() || this.lines().length === 0) {
+        this.toast.error('At least one line is required');
+        return;
+      }
 
-  if (this.dateError()) {
-    this.toast.error('Effective To cannot be earlier than Effective From');
-    return;
-  }
+      if (!this.validateLines()) {
+        this.toast.error('Line validation failed');
+        return;
+      }
 
-  this.service.add(f);
+    }
+    this.markSubmitted();
+
+    if (
+      this.hasError('pettyCashName') ||
+      this.hasError('custodianEmployeeId') ||
+      this.hasError('effectiveFromDate')
+    ) {
+      this.toast.error('Fill required fields');
+      return;
+    }
+
+    const data = {
+      ...this.form(),
+      closingCashBalance: this.closingBalance(),
+      lines: this.lines()
+    };
+
+    if (this.isEditMode()) {
+
+      this.service.update(this.form(), this.lines());
+      this.toast.success('Updated successfully');
+
+    } else {
+
+      this.service.add(this.form(), this.lines());
+      this.toast.success('Created successfully');
+
+    }
+
     this.router.navigate(['/petty-cash']);
-
-}
-
-onCategoryChange(categoryId: string) {
-
-  this.update('expenseCategoryId', categoryId);
-
-  // simple mapping example
-  const map: any = {
-    EC1: 'L1',
-    EC2: 'L2',
-    EC3: 'L3'
-  };
-
-  this.update('expenseLedgerAccountId', map[categoryId] || '');
-}
-
-receiptDateError = computed(() => {
-
-  const f = this.form();
-
-  if (!f.receiptDate) return false;
-
-  const receipt = new Date(f.receiptDate);
-  const txn = new Date(f.transactionDate);
-  const today = new Date();
-
-  return receipt > today || receipt > txn;
-
-});
-
-onFileUpload(event: any) {
-
-  const files = event.target.files;
-
-  if (!files || files.length === 0) return;
-
-  this.update('receiptFileCount', files.length);
-
-  // mock attachment id
-  this.update('receiptAttachmentId', crypto.randomUUID());
-
-}
+  }
 
   onCancel() {
     this.router.navigate(['/petty-cash']);
+  }
+
+  // ================= FORMAT =================
+  formatAmount(val?: number) {
+    return (val ?? 0).toLocaleString('en-IN', {
+      minimumFractionDigits: 2
+    });
+  }
+
+
+
+  deriveFiscal(dateStr: string) {
+
+    if (!dateStr) return;
+
+    const date = new Date(dateStr);
+
+    // ===== FIND FISCAL YEAR =====
+    const fy = this.fiscalYears().find(f =>
+      new Date(f.start) <= date && date <= new Date(f.end)
+    );
+
+    if (fy) {
+      this.update('fiscalYearId', fy.id);
+    }
+
+    // ===== FIND ACCOUNTING PERIOD =====
+    const period = this.accountingPeriods().find(p =>
+      new Date(p.start) <= date && date <= new Date(p.end)
+    );
+
+    if (period) {
+      this.update('accountingPeriodId', period.id);
+    }
+  }
+
+
+  onCategoryChange(categoryId: string) {
+
+    this.update('expenseCategoryId', categoryId);
+
+    // simple mapping example
+    const map: any = {
+      EC1: 'L1',
+      EC2: 'L2',
+      EC3: 'L3'
+    };
+
+    this.update('expenseLedgerAccountId', map[categoryId] || '');
+  }
+
+  receiptDateError = computed(() => {
+
+    const f = this.form();
+
+    if (!f.receiptDate) return false;
+
+    const receipt = new Date(f.receiptDate);
+    const txn = new Date(f.transactionDate);
+    const today = new Date();
+
+    return receipt > today || receipt > txn;
+
+  });
+
+
+  onFileUpload(event: any) {
+
+    const files = event.target.files;
+
+    if (!files || files.length === 0) return;
+
+    this.update('receiptFileCount', files.length);
+
+    // mock attachment id
+    this.update('receiptAttachmentId', crypto.randomUUID());
+
+  }
+  onTransactionDateChange(date: string) {
+
+    this.update('transactionDate', date);
+
+    this.deriveFiscal(date);
+
+  }
+
+  getFiscalYearName(id: string) {
+    return this.fiscalYears().find(f => f.id === id)?.name ?? '-';
+  }
+
+  getAccountingPeriodName(id: string) {
+    return this.accountingPeriods().find(p => p.id === id)?.name ?? '-';
+  }
+
+  isCashIssue() {
+    return this.transactionType() === PettyCashTransactionType.CashIssue;
+  }
+
+  isExpense() {
+    return this.transactionType() === PettyCashTransactionType.ExpenseRecording;
+  }
+
+  isReimbursement() {
+    return this.transactionType() === PettyCashTransactionType.EmployeeReimbursement;
+  }
+
+  isReturn() {
+    return this.transactionType() === PettyCashTransactionType.CashReturn;
+  }
+
+  isReplenishment() {
+    return this.transactionType() === PettyCashTransactionType.Replenishment;
+  }
+
+  showRequested() {
+    return this.isCashIssue() || this.isExpense() || this.isReimbursement() || this.isReplenishment();
+  }
+
+  validateLines(): boolean {
+
+    for (const l of this.lines()) {
+
+      if (this.showRequested() && !l.requestedAmount) return false;
+
+      if (this.isExpense() && !l.expenseAmount) return false;
+
+      if (this.isReturn() && !l.returnedAmount) return false;
+
+      if (this.isReplenishment() && !l.replenishmentAmount) return false;
+    }
+
+    return true;
   }
 }

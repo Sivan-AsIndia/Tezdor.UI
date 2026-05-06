@@ -1,0 +1,392 @@
+<div class="max-w-full">
+    <div class="full-container">
+        <div class="v-container v-container--fluid v-locale--is-ltr rounded-xl p-0">
+            <div>
+
+                <!-- HEADER -->
+                <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+
+                    <div>
+                        <h4 class="fw-bold mb-1 mainheading">General Ledger</h4>
+                        <small class="text-muted subdescription">
+                            Track all accounting entries, debits, credits, and audit trails.
+                        </small>
+                    </div>
+
+                    <!-- BREADCRUMB -->
+                    <div class="arrow-steps d-none d-md-flex">
+                        <ul id="breadcrumb">
+                            <li><a routerLink="/dashboard"><span class="fa fa-home me-1"></span>Home</a></li>
+                            <li><a href="javascript:void(0)">
+                                    <span class="fa fa-book me-1"></span>Ledger Entries
+                                </a></li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="content-card">
+                    <div class="card-body-inner">
+
+                        <!--  TOP BAR -->
+                        <div class="table-topbar">
+
+                            <div class="table-title-badge">
+                                <h5 class="tableheading">Ledger Entries</h5>
+                                <span class="count-badge">{{ total() }}</span>
+                            </div>
+
+                            <div class="topbar-actions">
+
+                                <!-- SEARCH -->
+                                <div class="search-box">
+                                    <input type="text" placeholder="Search ledger..." [value]="searchValue()"
+                                        (input)="onSearch($any($event.target).value)" />
+
+                                    @if(!searchValue()){
+                                    <button class="icon-clear"><i class="bi bi-search"></i></button>
+                                    }
+
+                                    @if(searchValue()){
+                                    <button class="icon-clear" (click)="clearSearch()">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                    }
+                                </div>
+                                <!-- FILTER -->
+                                <div class="filter-wrapper">
+
+                                    <!-- BUTTON -->
+                                    <button class="filter-btn" [class.active]="filters().sourceType || filters().date"
+                                        (click)="toggleFilter()">
+                                        <i class="ti ti-filter fs-5"></i>
+                                    </button>
+
+                                </div>
+
+                                <!-- OVERLAY -->
+                                @if(showFilter()){
+                                <div class="filter-overlay" (click)="closeFilter()"></div>
+                                }
+
+                                <!-- PANEL -->
+                                @if(showFilter()){
+                                <div class="filter-panel" [style.top.px]="filterTop" [style.right.px]="filterRight">
+
+                                    <!-- HEADER -->
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="fw-bold mb-0">Filter</h5>
+                                        <button class="btn btn-sm btn-cancel" (click)="resetFilters()">Reset</button>
+                                    </div>
+
+                                    <!-- SOURCE TYPE -->
+                                    <div class="mb-3">
+                                        <label class="fw-semibold mb-2">Source Type</label>
+
+                                        <select class="form-select" [value]="filters().sourceType ?? ''"
+                                            (change)="selectSource($any($event.target).value)">
+
+                                            <option value="">All</option>
+
+                                            @for(s of sourceOptions; track s){
+                                            <option [value]="s">{{ s }}</option>
+                                            }
+
+                                        </select>
+                                    </div>
+
+                                    <!-- DATE -->
+                                    <div class="mb-3">
+                                        <label class="fw-semibold mb-2">Posting Date</label>
+
+                                        <input type="date" class="form-control" [value]="filters().date ?? ''"
+                                            (change)="setDate($any($event.target).value)" />
+                                    </div>
+
+                                    <!-- FOOTER -->
+                                    <div class="d-flex gap-2 mt-4">
+                                        <button class="btn btn-cancel w-50" (click)="closeFilter()">Cancel</button>
+                                        <button class="btn btn-primary w-50" (click)="closeFilter()">Apply</button>
+                                    </div>
+
+                                </div>
+                                }
+
+                                <!-- ADD (optional future) -->
+                                <!-- <button
+                  class="v-btn bg-primary ml-auto">
+                  <i class="mdi mdi-plus mr-2"></i> Add Entry
+                </button> -->
+
+                            </div>
+                        </div>
+
+                        <!--  TABLE -->
+                        <div class="border-table">
+                            <div class="v-table v-theme--BLUE_THEME v-table--density-default">
+                                <div class="v-table__wrapper">
+
+                                    <table>
+                                        <thead>
+                                            <tr style="background: #8080800d;">
+                                                <th class="d-xl-none" style="width:40px"></th>
+
+                                                <th (click)="sortBy('postingDate')"
+                                                    class="d-none d-md-table-cell sortable">
+                                                    Date
+                                                    <i class="sort-icon"
+                                                        [class.asc]="sortColumn() === 'postingDate' && sortDirection() === 'asc'"
+                                                        [class.desc]="sortColumn() === 'postingDate' && sortDirection() === 'desc'"></i>
+                                                </th>
+
+                                                <th (click)="sortBy('accountName')" class="sortable">
+                                                    Account
+                                                    <i class="sort-icon"
+                                                        [class.asc]="sortColumn() === 'accountName' && sortDirection() === 'asc'"
+                                                        [class.desc]="sortColumn() === 'accountName' && sortDirection() === 'desc'"></i>
+                                                </th>
+
+                                                <th class="d-none d-xl-table-cell">Narration</th>
+
+                                                <th (click)="sortBy('debitAmount')"
+                                                    class=" d-none d-md-table-cell sortable">
+                                                    Debit
+                                                    <i class="sort-icon"
+                                                        [class.asc]="sortColumn() === 'debitAmount' && sortDirection() === 'asc'"
+                                                        [class.desc]="sortColumn() === 'debitAmount' && sortDirection() === 'desc'"></i>
+                                                </th>
+
+                                                <th (click)="sortBy('creditAmount')"
+                                                    class="d-none d-md-table-cell sortable">
+                                                    Credit
+                                                    <i class="sort-icon"
+                                                        [class.asc]="sortColumn() === 'creditAmount' && sortDirection() === 'asc'"
+                                                        [class.desc]="sortColumn() === 'creditAmount' && sortDirection() === 'desc'"></i>
+                                                </th>
+                                                <th class="text-center d-none d-md-table-cell">Source</th>
+                                                <th class="d-none d-xl-table-cell">Doc No</th>
+
+                                                <th style="width:130px">Actions</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @for(e of paginatedEntries(); track e.id){
+
+                                            <tr>
+
+                                                <!-- MOBILE EXPAND -->
+                                                <td class="d-xl-none text-center" style="padding-left:15px;">
+                                                    <a href="javascript:void(0);" class="TablePlus"
+                                                        data-bs-toggle="modal" data-bs-target="#rowDetailsModal"
+                                                        (click)="openRowDetails(e)">
+                                                        <i class="ti ti-plus"></i>
+                                                    </a>
+                                                </td>
+
+                                                <!-- DATE -->
+                                                <td class="d-none d-md-table-cell">
+                                                    {{ e.postingDate | date:'dd/MM/yyyy' }}
+                                                </td>
+
+                                                <!-- ACCOUNT -->
+                                                <td>
+                                                    <div class="fw-semibold">{{ e.accountName }}</div>
+                                                    <small class="text-muted">{{ e.accountCode }}</small>
+                                                </td>
+
+                                                <!-- NARRATION -->
+                                                <td class="d-none d-xl-table-cell">
+                                                    {{ e.narration || '-' }}
+                                                </td>
+
+                                                <!-- DEBIT -->
+                                                <td class="d-none d-md-table-cell text-success fw-semibold">
+                                                    {{ e.debitAmount > 0 ? (e.debitAmount | number:'1.2-2') : '-' }}
+                                                </td>
+
+                                                <!-- CREDIT -->
+                                                <td class="d-none d-md-table-cell text-danger fw-semibold">
+                                                    {{ e.creditAmount > 0 ? (e.creditAmount | number:'1.2-2') : '-' }}
+                                                </td>
+
+                                                <td class="text-center d-none d-md-table-cell">
+
+                                                    <!-- Journal Entry -->
+                                                    @if(e.sourceType === 'JournalEntry'){
+                                                    <div appTooltip="Journal Entry" tooltipIcon="ti-book"
+                                                        tooltipBg="linear-gradient(135deg, #22c55e, #16a34a)"
+                                                        tooltipArrow="#22c55e" class="source-icon green">
+
+                                                        <i class="ti ti-book"></i>
+                                                    </div>
+                                                    }
+
+                                                    <!-- Petty Cash -->
+                                                    @if(e.sourceType === 'PettyCash'){
+                                                    <div appTooltip="Petty Cash" tooltipIcon="ti-wallet"
+                                                        tooltipBg="linear-gradient(135deg, #3b82f6, #2563eb)"
+                                                        tooltipArrow="#3b82f6" class="source-icon blue">
+
+                                                        <i class="ti ti-wallet"></i>
+                                                    </div>
+                                                    }
+
+                                                    <!-- Fallback -->
+                                                    @if(!e.sourceType){
+                                                    <div appTooltip="Unknown" tooltipIcon="ti-help"
+                                                        tooltipBg="linear-gradient(135deg, #9ca3af, #6b7280)"
+                                                        tooltipArrow="#9ca3af" class="source-icon gray">
+
+                                                        <i class="ti ti-help"></i>
+                                                    </div>
+                                                    }
+
+                                                </td>
+
+                                                <!-- DOC -->
+                                                <td class="d-none d-xl-table-cell">
+                                                    {{ e.sourceDocumentNumber }}
+                                                </td>
+
+                                                <!-- ACTIONS -->
+                                                <td>
+                                                    <div class="action-icons">
+
+                                                        <button class="icon-btn view" (click)="onView(e)">
+                                                            <i class="ti ti-eye"></i>
+                                                        </button>
+
+                                                        <!-- <button class="icon-btn delete" (click)="onDelete(e)">
+                                                            <i class="ti ti-trash"></i>
+                                                        </button> -->
+
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+
+                                            }
+
+                                            @if(paginatedEntries().length === 0){
+                                            <tr>
+                                                <td colspan="7" class="text-center py-4">
+                                                    <div class="empty-table">
+                                                        <i class="ti ti-database-off"></i>
+                                                        <div>No ledger entries found</div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            }
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 🔹 PAGINATION -->
+                        <div class="pagination-bar Pagination">
+
+                            <!-- Page Size -->
+                            <div class="d-flex align-items-center fs-13"><!--!--><span class="me-2"
+                                    style="font-size: 12px;">Rows Per Page</span>
+                                <select class="form-select form-select-sm w-auto"
+                                    (change)="changePageSize($any($event.target).value)">
+                                    <option [selected]="pageSize() === 5">5</option>
+                                    <option [selected]="pageSize() === 10">10</option>
+                                    <option [selected]="pageSize() === 25">25</option>
+                                </select><!--!-->
+                                <!--!--><span class="ms-2" style="font-size: 12px;">Entries</span>
+                            </div>
+
+                            <!-- Controls -->
+                            <div class="pagination-controls">
+
+                                <nav class="v-pagination v-theme--BLUE_THEME text-subtitle-1 text-grey100"
+                                    role="navigation" aria-label="Pagination Navigation" data-test="v-pagination-root">
+                                    <ul class="pagination-list">
+                                        <li><button class="page-btn" (click)="changePage(page()-1)"
+                                                [disabled]="page() === 1"><span class="mdi mdi-chevron-left"
+                                                    style="font-size: 26px;"></span></button></li>
+                                        @for(p of [].constructor(totalPages()); let i = $index; track i){
+                                        <button class="page-btn" (click)="changePage(i+1)"
+                                            [class.active]="page() === i+1">
+                                            {{ i+1 }}
+                                        </button>
+                                        }
+                                        <li><button class="page-btn" (click)="changePage(page()+1)"
+                                                [disabled]="page() === totalPages()"><span class="mdi mdi-chevron-right"
+                                                    style="font-size: 26px;"></span></button></li>
+                                    </ul>
+                                </nav>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  MODAL -->
+<div class="modal fade" id="rowDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modern-modal">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Ledger Entry Details</h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                @if(selectedEntry()){
+
+                <div class="row g-2 details-grid">
+
+                    <div class="col-6">
+                        <label>Account</label>
+                        <div>{{ selectedEntry()?.accountName }}</div>
+                    </div>
+
+                    <div class="col-6">
+                        <label>Doc No</label>
+                        <div>{{ selectedEntry()?.sourceDocumentNumber }}</div>
+                    </div>
+
+                    <div class="col-6">
+                        <label>Debit</label>
+                        <div>{{ selectedEntry()?.debitAmount }}</div>
+                    </div>
+
+                    <div class="col-6">
+                        <label>Credit</label>
+                        <div>{{ selectedEntry()?.creditAmount }}</div>
+                    </div>
+
+                    <div class="col-12">
+                        <label>Narration</label>
+                        <div>{{ selectedEntry()?.narration }}</div>
+                    </div>
+
+                </div>
+
+                }
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<app-confirm-modal #modal></app-confirm-modal>

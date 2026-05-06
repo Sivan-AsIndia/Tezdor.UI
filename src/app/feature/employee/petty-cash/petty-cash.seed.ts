@@ -46,20 +46,11 @@ export const PETTY_CASH_SEED_FULL: PettyCash[] = [
     exchangeRate: 1,
 
     openingCashBalance: 0,
-    requestedAmount: 50000,
-    approvedAmount: 50000,
-    disbursedAmount: 50000,
-
-    expenseAmount: 0,
-    taxAmount: 0,
-
-    returnedAmount: 0,
-    replenishmentAmount: 0,
 
     closingCashBalance: 50000,
 
-    expenseCategoryId: 'EXP1',
-    expenseLedgerAccountId: 'LED_EXP',
+    // expenseCategoryId: 'EXP1',
+    // expenseLedgerAccountId: 'LED_EXP',
 
     taxApplicable: false,
     taxCodeId: 'GST0',
@@ -189,12 +180,10 @@ export const PETTY_CASH_SEED_FULL: PettyCash[] = [
     exchangeRate: 1,
 
     openingCashBalance: 50000,
-    expenseAmount: 1200,
-    taxAmount: 0,
     closingCashBalance: 48800,
 
-    expenseCategoryId: 'EXP_ST',
-    expenseLedgerAccountId: 'LED_EXP',
+    expenseCategoryId: 'EC1',
+    expenseLedgerAccountId: 'acc-004',
 
     taxApplicable: false,
 
@@ -249,9 +238,11 @@ export const PETTY_CASH_SEED_FULL: PettyCash[] = [
     custodianEmployeeId: 'EMP003',
 
     pettyCashTransactionType: PettyCashTransactionType.ExpenseRecording,
+    expenseCategoryId: 'EC2',
     transactionDate: '2026-04-03',
     fiscalYearId: 'FY26',
     accountingPeriodId: 'APR',
+    expenseLedgerAccountId: 'acc-004',
 
     purposeTitle: 'Duplicate claim',
 
@@ -259,7 +250,6 @@ export const PETTY_CASH_SEED_FULL: PettyCash[] = [
     exchangeRate: 1,
 
     openingCashBalance: 10000,
-    expenseAmount: 500,
     closingCashBalance: 9500,
 
     hasReceipt: true,
@@ -310,7 +300,8 @@ export const PETTY_CASH_SEED_FULL: PettyCash[] = [
     transactionDate: '2026-04-04',
     fiscalYearId: 'FY26',
     accountingPeriodId: 'APR',
-
+    expenseLedgerAccountId: 'acc-004',
+    expenseCategoryId: 'EC5',
     purposeTitle: 'Parking',
 
     currencyId: 'INR',
@@ -318,7 +309,6 @@ export const PETTY_CASH_SEED_FULL: PettyCash[] = [
 
     taxApplicable: false,
     openingCashBalance: 8000,
-    expenseAmount: 300,
     closingCashBalance: 7700,
 
     hasReceipt: false,

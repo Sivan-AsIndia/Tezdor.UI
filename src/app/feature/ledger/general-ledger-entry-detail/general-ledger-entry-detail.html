@@ -1,0 +1,188 @@
+<div class="emp-page">
+
+    <!--  HEADER -->
+    <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+
+        <div>
+            <h4 class="fw-bold mb-1 mainheading">Ledger Entry</h4>
+            <small class="text-muted subdescription">
+                View accounting entry, source traceability and audit details
+            </small>
+        </div>
+
+        <div class="arrow-steps d-none d-md-flex">
+            <ul id="breadcrumb">
+                <li><a routerLink="/dashboard"><span class="fa fa-home me-1"></span>Home</a></li>
+                <li><a routerLink="/general-ledger-entries"><span class="fa fa-book me-1"></span>Ledger</a></li>
+                <li><a href="javascript:void(0)"><span class="fa fa-eye me-1"></span>View</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    @if(entry()){
+
+    <!--  HERO -->
+    <div class="emp-hero-header d-flex justify-content-between align-items-center  mb-4">
+
+        <div class="d-flex align-items-center gap-3">
+
+            <div class="emp-avatar bg-success">
+                <i class="ti ti-book"></i>
+            </div>
+
+            <div>
+                <div class="emp-name">
+                    {{ entry()?.sourceDocumentNumber }}
+                </div>
+
+                <div class="emp-meta">
+                    <span>{{ entry()?.sourceType }}</span>
+                    <span class="dot"></span>
+                    <span>{{ formatDate(entry()?.postingDate) }}</span>
+                </div>
+            </div>
+
+        </div>
+
+        <button class="btn-print" (click)="print()">
+            <i class="ti ti-printer"></i>
+            <span class="d-none d-md-inline">Print</span>
+        </button>
+
+    </div>
+
+    <!--  KPI -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-4">
+            <div class="kpi-modern">
+                <div class="kpi-icon"><i class="ti ti-arrow-down"></i></div>
+                <div>
+                    <div class="kpi-value text-success">
+                        ₹ {{ entry()?.debitAmount | number:'1.2-2' }}
+                    </div>
+                    <div class="kpi-label">Debit</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="kpi-modern">
+                <div class="kpi-icon"><i class="ti ti-arrow-up"></i></div>
+                <div>
+                    <div class="kpi-value text-danger">
+                        ₹ {{ entry()?.creditAmount | number:'1.2-2' }}
+                    </div>
+                    <div class="kpi-label">Credit</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="kpi-modern">
+                <div class="kpi-icon"><i class="ti ti-scale"></i></div>
+                <div>
+                    <div class="kpi-value">
+                        ₹ {{ (entry()?.debitAmount || 0) - (entry()?.creditAmount || 0) }}
+                    </div>
+                    <div class="kpi-label">Net</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="pf-page">
+        <div class="pf-layout">
+
+            <!-- LEFT -->
+            <div class="pf-left">
+
+                <!-- ENTRY IDENTITY -->
+                <div class="pf-card">
+                    <div class="pf-head">Entry Identity</div>
+
+                    <div class="pf-grid">
+                        <div><label>Sequence No</label><b>{{ entry()?.postingSequenceNumber }}</b></div>
+                        <div><label>Posting Date</label><b>{{ formatDate(entry()?.postingDate) }}</b></div>
+                        <div><label>Entry Date</label><b>{{ formatDate(entry()?.entryDate) }}</b></div>
+                        <div><label>Period</label><b>{{ entry()?.accountingPeriodName }}</b></div>
+                    </div>
+                </div>
+
+                <!-- CONTEXT -->
+                <div class="pf-card">
+                    <div class="pf-head">Context</div>
+
+                    <div class="pf-grid">
+                        <div><label>Company</label><b>{{ entry()?.companyName }}</b></div>
+                        <div><label>Branch</label><b>{{ entry()?.branchName }}</b></div>
+                        <div><label>Ledger</label><b>{{ entry()?.ledgerName }}</b></div>
+                        <div><label>Account</label><b>{{ entry()?.accountCode }} - {{ entry()?.accountName }}</b></div>
+                        <div><label>Currency</label><b>{{ entry()?.baseCurrencyCode }}</b></div>
+                    </div>
+                </div>
+
+                <!-- SOURCE -->
+                <div class="pf-card">
+                    <div class="pf-head">Source Traceability</div>
+
+                    <div class="pf-grid">
+                        <div>
+                            <label>Source Type</label>
+                            <span class="pf-chip green">{{ entry()?.sourceType }}</span>
+                        </div>
+
+                        <div><label>Document No</label><b>{{ entry()?.sourceDocumentNumber }}</b></div>
+                        <div><label>Journal No</label><b>{{ entry()?.journalEntryNumber }}</b></div>
+                        <div><label>External Ref</label><b>{{ entry()?.externalReferenceNumber || '-' }}</b></div>
+                    </div>
+
+                    <div class="mt-3">
+                        <label>Narration</label>
+                        <div class="text-muted">{{ entry()?.narration }}</div>
+                    </div>
+
+                    <div class="mt-2">
+                        <label>Line Narration</label>
+                        <div class="text-muted">{{ entry()?.lineNarration }}</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+            <div class="pf-right">
+
+                <!-- SNAPSHOT -->
+                <div class="pf-card">
+                    <div class="pf-head">Snapshot</div>
+
+                    <div class="pf-grid">
+                        <div><label>Account Code</label><b>{{ entry()?.accountCodeSnapshot }}</b></div>
+                        <div><label>Account Name</label><b>{{ entry()?.accountNameSnapshot }}</b></div>
+                        <div><label>Branch Code</label><b>{{ entry()?.branchCodeSnapshot }}</b></div>
+                    </div>
+                </div>
+
+                <!--  AUDIT (MOVED HERE) -->
+                <div class="pf-card mt-3">
+                    <div class="pf-head">Audit Information</div>
+
+                    <div class="pf-grid">
+                        <div><label>Created At</label><b>{{ formatDateTime(entry()?.createdAt) }}</b></div>
+                        <div><label>Created By</label><b>{{ entry()?.createdBy }}</b></div>
+                        <div><label>Posting Batch</label><b>{{ entry()?.postingBatchId || '-' }}</b></div>
+                        <div><label>Reversal</label><b>{{ entry()?.isReversal ? 'Yes' : 'No' }}</b></div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    }
+
+</div>
