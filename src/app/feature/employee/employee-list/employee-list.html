@@ -1,0 +1,402 @@
+<div class="max-w-full">
+    <div class="full-container ">
+        <div class="v-container v-container--fluid v-locale--is-ltr rounded-xl p-0">
+            <div>
+
+
+                <!-- HEADER -->
+                <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+
+                    <div>
+                        <h4 class="fw-bold mb-1 mainheading">Employee Data</h4>
+                        <small class="text-muted subdescription">
+                            Track employee details, roles, and status across your organization.
+                        </small>
+                    </div>
+                    <!-- 🔷 ARROW BREADCRUMB -->
+                    <div class="arrow-steps d-none d-md-flex">
+
+
+                        <ul id="breadcrumb">
+                            <li><a routerLink="/dashboard"><span class="fa fa-home me-1"> </span>Home</a></li>
+
+                            <li><a href="javascript:void(0)"><span class="fa fa-list me-1"> </span>Employee
+                                    List</a></li>
+                        </ul>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="content-card">
+                    <div class="card-body-inner">
+
+                        <!-- 🔹 TOP BAR -->
+                        <div class="table-topbar">
+                            <div class="table-title-badge">
+                                <h5 class="tableheading">Employee List</h5>
+                                <span class="count-badge" id="countBadge">{{ total() }}</span>
+                            </div>
+
+                            <div class="topbar-actions">
+
+                                <!-- 🔍 SEARCH -->
+                                <div class="search-box">
+                                    <input type="text" placeholder="Search employees..." [value]="searchValue()"
+                                        (input)="onSearch($any($event.target).value)" />
+
+                                    @if(!searchValue()){
+                                    <button class="icon-clear"><i class="bi bi-search"></i></button>
+                                    }
+
+                                    @if(searchValue()){
+                                    <button class="icon-clear" (click)="clearSearch()">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                    }
+                                </div>
+                                <!-- WRAPPER (IMPORTANT) -->
+                                <div class="filter-wrapper">
+
+                                    <!-- FILTER BUTTON -->
+                                    <button class=" filter-btn" style="width: 35px;" (click)="showFilter.set(true)">
+                                        <i class="ti ti-filter fs-5"></i>
+                                    </button>
+
+                                    <!-- OVERLAY -->
+                                    @if(showFilter()){
+                                    <div class="filter-overlay" (click)="closeFilter()"></div>
+                                    }
+
+
+                                    <!-- FILTER PANEL -->
+                                    @if(showFilter()){
+                                    <div class="filter-panel">
+
+                                        <!-- HEADER -->
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h5 class="fw-bold mb-0">Filter</h5>
+                                            <button class="btn btn-sm btn-cancel"
+                                                (click)="resetFilters()">Reset</button>
+                                        </div>
+
+                                        <!-- CLASS -->
+                                        <div class="mb-3">
+                                            <label class="fw-semibold mb-2">Status</label>
+
+                                            <div class="chip-group">
+                                                @for (s of statuses; track s) {
+                                                <span (click)="selectStatus(s)" [class.active]="filters().status === s">
+                                                    {{ s }}
+                                                </span>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <!-- SECTION -->
+                                        <div class="mb-3">
+                                            <label class="fw-semibold mb-2">Department</label>
+
+                                            <div class="chip-group">
+                                                @for (d of departments(); track d.id) {
+                                                <span (click)="selectDepartment(d.id)"
+                                                    [class.active]="filters().departmentId === d.id">
+                                                    {{ d.name }}
+                                                </span>
+                                                }
+                                            </div>
+                                        </div>
+
+
+                                        <!-- FOOTER -->
+                                        <div class="d-flex gap-2 mt-4">
+                                            <button class="btn btn-cancel w-50" (click)="closeFilter()">Cancel</button>
+                                            <button class="btn btn-primary w-50" (click)="closeFilter()">Apply</button>
+                                        </div>
+
+                                    </div>
+                                    }
+
+                                </div>
+                                <button (click)="onAddEmp()"
+                                    class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-primary v-btn--density-default  v-btn--size-default v-btn--variant-elevated ml-auto">
+                                    <i class="mdi-account-multiple-plus mdi v-icon notranslate v-theme--BLUE_THEME v-icon--size-default mr-2"
+                                        aria-hidden="true"></i> Add </button>
+                            </div>
+                        </div>
+
+                        <!-- 🔹 TABLE -->
+                        <div class="border-table">
+                            <div class="v-table v-theme--BLUE_THEME v-table--density-default"><!---->
+                                <div class="v-table__wrapper">
+                                    <table>
+                                        <thead>
+                                            <tr style="background: #8080800d;">
+                                                <th class="d-xl-none" style="width:40px"></th>
+                                                <th (click)="sortBy('employeeName')" style="width:220px"
+                                                    class="sortable">
+                                                    Employee
+                                                    <i class="sort-icon"
+                                                        [class.asc]="sortColumn() === 'employeeName' && sortDirection() === 'asc'"
+                                                        [class.desc]="sortColumn() === 'employeeName' && sortDirection() === 'desc'">
+                                                    </i>
+                                                </th>
+                                                <!-- <th (click)="sortBy('employeeCode')"
+                                                    class="d-none d-md-table-cell sortable">
+                                                    Code
+                                                    <i class="sort-icon"
+                                                        [class.asc]="sortColumn() === 'employeeCode' && sortDirection() === 'asc'"
+                                                        [class.desc]="sortColumn() === 'employeeCode' && sortDirection() === 'desc'">
+                                                    </i>
+                                                </th> -->
+                                                <th (click)="sortBy('departmentId')"
+                                                    class="d-none d-md-table-cell sortable">
+                                                    Department
+                                                    <i class="sort-icon"
+                                                        [class.asc]="sortColumn() === 'departmentId' && sortDirection() === 'asc'"
+                                                        [class.desc]="sortColumn() === 'departmentId' && sortDirection() === 'desc'">
+                                                    </i>
+                                                </th>
+                                                <th (click)="sortBy('dateOfJoining')"
+                                                    class="d-none d-xl-table-cell sortable">
+                                                    D.O.J
+                                                    <i class="sort-icon"
+                                                        [class.asc]="sortColumn() === 'dateOfJoining' && sortDirection() === 'asc'"
+                                                        [class.desc]="sortColumn() === 'dateOfJoining' && sortDirection() === 'desc'">
+                                                    </i>
+                                                </th>
+                                                <th class="d-none d-xl-table-cell sortable" (click)="sortBy('status')">
+                                                    Status
+                                                    <i class="sort-icon"
+                                                        [class.asc]="sortColumn() === 'status' && sortDirection() === 'asc'"
+                                                        [class.desc]="sortColumn() === 'status' && sortDirection() === 'desc'">
+                                                    </i>
+                                                </th>
+                                                <th style="width:130px">Actions</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @for(emp of paginatedEmployees(); track emp.employeeId){
+
+                                            <tr>
+
+                                                <!-- PLUS ICON -->
+                                                <td class="d-xl-none text-center"
+                                                    style="padding: 0;padding-left: 15px;">
+                                                    <a href="javascript:void(0);" class="TablePlus"
+                                                        data-bs-toggle="modal" data-bs-target="#rowDetailsModal"
+                                                        (click)="openRowDetails(emp)">
+                                                        <i class="ti ti-plus"></i>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <div class="avatar "
+                                                            [style.background]="getAvatarColor(getFullName(emp))">
+                                                            {{ emp.firstName[0] }}
+                                                        </div>
+                                                        <div>
+                                                            <div class="fw-semibold">{{ emp.employeeName }}</div>
+                                                            <small class="text-muted">{{ emp.officialEmail }}</small>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <!-- <td class="d-none d-md-table-cell">{{ emp.employeeCode }}</td> -->
+                                                <td class="d-none d-md-table-cell">
+                                                    {{ getDepartmentName(emp.departmentId) }}
+                                                </td>
+                                                <td class="d-none d-xl-table-cell">{{ emp.dateOfJoining |
+                                                    date:'dd/MM/yyyy' }}</td>
+
+                                                <td class="d-none d-xl-table-cell">
+                                                    <span class="badge" [class.active]="emp.status === 'Active'"
+                                                        [class.inactive]="emp.status !== 'Active'">
+                                                        {{ emp.status }}
+                                                    </span>
+                                                </td>
+
+                                                <td>
+                                                    <div class="action-icons">
+
+                                                        <!--  Edit -->
+                                                        <button class="icon-btn edit" (click)="onEdit(emp)">
+                                                            <i class="ti ti-pencil"></i>
+                                                        </button>
+
+                                                        <!--  Delete -->
+                                                        <button class="icon-btn delete" (click)="onDelete(emp)">
+                                                            <i class="ti ti-trash"></i>
+                                                        </button>
+
+                                                        <!--  View -->
+                                                        <button class="icon-btn view" (click)="onView(emp)">
+                                                            <i class="ti ti-eye"></i>
+                                                        </button>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            }
+
+                                            @if(paginatedEmployees().length === 0){
+                                            <tr>
+                                                <td colspan="6" class="text-center py-4">
+
+                                                    <div class="empty-table">
+
+                                                        <i class="ti ti-database-off"></i>
+
+                                                        <div>No data found</div>
+
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                            }
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 🔹 PAGINATION -->
+                        <div class="pagination-bar Pagination">
+
+                            <!-- Page Size -->
+                            <div class="d-flex align-items-center fs-13"><!--!--><span class="me-2"
+                                    style="font-size: 12px;">Rows Per Page</span>
+                                <select class="form-select form-select-sm w-auto"
+                                    (change)="changePageSize($any($event.target).value)">
+                                    <option [selected]="pageSize() === 5">5</option>
+                                    <option [selected]="pageSize() === 10">10</option>
+                                    <option [selected]="pageSize() === 25">25</option>
+                                </select><!--!-->
+                                <!--!--><span class="ms-2" style="font-size: 12px;">Entries</span>
+                            </div>
+
+                            <!-- Controls -->
+                            <div class="pagination-controls">
+
+                                <nav class="v-pagination v-theme--BLUE_THEME text-subtitle-1 text-grey100"
+                                    role="navigation" aria-label="Pagination Navigation" data-test="v-pagination-root">
+                                    <ul class="pagination-list">
+                                        <li><button class="page-btn" (click)="changePage(page()-1)"
+                                                [disabled]="page() === 1"><span class="mdi mdi-chevron-left"
+                                                    style="font-size: 26px;"></span></button></li>
+                                        @for(p of [].constructor(totalPages()); let i = $index; track i){
+                                        <button class="page-btn" (click)="changePage(i+1)"
+                                            [class.active]="page() === i+1">
+                                            {{ i+1 }}
+                                        </button>
+                                        }
+                                        <li><button class="page-btn" (click)="changePage(page()+1)"
+                                                [disabled]="page() === totalPages()"><span class="mdi mdi-chevron-right"
+                                                    style="font-size: 26px;"></span></button></li>
+                                    </ul>
+                                </nav>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="rowDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modern-modal">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Employee Details
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                @if(selectedEmployee()) {
+
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="avatar-lg" [style.background]="getAvatarColor(getFullName(selectedEmployee()!))">
+                        {{ selectedEmployee()?.firstName?.[0] }}
+                    </div>
+
+                    <div>
+                        <div class="fw-bold">
+                            {{ selectedEmployee()?.firstName }} {{ selectedEmployee()?.lastName }}
+                        </div>
+                        <small class="text-muted">
+                            {{ selectedEmployee()?.officialEmail }}
+                        </small>
+                    </div>
+                </div>
+
+                <div class="row g-2 details-grid">
+
+                    <div class="col-6">
+                        <label>Employee Code</label>
+                        <div>{{ selectedEmployee()?.employeeCode }}</div>
+                    </div>
+
+                    <div class="col-6">
+                        <label>Department</label>
+                        <div>{{ selectedEmployee()?.departmentId }}</div>
+                    </div>
+
+                    <div class="col-6">
+                        <label>Joining Date</label>
+                        <div>
+                            {{ selectedEmployee()?.dateOfJoining | date:'dd/MM/yyyy' }}
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <label>Status</label>
+                        <div>
+                            <span class="badge" [class.active]="selectedEmployee()?.status === 'Active'"
+                                [class.inactive]="selectedEmployee()?.status !== 'Active'">
+                                {{ selectedEmployee()?.status }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <label>Mobile</label>
+                        <div>{{ selectedEmployee()?.personalmobileNumber }}</div>
+                    </div>
+
+                    <div class="col-6">
+                        <label>Email</label>
+                        <div>{{ selectedEmployee()?.officialEmail }}</div>
+                    </div>
+
+                </div>
+
+                }
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+                <button class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<app-confirm-modal #modal></app-confirm-modal>

@@ -1,0 +1,32 @@
+<div class="custom-toast-container">
+ 
+  @for (toast of toastService.toasts(); track toast.id) {
+    <div class="custom-toast" [class]="toast.type">
+ 
+      <div class="toast-icon">
+<i class="ti"
+   [class.ti-check]="toast.type === 'success'"
+   [class.ti-alert-octagon]="toast.type === 'error'"
+   [class.ti-alert-triangle]="toast.type === 'warning'"
+   [class.ti-info-circle]="toast.type === 'info'">
+</i>
+      </div>
+ 
+      <div class="toast-content">
+        <div class="toast-title">
+          {{ toast.type | titlecase }}
+        </div>
+        <div class="toast-message">
+          {{ toast.message }}
+        </div>
+      </div>
+ 
+      <button class="toast-close"
+              (click)="toastService.remove(toast.id)">
+        <i class="ti ti-x"></i>
+      </button>
+ 
+    </div>
+  }
+ 
+</div>

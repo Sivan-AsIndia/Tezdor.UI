@@ -1,0 +1,453 @@
+<div class="max-w-full">
+    <div class="full-container ">
+        <div class="v-container v-container--fluid v-locale--is-ltr rounded-xl p-0">
+            <div>
+
+
+                <!-- HEADER -->
+                <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+
+                    <div>
+                        <h4 class="fw-bold mb-1 mainheading">Salary Runs</h4>
+                        <small class="text-muted subdescription">
+                            Manage payroll runs, employee salaries, and payment status.
+                        </small>
+                    </div>
+                    <!-- 🔷 ARROW BREADCRUMB -->
+                    <div class="arrow-steps d-none d-md-flex">
+
+
+                        <ul id="breadcrumb">
+                            <li><a routerLink="/dashboard"><span class="fa fa-home me-1"> </span>Home</a></li>
+
+                            <li><a href="javascript:void(0)"><span class="bi bi-cash-stack me-1"> </span>Salary
+                                    List</a></li>
+                        </ul>
+
+                    </div>
+
+
+                </div>
+
+                <div class="content-card">
+                    <div class="card-body-inner">
+
+                        <!-- 🔹 TOP BAR -->
+                        <div class="table-topbar">
+
+                            <div class="table-title-badge">
+                                <h5 class="tableheading">Salary Runs</h5>
+                                <span class="count-badge">{{ total() }}</span>
+                            </div>
+
+                            <div class="topbar-actions">
+
+                                <!-- 🔍 SEARCH -->
+                                <div class="search-box">
+                                    <input type="text" placeholder="Search salary..." [value]="searchValue()"
+                                        (input)="onSearch($any($event.target).value)" />
+
+                                    @if(!searchValue()){
+                                    <button class="icon-clear">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                    }
+
+                                    @if(searchValue()){
+                                    <button class="icon-clear" (click)="clearSearch()">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                    }
+                                </div>
+
+                                <!-- FILTER -->
+                                <div class="filter-wrapper">
+
+                                    <!-- BUTTON -->
+                                    <button class="filter-btn" [class.active]="filters().status || filters().period"
+                                        (click)="showFilter.set(true)">
+                                        <i class="ti ti-filter fs-5"></i>
+                                    </button>
+
+                                    <!-- OVERLAY -->
+                                    @if(showFilter()){
+                                    <div class="filter-overlay" (click)="closeFilter()"></div>
+                                    }
+
+                                    <!-- PANEL -->
+                                    @if(showFilter()){
+                                    <div class="filter-panel">
+
+                                        <!-- HEADER -->
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h5 class="fw-bold mb-0">Filter</h5>
+                                            <button class="btn btn-sm btn-cancel"
+                                                (click)="resetFilters()">Reset</button>
+                                        </div>
+
+                                        <!-- STATUS DROPDOWN -->
+                                        <div class="mb-3">
+                                            <label class="fw-semibold mb-2">Status</label>
+
+                                            <select class="form-select" [value]="filters().status ?? ''"
+                                                (change)="selectStatus($any($event.target).value)">
+
+                                                <option value="">All</option>
+
+                                                @for(s of statusOptions; track s.value){
+                                                <option [value]="s.value">{{ s.label }}</option>
+                                                }
+
+                                            </select>
+                                        </div>
+
+                                        <!-- PERIOD DROPDOWN -->
+                                        <div class="mb-3">
+                                            <label class="fw-semibold mb-2">Salary Period</label>
+
+                                            <select class="form-select" [value]="filters().period ?? ''"
+                                                (change)="selectPeriod($any($event.target).value)">
+
+                                                <option value="">All</option>
+
+                                                @for(p of periods(); track p){
+                                                <option [value]="p">{{ p }}</option>
+                                                }
+
+                                            </select>
+                                        </div>
+
+                                        <!-- FOOTER -->
+                                        <div class="d-flex gap-2 mt-4">
+                                            <button class="btn btn-cancel w-50" (click)="closeFilter()">Cancel</button>
+                                            <button class="btn btn-primary w-50" (click)="closeFilter()">Apply</button>
+                                        </div>
+
+                                    </div>
+                                    }
+
+                                </div>
+                                <!-- ADD BUTTON -->
+                                <button (click)="onAddSalary()"
+                                    class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-primary v-btn--density-default  v-btn--size-default v-btn--variant-elevated ml-auto">
+                                    <i class="mdi-account-multiple-plus mdi v-icon notranslate v-theme--BLUE_THEME v-icon--size-default mr-2"
+                                        aria-hidden="true"></i> Add </button>
+
+                            </div>
+                        </div>
+
+                        <!-- 🔹 TABLE -->
+                        <div class="border-table">
+                            <div class="v-table__wrapper">
+                                <table>
+                                    <thead>
+                                        <tr style="background:#8080800d;">
+<th class="d-xl-none" style="width:40px"></th>
+                                            <!-- <th (click)="sortBy('salaryNumber')" class="sortable">
+                                                Salary No
+                                                <i class="sort-icon"
+                                                    [class.asc]="sortColumn() === 'salaryNumber' && sortDirection() === 'asc'"
+                                                    [class.desc]="sortColumn() === 'salaryNumber' && sortDirection() === 'desc'">
+                                                </i>
+                                            </th> -->
+
+                                            <th (click)="sortBy('salaryMonth')" >
+                                                Period
+                                                <i class="sort-icon"
+                                                    [class.asc]="sortColumn() === 'salaryMonth' && sortDirection() === 'asc'"
+                                                    [class.desc]="sortColumn() === 'salaryMonth' && sortDirection() === 'desc'">
+                                                </i>
+                                            </th>
+
+                                            <th (click)="sortBy('fromDate')" class="sortable d-none d-md-table-cell">
+                                                From
+                                                <i class="sort-icon"
+                                                    [class.asc]="sortColumn() === 'fromDate' && sortDirection() === 'asc'"
+                                                    [class.desc]="sortColumn() === 'fromDate' && sortDirection() === 'desc'">
+                                                </i>
+                                            </th>
+
+                                            <th (click)="sortBy('toDate')" class="sortable d-none d-md-table-cell">
+                                                To
+                                                <i class="sort-icon"
+                                                    [class.asc]="sortColumn() === 'toDate' && sortDirection() === 'asc'"
+                                                    [class.desc]="sortColumn() === 'toDate' && sortDirection() === 'desc'">
+                                                </i>
+                                            </th>
+
+                                            <th (click)="sortBy('totalEmployees')" class="sortable d-none d-xl-table-cell">
+                                                Employees
+                                                <i class="sort-icon"
+                                                    [class.asc]="sortColumn() === 'totalEmployees' && sortDirection() === 'asc'"
+                                                    [class.desc]="sortColumn() === 'totalEmployees' && sortDirection() === 'desc'">
+                                                </i>
+                                            </th>
+
+                                            <th (click)="sortBy('totalNetSalary')" class="sortable d-none d-xl-table-cell">
+                                                Net Salary
+                                                <i class="sort-icon"
+                                                    [class.asc]="sortColumn() === 'totalNetSalary' && sortDirection() === 'asc'"
+                                                    [class.desc]="sortColumn() === 'totalNetSalary' && sortDirection() === 'desc'">
+                                                </i>
+                                            </th>
+
+                                            <th (click)="sortBy('status')" class="sortable d-none d-xl-table-cell">
+                                                Status
+                                                <i class="sort-icon"
+                                                    [class.asc]="sortColumn() === 'status' && sortDirection() === 'asc'"
+                                                    [class.desc]="sortColumn() === 'status' && sortDirection() === 'desc'">
+                                                </i>
+                                            </th>
+
+                                            <th style="width:130px">Actions</th>
+
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                        @for(s of paginated(); track s.salaryId){
+
+                                        <tr>
+                                                <!-- PLUS ICON -->
+                                                <td class="d-xl-none text-center"
+                                                    style="padding: 0;padding-left: 15px;">
+                                                    <a href="javascript:void(0);" class="TablePlus"
+                                                        data-bs-toggle="modal" data-bs-target="#rowDetailsModal"
+                                                        (click)="openRowDetails(s)">
+                                                        <i class="ti ti-plus"></i>
+                                                    </a>
+                                                </td>
+                                            <!-- <td class="fw-semibold">
+                                                {{ s.salaryNumber }}
+                                            </td> -->
+                                            <!-- 
+                                            <td>
+                                                {{ getBranchName(s.branchId) }}
+                                            </td> -->
+
+                                            <td>
+                                                {{ s.salaryMonth }}
+                                            </td>
+
+                                            <td class="d-none d-md-table-cell">
+                                                {{ s.fromDate | date:'dd/MM/yyyy' }}
+                                            </td>
+
+                                            <td class="d-none d-md-table-cell">
+                                                {{ s.toDate | date:'dd/MM/yyyy' }}
+                                            </td>
+
+                                            <td class="d-none d-xl-table-cell">
+                                                {{ s.totalEmployees }}
+                                            </td>
+
+                                            <td class="fw-semibold text-success d-none d-xl-table-cell">
+                                                ₹ {{ formatAmount(s.totalNetSalary) }}
+                                            </td>
+
+                                            <td class="d-none d-xl-table-cell">
+                                                <span class="badge" [class.open]="s.status === 5"
+                                                    [class.active]="s.status === 3" [class.inactive]="s.status === 4"
+                                                    [class.submitted]="s.status === 2" [class.draft]="s.status === 1">
+                                                    {{ getStatusLabel(s.status) }}
+                                                </span>
+                                            </td>
+
+                                            <td>
+                                                <div class="action-icons">
+
+                                                    @if(canEdit(s.status)){
+                                                    <button class="icon-btn edit" (click)="onEdit(s)">
+                                                        <i class="ti ti-pencil"></i>
+                                                    </button>
+                                                    }
+
+                                                    <button class="icon-btn view" (click)="onView(s)">
+                                                        <i class="ti ti-eye"></i>
+                                                    </button>
+
+                                                </div>
+                                            </td>
+
+                                        </tr>
+
+                                        }
+
+                                        @if(paginated().length === 0){
+                                        <tr>
+                                            <td colspan="9" class="text-center py-4">
+                                                <div class="empty-table">
+                                                    <i class="ti ti-database-off"></i>
+                                                    <div>No salary runs found</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 🔹 PAGINATION -->
+                        <div class="pagination-bar Pagination">
+
+                            <!-- Page Size -->
+                            <div class="d-flex align-items-center fs-13"><!--!--><span class="me-2"
+                                    style="font-size: 12px;">Rows Per Page</span>
+                                <select class="form-select form-select-sm w-auto"
+                                    (change)="changePageSize($any($event.target).value)">
+                                    <option [selected]="pageSize() === 5">5</option>
+                                    <option [selected]="pageSize() === 10">10</option>
+                                    <option [selected]="pageSize() === 25">25</option>
+                                </select><!--!-->
+                                <!--!--><span class="ms-2" style="font-size: 12px;">Entries</span>
+                            </div>
+
+                            <!-- Controls -->
+                            <div class="pagination-controls">
+
+                                <nav class="v-pagination v-theme--BLUE_THEME text-subtitle-1 text-grey100"
+                                    role="navigation" aria-label="Pagination Navigation" data-test="v-pagination-root">
+                                    <ul class="pagination-list">
+                                        <li><button class="page-btn" (click)="changePage(page()-1)"
+                                                [disabled]="page() === 1"><span class="mdi mdi-chevron-left"
+                                                    style="font-size: 26px;"></span></button></li>
+                                        @for(p of [].constructor(totalPages()); let i = $index; track i){
+                                        <button class="page-btn" (click)="changePage(i+1)"
+                                            [class.active]="page() === i+1">
+                                            {{ i+1 }}
+                                        </button>
+                                        }
+                                        <li><button class="page-btn" (click)="changePage(page()+1)"
+                                                [disabled]="page() === totalPages()"><span class="mdi mdi-chevron-right"
+                                                    style="font-size: 26px;"></span></button></li>
+                                    </ul>
+                                </nav>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 🔹 ROW DETAILS MODAL -->
+<div class="modal fade" id="rowDetailsModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- HEADER -->
+      <div class="modal-header">
+        <h5 class="modal-title">
+          Salary Details - {{ selectedRow()?.salaryNumber }}
+        </h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- BODY -->
+      <div class="modal-body">
+
+        @if(selectedRow()){
+
+        <div class="row g-3 mb-3">
+
+          <div class="col-md-4">
+            <label class="text-muted small">Period</label>
+            <div class="fw-semibold">{{ selectedRow()?.salaryMonth }}</div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="text-muted small">From</label>
+            <div>{{ selectedRow()?.fromDate | date:'dd/MM/yyyy' }}</div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="text-muted small">To</label>
+            <div>{{ selectedRow()?.toDate | date:'dd/MM/yyyy' }}</div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="text-muted small">Employees</label>
+            <div>{{ selectedRow()?.totalEmployees }}</div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="text-muted small">Net Salary</label>
+            <div class="text-success fw-semibold">
+              ₹ {{ formatAmount(selectedRow()?.totalNetSalary) }}
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="text-muted small">Status</label>
+            <div>
+              <span class="badge"
+                [class.open]="selectedRow()?.status === 5"
+                [class.active]="selectedRow()?.status === 3"
+                [class.inactive]="selectedRow()?.status === 4"
+                [class.submitted]="selectedRow()?.status === 2"
+                [class.draft]="selectedRow()?.status === 1">
+                {{ getStatusLabel(selectedRow()?.status!) }}
+              </span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 🔸 LINES TABLE -->
+        <!-- <div class="border-table">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Employee</th>
+                <th>Basic</th>
+                <th>Gross</th>
+                <th>Deductions</th>
+                <th>Net</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              @for(line of selectedRow()?.salaryLines ?? []; track line.salaryLineId){
+
+              <tr>
+                <td>{{ line.employeeId }}</td>
+                <td>₹ {{ formatAmount(line.basicSalary) }}</td>
+                <td>₹ {{ formatAmount(line.grossEarnings) }}</td>
+                <td class="text-danger">
+                  ₹ {{ formatAmount(line.totalDeductions) }}
+                </td>
+                <td class="text-success fw-semibold">
+                  ₹ {{ formatAmount(line.netSalary) }}
+                </td>
+              </tr>
+
+              }
+
+              @if((selectedRow()?.salaryLines ?? []).length === 0){
+              <tr>
+                <td colspan="5" class="text-center text-muted">
+                  No salary lines found
+                </td>
+              </tr>
+              }
+
+            </tbody>
+          </table>
+        </div> -->
+
+        }
+
+      </div>
+
+    </div>
+  </div>
+</div>

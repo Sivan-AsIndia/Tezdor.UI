@@ -1,0 +1,424 @@
+<div class="max-w-full">
+    <div class="full-container ">
+        <div class="v-container v-container--fluid v-locale--is-ltr rounded-xl p-0">
+            <div>
+
+
+                <!-- HEADER -->
+                <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+
+                    <div>
+                        <h4 class="fw-bold mb-1 mainheading">Product Data</h4>
+                        <small class="text-muted subdescription"> View, manage, and organize all your products in one
+                            place.
+                        </small>
+                    </div>
+                    <!-- 🔷 ARROW BREADCRUMB -->
+                    <div class="arrow-steps d-none d-md-flex">
+
+
+                        <ul id="breadcrumb">
+                            <li><a href="#"><span class="fa fa-home"> </span>&nbsp;&nbsp;Home</a></li>
+
+                            <li><a><span class="fa fa-list"> </span>&nbsp;&nbsp;List</a></li>
+                        </ul>
+
+                    </div>
+
+
+                </div>
+
+                <div class="content-card">
+                    <div class="card-body-inner">
+
+                        <!-- TOP BAR -->
+                        <div class="table-topbar">
+                            <div class="table-title-badge">
+                                <h5 class="tableheading">Product List</h5>
+                                <span class="count-badge" id="countBadge">{{paginatedProducts().length}}</span>
+                            </div>
+                            <div class="topbar-actions">
+                                <div class="search-box">
+
+                                    <!-- INPUT -->
+                                    <input type="text" placeholder="Search orders..." [value]="searchValue()"
+                                        (input)="searchValue.set($event.target.value)" />
+
+                                    @if(!searchValue()){
+                                    <button class="icon-clear" type="button">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                    }
+                                    @if(searchValue()){
+                                    <button class="icon-clear" type="button" (click)="clearSearch()">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                    }
+
+                                </div>
+<div class="filter-wrapper">
+  <button class="filter-btn" style="width:35px;" (click)="toggleFilter()">
+    <i class="ti ti-filter fs-5"></i>
+       @if (activeFilterCount() > 0) {
+                      <span class="filter-dot">{{ activeFilterCount() }}</span>
+                    }
+  </button>
+</div>
+
+@if(showFilter()){
+  <div class="filter-overlay" (click)="closeFilter()"></div>
+  
+  <div class="filter-panel"
+    [style.top.px]="filterTop"
+    [style.right.px]="filterRight">
+    
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold mb-0">Filter</h5>
+      <button class="btn btn-sm bg-secondary" (click)="resetFilters()">Reset</button>
+    </div>
+
+    <!-- STATUS -->
+    <div class="mb-3">
+      <label class="fw-semibold mb-2">Status</label>
+      <div class="chip-group">
+        @for (s of statuses(); track s) {
+          <span (click)="selectStatus(s)"
+            [class]="'filter-chip ' + statusChipClass(s) + (tempFilters().status === s ? ' active' : '')">
+            {{ capitalize(s) }}
+          </span>
+        }
+      </div>
+    </div>
+
+    <!-- CATEGORY -->
+    <div class="mb-3">
+      <label class="fw-semibold mb-2">Category</label>
+      <div class="chip-group">
+        @for (c of categories(); track c) {
+          <span class="filter-chip" (click)="selectCategory(c)"
+            [class.active]="tempFilters().category === c.toLowerCase()">
+            {{ c }}
+          </span>
+        }
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="d-flex gap-2 mt-4">
+      <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated bg-secondary px-3" (click)="closeFilter()">Cancel</button>
+      <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated" (click)="applyFilters()">Apply</button>
+    </div>
+  </div>
+}
+
+
+
+
+
+                                <button type="button"
+                                    class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-primary v-btn--density-default  v-btn--size-default v-btn--variant-elevated ml-auto"
+                                    aria-haspopup="dialog"
+                                    style="text-transform: capitalize; letter-spacing: 0px;padding-left: 10px;padding-right: 10px;"
+                                    routerLink="/products/create"><span class="v-btn__overlay"></span><span
+                                        class="v-btn__underlay"></span><!----><span class="v-btn__content"
+                                        data-no-activator="">
+                                        <i class="mdi mdi-package-variant-plus mdi v-icon notranslate v-theme--BLUE_THEME v-icon--size-default mr-2"
+                                            aria-hidden="true"></i>Add </span><!----><!----></button><!---->
+
+                            </div>
+                        </div>
+
+                        <!-- TABLE -->
+                        <div class="border-table">
+                            <div class="v-table v-theme--BLUE_THEME v-table--density-default"><!---->
+                                <div class="v-table__wrapper">
+                                    <table>
+                                        <thead>
+                                            <tr style="background: #8080800d;">
+                                                <th class="text-subtitle-1 font-weight-semibold">#</th>
+                                                <!-- <th class="text-subtitle-1 font-weight-semibold">Product Code</th> -->
+                                                <th class="text-subtitle-1 font-weight-semibold">Product Name</th>
+                                                <th class="text-subtitle-1 font-weight-semibold">Category</th>
+                                                <th class="text-subtitle-1 font-weight-semibold">Cost Price</th>
+                                                <th class="text-subtitle-1 font-weight-semibold">Selling Price</th>
+                                                <th class="text-subtitle-1 font-weight-semibold">Stock</th>
+                                                <th class="text-subtitle-1 font-weight-semibold">Status</th>
+                                                <th class="text-subtitle-1 font-weight-semibold">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (paginatedProducts().length === 0) {
+                                            <tr>
+                                                <td colspan="9" style="text-align:center; padding: 30px; color: #888;">
+                                                    No Data Found
+                                                </td>
+                                            </tr>
+                                            }
+                                            @for (p of paginatedProducts(); track p.id) {
+                                            <tr>
+                                                <td class="text-subtitle-1 textSecondary">{{ p.id }}</td>
+                                                <!-- <td class="text-subtitle-1 textSecondary text-no-wrap">
+                                                    <strong>{{ p.productCode }}</strong>
+                                                </td> -->
+                                                <td class="text-subtitle-1 textSecondary text-no-wrap">
+                                                    {{ p.productName }}
+                                                </td>
+                                                <td class="text-subtitle-1 textSecondary text-no-wrap">
+                                                    {{ p.categoryName }}
+                                                </td>
+                                                <td class="text-subtitle-1 textSecondary text-no-wrap">
+                                                    ₹{{ p.costPrice | number:'1.2-2' }}
+                                                </td>
+                                                <td class="text-subtitle-1 textSecondary text-no-wrap">
+                                                    ₹{{ p.sellingPrice | number:'1.2-2' }}
+                                                </td>
+                                                <td class="text-subtitle-1 text-no-wrap">
+                                                    @if (p.reorderLevel && p.currentStock <= p.reorderLevel) { <span
+                                                        style="color: red; font-weight: 600;">
+                                                        {{ p.currentStock }}
+                                                        </span>
+                                                        } @else {
+                                                        <span>{{ p.currentStock }}</span>
+                                                        }
+                                              <td>
+  @if (p.status.toLowerCase() === 'active') {
+    <span class="badge bg-lightsuccess text-success rounded-2">Active</span>
+  } 
+  @else if (p.status.toLowerCase() === 'inactive') {
+    <span class="badge bg-lighterror text-error rounded-2">Inactive</span>
+  } 
+  @else {
+    <span class="badge bg-lightinfo text-info rounded-2">Discontinued</span>
+  }
+</td>
+                                                <td>
+                                                    <div class="d-flex align-center">
+                                                        <button type="button"
+                                                            class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                                                            aria-describedby="v-tooltip-v-0-70"
+                                                            style="text-transform: capitalize; letter-spacing: 0px;"
+                                                            [routerLink]="['/products/edit', p.id]"><span
+                                                                class="v-btn__overlay"></span><span
+                                                                class="v-btn__underlay"></span><!----><span
+                                                                class="v-btn__content" data-no-activator=""><svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    class="icon-tabler icon-tabler-pencil text-primary"
+                                                                    width="20px" height="20px" viewBox="0 0 24 24"
+                                                                    stroke-width="1.5" stroke="currentColor" fill="none"
+                                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                    <path
+                                                                        d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
+                                                                    <path d="M13.5 6.5l4 4" />
+                                                                </svg></span><!----><!----></button>
+                                                        <button type="button" data-bs-toggle="modal"
+                                                            data-bs-target="#deleteModal"
+                                                            class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                                                            aria-describedby="v-tooltip-v-0-72"
+                                                            style="text-transform: capitalize; letter-spacing: 0px;"
+                                                            (click)="DeletePopupView(p)"><span
+                                                                class="v-btn__overlay"></span><span
+                                                                class="v-btn__underlay"></span><!----><span
+                                                                class="v-btn__content" data-no-activator=""><svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    class="icon-tabler icon-tabler-trash text-error"
+                                                                    width="20px" height="20px" viewBox="0 0 24 24"
+                                                                    stroke-width="1.5" stroke="currentColor" fill="none"
+                                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                    <path d="M4 7l16 0" />
+                                                                    <path d="M10 11l0 6" />
+                                                                    <path d="M14 11l0 6" />
+                                                                    <path
+                                                                        d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                                                    <path
+                                                                        d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                                                </svg></span><!----><!---->
+                                                        </button>
+                                                        <a [routerLink]="['/products', p.id]"
+                                                            class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                                                            aria-describedby="v-tooltip-v-0-80"
+                                                            style="text-transform: capitalize; letter-spacing: 0px;"><span
+                                                                class="v-btn__overlay"></span><span
+                                                                class="v-btn__underlay"></span><!----><span
+                                                                class="v-btn__content" data-no-activator=""><svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    class="icon-tabler icon-tabler-eye text-info"
+                                                                    width="20px" height="20px" viewBox="0 0 24 24"
+                                                                    stroke-width="1.5" stroke="currentColor" fill="none"
+                                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                                    <path
+                                                                        d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                                                </svg></span><!----><!----></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div><!---->
+                            </div>
+                        </div>
+                        <hr class="v-divider v-theme--BLUE_THEME" aria-orientation="horizontal" role="separator"
+                            style="border-style: solid;">
+                        <!-- PAGINATION -->
+                        <div class="d-sm-flex justify-md-space-between align-center Pagination">
+
+                            <!-- Rows Per Page -->
+                            <div class="d-flex align-items-center fs-13">
+                                <span class="me-2" style="font-size: 12px;">Rows Per Page</span>
+
+                                <select class="form-select form-select-sm w-auto" [value]="pageSize()"
+                                    (change)="onPageSizeChange($event)">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                </select>
+
+                                <span class="ms-2" style="font-size: 12px;">Entries</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <nav class="v-pagination v-theme--BLUE_THEME text-subtitle-1 text-grey100"
+                                    role="navigation" aria-label="Pagination Navigation">
+                                    <ul class="pagination-list">
+
+                                        <li>
+                                            <button class="page-btn" [disabled]="currentPage() === 1"
+                                                (click)="goToPage(currentPage() - 1)">
+                                                <span class="mdi mdi-chevron-left" style="font-size: 26px;"></span>
+                                            </button>
+                                        </li>
+                                        @for (page of pageNumbers(); track page) {
+                                        <li>
+                                            <button class="page-btn" [class.active]="page === currentPage()"
+                                                (click)="goToPage(page)">
+                                                {{ page }}
+                                            </button>
+                                        </li>
+                                        }
+                                        <li>
+                                            <button class="page-btn" [disabled]="currentPage() === totalPages()"
+                                                (click)="goToPage(currentPage() + 1)">
+                                                <span class="mdi mdi-chevron-right" style="font-size: 26px;"
+                                                    [style.color]="currentPage() === totalPages() ? '#80808070' : ''">
+                                                </span>
+                                            </button>
+                                        </li>
+
+                                    </ul>
+                                </nav>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Delete Popup -->
+<style>
+    /* Modal box styling */
+    .custom-box {
+        border-radius: 12px;
+        width: 400px;
+        margin: auto;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Icon */
+    .icon-wrapper {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 15px;
+        background: #fdecec;
+        color: #ff4d4f;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 26px;
+    }
+
+    /* Title */
+    .custom-box h2 {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    /* Text */
+    .custom-box p {
+        color: #6c757d;
+        font-size: 15px;
+        margin-bottom: 20px;
+    }
+
+    /* Buttons */
+    .btn-group {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    /* Cancel */
+    .cancel-btn {
+        background: #fff;
+        border: 1px solid #ccc;
+        padding: 10px 18px;
+        border-radius: 6px;
+    }
+
+    /* Delete */
+    .delete-btn {
+        background: linear-gradient(180deg, #ff4d4f, #d9363e);
+        color: #fff;
+        padding: 10px 18px;
+        border-radius: 6px;
+        border: none;
+    }
+
+    /* Hover */
+    .delete-btn:hover {
+        opacity: 0.9;
+    }
+
+    .cancel-btn:hover {
+        background: #f5f5f5;
+    }
+</style>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content custom-box text-center p-4">
+
+            <div class="icon-wrapper">
+                <i class="ti ti-trash"></i>
+            </div>
+            @if (selectedProduct()) {
+            <h2>Delete {{ selectedProduct()!.productCode }}</h2>
+            <p>Are you sure you want to delete <strong>{{ selectedProduct()!.productName }}</strong>?</p>
+            }
+
+            <div class="btn-group">
+                <button
+                    class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-secondary v-btn--density-default rounded-md px-3"
+                    data-bs-dismiss="modal">
+                    Cancel
+                </button>
+                <button class="delete-btn v-btn v-theme--BLUE_THEME bg-error v-btn--density-default rounded-md px-3"
+                    data-bs-dismiss="modal" (click)="confirmDelete()">
+                    Yes, Delete
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>

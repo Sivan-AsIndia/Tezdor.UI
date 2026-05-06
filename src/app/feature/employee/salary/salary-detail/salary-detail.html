@@ -1,0 +1,164 @@
+<div class="emp-page">
+
+    <!-- 🔷 HEADER -->
+    <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+
+        <div>
+            <h4 class="fw-bold mb-1 mainheading">Salary Details</h4>
+            <small class="text-muted subdescription">
+                View processed payroll and employee salary breakdown
+            </small>
+        </div>
+
+        <!-- 🔷 BREADCRUMB -->
+        <div class="arrow-steps d-none d-md-flex">
+            <ul id="breadcrumb">
+                <li>
+                    <a routerLink="/dashboard">
+                        <i class="bi bi-house-door me-1"></i> Home
+                    </a>
+                </li>
+                <li>
+                    <a routerLink="/salary">
+                        <i class="bi bi-list-ul me-1"></i> Salary List
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">
+                        <span>
+                            <i class="bi bi-receipt me-1"></i> View
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    @if(salary()){
+
+    <!-- 🔷 HERO -->
+    <div class="emp-hero-header d-flex justify-content-between align-items-center">
+
+        <div>
+            <div class="emp-name">
+                {{ salary()?.salaryNumber }}
+            </div>
+
+            <div class="emp-meta">
+                <span>{{ salary()?.salaryMonth }}</span>
+                <span class="dot"></span>
+                <span>{{ formatDate(salary()?.fromDate) }} - {{ formatDate(salary()?.toDate) }}</span>
+            </div>
+        </div>
+
+        <button class="btn-print" (click)="print()">
+            <i class="ti ti-printer"></i>
+            <span class="d-none d-md-inline">Print</span>
+        </button>
+
+    </div>
+
+    <!-- 🔷 SUMMARY -->
+    <div class="salary-summary mt-3 mb-3">
+
+        <div class="sum-item">
+            <span>Employees</span>
+            <strong>{{ salary()?.totalEmployees }}</strong>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="sum-item">
+            <span>Gross</span>
+            <strong>₹ {{ formatAmount(salary()?.totalGrossAmount) }}</strong>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="sum-item">
+            <span>Deductions</span>
+            <strong class="text-danger">
+                ₹ {{ formatAmount(salary()?.totalDeductionAmount) }}
+            </strong>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="sum-item net">
+            <span>Net Salary</span>
+            <strong class="text-success">
+                ₹ {{ formatAmount(salary()?.totalNetSalary) }}
+            </strong>
+        </div>
+
+    </div>
+                <div class="content-card">
+                    <div class="card-body-inner">
+    <!-- 🔷 TABLE -->
+    <div class="border-table">
+        <div class="v-table__wrapper">
+
+            <table>
+                <thead>
+                    <tr style="background:#8080800d;">
+                        <th>Employee</th>
+                        <th>Payable Days</th>
+                        <th>Basic</th>
+                        <th>Gross</th>
+                        <th>Deductions</th>
+                        <th>Net</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @for(line of salary()?.salaryLines ?? []; track line.salaryLineId){
+
+                    <tr>
+
+                        <td class="fw-semibold">
+                            {{ getEmployeeName(line.employeeId) }}
+                        </td>
+
+                        <td>{{ line.payableDays }}</td>
+
+                        <td>₹ {{ formatAmount(line.basicSalary) }}</td>
+
+                        <td class="text-primary fw-semibold">
+                            ₹ {{ formatAmount(line.grossEarnings) }}
+                        </td>
+
+                        <td class="text-danger">
+                            ₹ {{ formatAmount(line.totalDeductions) }}
+                        </td>
+
+                        <td class="text-success fw-semibold">
+                            ₹ {{ formatAmount(line.netSalary) }}
+                        </td>
+
+                    </tr>
+
+                    }
+
+                    @if((salary()?.salaryLines?.length ?? 0) === 0){
+                    <tr>
+                        <td colspan="6" class="text-center py-4">
+                            No salary lines found
+                        </td>
+                    </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+    </div>
+    </div>
+
+    }
+
+</div>

@@ -1,0 +1,143 @@
+
+.ledger-row-in td:first-child {
+  border-left:3px solid #43a04754;
+}
+/* OUT row — very light red left border */
+.ledger-row-out td:first-child {
+  border-left: 3px solid rgb(239 68 68 / 21%);
+}
+
+/* ── Summary strip inside popup ──────────────────────────── */
+.ledger-summary-strip {
+  display: flex;
+  gap: 12px;
+  padding: 12px 20px;
+  background: #f9f9f9;
+  border-bottom: 1px solid #e0e0e0;
+  flex-wrap: wrap;
+}
+
+.ledger-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 8px 16px;
+  border-radius: 8px;
+  min-width: 179px;
+      gap: 10px;
+}
+.chip-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  width: 100%;
+}
+.chip-value {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.chip-in      { background: #e8f5e9; }
+.chip-in .chip-value { color: #2e7d32; }
+
+.chip-out     { background: #ffebee; }
+.chip-out .chip-value { color: #c62828; }
+
+.chip-closing { background: #e3f2fd; }
+.chip-closing .chip-value { color: #1565c0; }
+
+.chip-count   { background: #f3e5f5; }
+.chip-count .chip-value { color: #6a1b9a; }
+
+/* ── Custom Modal (no Bootstrap modal JS needed) ─────────── */
+.modal-backdrop-custom {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1040;
+  animation: fadeIn 0.15s ease;
+}
+
+.modal-custom {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: slideUp 0.2s ease;
+}
+
+@keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+.modal-custom-dialog {
+  width: 100%;
+  max-width: 1100px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-custom-content {
+  background: #fff;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+/* Header */
+.modal-custom-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  flex-shrink: 0;
+}
+.modal-title { font-size: 16px; font-weight: 600; }
+
+.btn-close-custom {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  transition: background 0.15s;
+}
+.btn-close-custom:hover { background: #f0f0f0; }
+
+/* Body — scrollable */
+.modal-custom-body {
+  padding: 16px 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Footer */
+.modal-custom-footer {
+  padding: 12px 20px;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+/* ── Table right-align for numbers ───────────────────────── */
+.text-end { text-align: right !important; }
+
+/* ── Responsive modal on small screens ───────────────────── */
+@media (max-width: 768px) {
+  .ledger-summary-strip { flex-direction: column; gap: 8px; }
+  .modal-custom-dialog  { max-width: 100%; }
+}

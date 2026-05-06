@@ -1,0 +1,70 @@
+@font-face {
+              font-family: 'Open Sans Regular';
+              font-style: normal;
+              font-weight: 400;
+              src: url('chrome-extension://gkkdmjjodidppndkbkhhknakbeflbomf/fonts/open_sans/open-sans-v18-latin-regular.woff');
+          }
+
+@font-face {
+              font-family: 'Open Sans Bold';
+              font-style: normal;
+              font-weight: 800;
+              src: url('chrome-extension://gkkdmjjodidppndkbkhhknakbeflbomf/fonts/open_sans/OpenSans-Bold.woff');
+          }
+
+@font-face {
+              font-family: 'Open Sans ExtraBold';
+              font-style: normal;
+              font-weight: 800;
+              src: url('chrome-extension://gkkdmjjodidppndkbkhhknakbeflbomf/fonts/open_sans/open-sans-v18-latin-800.woff');
+          }
+
+
+        @keyframes blc-pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes blc-intense-pulse {
+            0% { 
+                transform: scale(1); 
+                opacity: 1; 
+                filter: brightness(1);
+            }
+            50% { 
+                transform: scale(1.15); 
+                opacity: 0.9; 
+                filter: brightness(1.3);
+            }
+            100% { 
+                transform: scale(1); 
+                opacity: 1; 
+                filter: brightness(1);
+            }
+        }
+        
+        /* Подсветка ссылок по статусам */
+        .blc-link-valid {
+            outline: 2px solid #22c55e !important;
+            outline-offset: 1px !important;
+            background-color: rgba(34, 197, 94, 0.1) !important;
+        }
+        
+        .blc-link-redirect {
+            outline: 2px solid #2563eb !important;
+            outline-offset: 1px !important;
+            background-color: rgba(37, 99, 235, 0.1) !important;
+        }
+        
+        .blc-link-broken {
+            outline: 2px solid #ef4444 !important;
+            outline-offset: 1px !important;
+            background-color: rgba(239, 68, 68, 0.1) !important;
+        }
+        
+        /* Мягкая анимация при изменении подсветки */
+        [data-blc-id] {
+            transition: outline 0.3s ease, background-color 0.3s ease !important;
+        }
+    

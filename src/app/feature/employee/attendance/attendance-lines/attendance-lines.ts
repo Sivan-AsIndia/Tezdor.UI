@@ -1,0 +1,543 @@
+import { Component, computed, effect, inject, signal, viewChild } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { AttendanceDataClient } from '../attendance-data-client';
+import { AttendanceType, AttendanceLine } from '../attendance-line';
+import { ToastNotifier } from '../../../../core/services/toast';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ConfirmModalComponent } from '../../../../shared/components/confirm-modal/confirm-modal';
+import { AttendanceStatus } from '../attendance';
+import { EmployeeDataClient } from '../../employee-data-client';
+
+@Component({
+  selector: 'app-attendance-lines',
+  imports: [ConfirmModalComponent, RouterModule],
+  templateUrl: './attendance-lines.html',
+  styleUrl: './attendance-lines.css',
+})
+export class AttendanceLinesComponent {
+
+
+  private readonly service = inject(AttendanceDataClient);
+  private readonly router = inject(Router);
+  private readonly toast = inject(ToastNotifier);
+  private readonly empService = inject(EmployeeDataClient);
+
+
+  private readonly route = inject(ActivatedRoute);
+  modal = viewChild<ConfirmModalComponent>('modal');
+  paramMapSignal = toSignal(this.route.paramMap, { initialValue: null });
+
+  // ===== STATE =====
+  attendance = this.service.attendance;
+  lines = computed(() => this.attendance()?.attendanceLines ?? []);
+  AttendanceType = AttendanceType;
+  selectedLine = signal<AttendanceLine | null>(null);
+  filterDate = signal<string>('');
+
+dates = computed(() => {
+  const att = this.attendance();
+  if (!att?.fromDate || !att?.toDate) return [];
+
+  const start = new Date(att.fromDate);
+  const end = new Date(att.toDate);
+
+  const result: string[] = [];
+  const d = new Date(start);
+
+  while (d <= end) {
+    result.push(d.toISOString().split('T')[0]); // YYYY-MM-DD
+    d.setDate(d.getDate() + 1);
+  }
+
+  return result;
+});
+
+  employeeMap = computed(() => {
+    const map: Record<string, any> = {};
+    this.employees().forEach(e => {
+      map[e.employeeId!] = e;
+    });
+    return map;
+  });
+
+  errors = signal<Record<string, string>>({});
+  selectedRow = signal<AttendanceLine | null>(null);
+
+  searchValue = signal('');
+  page = signal(1);
+  pageSize = signal(10);
+
+  sortColumn = signal<keyof AttendanceLine | ''>('');
+  sortDirection = signal<'asc' | 'desc'>('asc');
+
+canAdd = computed(() => {
+  const att = this.attendance();
+  if (!att) return false;
+
+  const today = new Date().toISOString().split('T')[0];
+
+  return (
+    att.status === AttendanceStatus.Open && // Open
+    !!att.fromDate &&
+    !!att.toDate &&
+    today >= att.fromDate &&
+    today <= att.toDate
+  );
+});
+
+
+  // use service signal
+  employees = this.empService.employees;
+
+  showModal = signal(false);
+
+  form = signal({
+    employeeId: '',
+    attendanceDate: new Date().toISOString().split('T')[0],
+    inTime: '',
+    outTime: ''
+  });
+  viewMode = signal<'table' | 'grid'>('table');
+
+
+
+  getLine(empId: string, date: string) {
+    return this.lines().find(x =>
+      x.employeeId === empId &&
+      x.attendanceDate === date
+    );
+  }
+
+
+  constructor() {
+    effect(() => {
+      const params = this.paramMapSignal();
+      if (!params) return;
+
+      const id = params.get('id');
+
+      if (!id) {
+        this.reset();
+        return;
+      }
+
+      // prevent unnecessary reload
+      if (this.attendance()?.attendanceId === id) return;
+
+      this.loadAttendance(id);
+    });
+  }
+
+
+  loadAttendance(id: string) {
+    const data = this.service.attendanceList()
+      .find(x => x.attendanceId === id);
+
+    if (data) {
+      this.service.setAttendance(data);      // header
+      this.service.loadLinesByAttendanceId(id); // 🔥 attach lines
+    }
+  }
+  // ===== FILTER =====
+filtered = computed(() => {
+  const search = this.searchValue().trim().toLowerCase();
+  const dateFilter = this.filterDate();
+
+  return this.lines().filter(l => {
+
+    const emp = this.getEmployeeName(l.employeeId)?.toLowerCase() ?? '';
+    const date = l.attendanceDate ?? '';
+
+    const matchesSearch =
+      !search ||
+      emp.includes(search) ||
+      date.toLowerCase().includes(search);
+
+    const matchesDate =
+      !dateFilter || date === dateFilter;
+
+    return matchesSearch && matchesDate;
+  });
+});
+
+  // ===== SORT =====
+  sorted = computed(() => {
+    const data = [...this.filtered()];
+    const col = this.sortColumn();
+    const dir = this.sortDirection();
+
+    if (!col) return data;
+
+    return data.sort((a, b) => {
+      const valA = (a[col] ?? '').toString().toLowerCase();
+      const valB = (b[col] ?? '').toString().toLowerCase();
+
+      if (valA < valB) return dir === 'asc' ? -1 : 1;
+      if (valA > valB) return dir === 'asc' ? 1 : -1;
+      return 0;
+    });
+  });
+
+  // ===== PAGINATION =====
+  total = computed(() => this.sorted().length);
+
+  paginated = computed(() => {
+    const start = (this.page() - 1) * this.pageSize();
+    return this.sorted().slice(start, start + this.pageSize());
+  });
+
+  totalPages = computed(() =>
+    Math.ceil(this.total() / this.pageSize())
+  );
+
+  paginatedEmployees = computed(() => {
+  const start = (this.page() - 1) * this.pageSize();
+  return this.employees().slice(start, start + this.pageSize());
+});
+
+  // ===== ACTIONS =====
+  onSearch(val: string) {
+    this.searchValue.set(val);
+    this.page.set(1);
+  }
+
+  sortBy(column: keyof AttendanceLine) {
+    if (this.sortColumn() === column) {
+      this.sortDirection.set(
+        this.sortDirection() === 'asc' ? 'desc' : 'asc'
+      );
+    } else {
+      this.sortColumn.set(column);
+      this.sortDirection.set('asc');
+    }
+  }
+
+  changePage(p: number) {
+    if (p >= 1 && p <= this.totalPages()) {
+      this.page.set(p);
+    }
+  }
+
+  changePageSize(size: number) {
+    this.pageSize.set(+size);
+    this.page.set(1);
+  }
+
+  // ===== NAVIGATION =====
+  goBack() {
+    this.router.navigate(['/attendance']);
+  }
+
+
+  openRowDetails(row: AttendanceLine) {
+  this.selectedRow.set(row);
+}
+  // ===== LINE ACTIONS =====
+
+  // onEmployeeChange(value: string) {
+  //   this.toast.success(value);
+
+  //   this.form.set({
+  //     ...this.form(),
+  //     employeeId: value
+  //   });
+  // }
+
+
+  onEdit(line: AttendanceLine) {
+
+    // Set selected line (for tracking)
+    this.selectedLine.set(line);
+
+    this.form.set({
+      employeeId: line.employeeId ?? '',
+      attendanceDate: line.attendanceDate ?? new Date().toISOString().split('T')[0],
+      inTime: line.inTime ?? '',
+      outTime: line.outTime ?? ''
+    });
+    this.errors.set({});
+
+    this.showModal.set(true);
+  }
+
+  onDelete(line: AttendanceLine) {
+    this.modal()?.open({
+      type: 'delete',
+      title: 'Delete',
+      message: `Are you sure you want to delete ${line.attendanceLineId}?`,
+      onConfirm: () => {
+        this.delete(line);
+      }
+    });
+  }
+
+  delete(line: AttendanceLine) {
+    this.service.removeLine(line.attendanceLineId);
+    this.toast.success('Line deleted successfully');
+  }
+
+
+
+  // ===== UI HELPERS =====
+  getStatusLabel(type: AttendanceType): string {
+    switch (type) {
+      case AttendanceType.Present: return 'Present';
+      case AttendanceType.Absent: return 'Absent';
+      case AttendanceType.Leave: return 'Leave';
+      case AttendanceType.Holiday: return 'Holiday';
+      case AttendanceType.WeekOff: return 'WeekOff';
+      default: return '';
+    }
+  }
+
+  getStatusClass(type: AttendanceType) {
+    return {
+      'bg-success': type === AttendanceType.Present,
+      'bg-danger': type === AttendanceType.Absent,
+      'bg-warning': type === AttendanceType.Leave,
+      'bg-info': type === AttendanceType.Holiday,
+      'bg-dark': type === AttendanceType.WeekOff,
+    };
+  }
+
+  getEmployeeName(id: string): string {
+    const emp = this.employeeMap()[id];
+    return emp ? `${emp.firstName} ${emp.lastName}` : '—';
+  }
+
+  reset() {
+    this.service.clear();
+  }
+
+openAddModal() {
+  if (!this.canAdd()) return; 
+
+  this.form.set({
+    employeeId: '',
+    attendanceDate: new Date().toISOString().split('T')[0],
+    inTime: '',
+    outTime: ''
+  });
+
+  this.showModal.set(true);
+}
+
+  closeModal() {
+    this.showModal.set(false);
+    this.selectedLine.set(null);
+  }
+
+  setEmployee(value: string) {
+    this.form.update(f => ({ ...f, employeeId: value }));
+  }
+
+  setInTime(value: string) {
+    this.form.update(f => ({ ...f, inTime: value }));
+  }
+
+  setOutTime(value: string) {
+    this.form.update(f => ({ ...f, outTime: value }));
+  }
+
+  setDate(value: string) {
+    this.form.update(f => ({ ...f, attendanceDate: value }));
+  }
+
+  workingHours = computed(() => {
+    const f = this.form();
+    if (!f.inTime || !f.outTime) return 0;
+
+    const [h1, m1] = f.inTime.split(':').map(Number);
+    const [h2, m2] = f.outTime.split(':').map(Number);
+
+    return ((h2 * 60 + m2) - (h1 * 60 + m1)) / 60;
+  });
+
+  saveAttendance() {
+    const f = this.form();
+
+    // ===== VALIDATION =====
+    this.errors.set({});
+    if (!f.attendanceDate) {
+      this.setError('attendanceDate', 'Select date');
+    }
+
+    if (!f.employeeId) {
+      this.setError('employeeId', 'Select employee');
+    }
+    if (!f.inTime) { this.setError('inTime', 'Enter in time'); }
+    if (!f.inTime && f.outTime) {
+      this.setError('inTime', 'Enter in time first');
+    }
+
+    if (f.inTime && f.outTime && f.inTime >= f.outTime) {
+      this.setError('outTime', 'Out time must be greater than In time');
+    }
+
+    if (f.inTime && f.outTime && f.inTime >= f.outTime) {
+      this.setError('outTime', 'Out time must be greater than In time');
+    }
+
+    // stop if any error
+    if (Object.keys(this.errors()).length > 0) return;
+
+
+    // ===== CALCULATE WORKING HOURS =====
+    let workingHours = 0;
+    let totalMinutes = 0;
+    if (f.inTime && f.outTime) {
+      const inT = new Date(`1970-01-01T${f.inTime}`);
+      const outT = new Date(`1970-01-01T${f.outTime}`);
+      const data = (outT.getTime() - inT.getTime()) / 3600000;
+      totalMinutes = (outT.getTime() - inT.getTime()) / 60000;
+
+      workingHours = Math.round(data * 100) / 100;
+    }
+    // ===== BUILD ATTENDANCE LINE =====
+    try {
+      if (this.selectedLine()) {
+
+        //UPDATE EXISTING
+        const updated: AttendanceLine = {
+          ...this.selectedLine()!,
+          inTime: f.inTime,
+          outTime: f.outTime,
+          workingHours,
+          overtimeHours: totalMinutes > 480
+            ? Math.round(totalMinutes - 480)
+            : 0,
+          isLate: f.inTime > '09:00',
+          isEarlyExit: f.outTime < '18:00',
+          isHalfDay: workingHours < 5
+        };
+
+        this.service.updateLine(updated);
+        this.toast.success("Updated Successfully");
+
+        this.selectedLine.set(null); // reset edit mode
+
+      } else {
+
+        // CREATE NEW
+        const line: AttendanceLine = {
+          attendanceLineId: crypto.randomUUID(),
+          attendanceId: this.service.attendance()?.attendanceId!,
+          employeeId: f.employeeId,
+          attendanceDate: f.attendanceDate,
+          attendanceType: AttendanceType.Present,
+          inTime: f.inTime,
+          outTime: f.outTime,
+          workingHours,
+          overtimeHours: totalMinutes > 480
+            ? Math.round(totalMinutes - 480)
+            : 0,
+          isLate: f.inTime > '09:00',
+          isEarlyExit: f.outTime < '18:00',
+          isHalfDay: workingHours < 5,
+          timeLogs: []
+        };
+
+        this.service.addLine(line);
+        this.toast.success("Added Successfully");
+      }
+    } catch (err: any) {
+      this.toast.error(err.message);
+      return;
+    }
+
+
+
+    // ===== OPTIONAL: RECALCULATE SUMMARY =====
+    this.service.recalculateSummary();
+
+    // ===== RESET FORM =====
+    this.form.set({
+      employeeId: '',
+      attendanceDate: new Date().toISOString().split('T')[0], // 🔥 today
+      inTime: '',
+      outTime: ''
+    });
+    // ===== CLOSE MODAL =====
+    this.closeModal();
+  }
+
+  toggleView() {
+    this.viewMode.update(v => v === 'table' ? 'grid' : 'table');
+  }
+
+getDateForDay(day: number): string {
+  const base = this.attendance(); // current header
+
+  if (!base?.fromDate) return '';
+
+  const d = new Date(base.fromDate);
+  d.setDate(day);
+
+  return d.toISOString().split('T')[0]; // YYYY-MM-DD
+}
+
+getLineForDay(empId: string, day: number) {
+  const date = this.getDateForDay(day);
+
+  return this.lines().find(x =>
+    x.employeeId === empId &&
+    x.attendanceDate === date
+  );
+}
+
+  hasError(field: string): boolean {
+    return !!this.errors()[field];
+  }
+
+  getError(field: string): string {
+    return this.errors()[field];
+  }
+
+  setError(field: string, message: string) {
+    this.errors.update(e => ({ ...e, [field]: message }));
+  }
+
+  clearError(field: string) {
+    this.errors.update(e => {
+      const copy = { ...e };
+      delete copy[field];
+      return copy;
+    });
+  }
+
+  formatHours(hours: number): string {
+    const h = Math.floor(hours);
+    const m = Math.round((hours - h) * 60);
+    return `${h}:${m.toString().padStart(2, '0')}`;
+  }
+
+  formatMinutes(mins: number): string {
+    const h = Math.floor(mins / 60);
+    const m = Math.round(mins % 60);
+    return `${h}:${m.toString().padStart(2, '0')}`;
+  }
+
+    getAvatarColor(name: string): string {
+    if (!name) return '#ccc';
+
+    // generate hash from name
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    // convert to pastel color (HSL)
+    const hue = hash % 360;
+    return `hsl(${hue}, 70%, 80%)`; // pastel tone
+  }
+
+  openDatePicker(input: HTMLInputElement) {
+  input.showPicker?.(); // modern browsers
+  input.focus();        // fallback
+}
+
+clearDate(event: Event) {
+  event.stopPropagation(); // 🔥 prevent opening picker
+  this.filterDate.set('');
+}
+}

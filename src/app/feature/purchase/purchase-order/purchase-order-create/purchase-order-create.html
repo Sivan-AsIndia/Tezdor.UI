@@ -1,0 +1,351 @@
+<div class="max-w-full">
+  <div class="full-container">
+    <div class="v-container v-container--fluid v-locale--is-ltr rounded-xl p-0">
+
+      <!-- ══ HEADER ═══════════════════════════════════════════════════════ -->
+      <div class="mb-2">
+        <div class="v-card-text p-0">
+          <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+            <div>
+              <h4 class="fw-bold mb-1 mainheading">{{ pageTitle() }}</h4>
+              <small class="text-muted subdescription">{{ pageSubtitle() }}</small>
+            </div>
+            <div class="arrow-steps d-none d-md-flex">
+              <ul id="breadcrumb">
+                <li><a href="#"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a></li>
+                <li><a routerLink="/purchase-order-list"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;Purchase</a></li>
+                
+                <li><a><span class="fa fa-plus-circle"></span>&nbsp;&nbsp;{{ pageCrumb() }}</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ FORM ══════════════════════════════════════════════════════════ -->
+      <div [formGroup]="poForm">
+
+        <!-- ══ SECTION 1 · ORDER IDENTITY ════════════════════════════════ -->
+        <div class="card mb-3 section-card" id="section-primary">
+          <div class="card-body">
+
+            <div class="section-header">
+              <div class="section-icon"><i class="ti ti-file-invoice"></i></div>
+              <h6 class="cardheader">Order Identity</h6>
+            </div>
+
+            <div class="row g-3">
+
+              <!-- PO Number -->
+              <!-- <div class="col-md-3">
+                <label class="form-label cardlabel required">PO Number</label>
+                <input class="form-control text-uppercase"
+                  formControlName="poNumber"
+                  placeholder="PO-2026-001"
+                  [class.is-invalid]="hasError('poNumber')" />
+                @if (hasError('poNumber')) {
+                  <div class="invalid-feedback">PO Number is required.</div>
+                }
+              </div> -->
+
+              <!-- Order Date -->
+              <div class="col-md-3">
+                <label class="form-label cardlabel required">Order Date</label>
+                <input type="date" class="form-control"
+                  formControlName="orderDate"
+                  [class.is-invalid]="hasError('orderDate')" />
+                @if (hasError('orderDate')) {
+                  <div class="invalid-feedback">Order Date is required.</div>
+                }
+              </div>
+
+              <!-- Expected Delivery Date -->
+              <div class="col-md-3">
+                <label class="form-label cardlabel required">Expected Delivery</label>
+                <input type="date" class="form-control"
+                  formControlName="expectedDate"
+                  [class.is-invalid]="hasError('expectedDate')" />
+                @if (hasError('expectedDate')) {
+                  <div class="invalid-feedback">Expected date is required.</div>
+                }
+              </div>
+
+              <!-- Status -->
+              <div class="col-md-3">
+                <label class="form-label cardlabel">Status</label>
+                <select class="form-select" formControlName="status"   [class.is-invalid]="hasError('status')" >
+                    <option  value="">--Select Status --</option>
+                  @for (s of statusOptions; track s.value) {
+                    <option [value]="s.value">{{ s.label }}</option>
+                  }
+                </select>
+                 @if (hasError('status')) {
+                  <div class="invalid-feedback">status is required.</div>
+                }
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ SECTION 2 · VENDOR INFO ════════════════════════════════════ -->
+        <div class="card mb-3 section-card section-info">
+          <div class="card-body">
+
+            <div class="section-header">
+              <div class="section-icon"><i class="ti ti-building-store"></i></div>
+              <h6 class="cardheader">Vendor Information</h6>
+            </div>
+
+            <div class="row g-3">
+
+              <!-- Vendor -->
+              <div class="col-md-4">
+                <label class="form-label cardlabel required">Vendor</label>
+                <!--
+                  KEY FIX: [value]="v.value" sets the option value as a STRING.
+                  formControlName="vendorId" stores a STRING.
+                  When patchValue({ vendorId: '1' }), Angular matches '1' === '1' ✓
+                  Previously: vendorId was stored as number (1) → mismatch → blank select.
+                -->
+                <select class="form-select"
+                  formControlName="vendorId"
+                  [class.is-invalid]="hasError('vendorId')">
+                  <option value="">-- Select Vendor --</option>
+                  @for (v of vendorOptions; track v.value) {
+                    <option [value]="v.value">{{ v.label }}</option>
+                  }
+                </select>
+                @if (hasError('vendorId')) {
+                  <div class="invalid-feedback">Vendor is required.</div>
+                }
+              </div>
+
+              <!-- Payment Terms -->
+              <div class="col-md-4">
+                <label class="form-label cardlabel">Payment Terms</label>
+                <select class="form-select" formControlName="paymentTerms">
+                  @for (p of paymentTermsOptions; track p.value) {
+                    <option [value]="p.value">{{ p.label }}</option>
+                  }
+                </select>
+              </div>
+
+              <!-- Delivery Method -->
+              <div class="col-md-4">
+                <label class="form-label cardlabel">Delivery Method</label>
+                <select class="form-select" formControlName="deliveryMethod">
+                  @for (d of deliveryOptions; track d.value) {
+                    <option [value]="d.value">{{ d.label }}</option>
+                  }
+                </select>
+              </div>
+
+              <!-- Shipping Address -->
+              <div class="col-md-6">
+                <label class="form-label cardlabel">Shipping / Delivery Address</label>
+                <textarea class="form-control" rows="5" cols="5"
+                  placeholder="Address where goods should be delivered..."
+                  formControlName="shippingAddress"></textarea>
+              </div>
+
+              <!-- Notes -->
+              <div class="col-md-6">
+                <label class="form-label cardlabel">Notes / Remarks</label>
+                <textarea class="form-control" rows="5" cols="5"
+                  placeholder="Any special instructions..."
+                  formControlName="notes"></textarea>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ SECTION 3 · LINE ITEMS ══════════════════════════════════════ -->
+        <div class="card mb-3 section-card section-warning">
+          <div class="card-body">
+
+            <div class="section-header">
+              <div class="section-icon"><i class="ti ti-list-details"></i></div>
+              <h6 class="cardheader">Line Items</h6>
+            </div>
+
+            <div class="border-table mb-3" style="overflow-x:auto;">
+              <table class="table table-sm mb-0 line-items-table">
+                <thead style="background:#8080800d;">
+                  <tr>
+                    <th style="width:40px">#</th>
+                    <th >Product Name <span style="color: red;">*</span></th>
+                    <th >Unit</th>
+                    <th>Qty</th>
+                    <th>Unit Price</th>
+                    <th>Discount (₹)</th>
+                    <th>Tax</th>
+                    <th style="text-align:right;">Total</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (row of lineItems(); track row.id) {
+                    <tr>
+                      <td class="text-muted align-middle text-center">{{ $index + 1 }}</td>
+<td>
+  <select
+    class="form-select form-select-sm"
+    [class.is-invalid]="isInvalidProduct(row)"
+    [value]="row.productCode"
+    (change)="onProductSelect(row, $any($event.target).value)"
+  >
+    <option value="">-- Select Product --</option>
+
+    @for (p of product.products(); track p.productCode) {
+      <option [value]="p.productCode">
+        {{ p.productName }}
+      </option>
+    }
+  </select>
+
+  @if (isInvalidProduct(row)) {
+    <div class="invalid-feedback">Product is required.</div>
+  }
+</td>
+
+                      <td>
+                        <select class="form-select form-select-sm"
+                          [value]="row.unitId"
+                          (change)="updateRow(row.id, 'unitId', $any($event.target).value)">
+                          @for (u of unitOptions; track u.value) {
+                            <option [value]="u.value">{{ u.label }}</option>
+                          }
+                        </select>
+                      </td>
+
+                      <td>
+                        <input type="number" class="form-control form-control-sm"
+                          min="1"
+                          [value]="row.quantity"
+                          (input)="updateRow(row.id, 'quantity', $any($event.target).value)">
+                      </td>
+
+                      <td>
+                        <input type="number" class="form-control form-control-sm"
+                          min="0"
+                          [value]="row.unitPrice"
+                          (input)="updateRow(row.id, 'unitPrice', $any($event.target).value)">
+                      </td>
+
+                      <td>
+                        <input type="number" class="form-control form-control-sm"
+                          min="0"
+                          [value]="row.discount"
+                          (input)="updateRow(row.id, 'discount', $any($event.target).value)">
+                      </td>
+
+                      <td>
+                        <select class="form-select form-select-sm"
+                          [value]="row.taxPercent"
+                          (change)="updateRow(row.id, 'taxPercent', $any($event.target).value)">
+                          @for (t of taxOptions; track t.value) {
+                            <option [value]="t.value">{{ t.label }}</option>
+                          }
+                        </select>
+                      </td>
+
+                      <td class="align-middle fw-bold text-end pe-2">
+                        ₹{{ calcRowTotal(row) | number:'1.2-2' }}
+                      </td>
+
+                      <td class="align-middle text-center">
+                        <button type="button" class="btn btn-sm btn-link text-danger p-0"
+                          (click)="removeRow(row.id)">
+                          <i class="ti ti-trash fs-5"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+            <button type="button" class="btn bg-primary btn-sm" (click)="addRow()">
+              <i class="ti ti-plus me-1"></i> Add Row
+            </button>
+
+          </div>
+        </div>
+
+        <!-- ══ SECTION 4 · ORDER SUMMARY ══════════════════════════════════ -->
+        <div class="card mb-3 section-card section-success">
+          <div class="card-body">
+
+            <div class="section-header">
+              <div class="section-icon"><i class="ti ti-currency-rupee"></i></div>
+              <h6 class="cardheader">Order Summary</h6>
+            </div>
+
+            <div class="row g-3">
+
+              <!-- Shipping charge -->
+              <div class="col-md-6">
+                <label class="form-label cardlabel">Shipping / Freight Charge (₹)</label>
+                <input type="number" class="form-control" min="0"
+                  formControlName="shippingCharge"
+                  placeholder="0.00">
+                <small class="form-text text-muted">Freight or courier cost added to grand total.</small>
+              </div>
+
+              <!-- Summary table -->
+              <div class="col-md-6">
+                <div class="summary-table">
+                  <div class="summary-row">
+                    <span>Sub Total</span>
+                    <span>₹{{ subTotal() | number:'1.2-2' }}</span>
+                  </div>
+                  <div class="summary-row">
+                    <span>Total Discount</span>
+                    <span class="text-danger">− ₹{{ totalDiscount() | number:'1.2-2' }}</span>
+                  </div>
+                  <div class="summary-row">
+                    <span>Tax Amount</span>
+                    <span>+ ₹{{ totalTax() | number:'1.2-2' }}</span>
+                  </div>
+                  <div class="summary-row">
+                    <span>Shipping</span>
+                    <span>+ ₹{{ (+poForm.get('shippingCharge')?.value || 0) | number:'1.2-2' }}</span>
+                  </div>
+                  <div class="summary-row grand-total">
+                    <span>Grand Total</span>
+                    <span>₹{{ grandTotal() | number:'1.2-2' }}</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ FOOTER ACTIONS ═════════════════════════════════════════════ -->
+        <div class="d-flex mb-md-0 mb-3 gap-3" style="justify-content:flex-end;">
+
+          <button type="button"
+            class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3"
+            (click)="onCancel()">
+            Cancel
+          </button>
+
+          <button type="button"
+            class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+            (click)="savePO()">
+            {{ editMode ? 'Update' : 'Create' }}
+          </button>
+
+        </div>
+
+      </div>
+      <!-- /formGroup -->
+
+    </div>
+  </div>
+</div>
+
+

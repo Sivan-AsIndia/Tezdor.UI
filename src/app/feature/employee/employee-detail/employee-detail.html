@@ -1,0 +1,366 @@
+<div class="emp-page">
+
+    <!-- 🔷 HEADER -->
+    <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+
+        <div>
+            <h4 class="fw-bold mb-1 mainheading">Employee Details</h4>
+            <small class="text-muted subdescription">
+                View and manage employee information
+            </small>
+        </div>
+
+        <div class="arrow-steps d-none d-md-flex">
+            <ul id="breadcrumb">
+                <li><a routerLink="/dashboard"><span class="fa fa-home"></span>&nbsp; Home</a></li>
+                <li><a routerLink="/employees"><span class="fa fa-users"></span>&nbsp; Employees</a></li>
+                <li><a href="javascript:void(0)"><span class="fa fa-eye"></span>&nbsp; View</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    @if(employee()) {
+
+    <!-- 🔷 HERO -->
+    <div class="emp-hero-header d-flex justify-content-between align-items-center">
+
+        <div class="d-flex align-items-center gap-3">
+
+            <div class="emp-avatar">
+                {{ employee()?.firstName?.[0] }}{{ employee()?.lastName?.[0] }}
+            </div>
+
+            <div>
+                <div class="emp-name">
+                    {{ employee()?.firstName }} {{ employee()?.lastName }}
+                </div>
+
+                <div class="emp-meta">
+                    <span>{{ employee()?.employeeCode }}</span>
+                    <span class="dot"></span>
+                    <span>{{ employee()?.employmentType }}</span>
+                </div>
+            </div>
+
+        </div>
+
+        <button class="btn-print" (click)="print()">
+            <i class="ti ti-printer"></i>
+            <span class="d-none d-md-inline">Print</span>
+        </button>
+
+    </div>
+
+    <!-- 🔷 TABS -->
+    <div class="emp-tabs mb-3">
+
+        <span class="tab" [class.active]="activeTab()==='personal'" (click)="setTab('personal')">
+            Personal details
+        </span>
+
+        <span class="tab" [class.active]="activeTab()==='job'" (click)="setTab('job')">
+            Job information
+        </span>
+
+        <!-- <span class="tab" [class.active]="activeTab()==='salary'" (click)="setTab('salary')">
+      Salary details
+    </span>
+
+    <span class="tab" [class.active]="activeTab()==='pay'" (click)="setTab('pay')">
+      Pay history
+    </span> -->
+
+    </div>
+
+    <!-- ================= PERSONAL ================= -->
+    @if(activeTab()==='personal'){
+
+    <!-- KPI -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-3">
+            <div class="kpi-modern">
+                <div class="kpi-icon"><i class="ti ti-user"></i></div>
+                <div>
+                    <div class="kpi-value">{{ employee()?.firstName }} {{ employee()?.lastName }}</div>
+                    <div class="kpi-label">Employee Name</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="kpi-modern">
+                <div class="kpi-icon"><i class="ti ti-calendar"></i></div>
+                <div>
+                    <div class="kpi-value">{{ getAge(employee()?.dateOfBirth) }}</div>
+                    <div class="kpi-label">Age</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="kpi-modern">
+                <div class="kpi-icon"><i class="ti ti-phone"></i></div>
+                <div>
+                    <div class="kpi-value">{{ employee()?.personalmobileNumber }}</div>
+                    <div class="kpi-label">Mobile</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="kpi-modern">
+                <div class="kpi-icon"><i class="ti ti-mail"></i></div>
+                <div>
+                    <div class="kpi-value">{{ employee()?.personalEmail || '-' }}</div>
+                    <div class="kpi-label">Email</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="pf-page">
+        <div class="pf-layout">
+
+            <!-- LEFT -->
+            <div class="pf-left">
+
+                <!-- PERSONAL -->
+                <div class="pf-card">
+                    <div class="pf-head">Personal Details</div>
+
+                    <div class="pf-grid">
+                        <div><label>First Name</label><b>{{ employee()?.firstName }}</b></div>
+                        <div><label>Last Name</label><b>{{ employee()?.lastName }}</b></div>
+                        <div>
+                            <label>Display Name</label>
+                            <b>{{ employee()?.displayName || '-' }}</b>
+                        </div>
+                        <div><label>DOB</label><b>{{ formatDate(employee()?.dateOfBirth) }}</b></div>
+                        <div><label>Gender</label><span class="pf-chip blue">{{ employee()?.gender }}</span></div>
+
+
+                        <!-- ✅ NEW -->
+                        <div>
+                            <label>Marital Status</label>
+                            <span class="pf-chip orange">
+                                {{ employee()?.maritalStatus || '-' }}
+                            </span>
+                        </div>
+
+                        <div>
+                            <label>Father / Spouse</label>
+                            <b>{{ employee()?.fatherOrSpouseOrGuardianName || '-' }}</b>
+                        </div>
+
+
+                        <div>
+                            <label>Blood Group</label>
+                            <span class="pf-chip red">
+                                {{ employee()?.bloodGroup || '-' }}
+                            </span>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="pf-card">
+                    <div class="pf-head">Address</div>
+
+                    <div class="pf-grid">
+
+                        <div>
+                            <label>Address Line</label>
+                            <b>{{ employee()?.permanentAddress?.addressLine1 || '-' }}</b>
+                        </div>
+
+                        <div>
+                            <label>City</label>
+                            <b>{{ employee()?.permanentAddress?.city || '-' }}</b>
+                        </div>
+
+                        <div>
+                            <label>State</label>
+                            <b>{{ employee()?.permanentAddress?.stateId || '-' }}</b>
+                        </div>
+
+                        <div>
+                            <label>Country</label>
+                            <b>{{ employee()?.permanentAddress?.countryId || '-' }}</b>
+                        </div>
+
+                        <div>
+                            <label>Postal Code</label>
+                            <b>{{ employee()?.permanentAddress?.postalCode || '-' }}</b>
+                        </div>
+
+                    </div>
+                    <!-- <div>
+                        <label>Current Address</label>
+                        <b>
+                            {{ employee()?.currentAddress?.addressLine1 || '-' }},
+                            {{ employee()?.currentAddress?.city || '-' }}
+                        </b>
+                    </div> -->
+                </div>
+
+                <!-- EDUCATION -->
+                <div class="pf-card">
+                    <div class="pf-head">Education</div>
+
+                    @for (edu of employee()?.educations ?? []; track edu) {
+                    <div class="pf-item">
+                        <b>{{ edu.degree }}</b>
+                        <span>{{ edu.instituteName }}</span>
+                        <small>{{ formatDate(edu.dateOfCompletion) }}</small>
+                    </div>
+                    }
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+            <div class="pf-right">
+
+                <!-- BANK -->
+                <div class="pf-bank">
+                    <div class="pf-bank-name">
+                        {{ employee()?.firstName }} {{ employee()?.lastName }}
+                    </div>
+
+                    <div class="pf-bank-num">
+                        •••• {{ employee()?.bankAccountNumber?.slice(-4) }}
+                    </div>
+
+                    <div class="pf-bank-row">
+                        <div><span>Bank:</span><b> {{ employee()?.bankName }}</b></div>
+                        <div><span>IFSC:</span><b> {{ employee()?.ifscCode }}</b></div>
+                    </div>
+
+                    <!-- ✅ NEW -->
+                    <div class="pf-bank-row">
+                        <div><span>PAN:</span><b> {{ employee()?.panNumber }}</b></div>
+                        <div><span>Aadhaar:</span><b> {{ employee()?.aadhaarNumber }}</b></div>
+                    </div>
+                    <!-- ADD BELOW -->
+                    <div class="pf-bank-row">
+                        <div><span>Branch:</span><b> {{ employee()?.branchName || '-' }}</b></div>
+                        <div><span>MICR:</span><b> {{ employee()?.micrNumber || '-' }}</b></div>
+                    </div>
+                </div>
+
+                <div class="pf-card">
+                    <div class="pf-head">UPI IDs</div>
+
+                    @if((employee()?.upiIds?.length ?? 0) === 0){
+                    <div class="empty-upi">
+                        <i class="ti ti-qrcode"></i>
+                        <p>No UPI IDs</p>
+                    </div>
+                    } @else {
+
+                    <div class="upi-list">
+                        @for (upi of employee()?.upiIds ?? []; track upi) {
+                        <span class="upi-chip">
+                            <i class="ti ti-qrcode"></i> {{ upi }}
+                        </span>
+                        }
+                    </div>
+
+                    }
+                </div>
+
+                <!-- WORK -->
+                <div class="pf-card">
+                    <div class="pf-head">Work Experience</div>
+
+                    @for (work of employee()?.workExperiences ?? []; track work) {
+                    <div class="pf-item">
+                        <b>{{ work.jobTitle }}</b>
+                        <span>{{ work.companyName }}</span>
+                        <small>{{ formatDate(work.fromDate) }} - {{ formatDate(work.toDate) }}</small>
+                    </div>
+                    }
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    }
+
+    <!-- ================= JOB ================= -->
+    @if(activeTab()==='job'){
+    <div class="infos-card">
+
+        <div class="section-header">Job Information</div>
+
+        <div class="info-grid">
+
+            <div class="info-tile">
+                <span>Employee Code</span>
+                <strong>{{ employee()?.employeeCode }}</strong>
+            </div>
+
+            <div class="info-tile">
+                <span>Department</span>
+                <strong>{{ employee()?.departmentId }}</strong>
+            </div>
+
+            <div class="info-tile">
+                <span>Designation</span>
+                <strong>{{ employee()?.designationId }}</strong>
+            </div>
+            <div class="info-tile">
+                <span>Work Phone Number</span>
+                <strong>{{ employee()?.workPhoneNumber }}</strong>
+            </div>
+
+            <div class="info-tile">
+                <span>Official Email</span>
+                <strong>{{ employee()?.officialEmail }}</strong>
+            </div>
+
+            <div class="info-tile">
+                <span>Employment Type</span>
+                <strong>{{ employee()?.employmentType }}</strong>
+            </div>
+
+            <div class="info-tile">
+                <span>Joining Date</span>
+                <strong>{{ formatDate(employee()?.dateOfJoining) }}</strong>
+            </div>
+
+            <div class="info-tile status">
+                <span>Status</span>
+                <strong class="active">{{ employee()?.status }}</strong>
+            </div>
+
+        </div>
+
+    </div>
+    }
+
+    <!-- ================= SALARY ================= -->
+    @if(activeTab()==='salary'){
+    <div class="salary-grid">
+
+        <div class="salary-row">
+            <span>Basic Salary</span>
+            <strong>₹{{ employee()?.basicSalary }}</strong>
+        </div>
+
+        <div class="salary-row">
+            <span>Payment Mode</span>
+            <strong>{{ employee()?.paymentMode }}</strong>
+        </div>
+
+    </div>
+    }
+
+    }
+
+</div>

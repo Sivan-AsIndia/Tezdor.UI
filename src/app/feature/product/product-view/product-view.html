@@ -1,0 +1,226 @@
+<div>
+  @if (product()) {
+
+  <!-- 🔷 HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="header-align">
+      <div>
+        <h4 class="fw-bold mb-1 mainheading" >Product Details</h4>
+        <p class="text-muted small mb-0 subdescription">View product information and status</p>
+      </div>
+      <div class="profile-actions d-none d-md-block">
+        <i class="ti ti-printer action-icon" (click)="print()"></i>
+      </div>
+    </div>
+
+    <!-- BREADCRUMB -->
+    <div class="arrow-steps d-none d-md-flex">
+      <ul id="breadcrumb">
+        <li><a routerLink="/"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a></li>
+        <li><a href="/productlist" style="cursor: pointer;"><span class="fa fa-list"></span>&nbsp;&nbsp;Product List</a></li>
+        <li><a><span class="fa fa-eye"></span>&nbsp;&nbsp;Details</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- LAYOUT -->
+  <div class="layout">
+
+    <!-- ══════════ LEFT PANEL ══════════ -->
+    <div>
+
+      <!-- Basic Information -->
+      <div class="product-card">
+        <div class="profile-row ps-3 pt-3 pb-4">
+          <div class="avatar"><i class="ti ti-package"></i></div>
+          <div>
+            <div class="branch-name fs-5 ">{{ product()!.productName }}</div>
+            <div class="branch-code" style="color: gray;">{{ product()!.productCode }}</div>
+
+       @if (product()) {
+  @if (product()!.status === 'active') {
+    <span class="badge bg-lightsuccess text-success rounded-2">Active</span>
+  } @else if (product()!.status === 'inactive') {
+    <span class="badge bg-lighterror text-error rounded-2">Inactive</span>
+  } @else {
+    <span class="badge bg-lightinfo text-info rounded-2">Discontinued</span>
+  }
+}
+          </div>
+        </div>
+
+        <div class="product-title cardheader">
+          <span class="title-bar"></span> Basic Information
+        </div>
+
+        <div class="info-grid">
+          <div class="info-cell">
+            <div class="info-lbl cardlabel">Product Code</div>
+            <div class="info-val cardvalue">{{ product()!.productCode }}</div>
+          </div>
+          <div class="info-cell">
+            <div class="info-lbl cardlabel">Product Name</div>
+            <div class="info-val cardvalue">{{ product()!.productName }}</div>
+          </div>
+          <div class="info-cell">
+            <div class="info-lbl cardlabel">Category</div>
+            <div class="info-val cardvalue">{{ getCategoryLabel(product()!.categoryId) }}</div>
+          </div>
+          <div class="info-cell">
+            <div class="info-lbl cardlabel">Brand</div>
+            <div class="info-val cardvalue">{{ getBrandLabel(product()!.brandId) }}</div>
+          </div>
+          <div class="info-cell">
+            <div class="info-lbl cardlabel">Unit of Measure</div>
+            <div class="info-val cardvalue">{{ getUnitLabel(product()!.unitId) }}</div>
+          </div>
+          <div class="info-cell">
+            <div class="info-lbl cardlabel">Barcode / SKU</div>
+            <div class="info-val cardvalue">{{ product()!.barcode ?? '-' }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Specifications & Attributes -->
+      <div class="product-card">
+        <div class="product-title cardheader">
+          <span class="title-bar"></span> Specifications & Attributes
+        </div>
+        <div class="info-grid">
+          <div class="info-cell">
+            <div class="info-lbl cardlabel">Physical Product</div>
+            <div class="info-val cardvalue">{{ product()!.isPhysical ? 'Yes' : 'No' }}</div>
+          </div>
+          <!-- <div class="info-cell">
+            <div class="info-lbl cardlabel">Discount Type</div>
+            <div class="info-val cardvalue">{{ product()!.discountType ?? 'None' }}</div>
+          </div> -->
+          <div class="info-cell">
+            <div class="info-lbl cardlabel">Discount Value</div>
+            <div class="info-val cardvalue">{{ product()!.discountValue ?? '-' }}</div>
+          </div>
+          <div class="info-cell">
+            <div class="info-lbl cardlabel">Description</div>
+            <div class="info-val cardvalue">{{ product()!.description ?? '-' }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing & Taxation -->
+      <div class="product-card">
+        <div class="product-title cardheader">
+          <span class="title-bar"></span> Pricing & Taxation
+        </div>
+        <div class="info-grid">
+          <div class="info-cell">
+            <div class="info-lbl cardlabel">Cost Price</div>
+            <div class="info-val cardvalue">₹{{ product()!.costPrice | number:'1.2-2' }}</div>
+          </div>
+          <div class="info-cell">
+            <div class="info-lbl cardlabel">Selling Price</div>
+            <div class="info-val cardvalue">₹{{ product()!.sellingPrice | number:'1.2-2' }}</div>
+          </div>
+          <div class="info-cell">
+            <div class="info-lbl cardlabel">Tax / GST</div>
+            <div class="info-val cardvalue">{{ getTaxLabel(product()!.taxId) }}</div>
+          </div>
+          <div class="info-cell">
+            <div class="info-lbl cardlabel">Tax Inclusive</div>
+            <div class="info-val cardvalue">{{ product()!.isInclusiveTax ? 'Yes' : 'No' }}</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══════════ RIGHT PANEL ══════════ -->
+    <div>
+      <div class="product-card">
+        <div class="product-title cardheader">
+          <span class="title-bar"></span> Product Images
+        </div>
+        <div class="empty-state">
+   <div class="product-gallery">
+
+  <div class="thumb-list">
+    @for (img of images(); track $index) {
+      <div 
+        class="thumb"
+        [class.active]="$index === selectedIndex()"
+        (click)="selectImage($index)">
+        <img [src]="img.url" />
+      </div>
+    }
+  </div>
+  <div 
+    class="main-image"
+    (mousemove)="moveLens($event)"
+    (mouseenter)="startZoom()"
+    (mouseleave)="stopZoom()"
+  >
+    <img 
+      [src]="images()[selectedIndex()]?.url"
+      [class.zooming]="showZoom()" 
+      [ngStyle]="zoomTransform()"
+    />
+
+  </div>
+
+</div>
+        </div>
+      </div>
+
+      <!-- Stock Settings -->
+      <div class="product-card">
+        <div class="product-title cardheader">
+          <span class="title-bar"></span> Stock Settings
+        </div>
+        <div class="info-grid single-col">
+          <div class="info-cell">
+            <div class="info-lbl cardlabel">Current Stock</div>
+            <div class="info-val cardvalue">
+              {{ product()!.currentStock }}
+              @if (product()!.reorderLevel && product()!.currentStock <= product()!.reorderLevel!) {
+                <span style="color: red; font-size: 12px; margin-left: 6px;">⚠️ Low Stock</span>
+              }
+            </div>
+          </div>
+          <div class="info-cell">
+            <div class="info-lbl cardlabel">Reorder Level</div>
+            <div class="info-val cardvalue">{{ product()!.reorderLevel ?? '-' }}</div>
+          </div>
+          <div class="info-cell">
+            <div class="info-lbl cardlabel">Max Stock Level</div>
+            <div class="info-val cardvalue">{{ product()!.maxStockLevel ?? '-' }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Audit Information -->
+      <div class="product-card">
+        <div class="product-title cardheader">
+          <span class="title-bar"></span> Audit Information
+        </div>
+        <div class="info-grid single-col">
+          <div class="info-cell">
+            <div class="info-lbl cardlabel">Created At</div>
+            <div class="info-val cardvalue">{{ product()!.createdAt ?? '-' }}</div>
+          </div>
+          <div class="info-cell">
+            <div class="info-lbl cardlabel">Last Updated</div>
+            <div class="info-val cardvalue">{{ product()!.updatedAt ?? '-' }}</div>
+          </div>
+        </div>
+      </div>
+
+   
+
+    </div>
+  </div>
+
+  } @else {
+    <div style="text-align: center; padding: 60px; color: #888;">
+      <p>Loading...</p>
+    </div>
+  }
+</div>

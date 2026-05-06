@@ -1,0 +1,558 @@
+<div class="max-w-full">
+    <div class="full-container">
+        <div class="v-container v-container--fluid rounded-xl p-0">
+
+            <!-- HEADER -->
+            <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+
+                <div>
+                    <h4 class="fw-bold mb-1 mainheading">Attendance</h4>
+                    <small class="text-muted subdescription">
+                        Manage attendance periods and summaries across your organization.
+                    </small>
+                </div>
+
+                <!-- BREADCRUMB -->
+                <div class="arrow-steps d-none d-md-flex">
+                    <ul id="breadcrumb">
+                        <li>
+                            <a routerLink="/dashboard">
+                                <span class="fa fa-home"></span>&nbsp;&nbsp;Home
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <span class="fa fa-calendar"></span>&nbsp;&nbsp;Attendance List
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="content-card">
+                <div class="card-body-inner">
+
+                    <!-- TOP BAR -->
+                    <div class="table-topbar">
+
+                        <div class="table-title-badge">
+                            <h5 class="tableheading">Attendance List</h5>
+                            <span class="count-badge">{{ total() }}</span>
+                        </div>
+
+                        <div class="topbar-actions">
+
+                            <!-- SEARCH -->
+                            <div class="search-box">
+                                <input type="text" placeholder="Search attendance..." [value]="searchValue()"
+                                    (input)="onSearch($any($event.target).value)" />
+
+                                @if(!searchValue()){
+                                <button class="icon-clear">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                                }
+
+                                @if(searchValue()){
+                                <button class="icon-clear" (click)="searchValue.set('')">
+                                    <i class="bi bi-x"></i>
+                                </button>
+                                }
+                            </div>
+                            <!-- FILTER -->
+                            <div class="filter-wrapper">
+
+                                <!-- BUTTON -->
+                                <button class="filter-btn" style="width:35px;" (click)="showFilter.set(true)">
+                                    <i class="ti ti-filter fs-5"></i>
+                                </button>
+
+                                <!-- OVERLAY -->
+                                @if(showFilter()){
+                                <div class="filter-overlay" (click)="closeFilter()"></div>
+                                }
+
+                                <!-- PANEL -->
+                                @if(showFilter()){
+                                <div class="filter-panel">
+
+                                    <!-- HEADER -->
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="fw-bold mb-0">Filter</h5>
+                                        <button class="btn btn-sm btn-cancel" (click)="resetFilters()">Reset</button>
+                                    </div>
+
+                                    <!-- STATUS -->
+                                    <div class="mb-3">
+                                        <label class="fw-semibold mb-2">Status</label>
+
+                                        <div class="chip-group">
+                                            @for (s of statusOptions; track s.value) {
+
+                                            <span (click)="selectStatus(s.value)"
+                                                [class.active]="filters().status === s.value">
+
+                                                {{ s.label }}
+
+                                            </span>
+
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <!-- FOOTER -->
+                                    <div class="d-flex gap-2 mt-4">
+                                        <button class="btn btn-cancel w-50" (click)="closeFilter()">Cancel</button>
+                                        <button class="btn btn-primary w-50" (click)="closeFilter()">Apply</button>
+                                    </div>
+
+                                </div>
+                                }
+
+                            </div>
+
+                            <!-- ADD BUTTON -->
+                            <button (click)="offCanvas.set(true)"
+                                class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-primary v-btn--density-default  v-btn--size-default v-btn--variant-elevated ml-auto">
+                                <i class="mdi-account-multiple-plus mdi v-icon notranslate v-theme--BLUE_THEME v-icon--size-default mr-2"
+                                    aria-hidden="true"></i> Add </button>
+
+                        </div>
+                    </div>
+
+                    <!-- TABLE -->
+                    <div class="border-table">
+                        <div class="v-table v-theme--BLUE_THEME v-table--density-default"><!---->
+                            <div class="v-table__wrapper">
+                                <table>
+                                    <thead>
+                                        <tr style="background: #8080800d;">
+                                            <th class="d-xl-none" style="width:40px"></th>
+                                            <!-- <th (click)="sortBy('attendanceNumber')"
+                                                class="sortable d-none d-md-table-cell">
+                                                Attendance No
+                                            </th> -->
+
+                                            <th (click)="sortBy('attendancePeriodId')" class="sortable">
+                                                Attendance Period
+                                            </th>
+
+
+
+                                            <th (click)="sortBy('fromDate')" class="sortable d-none d-xl-table-cell">
+                                                From Date
+                                            </th>
+
+                                            <th (click)="sortBy('toDate')" class="sortable d-none d-xl-table-cell">
+                                                To Date
+                                            </th>
+                                            <th (click)="sortBy('payableDays')" class="sortable d-none d-md-table-cell">
+                                                Payable Days
+                                            </th>
+
+                                            <th class="d-none d-md-table-cell">Status</th>
+
+
+                                            <th style="width:130px">Actions</th>
+
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                        @for(a of paginated(); track a.attendanceId){
+
+                                        <tr>
+                                            <!-- PLUS ICON -->
+                                            <td class="d-xl-none text-center" style="padding: 0;padding-left: 15px;">
+                                                <a href="javascript:void(0);" class="TablePlus" data-bs-toggle="modal"
+                                                    data-bs-target="#rowDetailsModal" (click)="openRowDetails(a)">
+                                                    <i class="ti ti-plus"></i>
+                                                </a>
+                                            </td>
+
+                                            <!-- <td class="fw-semibold d-none d-md-table-cell">
+                                                {{ a.attendanceNumber }}
+                                            </td> -->
+
+                                            <td>{{ a.attendancePeriodName }}</td>
+
+
+                                            <td class="d-none d-xl-table-cell">{{ a.fromDate }}</td>
+
+                                            <td class="d-none d-xl-table-cell">{{ a.toDate }}</td>
+
+                                            <td class="d-none d-md-table-cell">{{ a.payableDays }}</td>
+
+                                            <td class="d-none d-md-table-cell">
+                                                <span class="badge" [class.open]="a.status === 5"
+                                                    [class.active]="a.status === 3" [class.inactive]="a.status === 4"
+                                                    [class.submitted]="a.status === 2" [class.draft]="a.status === 1">
+                                                    {{ getStatusLabel(a.status!) }}
+                                                </span>
+                                            </td>
+
+                                            <td>
+                                                <div class="action-icons">
+
+                                                    <!-- VIEW -->
+                                                    <!-- <button class="icon-btn view" (click)="onView(a)">
+                                                        <i class="ti ti-eye"></i>
+                                                    </button> -->
+
+                                                    <button class="icon-btn edit" (click)="onViewLines(a)">
+                                                        <i class="ti ti-stack"></i>
+                                                    </button>
+                                                    <!-- EDIT -->
+                                                    @if(a.status !== AttendanceStatus.Open && a.status !==
+                                                    AttendanceStatus.Locked){
+                                                    <button class="icon-btn edit" (click)="onEdit(a)">
+                                                        <i class="ti ti-pencil"></i>
+                                                    </button>
+                                                    }
+
+
+                                                    <!--  Delete -->
+                                                    @if(a.status === 1){
+                                                    <button class="icon-btn delete" (click)="onDelete(a)">
+                                                        <i class="ti ti-trash"></i>
+                                                    </button>
+                                                    }
+
+
+                                                </div>
+                                            </td>
+
+                                        </tr>
+
+                                        }
+
+                                        @if(paginated().length === 0){
+                                        <tr>
+                                            <td colspan="8" class="text-center py-4">
+                                                <div class="empty-table">
+                                                    <i class="ti ti-calendar-off"></i>
+                                                    <div>No attendance records found</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PAGINATION -->
+                    <div class="pagination-bar">
+
+                        <!-- Page Size -->
+                        <div class="d-flex align-items-center fs-13"><!--!--><span class="me-2"
+                                style="font-size: 12px;">Rows Per Page</span>
+                            <select class="form-select form-select-sm w-auto"
+                                (change)="changePageSize($any($event.target).value)">
+                                <option [selected]="pageSize() === 5">5</option>
+                                <option [selected]="pageSize() === 10">10</option>
+                                <option [selected]="pageSize() === 25">25</option>
+                            </select><!--!-->
+                            <!--!--><span class="ms-2" style="font-size: 12px;">Entries</span>
+                        </div>
+
+                        <!-- PAGINATION CONTROLS -->
+
+                        <div class="pagination-controls">
+
+                            <nav class="v-pagination v-theme--BLUE_THEME text-subtitle-1 text-grey100" role="navigation"
+                                aria-label="Pagination Navigation" data-test="v-pagination-root">
+                                <ul class="pagination-list">
+                                    <li><button class="page-btn" (click)="changePage(page()-1)"
+                                            [disabled]="page() === 1"><span class="mdi mdi-chevron-left"
+                                                style="font-size: 26px;"></span></button></li>
+                                    @for(p of [].constructor(totalPages()); let i = $index; track i){
+                                    <button class="page-btn" (click)="changePage(i+1)" [class.active]="page() === i+1">
+                                        {{ i+1 }}
+                                    </button>
+                                    }
+                                    <li><button class="page-btn" (click)="changePage(page()+1)"
+                                            [disabled]="page() === totalPages()"><span class="mdi mdi-chevron-right"
+                                                style="font-size: 26px;"></span></button></li>
+                                </ul>
+                            </nav>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="rowDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modern-modal">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Attendance Details
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                @if(selectedAttendance()) {
+
+                <div class="mb-3">
+                    <div class="fw-bold fs-6">
+                        {{ selectedAttendance()?.attendanceNumber }}
+                    </div>
+                </div>
+
+                <div class="row g-2 details-grid">
+
+                    <div class="col-6">
+                        <label>From Date</label>
+                        <div>{{ selectedAttendance()?.fromDate }}</div>
+                    </div>
+
+                    <div class="col-6">
+                        <label>To Date</label>
+                        <div>{{ selectedAttendance()?.toDate }}</div>
+                    </div>
+
+
+                    <div class="col-6">
+                        <label>Payable Days</label>
+                        <div>{{ selectedAttendance()?.payableDays ?? 0 }}</div>
+                    </div>
+
+
+                    <div class="col-6">
+                        <label>Total Working Hours</label>
+                        <div>{{ selectedAttendance()?.totalWorkingHours ?? 0 }}</div>
+                    </div>
+
+                    <div class="col-6">
+                        <label>Overtime Hours</label>
+                        <div>{{ selectedAttendance()?.totalOvertimeHours ?? 0 }}</div>
+                    </div>
+
+                    <div class="col-6">
+                        <label>Status</label>
+                        <div>
+
+                            <span class="badge" [class.open]="selectedAttendance()?.status === 5"
+                                [class.active]="selectedAttendance()?.status === 3"
+                                [class.inactive]="selectedAttendance()?.status === 4"
+                                [class.submitted]="selectedAttendance()?.status === 2"
+                                [class.draft]="selectedAttendance()?.status === 1">
+                                {{ getStatusLabel(selectedAttendance()?.status!) }}
+                            </span>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                }
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+                <button class="btn btn-cancel" data-bs-dismiss="modal">
+                    Close
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<app-confirm-modal #modal></app-confirm-modal>
+
+@if(offCanvas()){
+<div class="offcanvas-backdrop fade show" (click)="close()"></div>
+}
+@if(offCanvas()){
+<div class="offcanvas offcanvas-end emp-canvas show d-block">
+
+    <!-- backdrop -->
+
+
+    <!-- HEADER -->
+    <div class="offcanvas-header oc-header-enhanced">
+
+        <div class="off-header oc-header-top">
+
+            <div class="oc-avatar">
+                <i class="ti ti-calendar-plus"></i>
+            </div>
+
+            <div class="oc-header-info">
+                <div class="oc-header-top">
+                    <h5>
+                        {{ isEditMode() ? 'Edit Attendance' : 'Create Attendance' }}
+                    </h5>
+                    <span class="badge badge-soft">
+                        {{ model().attendanceNumber || 'AUTO' }}
+                    </span>
+                </div>
+
+                <p class="oc-header-sub">
+                    Manage attendance period and configuration
+                </p>
+            </div>
+
+        </div>
+
+        <button class="btn-close" (click)="close()"></button>
+    </div>
+
+    <!-- BODY -->
+    <div class="offcanvas-body">
+
+        <!-- CORE -->
+        <div class="oc-card">
+            <div class="oc-card-header hdr-orange">
+                <i class="ti ti-id"></i>
+                <h6>Core Details</h6>
+            </div>
+
+            <div class="oc-card-body">
+                <div class="row g-3">
+
+                    <!-- Period -->
+                    <div class="col-12 col-md-6">
+                        <label class="oc-field-label">
+                            Attendance Period<span class="text-danger">*</span>
+                        </label>
+
+                        <input class="form-control text-uppercase" placeholder="Month-2026" maxlength="30"
+                            [value]="model().attendancePeriodName"
+                            (input)="update('attendancePeriodName', $any($event.target).value)"
+                            [class.is-invalid]="hasError('attendancePeriodName')">
+
+                        @if(hasError('attendancePeriodName')){
+                        <div class="field-error">
+                            {{ getError('attendancePeriodName') }}
+                        </div>
+                        }
+                    </div>
+
+                    <!-- Status -->
+                    <div class="col-12 col-md-6">
+                        <label class="oc-field-label">
+                            Status<span class="text-danger">*</span>
+                        </label>
+
+                        <select class="form-select" [value]="model().status" (change)="onStatusChange($event)"
+                            [class.is-invalid]="hasError('status')">
+
+                            <option value="">-- Select --</option>
+
+                            @for (opt of statusOptions; track opt.value) {
+                            <option [value]="opt.value" [selected]="opt.value === model().status">
+                                {{ opt.label }}
+                            </option>
+                            }
+
+                        </select>
+
+                        @if(hasError('status')){
+                        <div class="field-error">
+                            {{ getError('status') }}
+                        </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- DATE RANGE -->
+        <div class="oc-card">
+            <div class="oc-card-header hdr-blue">
+                <i class="ti ti-calendar"></i>
+                <h6>Attendance Period</h6>
+            </div>
+
+            <div class="oc-card-body">
+                <div class="row g-3">
+
+                    <!-- From Date -->
+                    <div class="col-12">
+                        <div class="oc-field">
+                            <label class="oc-field-label">From Date *</label>
+
+                            <input type="date" class="form-control" [value]="model().fromDate"
+                                (change)="onDateChange('fromDate', $any($event.target).value)"
+                                [class.is-invalid]="hasError('fromDate')">
+
+                            @if(hasError('fromDate')){
+                            <div class="field-error">
+                                {{ getError('fromDate') }}
+                            </div>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- To Date -->
+                    <div class="col-12">
+                        <div class="oc-field">
+                            <label class="oc-field-label">To Date *</label>
+
+                            <input type="date" class="form-control" [value]="model().toDate"
+                                [min]="model().fromDate || ''"
+                                (change)="onDateChange('toDate', $any($event.target).value)"
+                                [class.is-invalid]="hasError('toDate')">
+
+                            @if(hasError('toDate')){
+                            <div class="field-error">
+                                {{ getError('toDate') }}
+                            </div>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Payable -->
+                    <div class="col-12">
+                        <div class="oc-field">
+                            <label class="oc-field-label">
+                                Payable Days <small>(Auto)</small>
+                            </label>
+
+                            <input type="number" class="form-control" [value]="model().payableDays ?? 0"
+                                [class.is-invalid]="hasError('payableDays')">
+
+                            @if(hasError('payableDays')){
+                            <div class="field-error">
+                                {{ getError('payableDays') }}
+                            </div>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="offcanvas-footer">
+        <button class="btn btn-cancel" data-bs-dismiss="offcanvas" (click)="close()">Cancel</button>
+        <button class="btn btn-primary" (click)="save()">Save</button>
+    </div>
+
+</div>
+}

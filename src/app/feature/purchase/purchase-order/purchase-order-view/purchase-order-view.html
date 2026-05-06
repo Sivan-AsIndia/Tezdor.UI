@@ -1,0 +1,503 @@
+<!-- purchaseorderview.html -->
+<div class="emp-page">
+
+  <!-- 🔷 HEADER -->
+  <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+    <div>
+      <h4 class="fw-bold mb-1 mainheading">Purchase Order Details</h4>
+      <small class="text-muted subdescription">View complete purchase order information and line items.</small>
+    </div>
+    <div class="arrow-steps d-none d-md-flex">
+      <ul id="breadcrumb">
+        <li><a href="#"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a></li>
+        <li><a routerLink="/purchase-order-list"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;Purchase</a></li>
+        <li><a><span class="fa fa-eye"></span>&nbsp;&nbsp;Details</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 🔷 HERO HEADER -->
+  <div class="emp-hero-header d-flex justify-content-between align-items-center">
+
+    <!-- LEFT -->
+    <div class="d-flex align-items-center gap-3">
+      <div class="emp-avatar">
+        {{ getVendorInitials() }}
+      </div>
+      <div>
+        <div class="emp-name">{{ po.vendorName }}</div>
+        <div class="emp-meta">
+          <span>{{ po.poNumber }}</span>
+          <span class="dot"></span>
+          <span>{{ getDeliveryLabel(po.deliveryMethod) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="d-flex align-items-center gap-2">
+      <button class="btn-print" (click)="printPO()">
+        <i class="ti ti-printer"></i>
+        <span class="d-none d-md-inline">Print</span>
+      </button>
+      <button class="btn-print" [routerLink]="['/purchase-order-edit', po.id]">
+        <i class="ti ti-pencil"></i>
+        <span class="d-none d-md-inline">Edit</span>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- 🔷 TABS -->
+  <div class="emp-tabs mb-3">
+    <span class="tab" [class.active]="activeTab() === 'overview'"  (click)="setTab('overview')">
+      Order Overview
+    </span>
+    <span class="tab" [class.active]="activeTab() === 'vendor'"    (click)="setTab('vendor')">
+      Vendor Info
+    </span>
+    <span class="tab" [class.active]="activeTab() === 'lineitems'" (click)="setTab('lineitems')">
+      Line Items
+    </span>
+    <span class="tab" [class.active]="activeTab() === 'summary'"   (click)="setTab('summary')">
+      Order Summary
+    </span>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       TAB 1 — ORDER OVERVIEW
+  ════════════════════════════════════════ -->
+  @if(activeTab() === 'overview') {
+  <div>
+
+    <!-- KPI WIDGETS -->
+    <div class="row g-3 mb-4">
+
+      <div class="col-md-3">
+        <div class="kpi-modern">
+          <div class="kpi-icon"><i class="ti ti-file-invoice"></i></div>
+          <div>
+            <div class="kpi-value">{{ po.poNumber }}</div>
+            <div class="kpi-label">PO Number</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="kpi-modern">
+          <div class="kpi-icon"><i class="ti ti-calendar"></i></div>
+          <div>
+            <div class="kpi-value">{{ po.orderDate | date:'dd MMM yyyy' }}</div>
+            <div class="kpi-label">Order Date</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="kpi-modern">
+          <div class="kpi-icon"><i class="ti ti-truck"></i></div>
+          <div>
+            <div class="kpi-value">{{ po.expectedDate | date:'dd MMM yyyy' }}</div>
+            <div class="kpi-label">Expected Delivery</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="kpi-modern">
+          <div class="kpi-icon"><i class="ti ti-currency-rupee"></i></div>
+          <div>
+            <div class="kpi-value">₹{{ po.grandTotal | number:'1.2-2' }}</div>
+            <div class="kpi-label">Grand Total</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PF LAYOUT -->
+    <div class="pf-page">
+      <div class="pf-layout">
+
+        <!-- LEFT -->
+        <div class="pf-left">
+
+          <!-- ORDER DETAILS -->
+          <div class="pf-card">
+            <div class="pf-head">Order Details</div>
+            <div class="pf-grid">
+              <div><label>PO Number</label><b>{{ po.poNumber }}</b></div>
+              <div><label>Status</label>
+                <span class="badge  pf-chip" [class]="getChipClass(po.status)">
+                  {{ po.status | titlecase }}
+                </span>
+                <small class="d-block text-muted mt-1" style="font-size:11px;">
+                  {{ getStatusHint(po.status) }}
+                </small>
+              </div>
+              <div><label>Order Date</label><b>{{ po.orderDate | date:'dd MMM yyyy' }}</b></div>
+              <div><label>Expected Date</label><b>{{ po.expectedDate | date:'dd MMM yyyy' }}</b></div>
+              <div><label>Created At</label><b>{{ po.createdAt | date:'dd MMM yyyy, hh:mm a' }}</b></div>
+              <div><label>Last Updated</label><b>{{ po.updatedAt | date:'dd MMM yyyy, hh:mm a' }}</b></div>
+            </div>
+          </div>
+
+          <!-- DELIVERY & PAYMENT -->
+          <div class="pf-card">
+            <div class="pf-head">Delivery & Payment</div>
+            <div class="pf-grid">
+              <div><label>Payment Terms</label><b>{{ getPaymentTermsLabel(po.paymentTerms) }}</b></div>
+              <div><label>Delivery Method</label><b>{{ getDeliveryLabel(po.deliveryMethod) }}</b></div>
+              <div style="grid-column:1/-1"><label>Shipping Address</label><b>{{ po.shippingAddress || '—' }}</b></div>
+              <div style="grid-column:1/-1"><label>Notes / Remarks</label><b>{{ po.notes || '—' }}</b></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="pf-right">
+
+          <!-- VENDOR CARD (styled like pf-bank) -->
+          <div class="pf-bank">
+            <div class="pf-bank-name">{{ po.vendorName }}</div>
+            <div class="pf-bank-num">{{ po.poNumber }}</div>
+            <div class="pf-bank-row">
+              <div><span>Vendor Code:</span><b> {{ po.vendorCode }}</b></div>
+              <div><span>Status:</span><b> {{ po.status | titlecase }}</b></div>
+            </div>
+            <div class="pf-chip-box">Grand Total: ₹{{ po.grandTotal | number:'1.2-2' }}</div>
+          </div>
+
+          <!-- AMOUNT BREAKDOWN (like Work Experience card) -->
+          <div class="pf-card">
+            <div class="pf-head">Amount Breakdown</div>
+
+            <div class="pf-amount-row mb-3">
+              <b>Sub Total</b>
+              <span>₹{{ po.subTotal | number:'1.2-2' }}</span>
+            </div>
+            <div class="pf-amount-row mb-3">
+              <b>Total Discount</b>
+              <span class="text-danger">− ₹{{ po.discountAmount | number:'1.2-2' }}</span>
+            </div>
+            <div class="pf-amount-row mb-3">
+              <b>Tax Amount</b>
+              <span>+ ₹{{ po.taxAmount | number:'1.2-2' }}</span>
+            </div>
+            <div class="pf-amount-row mb-3" >
+              <b>Shipping Charge</b>
+              <span>+ ₹{{ po.shippingCharge | number:'1.2-2' }}</span>
+            </div>
+            <div class="pf-amount-row pf-amount-total">
+              <b>Grand Total</b>
+              <span class="text-success">₹{{ po.grandTotal | number:'1.2-2' }}</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+  }
+
+
+  <!-- ═══════════════════════════════════════
+       TAB 2 — VENDOR INFO
+  ════════════════════════════════════════ -->
+  @if(activeTab() === 'vendor') {
+  <div>
+
+    <div class="infos-card">
+      <div class="section-header">
+        <span>Vendor Information</span>
+      </div>
+      <div class="info-grid">
+
+        <div class="info-tile">
+          <span>Vendor Name</span>
+          <strong>{{ po.vendorName }}</strong>
+        </div>
+
+        <div class="info-tile">
+          <span>Vendor Code</span>
+          <strong>{{ po.vendorCode }}</strong>
+        </div>
+
+        <div class="info-tile">
+          <span>Payment Terms</span>
+          <strong>{{ getPaymentTermsLabel(po.paymentTerms) }}</strong>
+        </div>
+
+        <div class="info-tile">
+          <span>Delivery Method</span>
+          <strong>{{ getDeliveryLabel(po.deliveryMethod) }}</strong>
+        </div>
+
+        <div class="info-tile">
+          <span>Order Date</span>
+          <strong>{{ po.orderDate | date:'dd MMM yyyy' }}</strong>
+        </div>
+
+        <div class="info-tile">
+          <span>Expected Delivery</span>
+          <strong>{{ po.expectedDate | date:'dd MMM yyyy' }}</strong>
+        </div>
+
+        <div class="info-tile">
+          <span>Shipping Charge</span>
+          <strong>₹{{ po.shippingCharge | number:'1.2-2' }}</strong>
+        </div>
+
+        <div class="info-tile status">
+          <span>Status</span>
+          <div>
+            <strong [class]="getStatusClass(po.status)">{{ po.status | titlecase }}</strong>
+            <small class="d-block text-muted" style="font-size:11px;">{{ getStatusHint(po.status) }}</small>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row g-3 mt-1">
+      <div class="col-md-6">
+        <div class="infos-card">
+          <div class="section-header"><span>Shipping Address</span></div>
+          <p class="p-3 mb-0" style="font-size:14px; color:#4a5568; white-space:pre-line; min-height:80px;">
+            {{ po.shippingAddress || 'No shipping address provided.' }}
+          </p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="infos-card">
+          <div class="section-header"><span>Notes / Remarks</span></div>
+          <p class="p-3 mb-0" style="font-size:14px; color:#4a5568; white-space:pre-line; min-height:80px;">
+            {{ po.notes || 'No notes provided.' }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  }
+
+
+  <!-- ═══════════════════════════════════════
+       TAB 3 — LINE ITEMS
+  ════════════════════════════════════════ -->
+  @if(activeTab() === 'lineitems') {
+  <div>
+
+    <div class="row g-3 mb-4">
+
+      <div class="col-md-2">
+        <div class="kpi-card-modern">
+          <div class="kpi-icon"><i class="ti ti-list-details"></i></div>
+          <div class="kpi-content">
+            <div class="kpi-value">{{ po.lineItems?.length }}</div>
+            <div class="kpi-label">Total Items</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="kpi-card-modern success">
+          <div class="kpi-icon"><i class="ti ti-currency-rupee"></i></div>
+          <div class="kpi-content">
+            <div class="kpi-value">₹{{ po.subTotal | number:'1.0-0' }}</div>
+            <div class="kpi-label">Sub Total</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="kpi-card-modern warning">
+          <div class="kpi-icon"><i class="ti ti-tag"></i></div>
+          <div class="kpi-content">
+            <div class="kpi-value">₹{{ po.discountAmount | number:'1.0-0' }}</div>
+            <div class="kpi-label">Discount</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="kpi-card-modern">
+          <div class="kpi-icon"><i class="ti ti-receipt-tax"></i></div>
+          <div class="kpi-content">
+            <div class="kpi-value">₹{{ po.taxAmount | number:'1.0-0' }}</div>
+            <div class="kpi-label">Tax</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header fw-semibold d-flex justify-content-between align-items-center">
+        <span>Line Items</span>
+        <span class="badge bg-warning text-dark">{{ po.lineItems?.length }} Item(s)</span>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead style="background:#8080800d;">
+            <tr>
+              <th style="width:40px">#</th>
+              <th>Product Name</th>
+              <th>Code</th>
+              <th>Unit</th>
+              <th>Qty</th>
+              <th>Unit Price</th>
+              <th>Discount (₹)</th>
+              <th>Tax</th>
+              <th class="text-end pe-3">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of po.lineItems; track row.id) {
+              <tr>
+                <td class="text-muted text-center">{{ $index + 1 }}</td>
+                <td class="fw-semibold">{{ row.productName }}</td>
+                <td><span class="po-code-chip">{{ row.productCode || '—' }}</span></td>
+                <td><span class="po-unit-chip">{{ row.unitName }}</span></td>
+                <td class="text-center">{{ row.quantity }}</td>
+                <td>₹{{ row.unitPrice | number:'1.2-2' }}</td>
+                <td>
+                  @if(row.discount > 0) {
+                    <span class="text-danger">− ₹{{ row.discount | number:'1.2-2' }}</span>
+                  } @else {
+                    <span class="text-muted">—</span>
+                  }
+                </td>
+                <td>
+                  @if(row.taxPercent > 0) {
+                    <span class="po-tax-chip">{{ row.taxPercent }}%</span>
+                  } @else {
+                    <span class="text-muted">—</span>
+                  }
+                </td>
+                <td class="fw-bold text-end pe-3">₹{{ row.total | number:'1.2-2' }}</td>
+              </tr>
+            }
+            @if(!po.lineItems?.length) {
+              <tr><td colspan="9" class="text-center text-muted py-4">No line items found.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  }
+
+
+  <!-- ═══════════════════════════════════════
+       TAB 4 — ORDER SUMMARY
+  ════════════════════════════════════════ -->
+  @if(activeTab() === 'summary') {
+  <div>
+
+    <!-- SUMMARY STRIP (like salary-summary) -->
+    <div class="salary-summary mb-4">
+      <div class="sum-item">
+        <span>Sub Total</span>
+        <strong>₹{{ po.subTotal | number:'1.2-2' }}</strong>
+      </div>
+      <div class="divider"></div>
+      <div class="sum-item">
+        <span>Total Discount</span>
+        <strong class="text-danger">− ₹{{ po.discountAmount | number:'1.2-2' }}</strong>
+      </div>
+      <div class="divider"></div>
+      <div class="sum-item">
+        <span>Tax Amount</span>
+        <strong class="text-warning">+ ₹{{ po.taxAmount | number:'1.2-2' }}</strong>
+      </div>
+      <div class="divider"></div>
+      <div class="sum-item">
+        <span>Shipping</span>
+        <strong>+ ₹{{ po.shippingCharge | number:'1.2-2' }}</strong>
+      </div>
+      <div class="divider"></div>
+      <div class="sum-item net">
+        <span>Grand Total</span>
+        <strong class="text-success">₹{{ po.grandTotal | number:'1.2-2' }}</strong>
+      </div>
+    </div>
+
+    <!-- BREAKDOWN GRID (like salary-grid) -->
+    <div class="salary-grid">
+      <div class="salary-row">
+        <span>Sub Total</span>
+        <strong>₹{{ po.subTotal | number:'1.2-2' }}</strong>
+      </div>
+      <div class="salary-row">
+        <span>Shipping Charge</span>
+        <strong>₹{{ po.shippingCharge | number:'1.2-2' }}</strong>
+      </div>
+      <div class="salary-row deduction">
+        <span>Total Discount</span>
+        <strong>₹{{ po.discountAmount | number:'1.2-2' }}</strong>
+      </div>
+      <div class="salary-row deduction">
+        <span>Tax Amount</span>
+        <strong>₹{{ po.taxAmount | number:'1.2-2' }}</strong>
+      </div>
+    </div>
+
+    <!-- ITEM-WISE TABLE -->
+    <div class="card mt-4">
+      <div class="card-header d-flex justify-content-between">
+        <span class="fw-semibold">Item-wise Summary</span>
+        <span class="text-muted small"><i class="ti ti-list"></i> {{ po.lineItems?.length }} item(s)</span>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Product</th>
+              <th>Qty</th>
+              <th>Unit Price</th>
+              <th>Discount</th>
+              <th>Tax %</th>
+              <th class="text-end pe-3">Row Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of po.lineItems; track row.id) {
+              <tr>
+                <td class="text-muted">{{ $index + 1 }}</td>
+                <td class="fw-semibold">{{ row.productName }}</td>
+                <td>{{ row.quantity }}</td>
+                <td>₹{{ row.unitPrice | number:'1.2-2' }}</td>
+                <td>
+                  @if(row.discount > 0) {
+                    <span class="text-danger">− ₹{{ row.discount | number:'1.2-2' }}</span>
+                  } @else { <span class="text-muted">—</span> }
+                </td>
+                <td>
+                  @if(row.taxPercent > 0) { {{ row.taxPercent }}% }
+                  @else { <span class="text-muted">—</span> }
+                </td>
+                <td class="fw-bold text-end pe-3">₹{{ row.total | number:'1.2-2' }}</td>
+              </tr>
+            }
+          </tbody>
+          <tfoot style="background:#f8f9fb;">
+            <tr>
+              <td colspan="6" class="text-end pe-3 fw-bold">Grand Total</td>
+              <td class="text-end pe-3 fw-bold text-success">₹{{ po.grandTotal | number:'1.2-2' }}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  }
+
+
+</div>

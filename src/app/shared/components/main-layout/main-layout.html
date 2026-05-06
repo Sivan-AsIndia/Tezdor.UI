@@ -1,0 +1,23 @@
+<div id="main-wrapper" class="flex p-5 pt-0">
+  <app-vertical-sidebar ></app-vertical-sidebar>
+  <div class="page-wrapper w-full">
+
+    <app-horizontal-sidebar></app-horizontal-sidebar>
+
+    <div class="body-wrapper">
+      <div class="container-fluid">
+
+        <app-top-header></app-top-header>
+<app-toast></app-toast>
+<router-outlet />
+
+      </div>
+    </div>
+
+    <app-theme></app-theme>
+  </div>
+  <div class="dark-transparent sidebartoggler"></div>
+</div>
+
+
+

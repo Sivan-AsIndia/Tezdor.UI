@@ -1,0 +1,323 @@
+<div class="max-w-full">
+    <div class="full-container">
+        <div class="v-container v-container--fluid rounded-xl p-0">
+
+            <!-- HEADER -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+
+                <div>
+                    <h4 class="fw-bold mb-1 mainheading">
+                        {{ editMode ? 'Edit Salary' : 'Create Salary' }}
+                    </h4>
+                    <small class="text-muted">
+                        Manage payroll runs, employee salaries, and payments.
+                    </small>
+                </div>
+
+
+
+                <!-- 🔷 ARROW BREADCRUMB -->
+                <div class="arrow-steps d-none d-md-flex">
+
+
+                    <ul id="breadcrumb">
+                        <li><a routerLink="/dashboard"><span class="fa fa-home me-1"> </span>Home</a></li>
+                        <li>
+                            <a routerLink="/salary">
+                                <i class="bi bi-list-ul me-1"></i> List
+                            </a>
+                        </li>
+
+                        <!-- CREATE / EDIT -->
+                        <li class="active">
+                            <a href="javascript:void(0)">
+                                <span>
+                                    <i class="bi bi-pencil-square"></i>
+                                    {{ editMode ? 'Edit' : 'Create' }}
+                                </span>
+                            </a>
+
+                        </li>
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <!-- TABS -->
+            <div class="pf-tabs">
+                <button class="pf-tab" [class.pf-tab--active]="activeTab() === 'general'" (click)="setTab('general')">
+                    General
+                </button>
+
+                <button class="pf-tab" [class.pf-tab--active]="activeTab() === 'lines'" (click)="setTab('lines')">
+                    Salary Lines
+                </button>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="content-layout">
+
+                <!-- LEFT -->
+                <div class="main-column">
+
+                    <!-- ================= GENERAL ================= -->
+                    @if(activeTab() === 'general'){
+
+                    <div class="pf-card mobile-view">
+
+                        <div class="pf-card__header">
+                            <h3 class="cardheader">General</h3>
+                        </div>
+
+                        <!-- Salary Number -->
+                        <!-- <div class="form-group">
+              <label class="form-label">Salary No</label>
+              <input class="form-control"
+                     [value]="form().salaryNumber"
+                     readonly />
+            </div> -->
+
+                        <!-- Branch + Period -->
+                        <div class="form-row">
+
+                            <!-- <div class="form-group flex-1">
+                <label class="form-label required">Branch</label>
+                <select class="form-select"
+                        [value]="form().branchId"
+                        (input)="setBranch($any($event.target).value)">
+                  <option value="">Select Branch</option>
+                  @for(b of branches(); track b.id){
+                    <option [value]="b.id">{{ b.name }}</option>
+                  }
+                </select>
+              </div> -->
+
+                            <div class="form-group flex-1">
+                                <label class="form-label required">Payroll Period</label>
+                                <select class="form-select" [value]="form().payrollPeriodId || ''"
+                                    (change)="setPeriod($any($event.target).value)"
+                                    [class.is-invalid]="hasError('payrollPeriodId')">
+
+                                    <option value="">-- Select Period --</option>
+
+                                    @for (p of periods(); track p.id) {
+                                    <option [value]="p.id" [selected]="p.id === form().payrollPeriodId">{{ p.name }}
+                                    </option>
+                                    }
+
+                                </select>
+
+                                @if(hasError('payrollPeriodId')){
+                                <div class="text-danger mt-1">
+                                    {{ getError('payrollPeriodId') }}
+                                </div>
+                                }
+                            </div>
+
+                        </div>
+
+                        <!-- From / To -->
+                        <div class="form-row mt-3">
+
+                            <div class="form-group flex-1">
+                                <label class="form-label required">From Date</label>
+                                <input type="date" class="form-control" [value]="form().fromDate"
+                                    (input)="setFromDate($any($event.target).value)"
+                                    [class.is-invalid]="hasError('fromDate')" />
+
+                                @if(hasError('fromDate')){
+                                <div class="text-danger mt-1">
+                                    {{ getError('fromDate') }}
+                                </div>
+                                }
+                            </div>
+
+                            <div class="form-group flex-1">
+                                <label class="form-label required">To Date</label>
+                                <input type="date" class="form-control" [value]="form().toDate"
+                                    (input)="setToDate($any($event.target).value)"
+                                    [class.is-invalid]="hasError('toDate')" />
+
+                                @if(hasError('toDate')){
+                                <div class="text-danger mt-1">
+                                    {{ getError('toDate') }}
+                                </div>
+                                }
+                            </div>
+
+                        </div>
+
+                        <!-- Salary Date -->
+                        <div class="form-group">
+                            <label class="form-label">Salary Date</label>
+                            <input type="date" class="form-control" [value]="form().salaryDate"
+                                (input)="setSalaryDate($any($event.target).value)">
+                        </div>
+
+                    </div>
+
+                    }
+
+                    <!-- ================= SALARY LINES ================= -->
+                    @if(activeTab() === 'lines'){
+
+                    <div class="pf-card">
+
+                        <div class="pf-card__header d-flex justify-content-between">
+                            <h3 class="cardheader">Salary Lines</h3>
+
+                            <button class="btn btn-primary" (click)="generateSalary()">
+                                Generate Salary
+                            </button>
+                        </div>
+
+                        <!-- TABLE -->
+                        <div class="table-responsive">
+
+                            <table class="table">
+
+                                <thead>
+                                    <tr>
+                                        <th>Employee</th>
+                                        <th>Days</th>
+                                        <th>Basic</th>
+                                        <th>OT</th>
+                                        <th>Gross</th>
+                                        <th>Deductions</th>
+                                        <th>Net</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    @for(l of lines(); track l.salaryLineId){
+
+                                    <tr>
+
+                                        <td>{{ getEmployeeName(l.employeeId) }}</td>
+
+                                        <td>{{ l.payableDays }}</td>
+
+                                        <td>{{ formatAmount(l.basicSalary) }}</td>
+
+                                        <td>{{ l.overtimeHours }}</td>
+
+                                        <td>{{ formatAmount(l.grossEarnings) }}</td>
+
+                                        <td>{{ formatAmount(l.totalDeductions) }}</td>
+
+                                        <td class="fw-semibold text-success">
+                                            {{ formatAmount(l.netSalary) }}
+                                        </td>
+
+                                        <td>
+                                            <button class="icon-btn delete" (click)="removeLine(l.salaryLineId)">
+                                                <i class="ti ti-trash"></i>
+                                            </button>
+                                        </td>
+
+                                    </tr>
+
+                                    }
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                    }
+
+                </div>
+
+                <!-- RIGHT SIDEBAR -->
+                <div class="sidebar-column">
+
+                    <!-- SUMMARY -->
+                    @if(activeTab() === 'lines'){
+                    <div class="pf-card">
+
+                        <div class="pf-card__header">
+                            <h3 class="cardheader">Summary</h3>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Total Employees</span>
+                            <strong>{{ totalEmployees() }}</strong>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Gross</span>
+                            <strong>{{ formatAmount(totalGross()) }}</strong>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Deductions</span>
+                            <strong>{{ formatAmount(totalDeduction()) }}</strong>
+                        </div>
+
+                        <div class="d-flex justify-content-between fw-bold">
+                            <span>Net Salary</span>
+                            <span class="text-success">
+                                {{ formatAmount(totalNet()) }}
+                            </span>
+                        </div>
+
+                    </div>
+                    }
+
+                    <!-- STATUS -->
+                    @if(activeTab() === 'general'){
+                    <div class="pf-card">
+
+                        <div class="pf-card__header">
+                            <h3 class="cardheader">Status</h3>
+                        </div>
+
+                        <div class="pf-status-options">
+
+                            @for(s of statusOptions; track s.value){
+
+                            <label class="pf-status-option"
+                                [class.pf-status-option--active]="form().status === s.value">
+
+                                <input type="radio" [value]="s.value" (change)="setStatus(s.value)" />
+
+                                <div>
+                                    <div class="fw-semibold">{{ s.label }}</div>
+                                    <small class="text-muted">{{ s.hint }}</small>
+                                </div>
+
+                            </label>
+
+                            }
+
+                        </div>
+
+                    </div>
+                    }
+
+                </div>
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="d-flex justify-content-end gap-3 mt-3">
+
+                <button class="btn btn-cancel" (click)="onCancel()">
+                    Cancel
+                </button>
+
+                <button class="btn btn-primary" (click)="onSave()">
+                    {{ editMode ? 'Update' : 'Create' }}
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>

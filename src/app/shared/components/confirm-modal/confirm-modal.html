@@ -1,0 +1,57 @@
+@if (visible()) {
+
+<div class="modal-backdrop-custom">
+
+  <div class="modal-card">
+
+    <!-- CLOSE -->
+    <button class="close-btn" (click)="close()">
+      <i class="ti ti-x"></i>
+    </button>
+
+    <!-- ICON -->
+    <div class="icon-wrapper" [class]="type()">
+
+<i class="ti"
+   [class.ti-trash]="type() === 'delete'"
+   [class.ti-alert-circle]="type() === 'warning'"
+   [class.ti-check]="type() === 'success'">
+</i>
+
+    </div>
+
+    <!-- TITLE -->
+    <h5 class="modal-title">
+      {{ title() }}
+    </h5>
+
+    <!-- MESSAGE -->
+    <p class="modal-message">
+      {{ message() }}
+    </p>
+
+    <!-- ACTIONS -->
+<div class="modal-actions">
+
+  @if(type() !== 'success'){
+  <button 
+          class="btn-cancel"
+          (click)="close()">
+    Cancel
+  </button>
+  }
+
+
+  <button class="btn-confirm"
+          [class]="type()"
+          (click)="confirm()">
+    {{ confirmText() }}
+  </button>
+
+</div>
+
+  </div>
+
+</div>
+
+}

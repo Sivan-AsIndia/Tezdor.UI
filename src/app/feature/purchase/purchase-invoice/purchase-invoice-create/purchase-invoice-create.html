@@ -1,0 +1,358 @@
+<div class="max-w-full">
+  <div class="full-container">
+    <div class="v-container v-container--fluid v-locale--is-ltr rounded-xl p-0">
+
+      <!-- ══ HEADER ══════════════════════════════════════════════ -->
+      <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+        <div>
+          <h4 class="fw-bold mb-1 mainheading">{{ pageTitle }}</h4>
+          <small class="text-muted subdescription">
+            Record supplier invoices against purchase orders.
+          </small>
+        </div>
+        <div class="arrow-steps d-none d-md-flex">
+          <ul id="breadcrumb">
+            <li><a href="#"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a></li>
+            <li><a href="/purchase-invoice-list"><span class="fa fa-file"></span>&nbsp;&nbsp;Invoices</a></li>
+            <li><a><span class="fa fa-plus-circle"></span>&nbsp;&nbsp;{{ isEditMode ? 'Edit' : 'Create' }}</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ══ SECTION 1 · P-INVOICE HEADER ════════════════════════ -->
+      <div class="card mb-3 section-card" id="section-primary">
+        <div class="card-body">
+          <div class="section-header">
+            <div class="section-icon"><i class="ti ti-file-invoice"></i></div>
+            <h6 class="cardheader">P-Invoice Header</h6>
+          </div>
+
+          <div class="row g-3">
+
+            <!-- Supplier Invoice No (required) -->
+            <div class="col-md-3">
+              <label class="form-label cardlabel">Supplier Invoice No <span class="text-danger">*</span></label>
+              <input
+                class="form-control"
+                [class.is-invalid]="isInvalid('supplierInvNo', supplierInvNo())"
+                [value]="supplierInvNo()"
+                (input)="supplierInvNo.set($any($event.target).value)"
+                (blur)="touch('supplierInvNo')"
+                placeholder="e.g. KT-INV-4521">
+              @if (isInvalid('supplierInvNo', supplierInvNo())) {
+                <div class="invalid-feedback">Supplier Invoice No is required.</div>
+              }
+            </div>
+
+            <!-- Invoice Date (required) -->
+            <div class="col-md-3">
+              <label class="form-label cardlabel">Invoice Date <span class="text-danger">*</span></label>
+              <input
+                type="date"
+                class="form-control"
+                [class.is-invalid]="isInvalid('invoiceDate', invoiceDate())"
+                [value]="invoiceDate()"
+                (change)="invoiceDate.set($any($event.target).value); touch('invoiceDate')"
+                (blur)="touch('invoiceDate')">
+              @if (isInvalid('invoiceDate', invoiceDate())) {
+                <div class="invalid-feedback">Invoice date is required.</div>
+              }
+            </div>
+
+            <!-- Invoice Status (required) -->
+            <div class="col-md-3">
+              <label class="form-label cardlabel">Invoice Status <span class="text-danger">*</span></label>
+              <select
+                class="form-select"
+                [class.is-invalid]="isInvalid('invoiceStatus', invoiceStatus())"
+                [value]="invoiceStatus()"
+                (change)="invoiceStatus.set($any($event.target).value); touch('invoiceStatus')"
+                (blur)="touch('invoiceStatus')">
+                <option value="">-- Select Status --</option>
+                @for (s of invoiceStatusOptions; track s.value) {
+                  <option [value]="s.value">{{ s.label }}</option>
+                }
+              </select>
+              @if (isInvalid('invoiceStatus', invoiceStatus())) {
+                <div class="invalid-feedback">Invoice status is required.</div>
+              }
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SECTION 2 · SUPPLIER & PO REF ═══════════════════════ -->
+      <div class="card mb-3 section-card section-info">
+        <div class="card-body">
+          <div class="section-header">
+            <div class="section-icon"><i class="ti ti-building-store"></i></div>
+            <h6 class="cardheader">Supplier Information</h6>
+          </div>
+
+          <div class="row g-3">
+
+            <!-- Supplier dropdown (required) -->
+            <div class="col-md-4">
+              <label class="form-label cardlabel">Supplier <span class="text-danger">*</span></label>
+              <select
+                class="form-select"
+                [class.is-invalid]="isInvalid('supplierId', supplierId())"
+                [value]="supplierId()"
+                (change)="supplierId.set($any($event.target).value); touch('supplierId')"
+                (blur)="touch('supplierId')">
+                <option value="">-- Select Supplier --</option>
+                @for (v of supplierOptions; track v.value) {
+                  <option [value]="v.value">{{ v.label }}</option>
+                }
+              </select>
+              @if (isInvalid('supplierId', supplierId())) {
+                <div class="invalid-feedback">Please select a supplier.</div>
+              }
+            </div>
+
+            <!-- Purchase Order Ref (optional) -->
+            <div class="col-md-4">
+              <label class="cardlabel">Purchase Order Ref</label>
+              <select
+                class="form-select"
+                [value]="poRef()"
+                (change)="poRef.set($any($event.target).value)">
+                <option value="">-- Select PO --</option>
+                @for (p of poOptions; track p.value) {
+                  <option [value]="p.value">{{ p.label }}</option>
+                }
+              </select>
+            </div>
+
+            <!-- Notes (optional) -->
+            <div class="col-md-4">
+              <label class="cardlabel">Notes</label>
+              <textarea
+                class="form-control"
+                rows="2"
+                placeholder="Any remarks..."
+                [value]="notes()"
+                (input)="notes.set($any($event.target).value)"></textarea>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SECTION 3 · LINE ITEMS ════════════════════════════════ -->
+      <div class="card mb-3 section-card section-warning">
+        <div class="card-body">
+          <div class="section-header">
+            <div class="section-icon"><i class="ti ti-list-details"></i></div>
+            <h6 class="cardheader">Line Items</h6>
+          </div>
+
+          <div class="border-table mb-3" style="overflow-x:auto;">
+            <table class="table table-sm mb-0" style="min-width:800px;">
+              <thead style="background:#8080800d;">
+                <tr>
+                  <th style="width:40px">#</th>
+                  <th>Product Name <span class="text-danger">*</span></th>
+                  <th>Unit</th>
+                  <th>Qty <span class="text-danger">*</span></th>
+                  <th>Unit Cost (₹)</th>
+                  <th>Tax / GST</th>
+                  <th>Line Total</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of lineItems(); track row.id) {
+                  <tr>
+                    <td class="text-muted align-middle">{{ $index + 1 }}</td>
+
+                    <!-- Product dropdown (required) -->
+                    <td>
+                      <select
+                        class="form-select form-select-sm"
+                        [class.is-invalid]="isRowInvalid(row.id, 'productCode', row.productCode)"
+                        [value]="row.productCode"
+                        (change)="onProductSelect(row, $any($event.target).value)"
+                        (blur)="touchRow(row.id, 'productCode')">
+                        <option value="">-- Select Product --</option>
+                        @for (p of product.products(); track p.productCode) {
+                          <option [value]="p.productCode">{{ p.productName }}</option>
+                        }
+                      </select>
+                      @if (isRowInvalid(row.id, 'productCode', row.productCode)) {
+                        <div class="invalid-feedback">Please select a product.</div>
+                      }
+                    </td>
+
+                    <!-- Unit -->
+                    <td>
+                      <select
+                        class="form-select form-select-sm"
+                        [value]="row.unitId"
+                        (change)="updateRow(row.id, 'unitId', +$any($event.target).value)">
+                        @for (u of unitOptions; track u.value) {
+                          <option [value]="u.value">{{ u.label }}</option>
+                        }
+                      </select>
+                    </td>
+
+                    <!-- Qty (required, > 0) -->
+                    <td>
+                      <input
+                        type="number"
+                        class="form-control form-control-sm"
+                        [class.is-invalid]="isRowInvalid(row.id, 'qty', row.qty)"
+                        min="0.001"
+                        step="0.001"
+                        [value]="row.qty"
+                        (input)="updateRow(row.id, 'qty', +$any($event.target).value)"
+                        (blur)="touchRow(row.id, 'qty')">
+                      @if (isRowInvalid(row.id, 'qty', row.qty)) {
+                        <div class="invalid-feedback">Qty must be &gt; 0.</div>
+                      }
+                    </td>
+
+                    <!-- Unit Cost -->
+                    <td>
+                      <input
+                        type="number"
+                        class="form-control form-control-sm"
+                        min="0"
+                        [value]="row.unitCost"
+                        (input)="updateRow(row.id, 'unitCost', +$any($event.target).value)">
+                    </td>
+
+                    <!-- Tax -->
+                    <td>
+                      <select
+                        class="form-select form-select-sm"
+                        [value]="row.taxPercent"
+                        (change)="updateRow(row.id, 'taxPercent', +$any($event.target).value)">
+                        @for (t of taxOptions; track t.value) {
+                          <option [value]="t.value">{{ t.label }}</option>
+                        }
+                      </select>
+                    </td>
+
+                    <!-- Line Total -->
+                    <td class="align-middle fw-bold text-end pe-2">
+                      ₹{{ calcLineTotal(row) | number:'1.2-2' }}
+                    </td>
+
+                    <!-- Remove row -->
+                    <td class="align-middle text-center">
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-link text-danger p-0"
+                        (click)="removeRow(row.id)">
+                        <i class="ti ti-trash fs-5"></i>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <button
+            type="button"
+            class="btn btn-outline-primary btn-sm bg-primary"
+            (click)="addRow()">
+            <i class="ti ti-plus me-1"></i> Add Row
+          </button>
+
+        </div>
+      </div>
+
+      <!-- ══ SECTION 4 · TOTALS & PAYMENT ═════════════════════════ -->
+      <div class="card mb-3 section-card section-success">
+        <div class="card-body">
+          <div class="section-header">
+            <div class="section-icon"><i class="ti ti-currency-rupee"></i></div>
+            <h6 class="cardheader">Totals &amp; Payment</h6>
+          </div>
+
+          <div class="row g-3">
+
+            <!-- LEFT: Payment inputs -->
+            <div class="col-md-6">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="cardlabel">Amount Paid (₹)</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    min="0"
+                    [value]="amountPaid()"
+                    (input)="amountPaid.set(+$any($event.target).value)"
+                    placeholder="0.00">
+                  <small class="text-muted">Partial payments allowed</small>
+                </div>
+                <div class="col-12">
+                  <label class="cardlabel">Payment Due Date</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    [value]="paymentDueDate()"
+                    (change)="paymentDueDate.set($any($event.target).value)">
+                </div>
+                <div class="col-12">
+                  <label class="cardlabel">Payment Status</label>
+                  <div class="form-control bg-light d-flex align-items-center gap-2" style="pointer-events:none;">
+                    <span
+                      class="badge rounded-2"
+                      [ngClass]="{
+                        'bg-lighterror  text-error':    paymentStatus() === 'unpaid',
+                        'bg-lightwarning text-warning': paymentStatus() === 'partial',
+                        'bg-lightsuccess text-success': paymentStatus() === 'paid'
+                      }">
+                      {{ capitalize(paymentStatus()) }}
+                    </span>
+                    <small class="text-muted">Auto-computed</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT: Summary -->
+            <div class="col-md-6">
+              <div class="summary-table">
+                <div class="summary-row">
+                  <span>Grand Total</span>
+                  <span><strong>₹{{ grandTotal() | number:'1.2-2' }}</strong></span>
+                </div>
+                <div class="summary-row">
+                  <span>Amount Paid</span>
+                  <span class="text-success">₹{{ amountPaid() | number:'1.2-2' }}</span>
+                </div>
+                <div class="summary-row grand-total">
+                  <span>Balance Due</span>
+                  <span [class]="balanceDue() > 0 ? 'text-danger' : 'text-success'">
+                    ₹{{ balanceDue() | number:'1.2-2' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ ACTION BUTTONS ════════════════════════════════════════ -->
+      <div class="d-flex gap-2 mt-4 justify-content-end mb-5">
+        <button
+          class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated bg-secondary px-3"
+          (click)="cancel()">
+          Cancel
+        </button>
+        <button
+          class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+          (click)="saveInvoice()">
+          {{ isEditMode ? 'Update' : 'Save' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

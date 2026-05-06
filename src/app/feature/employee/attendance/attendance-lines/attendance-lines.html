@@ -1,0 +1,521 @@
+<div class="max-w-full">
+    <div class="full-container">
+        <div class="v-container v-container--fluid rounded-xl p-0">
+
+            <!-- HEADER -->
+            <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+
+                <div>
+                    <h4 class="fw-bold mb-1 mainheading">Attendance Lines</h4>
+                    <small class="text-muted subdescription">
+                        Employee-wise attendance entries for selected period.
+                    </small>
+                </div>
+
+                <!-- BREADCRUMB -->
+                <div class="arrow-steps d-none d-md-flex">
+                    <ul id="breadcrumb">
+                        <li>
+                            <a routerLink="/dashboard">
+                                <span class="fa fa-home"></span>&nbsp;&nbsp;Home
+                            </a>
+                        </li>
+
+                        <li>
+                            <a routerLink="/attendance">
+                                <span class="fa fa-calendar-check"></span>&nbsp;&nbsp;Attendance List
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="javascript:void(0)">
+                                <span class="fa fa-list-check"></span>&nbsp;&nbsp;Attendance Lines
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="content-card">
+                <div class="card-body-inner">
+
+                    <!-- TOP BAR -->
+                    <div class="table-topbar">
+
+                        <div class="table-title-badge">
+                            <h5 class="tableheading">Attendance Entries</h5>
+                            <span class="count-badge">{{ total() }}</span>
+                        </div>
+
+                        <div class="topbar-actions">
+                            <!-- DATE FILTER -->
+                            <div class="date-filter" (click)="openDatePicker(dateInput)">
+
+                                <input #dateInput type="date" class="form-control form-control-sm"
+                                    [value]="filterDate()" (input)="filterDate.set($any($event.target).value)" />
+
+                                @if(filterDate()){
+                                <button class="icon-clear" (click)="clearDate($event)">
+                                    <i class="bi bi-x"></i>
+                                </button>
+                                }
+
+                            </div>
+                            <!-- SEARCH -->
+                            <div class="search-box">
+                                <input type="text" placeholder="Search by employee..." [value]="searchValue()"
+                                    (input)="onSearch($any($event.target).value)" />
+
+                                @if(!searchValue()){
+                                <button class="icon-clear">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                                }
+
+                                @if(searchValue()){
+                                <button class="icon-clear" (click)="searchValue.set('')">
+                                    <i class="bi bi-x"></i>
+                                </button>
+                                }
+                            </div>
+                            <!-- VIEW TOGGLE -->
+                            <!-- <button class="icon-btn view-toggle" (click)="toggleView()"
+                                [title]="viewMode() === 'table' ? 'Grid View' : 'Table View'">
+
+                                <i class="ti" [class]="viewMode() === 'table' ? 'ti-layout-grid' : 'ti-table'">
+                                </i>
+
+                            </button> -->
+                            <!-- ADD BUTTON -->
+                            @if(canAdd()){
+                            <button
+                                class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-primary v-btn--density-default v-btn--size-default v-btn--variant-elevated ml-auto"
+                                (click)="openAddModal()">
+
+                                <i class="mdi-account-multiple-plus mdi v-icon mr-2"></i>
+                                Add
+                            </button>
+                            }
+
+                        </div>
+                    </div>
+
+                    <!-- TABLE -->
+                    @if(viewMode() === 'table'){
+                    <div class="border-table">
+                        <div class="v-table v-theme--BLUE_THEME v-table--density-default"><!---->
+                            <div class="v-table__wrapper">
+                                <table>
+                                    <thead>
+                                        <tr style="background: #8080800d;">
+                                            <th class="d-xl-none" style="width:40px"></th>
+                                            <th>Employee</th>
+
+
+                                            <th (click)="sortBy('attendanceDate')" class="sortable">
+                                                Date
+                                            </th>
+
+
+                                            <th class="d-none d-md-table-cell">In</th>
+                                            <th class="d-none d-md-table-cell">Out</th>
+
+                                            <th class="d-none d-xl-table-cell">Hours</th>
+                                            <th class="d-none d-xl-table-cell">OT</th>
+                                            <th class="d-none d-xl-table-cell">Status</th>
+
+
+                                            <th style="width:120px">Actions</th>
+
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                        @for(a of paginated(); track a.attendanceLineId){
+
+                                        <tr>
+                                            <!-- PLUS ICON -->
+                                            <td class="d-xl-none text-center" style="padding: 0;padding-left: 15px;">
+                                                <a href="javascript:void(0);" class="TablePlus" data-bs-toggle="modal"
+                                                    data-bs-target="#rowDetailsModal" (click)="openRowDetails(a)">
+                                                    <i class="ti ti-plus"></i>
+                                                </a>
+                                            </td>
+
+                                            <td class="fw-semibold">
+                                                <div class="d-flex align-items-center gap-2">
+
+                                                    <div class="avatar"
+                                                        [style.background]="getAvatarColor(getEmployeeName(a.employeeId))">
+                                                        {{ getEmployeeName(a.employeeId).charAt(0) }}
+                                                    </div>
+
+                                                    <div>
+                                                        <div class="fw-semibold">
+                                                            {{ getEmployeeName(a.employeeId) }}
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                {{ a.attendanceDate }}
+                                            </td>
+
+                                            <td class="d-none d-md-table-cell">
+                                                {{ a.inTime ?? '-' }}
+                                            </td>
+
+                                            <td class="d-none d-md-table-cell">
+                                                {{ a.outTime ?? '-' }}
+                                            </td>
+
+                                            <td class="d-none d-xl-table-cell">
+                                                {{ formatHours(a.workingHours) }}
+                                            </td>
+
+                                            <td class="d-none d-xl-table-cell">
+                                                {{ formatMinutes(a.overtimeHours) }}
+                                            </td>
+
+                                            <!-- STATUS -->
+                                            <td class="d-none d-xl-table-cell">
+                                                <span class="badge status-pill"
+                                                    [class.present]="a.attendanceType === AttendanceType.Present"
+                                                    [class.absent]="a.attendanceType === AttendanceType.Absent"
+                                                    [class.leave]="a.attendanceType === AttendanceType.Leave"
+                                                    [class.holiday]="a.attendanceType === AttendanceType.Holiday"
+                                                    [class.weekoff]="a.attendanceType === AttendanceType.WeekOff">
+
+                                                    {{ getStatusLabel(a.attendanceType) }}
+
+                                                </span>
+                                            </td>
+
+                                            <!-- ACTIONS -->
+                                            <td>
+                                                <div class="action-icons">
+
+                                                    <button class="icon-btn edit" (click)="onEdit(a)" title="Edit">
+                                                        <i class="ti ti-pencil"></i>
+                                                    </button>
+
+                                                    <button class="icon-btn delete" (click)="onDelete(a)"
+                                                        title="Delete">
+                                                        <i class="ti ti-trash"></i>
+                                                    </button>
+
+                                                </div>
+                                            </td>
+
+                                        </tr>
+
+                                        }
+
+                                        @if(paginated().length === 0){
+                                        <tr>
+                                            <td colspan="8" class="text-center py-4">
+                                                <div class="empty-table">
+                                                    <i class="ti ti-calendar-off"></i>
+                                                    <div>No attendance entries found</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    }
+
+                    @else{
+
+                    <div class="attendance-grid-wrapper" style="width: 98%;">
+
+                        <div class="attendance-header">
+
+                            <!-- Employee Column -->
+                            <div class="emp-header sticky-col">
+                                Employee
+                            </div>
+
+                            <!-- Dates -->
+                            <div class="days-row" style="width: 98%;">
+
+                                @for(date of dates(); track date){
+
+                                <div class="day-cell header-cell">
+                                    {{ date.split('-')[2] }} <!-- show day -->
+                                </div>
+
+                                }
+
+                            </div>
+
+                        </div>
+                        <div class="attendance-grid">
+
+                            @for(emp of employees(); track emp.employeeId){
+
+                            <div class="emp-row">
+
+                                <!-- Employee -->
+                                <div class="emp-header sticky-col">
+                                    {{ emp.firstName }} {{ emp.lastName }}
+                                </div>
+
+                                <!-- Days -->
+                                <div class="days-row">
+
+                                    @for(date of dates(); track date){
+
+                                    <div class="day-cell">
+
+                                        @if(emp.employeeId && getLine(emp.employeeId, date)){
+
+                                        <span class="dot"
+                                            [class.present]="getLine(emp.employeeId, date)?.attendanceType === AttendanceType.Present"
+                                            [class.absent]="getLine(emp.employeeId, date)?.attendanceType === AttendanceType.Absent"
+                                            [class.leave]="getLine(emp.employeeId, date)?.attendanceType === AttendanceType.Leave">
+                                        </span>
+
+                                        } @else {
+                                        <span class="dot empty"></span>
+                                        }
+
+                                    </div>
+
+                                    }
+
+                                </div>
+
+                            </div>
+
+                            }
+
+                        </div>
+                    </div>
+                    }
+
+                    <!-- PAGINATION -->
+                    <div class="pagination-bar">
+
+                        <!-- Page Size -->
+                        <div class="d-flex align-items-center fs-13"><!--!--><span class="me-2"
+                                style="font-size: 12px;">Rows Per Page</span>
+                            <select class="form-select form-select-sm w-auto"
+                                (change)="changePageSize($any($event.target).value)">
+                                <option [selected]="pageSize() === 5">5</option>
+                                <option [selected]="pageSize() === 10">10</option>
+                                <option [selected]="pageSize() === 25">25</option>
+                            </select><!--!-->
+                            <!--!--><span class="ms-2" style="font-size: 12px;">Entries</span>
+                        </div>
+
+                        <!-- PAGINATION CONTROLS -->
+
+                        <div class="pagination-controls">
+
+                            <nav class="v-pagination v-theme--BLUE_THEME text-subtitle-1 text-grey100" role="navigation"
+                                aria-label="Pagination Navigation" data-test="v-pagination-root">
+                                <ul class="pagination-list">
+                                    <li><button class="page-btn" (click)="changePage(page()-1)"
+                                            [disabled]="page() === 1"><span class="mdi mdi-chevron-left"
+                                                style="font-size: 26px;"></span></button></li>
+                                    @for(p of [].constructor(totalPages()); let i = $index; track i){
+                                    <button class="page-btn" (click)="changePage(i+1)" [class.active]="page() === i+1">
+                                        {{ i+1 }}
+                                    </button>
+                                    }
+                                    <li><button class="page-btn" (click)="changePage(page()+1)"
+                                            [disabled]="page() === totalPages()"><span class="mdi mdi-chevron-right"
+                                                style="font-size: 26px;"></span></button></li>
+                                </ul>
+                            </nav>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<app-confirm-modal #modal></app-confirm-modal>
+
+
+<!-- ADD ATTENDANCE MODAL -->
+@if(showModal()){
+<div class="modal fade" [class.show]="showModal()" style="display:block;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    {{ selectedLine() ? 'Edit Attendance' : 'Add Attendance' }}
+                </h5>
+                <button type="button" class="btn-close" (click)="closeModal()"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Date</label>
+
+                    <input type="date" class="form-control" [disabled]="selectedLine() !== null"
+                        [value]="form().attendanceDate" (input)="setDate($any($event.target).value)"
+                        [min]="attendance()?.fromDate || ''" [max]="attendance()?.toDate || ''"
+                        [class.is-invalid]="hasError('attendanceDate')">
+
+                    @if(hasError('attendanceDate')){
+                    <div class="field-error">
+                        {{ getError('attendanceDate') }}
+                    </div>
+                    }
+                </div>
+
+                <!-- Employee Dropdown -->
+                <div class="mb-3">
+                    <label class="form-label">Employee</label>
+
+                    <select class="form-select" [disabled]="selectedLine() !== null" [value]="form().employeeId || ''"
+                        (input)="setEmployee($any($event.target).value)" [class.is-invalid]="hasError('employeeId')">
+
+                        <option value="">-- Select Employee --</option>
+
+                        @for (emp of employees(); track emp.employeeId) {
+                        <option [value]="emp.employeeId" [selected]="emp.employeeId === form().employeeId">
+                            {{ emp.firstName }} {{ emp.lastName }}
+                        </option>
+                        }
+
+                    </select>
+
+                    @if(hasError('employeeId')){
+                    <div class="field-error">
+                        {{ getError('employeeId') }}
+                    </div>
+                    }
+                </div>
+
+                <!-- In Time -->
+                <div class="mb-3">
+                    <label class="form-label">In Time</label>
+                    <input type="time" class="form-control" [value]="form().inTime"
+                        (input)="setInTime($any($event.target).value)" [class.is-invalid]="hasError('inTime')">
+
+                    @if(hasError('inTime')){
+                    <div class="field-error">
+                        {{ getError('inTime') }}
+                    </div>
+                    }
+                </div>
+
+                <!-- Out Time -->
+                <div class="mb-3">
+                    <label class="form-label">Out Time</label>
+                    <input type="time" class="form-control" [value]="form().outTime"
+                        (input)="setOutTime($any($event.target).value)" [class.is-invalid]="hasError('outTime')">
+
+                    @if(hasError('outTime')){
+                    <div class="field-error">
+                        {{ getError('outTime') }}
+                    </div>
+                    }
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-cancel" (click)="closeModal()">Cancel</button>
+                <button class="btn btn-primary" (click)="saveAttendance()">
+                    Save
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+}
+
+
+@if(showModal()){
+<div class="modal-backdrop fade show"></div>
+}
+
+
+<div class="modal fade" id="rowDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modern-modal">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Attendance Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                @if(selectedRow()){
+
+                <div class="row g-2 details-grid">
+
+                    <div class="col-6">
+                        <label>Employee</label>
+                        <div>{{ getEmployeeName(selectedRow()!.employeeId) }}</div>
+                    </div>
+
+                    <div class="col-6">
+                        <label>Date</label>
+                        <div>{{ selectedRow()!.attendanceDate }}</div>
+                    </div>
+
+                    <div class="col-6">
+                        <label>In Time</label>
+                        <div>{{ selectedRow()!.inTime || '-' }}</div>
+                    </div>
+
+                    <div class="col-6">
+                        <label>Out Time</label>
+                        <div>{{ selectedRow()!.outTime || '-' }}</div>
+                    </div>
+
+                    <div class="col-6">
+                        <label>Working Hours</label>
+                        <div>{{ formatHours(selectedRow()!.workingHours) }}</div>
+                    </div>
+
+                    <div class="col-6">
+                        <label>OT</label>
+                        <div>{{ formatMinutes(selectedRow()!.overtimeHours) }}</div>
+                    </div>
+
+                    <div class="col-6">
+                        <label>Status</label>
+                        <div>
+                            <span class="badge status-pill"
+                                [class.present]="selectedRow()!.attendanceType === AttendanceType.Present"
+                                [class.absent]="selectedRow()!.attendanceType === AttendanceType.Absent"
+                                [class.leave]="selectedRow()!.attendanceType === AttendanceType.Leave">
+                                {{ getStatusLabel(selectedRow()!.attendanceType) }}
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>

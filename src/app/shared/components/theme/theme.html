@@ -1,0 +1,325 @@
+
+ <button class="btn btn-primary p-3 rounded-circle d-flex align-items-center justify-content-center customizer-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"
+ style="    bottom: 50%;
+    border-radius: 13px 0px 0px 13px !important;
+    right: 0px;
+    padding:9px 11px 10px !important">
+      <i class="fa fa-cog fa-w-16 fa-spin"></i>
+      </button>
+
+      <div class="offcanvas customizer offcanvas-end " tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel" style="width: 380px !important;overflow: hidden;">
+        <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
+          <h4 class="offcanvas-title fw-semibold" id="offcanvasExampleLabel">
+            Settings
+          </h4>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body h-n80">
+          <!-- ── Scrollable Body ──────────────────────────────── -->
+  <div class="panel-body">
+
+    
+       
+    <!-- 1. Theme Colors -->
+    <div class="accordion-item">
+      <button class="accordion-header" (click)="toggleSection('themeColors')">
+        <span>Theme Colors</span>
+        <svg class="chevron" [class.rotated]="openSections['themeColors']" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="accordion-body" [class.open]="openSections['themeColors']">
+        <div class="color-wrapper">
+           @for (color of primaryPresets; track color) {
+          <div class="color-item"  (click)="setPrimaryPreset(color)">
+            <div class="color-circle" [class.active]="primaryColor.toLowerCase() === color.toLowerCase()" [style.background]="color">
+              @if(primaryColor.toLowerCase() === color.toLowerCase()){
+              <svg class="tick-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              }
+            </div>
+          </div>
+        }
+             @if(isCustomPrimary){
+          <div class="color-item">
+            <div class="color-circle active" style="background:var(--primary)">
+              <svg class="tick-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+        }
+          <label class="color-picker-btn" title="Custom color">
+            <input type="color" [value]="primaryColor" (input)="onPrimaryInput($event)" />
+<i class="bi bi-eyedropper"></i>          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Secondary Colors -->
+    <div class="accordion-item">
+      <button class="accordion-header" (click)="toggleSection('secondaryColors')">
+        <span>Secondary Colors</span>
+        <svg class="chevron" [class.rotated]="openSections['secondaryColors']" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="accordion-body" [class.open]="openSections['secondaryColors']">
+        <div class="color-wrapper">
+           @for (color of secondaryPresets; track color) {
+          <div class="color-item" (click)="setSecondaryPreset(color)">
+            <div class="color-circle" [class.active]="secondaryColor.toLowerCase() === color.toLowerCase()" [style.background]="color">
+              @if(secondaryColor.toLowerCase() === color.toLowerCase()){
+              <svg class="tick-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              }
+            </div>
+          </div>}
+
+          @if(isCustomSecondary){
+    <div class="color-item">
+            <div class="color-circle active" style="background:var(--secondary)">
+              <svg class="tick-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          }
+      
+          <label class="color-picker-btn" title="Custom color">
+            <input type="color" [value]="secondaryColor" (input)="onSecondaryInput($event)" />
+<i class="bi bi-eyedropper"></i>          </label>
+        </div>
+      </div>
+    </div>
+
+
+     <div class="accordion-item">
+      <button class="accordion-header" (click)="toggleSection('themeMode')">
+        <span>Theme Mode</span>
+        <svg class="chevron" [class.rotated]="openSections['themeMode']" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="accordion-body" [class.open]="openSections['themeMode']">
+        <div class="theme-mode-group">
+          <label class="theme-mode-card" [class.active]="!isDarkMode" (click)="setThemeMode(false)">
+            <input type="radio" name="themeMode" [checked]="!isDarkMode" />
+<i class="bi bi-sun"></i>
+            Light
+          </label>
+          <label class="theme-mode-card" [class.active]="isDarkMode" (click)="setThemeMode(true)">
+            <input type="radio" name="themeMode" [checked]="isDarkMode" />
+<i class="bi bi-moon-fill"></i>            Dark
+          </label>
+        </div>
+      </div>
+    </div>
+
+
+    
+    <!-- 3. Select Layouts -->
+    <div class="accordion-item">
+      <button class="accordion-header" (click)="toggleSection('layout')">
+        <span>Select Layouts</span>
+        <svg class="chevron" [class.rotated]="openSections['layout']" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="accordion-body" [class.open]="openSections['layout']">
+        <div class="layout-card-group">
+          <!-- Horizontal -->
+          <div class="layout-card" [class.active]="layoutMode === 'fluid'" (click)="selectLayout('horizontal')">
+            <div class="layout-preview horizontal-preview">
+              <div class="lp-topbar">
+                <div class="lp-logo"></div>
+                <div class="lp-nav"><span></span><span></span><span></span><span></span></div>
+              </div>
+              <div class="lp-body">
+                <div class="lp-content">
+                  <div class="lp-block"></div>
+                  <div class="lp-block short"></div>
+                  <div class="lp-block"></div>
+                </div>
+              </div>
+            </div>
+            <div class="layout-card-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="11" rx="1"/></svg>
+              Horizontal
+            </div>
+            <div class="layout-card-check">
+<i class="bi bi-check"></i>            </div>
+          </div>
+          <!-- Vertical -->
+          <div class="layout-card" [class.active]="layoutMode === 'box'" (click)="selectLayout('vertical')">
+            <div class="layout-preview vertical-preview">
+              <div class="lp-sidebar">
+                <div class="lp-logo-v"></div>
+                <div class="lp-menu"><span></span><span></span><span></span><span></span><span></span></div>
+              </div>
+              <div class="lp-main">
+                <div class="lp-header-v"></div>
+                <div class="lp-content-v">
+                  <div class="lp-block"></div>
+                  <div class="lp-block short"></div>
+                </div>
+              </div>
+            </div>
+            <div class="layout-card-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="6" height="18" rx="1"/><rect x="12" y="3" width="9" height="18" rx="1"/></svg>
+              Vertical
+            </div>
+            <div class="layout-card-check">
+<i class="bi bi-check"></i>            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Font Family -->
+    <div class="accordion-item">
+      <button class="accordion-header" (click)="toggleSection('fontFamily')">
+        <span>Font Family</span>
+        <svg class="chevron" [class.rotated]="openSections['fontFamily']" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="accordion-body" [class.open]="openSections['fontFamily']">
+        <div class="ff-label"><span class="ff-dot"></span>Menu Font</div>
+        <div class="ff-grid">
+             @for (font of fonts; track font) {
+          <label  class="ff-pill" [class.active]="selectedMenuFont === font.value" (click)="setFont('menu', font.value)">
+            {{ font.name }} @if(selectedMenuFont === font.value){<span class="ff-badge">✓</span>}
+          </label>
+        }
+        </div>
+        <div class="ff-label"><span class="ff-dot"></span>Heading Font</div>
+        <div class="ff-grid">
+             @for (font of fonts; track font) {
+          <label  class="ff-pill" [class.active]="selectedHeadingFont === font.value" (click)="setFont('heading', font.value)">
+            {{ font.name }}@if(selectedHeadingFont === font.value){<span class="ff-badge">✓</span>}
+          </label>
+        }
+        </div>
+        <div class="ff-label"><span class="ff-dot"></span>Number Font</div>
+        <div class="ff-grid">
+             @for (font of fonts; track font) {
+          <label  class="ff-pill" [class.active]="selectedNumberFont === font.value" (click)="setFont('number', font.value)">
+            {{ font.name }}@if(selectedNumberFont === font.value){<span  class="ff-badge">✓</span>}
+          </label>
+        }
+        </div>
+        <div class="ff-label"><span class="ff-dot"></span>Other Font</div>
+        <div class="ff-grid">
+             @for (font of fonts; track font) {
+          <label  class="ff-pill" [class.active]="selectedOtherFont === font.value" (click)="setFont('other', font.value)">
+            {{ font.name }}@if(selectedOtherFont === font.value){<span class="ff-badge">✓</span>}
+          </label>
+        }
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Font Size & Style -->
+    <div class="accordion-item">
+      <button class="accordion-header" (click)="toggleSection('fontSizeStyle')">
+        <span>Font Size &amp; Style</span>
+        <svg class="chevron" [class.rotated]="openSections['fontSizeStyle']" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="accordion-body" [class.open]="openSections['fontSizeStyle']">
+        <div class="ff-label"><span class="ff-dot"></span>Font Size</div>
+        <div class="size-tile-grid">
+             @for (size of fontSizes; track size) {
+          <div class="size-tile" [class.active]="selectedFontSize === size.toString()" (click)="setFontSize(size)">
+            <span class="size-num">{{ size }}</span><span class="size-unit">px</span>
+          </div>
+        }
+        </div>
+
+        <div class="ff-label"><span class="ff-dot"></span>Font Weight</div>
+        <div class="weight-card-grid">
+            @for ( w of fontWeights; track w) {
+          <div  class="weight-card" [class.active]="selectedFontWeight === w.value" (click)="setFontWeight(w.value)">
+            <span class="weight-sample" [style.fontWeight]="w.value">Aa</span>
+            <span class="weight-name">{{ w.label }}</span>
+          </div>
+        }
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 8. Icon Colors -->
+    <div class="accordion-item">
+      <button class="accordion-header" (click)="toggleSection('iconColors')">
+        <span>Icon Colors</span>
+        <svg class="chevron" [class.rotated]="openSections['iconColors']" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="accordion-body" [class.open]="openSections['iconColors']">
+        <div class="color-wrapper">
+                @for (color of iconPresets; track color) {
+          <div class="color-item" (click)="setIconPreset(color)">
+            <div class="color-circle" [class.active]="iconColor.toLowerCase() === color.toLowerCase()" [style.background]="color">
+              @if(iconColor.toLowerCase() === color.toLowerCase()){
+              <svg  class="tick-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              }
+            </div>
+          </div>
+        }
+@if(isCustomIcon){
+          <div class="color-item" >
+            <div class="color-circle active" style="background:var(--icon-color)">
+              <svg class="tick-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+        }
+          <label class="color-picker-btn">
+            <input type="color" [value]="iconColor" (input)="onIconInput($event)" />
+<i class="bi bi-eyedropper"></i>              </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. Heading Colors -->
+    <div class="accordion-item">
+      <button class="accordion-header" (click)="toggleSection('headingColors')">
+        <span>Heading Colors</span>
+        <svg class="chevron" [class.rotated]="openSections['headingColors']" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="accordion-body" [class.open]="openSections['headingColors']">
+        <div class="color-wrapper">
+       @for (color of headingPresets; track color) {
+  <div class="color-item" (click)="setHeadingPreset(color)">
+
+    <div class="color-circle"
+         [class.active]="headingColor.toLowerCase() === color.toLowerCase()"
+         [style.background]="color">
+
+      @if (headingColor.toLowerCase() === color.toLowerCase()) {
+        <svg class="tick-icon"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="white"
+             stroke-width="3">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      }
+
+    </div>
+  </div>
+}
+ @if(isCustomHeading){
+          <div class="color-item">
+            <div class="color-circle active" style="background:var(--heading-color)">
+              <svg class="tick-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+        }
+          <label class="color-picker-btn">
+            <input type="color" [value]="headingColor" (input)="onHeadingInput($event)" />
+<i class="bi bi-eyedropper"></i>              </label>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Footer ───────────────────────────────────────── -->
+ 
+        </div>
+        
+              <div class="modal-footer mb-3 justify-content-end ms-4 mt-4 gap-2">
+                <button 
+  class="v-btn v-theme--BLUE_THEME bg-secondary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated px-3 cursor-pointer" 
+  (click)="resetTheme()">Reset</button>
+    <button class="v-btn v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated px-3 cursor-pointer" (click)="saveTheme()">
+      Save
+    </button>
+        
+            </div>
+      </div>
+      

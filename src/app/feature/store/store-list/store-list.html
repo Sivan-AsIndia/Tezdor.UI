@@ -1,0 +1,438 @@
+<!-- storelist.html ──────────────────────────────────────── -->
+<div class="max-w-full">
+  <div class="full-container">
+    <div class="v-container v-container--fluid v-locale--is-ltr rounded-xl p-0">
+      <div>
+
+        <!-- ── HEADER ────────────────────────────────────── -->
+        <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+          <div>
+            <h4 class="fw-bold mb-1 mainheading">Store Maintenance</h4>
+            <small class="text-muted subdescription">
+              View and track stock movements — receipts, issues, and closing balances.
+            </small>
+          </div>
+
+          <!-- Breadcrumb -->
+          <div class="arrow-steps d-none d-md-flex">
+            <ul id="breadcrumb">
+              <li><a href="#"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a></li>
+              <li><a><span class="fa fa-warehouse"></span>&nbsp;&nbsp;Store</a></li>
+              <!-- <li><a><span class="fa fa-list"></span>&nbsp;&nbsp;List</a></li> -->
+            </ul>
+          </div>
+        </div>
+
+        <!-- ── CARD ──────────────────────────────────────── -->
+        <div class="content-card">
+          <div class="card-body-inner">
+
+            <!-- TOP BAR -->
+            <div class="table-topbar">
+              <div class="table-title-badge">
+                <h5 class="tableheading">Product Stock Summary</h5>
+                <span class="count-badge">{{ paginatedProducts().length }}</span>
+              </div>
+
+              <div class="topbar-actions">
+
+                <!-- Search -->
+                <div class="search-box">
+                  <input type="text" placeholder="Search product / vendor..."
+                    [value]="searchValue()"
+                    (input)="searchValue.set($any($event.target).value)" />
+
+                  @if (!searchValue()) {
+                    <button class="icon-clear" type="button">
+                      <i class="bi bi-search"></i>
+                    </button>
+                  }
+                  @if (searchValue()) {
+                    <button class="icon-clear" type="button" (click)="clearSearch()">
+                      <i class="bi bi-x"></i>
+                    </button>
+                  }
+                </div>
+
+                <!-- Filter button -->
+                <div class="filter-wrapper">
+                  <button class="filter-btn" style="width:35px; position:relative;" (click)="toggleFilter()">
+                    <i class="ti ti-filter fs-5"></i>
+                    @if (activeFilterCount() > 0) {
+                      <span class="filter-dot">{{ activeFilterCount() }}</span>
+                    }
+                  </button>
+                </div>
+
+                @if (showFilter()) {
+                  <div class="filter-overlay" (click)="closeFilter()"></div>
+
+                  <div class="filter-panel"
+                    [style.top.px]="filterTop"
+                    [style.right.px]="filterRight">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                      <h5 class="fw-bold mb-0">Filter</h5>
+                      <button class="btn btn-sm bg-secondary" (click)="resetFilters()">Reset</button>
+                    </div>
+
+                    <!-- Vendor filter -->
+                    <div class="mb-3">
+                      <label class="fw-semibold mb-2">Vendor</label>
+                      <div class="chip-group">
+                        @for (v of vendors(); track v) {
+                          <span class="filter-chip"
+                            [class.active]="tempFilters().vendor === v.toLowerCase()"
+                            (click)="selectVendor(v)">
+                            {{ v }}
+                          </span>
+                        }
+                      </div>
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+      <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated bg-secondary px-3" (click)="closeFilter()">Cancel</button>
+      <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated" (click)="applyFilters()">Apply</button>
+    </div>
+                  </div>
+                }
+
+                <!-- Add button -->
+                <!-- <button type="button"
+                  class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-primary v-btn--density-default v-btn--size-default v-btn--variant-elevated"
+                  style="text-transform:capitalize; letter-spacing:0; padding:0 10px;"
+                  routerLink="/storeCreate">
+                  <span class="v-btn__content">
+                    <i class="mdi mdi-plus-circle-outline v-icon mr-2"></i>Add
+                  </span>
+                </button> -->
+
+              </div>
+            </div>
+
+            <!-- ── TABLE ──────────────────────────────────── -->
+            <div class="border-table">
+              <div class="v-table v-theme--BLUE_THEME v-table--density-default">
+                <div class="v-table__wrapper">
+                  <table>
+                    <thead>
+                      <tr style="background:#8080800d;">
+                        <th class="text-subtitle-1 font-weight-semibold">#</th>
+                        <!-- <th class="text-subtitle-1 font-weight-semibold">Vendor Code</th> -->
+                        <th class="text-subtitle-1 font-weight-semibold">Vendor Name</th>
+                        <!-- <th class="text-subtitle-1 font-weight-semibold">Product Code</th> -->
+                        <th class="text-subtitle-1 font-weight-semibold">Product Name</th>
+                        <th class="text-subtitle-1 font-weight-semibold">Total IN</th>
+                        <th class="text-subtitle-1 font-weight-semibold">Total OUT</th>
+                        <th class="text-subtitle-1 font-weight-semibold">Closing Stock</th>
+                        <th class="text-subtitle-1 font-weight-semibold">Status</th>
+                        <th class="text-subtitle-1 font-weight-semibold">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      @if (paginatedProducts().length === 0) {
+                        <tr>
+                          <td colspan="10" style="text-align:center; padding:30px; color:#888;">
+                            No Data Found
+                          </td>
+                        </tr>
+                      }
+
+                      @for (p of paginatedProducts(); track p.productCode; let i = $index) {
+                        <tr>
+                          <td class="text-subtitle-1 textSecondary">
+                            {{ (currentPage() - 1) * pageSize() + i + 1 }}
+                          </td>
+                          <!-- <td class="text-subtitle-1 textSecondary text-no-wrap">
+                            {{ p.vendorCode }}
+                          </td> -->
+                          <td class="text-subtitle-1 textSecondary text-no-wrap">
+                            {{ p.vendorName }}
+                          </td>
+                          <!-- <td class="text-subtitle-1 textSecondary text-no-wrap">
+                            <strong>{{ p.productCode }}</strong>
+                          </td> -->
+                          <td class="text-subtitle-1 textSecondary text-no-wrap">
+                            {{ p.productName }}
+                          </td>
+
+                          <!-- Total IN — green -->
+                          <td class="text-subtitle-1 text-no-wrap">
+                            <span style="color:#2e7d32; font-weight:600;">
+                              +{{ p.totalIn }}
+                            </span>
+                          </td>
+
+                          <!-- Total OUT — red -->
+                          <td class="text-subtitle-1 text-no-wrap">
+                            <span style="color:#c62828; font-weight:600;">
+                              −{{ p.totalOut }}
+                            </span>
+                          </td>
+
+                          <!-- Closing Stock — colored by level -->
+                          <td class="text-subtitle-1 text-no-wrap">
+                            <strong [style.color]="p.closingStock <= 0 ? '#c62828' : p.closingStock <= 20 ? '#e65100' : '#2e7d32'">
+                              {{ p.closingStock }}
+                            </strong>
+                          </td>
+
+                          <!-- Status chip -->
+                          <td>
+                        <span class="badge rounded-2"
+  [ngClass]="{
+    'bg-lightsuccess text-success': stockStatusClass(p.closingStock) === 'chip-ok',
+    'bg-lightwarning text-warning': stockStatusClass(p.closingStock) === 'chip-low',
+    'bg-lighterror text-error': stockStatusClass(p.closingStock) === 'chip-out'
+  }">
+  {{ stockStatusLabel(p.closingStock) }}
+</span>
+                          </td>
+
+                          <!-- Actions -->
+                          <td>
+                            <div class="d-flex align-center">
+
+                              <!-- View History button -->
+                              <button type="button"
+                                class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default"
+                                title="View Stock History"
+                                (click)="openHistory(p)">
+                                <span class="v-btn__content">
+                                  <!-- Eye icon -->
+                                  <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="icon-tabler icon-tabler-eye text-info"
+                                    width="20" height="20" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/>
+                                    <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/>
+                                  </svg>
+                                </span>
+                              </button>
+
+
+                            </div>
+                          </td>
+                        </tr>
+                      }
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <hr class="v-divider v-theme--BLUE_THEME" aria-orientation="horizontal" role="separator"
+              style="border-style:solid;">
+
+            <!-- ── PAGINATION ─────────────────────────────── -->
+            <div class="d-sm-flex justify-md-space-between align-center Pagination">
+              <div class="d-flex align-items-center fs-13">
+                <span class="me-2" style="font-size:12px;">Rows Per Page</span>
+                <select class="form-select form-select-sm w-auto"
+                  [value]="pageSize()" (change)="onPageSizeChange($event)">
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                </select>
+                <span class="ms-2" style="font-size:12px;">Entries</span>
+              </div>
+
+              <div class="d-flex align-items-center gap-2">
+                <nav class="v-pagination v-theme--BLUE_THEME text-subtitle-1" role="navigation">
+                  <ul class="pagination-list">
+                    <li>
+                      <button class="page-btn" [disabled]="currentPage() === 1"
+                        (click)="goToPage(currentPage() - 1)">
+                        <span class="mdi mdi-chevron-left" style="font-size:26px;"></span>
+                      </button>
+                    </li>
+                    @for (page of pageNumbers(); track page) {
+                      <li>
+                        <button class="page-btn" [class.active]="page === currentPage()"
+                          (click)="goToPage(page)">{{ page }}</button>
+                      </li>
+                    }
+                    <li>
+                      <button class="page-btn" [disabled]="currentPage() === totalPages()"
+                        (click)="goToPage(currentPage() + 1)">
+                        <span class="mdi mdi-chevron-right" style="font-size:26px;"
+                          [style.color]="currentPage() === totalPages() ? '#80808070' : ''">
+                        </span>
+                      </button>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+
+          </div><!-- card-body-inner -->
+        </div><!-- content-card -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════
+     STOCK HISTORY POPUP  (Bootstrap modal)
+     Opens when eye icon is clicked on any product row
+     Shows full Stock Ledger: Old Stock / Received / Total / Issued / Closing
+═════════════════════════════════════════════════════════ -->
+@if (selectedProduct()) {
+  <!-- Backdrop -->
+  <div class="modal-backdrop-custom" (click)="closeHistory()"></div>
+
+  <!-- Modal -->
+  <div class="modal-custom" role="dialog" aria-modal="true">
+    <div class="modal-custom-dialog modal-xl">
+      <div class="modal-custom-content">
+
+        <!-- ── Modal Header ── -->
+        <div class="modal-custom-header">
+          <div>
+            <h5 class="modal-title mb-0">
+              <i class="ti ti-history me-2"></i>
+              Stock History — {{ selectedProduct()!.productCode }}
+            </h5>
+            <small class="text-muted">{{ selectedProduct()!.productName }} &nbsp;·&nbsp; {{ selectedProduct()!.vendorName }}</small>
+          </div>
+          <button class="btn-close-custom" (click)="closeHistory()" aria-label="Close">
+            <i class="ti ti-x fs-5"></i>
+          </button>
+        </div>
+
+        <!-- ── Summary Chips inside popup ── -->
+        <div class="ledger-summary-strip">
+          <div class="ledger-chip chip-in">
+            <span class="chip-label">Total Received</span>
+            <span class="chip-value">+{{ ledgerTotalIn() }}</span>
+          </div>
+          <div class="ledger-chip chip-out">
+            <span class="chip-label">Total Issued</span>
+            <span class="chip-value">−{{ ledgerTotalOut() }}</span>
+          </div>
+          <div class="ledger-chip chip-closing">
+            <span class="chip-label">Closing Stock</span>
+            <span class="chip-value">{{ ledgerClosing() }}</span>
+          </div>
+          <div class="ledger-chip chip-count">
+            <span class="chip-label">Transactions</span>
+            <span class="chip-value">{{ ledgerRows().length }}</span>
+          </div>
+        </div>
+
+        <!-- ── Modal Body — Ledger Table ── -->
+        <div class="modal-custom-body">
+          <div class="border-table">
+            <div class="v-table v-theme--BLUE_THEME v-table--density-default">
+              <div class="v-table__wrapper">
+                <table>
+                  <thead>
+                    <tr style="background:#8080800d;">
+                      <th class="text-subtitle-1 font-weight-semibold">S.No</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Date</th>
+                      <!-- <th class="text-subtitle-1 font-weight-semibold">Vendor Code</th> -->
+                      <th class="text-subtitle-1 font-weight-semibold">Vendor Name</th>
+                      <!-- <th class="text-subtitle-1 font-weight-semibold">Product Code</th> -->
+                      <th class="text-subtitle-1 font-weight-semibold">Product Name</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Old Stock</th>
+                      <th class="text-subtitle-1 font-weight-semibold text-success">Received</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Total</th>
+                      <th class="text-subtitle-1 font-weight-semibold text-error">Issued</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Closing</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @if (paginatedLedger().length === 0) {
+                      <tr>
+                        <td colspan="11" style="text-align:center; padding:30px; color:#888;">
+                          No transactions found
+                        </td>
+                      </tr>
+                    }
+
+                    @for (row of paginatedLedger(); track row.sNo) {
+                      <tr [class.ledger-row-in]="row.received > 0" [class.ledger-row-out]="row.issued > 0">
+                        <td class="textSecondary">{{ row.sNo }}</td>
+                        <td class="text-no-wrap">{{ row.date | date:'dd-MM-yyyy' }}</td>
+                        <!-- <td>{{ row.vendorCode }}</td> -->
+                        <td class="text-no-wrap">{{ row.vendorName }}</td>
+                        <!-- <td><strong>{{ row.productCode }}</strong></td> -->
+                        <td class="text-no-wrap">{{ row.productName }}</td>
+
+                        <!-- Old Stock -->
+                        <td class="text-end">{{ row.oldStock }}</td>
+
+                        <!-- Received — green if > 0 -->
+                        <td class="text-end">
+                          @if (row.received > 0) {
+                            <span style="color:#2e7d32; font-weight:600;">+{{ row.received }}</span>
+                          } @else {
+                            <span class="textSecondary">0</span>
+                          }
+                        </td>
+
+                        <!-- Total -->
+                        <td class="text-end"><strong>{{ row.total }}</strong></td>
+
+                        <!-- Issued — red if > 0 -->
+                        <td class="text-end">
+                          @if (row.issued > 0) {
+                            <span style="color:#c62828; font-weight:600;">{{ row.issued }}</span>
+                          } @else {
+                            <span class="textSecondary">0</span>
+                          }
+                        </td>
+
+                        <!-- Closing — color by level -->
+                        <td class="text-end">
+                          <strong
+                            [style.color]="row.closing <= 0 ? '#c62828' : row.closing <= 20 ? '#e65100' : '#2e7d32'">
+                            {{ row.closing }}
+                          </strong>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Ledger Pagination ── -->
+          @if (ledgerTotalPages() > 1) {
+            <div class="d-flex justify-content-end align-items-center gap-2 mt-3">
+              <nav class="v-pagination v-theme--BLUE_THEME" role="navigation">
+                <ul class="pagination-list">
+                  <li>
+                    <button class="page-btn" [disabled]="ledgerPage() === 1"
+                      (click)="goToLedgerPage(ledgerPage() - 1)">
+                      <span class="mdi mdi-chevron-left" style="font-size:22px;"></span>
+                    </button>
+                  </li>
+                  @for (page of ledgerPageNumbers(); track page) {
+                    <li>
+                      <button class="page-btn" [class.active]="page === ledgerPage()"
+                        (click)="goToLedgerPage(page)">{{ page }}</button>
+                    </li>
+                  }
+                  <li>
+                    <button class="page-btn" [disabled]="ledgerPage() === ledgerTotalPages()"
+                      (click)="goToLedgerPage(ledgerPage() + 1)">
+                      <span class="mdi mdi-chevron-right" style="font-size:22px;"></span>
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          }
+        </div><!-- modal-body -->
+
+      </div><!-- modal-content -->
+    </div>
+  </div>
+}

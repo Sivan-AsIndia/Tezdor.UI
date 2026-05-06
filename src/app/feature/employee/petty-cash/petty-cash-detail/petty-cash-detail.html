@@ -1,0 +1,320 @@
+@if (pettyCash(); as pc) {
+
+<div class="petty-cash-details">
+
+  <!-- HEADER -->
+  <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+    <div>
+      <h4 class="fw-bold mb-1 mainheading">Petty Cash Details</h4>
+      <small class="text-muted subdescription">
+        Petty cash transaction overview and fund tracking
+      </small>
+    </div>
+
+                    <!-- BREADCRUMB -->
+                <div class="arrow-steps d-none d-md-flex">
+                    <ul id="breadcrumb">
+                        <li><a routerLink="/dashboard"><i class="fa fa-home me-1"></i> Home</a></li>
+                        <li><a routerLink="/petty-cash"><i class="bi bi-receipt me-1"></i> Petty Cash</a></li>
+                    </ul>
+                </div>
+  </div>
+
+  <!-- HEADER CARD -->
+  <div class="card mb-3 dn-header-card d-flex justify-content-between flex-wrap">
+
+    <div class="card-body d-flex align-items-center gap-3">
+
+      <div class="dn-icon">
+        <i class="ti ti-cash"></i>
+      </div>
+
+      <div>
+        <h5>
+          {{ pc.pettyCashCode }} — {{ pc.pettyCashName }}
+          <span class="small"> • {{ pc.transactionDate | date }}</span>
+        </h5>
+
+        <div class="mt-2 d-flex gap-2">
+          <span class="badge" [ngClass]="getStatusClass(pc.pettyCashStatus)">
+            {{ pc.pettyCashStatus }}
+          </span>
+
+          <span class="badge bg-success-subtle text-success">
+            {{ pc.pettyCashTransactionType }}
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <!-- LEFT -->
+    <div class="col-lg-8">
+
+      <!-- CORE -->
+      <div class="card mb-3">
+        <div class="card-header fw-semibold small text-primary">
+          Core Information
+        </div>
+
+        <div class="row g-0 info-grid">
+
+          <div class="col-md-3 info-box">
+            <label>Code</label>
+            <div>{{ pc.pettyCashCode }}</div>
+          </div>
+
+          <div class="col-md-3 info-box">
+            <label>Transaction Type</label>
+            <div>{{ pc.pettyCashTransactionType }}</div>
+          </div>
+
+          <div class="col-md-3 info-box">
+            <label>Date</label>
+            <div>{{ pc.transactionDate | date }}</div>
+          </div>
+
+          <div class="col-md-3 info-box">
+            <label>Status</label>
+            <div>{{ pc.pettyCashStatus }}</div>
+          </div>
+
+          <div class="col-md-6 info-box">
+            <label>Branch</label>
+            <div>{{ pc.branchId }}</div>
+          </div>
+
+          <div class="col-md-6 info-box">
+            <label>Custodian</label>
+            <div>{{ pc.custodianEmployeeId }}</div>
+          </div>
+
+          <div class="col-md-3 info-box">
+            <label>Currency</label>
+            <div>{{ pc.currencyId }}</div>
+          </div>
+
+          <div class="col-md-3 info-box">
+            <label>Exchange Rate</label>
+            <div>{{ pc.exchangeRate }}</div>
+          </div>
+
+          <div class="col-md-6 info-box">
+            <label>Purpose</label>
+            <div>{{ pc.purposeTitle }}</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- EXPENSE -->
+      <div class="card mb-3">
+        <div class="card-header fw-semibold small text-primary">
+          Expense Details
+        </div>
+
+        <div class="row g-0 info-grid">
+
+          <div class="col-md-4 info-box">
+            <label>Category</label>
+            <div>{{ pc.expenseCategoryId }}</div>
+          </div>
+
+          <div class="col-md-4 info-box">
+            <label>Ledger</label>
+            <div>{{ pc.expenseLedgerAccountId }}</div>
+          </div>
+
+          <div class="col-md-4 info-box">
+            <label>Vendor</label>
+            <div>{{ pc.vendorNameOnReceipt }}</div>
+          </div>
+
+          <div class="col-md-4 info-box">
+            <label>Receipt No</label>
+            <div>{{ pc.receiptNumber }}</div>
+          </div>
+
+          <div class="col-md-4 info-box">
+            <label>Receipt Date</label>
+            <div>{{ pc.receiptDate | date }}</div>
+          </div>
+
+          <div class="col-md-4 info-box">
+            <label>Verification</label>
+            <div>{{ pc.receiptVerificationStatus }}</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TRANSACTION -->
+      <div class="card">
+        <div class="card-header fw-semibold small text-primary">
+          Transaction Summary
+        </div>
+
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
+
+            <thead class="table-light">
+              <tr>
+                <th>Opening</th>
+                <th>Expense</th>
+                <th>Tax</th>
+                <th>Closing</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>{{ formatAmount(pc.openingCashBalance) }}</td>
+                <td>{{ formatAmount(pc.expenseAmount) }}</td>
+                <td>{{ formatAmount(pc.taxAmount) }}</td>
+                <td class="fw-semibold text-success">
+                  {{ formatAmount(closingBalance()) }}
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="col-lg-4">
+<div class="card mb-3">
+  <div class="card-header small text-primary fw-semibold">
+    Actions
+  </div>
+
+  <div class="card-body d-flex flex-column gap-2">
+
+    <!-- SUBMIT -->
+    @if (pc.pettyCashStatus === 'Draft') {
+      <button class="btn btn-primary w-100"
+              (click)="submit(pc.pettyCashId)">
+        Submit
+      </button>
+    }
+
+    <!-- APPROVE / REJECT -->
+    @if (pc.approvalStatus === 'Submitted' || pc.approvalStatus === 'UnderReview') {
+
+      <button class="btn btn-success w-100"
+              (click)="approve(pc.pettyCashId)">
+        Approve
+      </button>
+
+      <button class="btn btn-outline-danger w-100"
+              (click)="reject(pc.pettyCashId)">
+        Reject
+      </button>
+    }
+
+    <!-- FINANCE VERIFY -->
+    @if (pc.approvalStatus === 'Approved' && pc.financeVerificationStatus !== 'Verified') {
+      <button class="btn btn-info w-100"
+              (click)="verifyReceipt(pc.pettyCashId)">
+        Verify Receipt
+      </button>
+    }
+
+    <!-- POST -->
+    @if (pc.financeVerificationStatus === 'Verified' && pc.postingStatus !== 'Posted') {
+      <button class="btn btn-success w-100"
+              (click)="post(pc.pettyCashId)">
+        Post Transaction
+      </button>
+    }
+
+    <!-- REPLENISH -->
+    @if (pc.replenishmentStatus === 'Required') {
+      <button class="btn btn-warning w-100"
+              (click)="requestReplenishment(pc.pettyCashId)">
+        Request Replenishment
+      </button>
+    }
+
+    <!-- RECONCILE -->
+    @if (pc.postingStatus === 'Posted' && pc.reconciliationStatus !== reconciliationStatuses.Pending) {
+      <button class="btn btn-dark w-100"
+              (click)="reconcile(pc.pettyCashId)">
+        Reconcile Cash
+      </button>
+    }
+
+    <!-- CLOSE -->
+    @if (pc.reconciliationStatus === reconciliationStatuses.Pending) {
+      <button class="btn btn-secondary w-100"
+              (click)="close(pc.pettyCashId)">
+        Close Fund
+      </button>
+    }
+
+    <!-- CANCEL -->
+    @if (pc.pettyCashStatus !== 'Closed') {
+      <button class="btn btn-outline-danger w-100 btn-clr"
+              (click)="cancel(pc.pettyCashId)">
+        Cancel
+      </button>
+    }
+
+  </div>
+</div>
+      <!-- CASH SUMMARY -->
+      <div class="card mb-3">
+        <div class="card-header small text-primary fw-semibold">
+          Cash Summary
+        </div>
+
+        <div class="card-body">
+
+          <div class="d-flex justify-content-between mb-2">
+            <span>Opening</span>
+            <span>{{ formatAmount(pc.openingCashBalance) }}</span>
+          </div>
+
+          <div class="d-flex justify-content-between mb-2">
+            <span>Expense</span>
+            <span class="text-danger">
+              - {{ formatAmount(pc.expenseAmount) }}
+            </span>
+          </div>
+
+          <hr>
+
+          <div class="d-flex justify-content-between fw-bold text-success">
+            <span>Closing Balance</span>
+            <span>{{ formatAmount(closingBalance()) }}</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- OWNERSHIP -->
+      <div class="card mb-3">
+        <div class="card-header small text-primary fw-semibold">
+          Ownership
+        </div>
+
+        <div class="card-body">
+          <div><small>Department</small><div>{{ pc.departmentId }}</div></div>
+          <div class="mt-2"><small>Cost Center</small><div>{{ pc.costCenterId }}</div></div>
+          <div class="mt-2"><small>Project</small><div>{{ pc.projectId }}</div></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+}

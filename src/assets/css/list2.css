@@ -1,0 +1,243 @@
+/* ------------Add Popup ------------------ */
+
+.dn-card {
+  background: #ffffff;
+  border: 1px solid #e4e2dc;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(15, 17, 23, 0.06), 0 1px 2px rgba(15, 17, 23, 0.04);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.dn-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid #e4e2dc;
+}
+
+.dn-card-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dn-card-title i {
+  font-size: 15px;
+  color: var(--color-primary);
+}
+
+.count-pill {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-primary);
+  background:
+    color-mix(in srgb, var(--color-primary) 12%, white);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 30%, white);
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+
+.dn-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.dn-table thead th {
+  padding: 10px 14px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #7c8099;
+  white-space: nowrap;
+}
+
+.dn-table thead tr {
+  background: #f8f7f4;
+  border-bottom: 2px solid #c8c5bd;
+}
+
+.dn-table tbody tr {
+  border-bottom: 1px solid #e4e2dc;
+  transition: background 0.15s;
+}
+
+.dn-table td {
+  padding: 12px 14px;
+  color: #0f1117;
+  vertical-align: middle;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(128, 128, 128, 0.589);
+  opacity: 1;
+  font-size: 13px;
+}
+
+
+
+.center {
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+  /* padding: 20px; */
+}
+
+
+.breadcrumb-holder ul {
+  display: flex;
+  margin-bottom: 0;
+}
+
+
+.filter-overlay1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 999;
+}
+
+.filter-panel1 {
+  position: fixed;
+  right: 20px;
+  top: 100px;
+  width: 320px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  z-index: 1000;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip-group span {
+  padding: 4px 14px;
+  border-radius: 8px;
+  background: #f1f3f5;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.chip-group span.active {
+  background: var(--color-primary) !important;
+  color: #fff;
+}
+
+.filter-btn {
+  width: 66px;
+  height: 37px;
+  padding: 0;
+  border-radius: 8px;
+  border: none;
+  background: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.filter-btn i {
+  font-size: 18px;
+  color: white;
+}
+
+
+.filter-dot {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #ef4444;
+  color: #fff;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* WRAPPER */
+.filter-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+
+.filter-panel {
+position: absolute;
+    top: 45px;
+    right: 0;
+    width: 285px;
+    /* height: 315px; */
+    background: #fff;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+}
+
+.filter-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.2);
+  z-index: 9998;
+}
+
+
+/* ARROW */
+.filter-panel::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  right: 14px;
+
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid #fff;
+}
+
+/* ANIMATION */
+@keyframes dropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.filter-panel-fixed {
+  position: fixed;
+  width: 300px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  z-index: 9999;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  animation: dropdown 0.2s ease;
+}
+

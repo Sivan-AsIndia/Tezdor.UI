@@ -1,0 +1,1958 @@
+<div class="max-w-full">
+    <div class="full-container ">
+        <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+
+            <div>
+                <h4 class="fw-bold mb-1 mainheading">Profile Details</h4>
+                <small class="text-muted subdescription"> Manage and update your personal information, contact details,
+                    and account preferences in one place.
+                </small>
+            </div>
+            <!-- 🔷 ARROW BREADCRUMB -->
+            <div class="arrow-steps d-none d-md-flex">
+
+
+                <ul id="breadcrumb">
+                    <li><a href="#"><span class="fa fa-home"> </span>&nbsp;&nbsp;Home</a></li>
+
+                    <li><a href="#"><span class="fa fa-user"> </span>&nbsp;&nbsp; Profile</a></li>
+                </ul>
+
+            </div>
+
+
+        </div>
+        <!----Breadcrumb End---->
+        <div class="relative">
+            <div class="relative overflow-hidden rounded-md" style="height: 284px;">
+                <img src="/assets/images/profile/profilebg_2.jpg" alt="" class="w-full max-w-full">
+            </div>
+            <div class="px-4">
+                <div class="card relative -top-12">
+                    <div class="card-body pb-0">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-4">
+                                <div class="relative">
+                                    <div class="rounded-full d-flex align-items-center justify-content-center bg-primary text-white fw-bold"
+                                        style="width:100px;height:100px;font-size:36px;">
+                                      {{ userInitials() }}
+                                    </div>
+                                    <span
+                                        class="bg-primary rounded-full text-white flex items-center justify-center absolute bottom-0 end-0 p-1 border-2 dark:border-primary"><i
+                                            class="ti ti-plus"></i></span>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-7">
+                                        <h4 class="text-2xl">{{ userName() }}</h4>
+                                        <!-- <div
+                                            class="badge bg-lightprimary dark:bg-darkprimary border-primary text-primary w-fit">
+                                            Admin</div> -->
+                                    </div>
+                                    <p class="font-semibold text-base text-bodytext dark:text-darklink">{{ userEmail() }}</p>
+                                    <div class="flex items-center justify-start md:justify-start">
+                                        <span class="bg-success p-1 rounded-full"></span>
+                                        <h6 class="mb-0 ms-2">Active</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <button class="btn">Edit Profile</button> -->
+                        </div>
+
+                        <!-- <nav class="flex justify-start space-x-3 mt-6" aria-label="Tabs" role="tablist">
+                            <button type="button"
+                                class="hs-tab-active:border-primary hs-tab-active:text-primary py-2 px-3 inline-flex items-center gap-3 border-b-2 border-transparent text-sm whitespace-nowrap  text-bodytext dark:text-darklink hover:text-primary focus:outline-none focus:text-primary disabled:opacity-50 disabled:pointer-events-none dark:text-gray-400 dark:hover:text-primary active"
+                                id="Profile-tab" data-hs-tab="#profile" aria-controls="profile" role="tab">
+                                <i class="ti ti-user-circle text-xl"></i><span
+                                    class="md:flex hidden text-base font-medium">My Profile</span>
+                            </button>
+                          
+                        </nav> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!---Tabs Content--->
+        <div class="relative " style="top: -43px !important;">
+            <div id="profile" role="tabpanel" aria-labelledby="Profile-tab">
+
+                <div class="grid grid-cols-12 gap-6">
+                    <div class="lg:col-span-4 md:col-span-12 sm:col-span-12 col-span-12">
+                        <div class="card shadow-none border border-border dark:border-darkborder mb-6">
+                            <div class="card-body p-0">
+                                <div class="pb-0">
+                                    <h4 class="text-xl mb-5"> About me</h4>
+                                    <p class="text-dark dark:text-darklink font-medium">Hello, I’m {{ userName() }}. Welcome to your profile page where you can manage your account details.</p>
+                                </div>
+                                <div class="pt-2 border-t border-light-dark">
+                                    <h5 class="text-xl mb-3">Contact</h5>
+                                    <ul class="mb-0">
+                                        <li class="flex items-center mb-1 gap-4">
+                                            <div
+                                                class="bg-lighterror dark:bg-darkerror h-10 w-10 rounded-full flex items-center justify-center">
+                                                <i class="ti ti-phone text-error text-xl"></i></div>
+                                            <div>
+                                                <h6 class="text-fs_15 mb-1">Call</h6>
+                                                <p class="text-darklink font-medium">(123) 456-7890</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-center mb-3 gap-4">
+                                            <div
+                                                class="bg-lightsuccess dark:bg-darksuccess h-10 w-10 rounded-full flex items-center justify-center">
+                                                <i class="ti ti-mail text-success text-xl"></i></div>
+                                            <div>
+                                                <h6 class="text-fs_15 mb-1">Email</h6>
+                                                <p class="text-darklink font-medium">{{ userEmail() }}</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-center mb-3 gap-4">
+                                            <div
+                                                class="bg-lightprimary dark:bg-darkprimary h-10 w-10 rounded-full flex items-center justify-center">
+                                                <i class="ti ti-brand-skype text-primary text-xl"></i></div>
+                                            <div>
+                                                <h6 class="text-fs_15 mb-1">Skype</h6>
+                                                <p class="text-darklink font-medium">jonathan.doe</p>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="pt-2 border-t border-light-dark">
+                                    <h5 class="text-xl mb-3">Other</h5>
+                                    <ul class="mb-0">
+                                        <li class="flex items-center mb-3 gap-4">
+                                            <div
+                                                class="bg-lightwarning dark:bg-darkwarning h-10 w-10 rounded-full flex items-center justify-center">
+                                                <i class="ti ti-map-pin text-warning text-xl"></i></div>
+                                            <div>
+                                                <h6 class="text-fs_15 mb-1">Location</h6>
+                                                <p class="text-darklink font-medium">Newyork, USA - 100001</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-center mb-3 gap-4">
+                                            <div
+                                                class="bg-lightsuccess dark:bg-darksuccess h-10 w-10 rounded-full flex items-center justify-center">
+                                                <i class="ti ti-school text-success text-xl"></i></div>
+                                            <div>
+                                                <h6 class="text-fs_15 mb-1">Education</h6>
+                                                <p class="text-darklink font-medium">Saint Josef Institute of Science
+                                                </p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-center mb-0 gap-4">
+                                            <div
+                                                class="bg-lightindigo dark:bg-darkindigo h-10 w-10 rounded-full flex items-center justify-center">
+                                                <i class="ti ti-language text-indigo text-xl"></i></div>
+                                            <div>
+                                                <h6 class="text-fs_15 mb-1">Language</h6>
+                                                <p class="text-darklink font-medium">English</p>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-8 md:col-span-12 sm:col-span-12 col-span-12">
+                        <div class="grid grid-cols-12 gap-6 mb-6">
+                            <div class="lg:col-span-4 md:col-span-12 sm:col-span-12 col-span-12">
+                                <div class="card">
+                                    <div class="card-body p-0">
+                                        <div class="flex items-center gap-4">
+                                            <div
+                                                class="bg-lightprimary dark:bg-darkprimary h-12 w-12 rounded-full flex items-center justify-center">
+                                                <i class="ti ti-template text-primary text-2xl"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="text-xl">680</h6>
+                                                <p class="text-fs_15 font-medium">Tasks Done</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="lg:col-span-4 md:col-span-12 sm:col-span-12 col-span-12">
+                                <div class="card">
+                                    <div class="card-body p-0">
+                                        <div class="flex items-center gap-4">
+                                            <div
+                                                class="bg-lightsuccess dark:bg-darksuccess h-12 w-12 rounded-full flex items-center justify-center">
+                                                <i class="ti ti-layout-grid-add text-success text-2xl"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="text-xl">42</h6>
+                                                <p class="text-fs_15 font-medium">Projects</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="lg:col-span-4 md:col-span-12 sm:col-span-12 col-span-12">
+                                <div class="card">
+                                    <div class="card-body p-0">
+                                        <div class="flex items-center gap-4">
+                                            <div
+                                                class="bg-lighterror dark:bg-darkerror h-12 w-12 rounded-full flex items-center justify-center">
+                                                <i class="ti ti-id text-error text-2xl"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="text-xl">$780 </h6>
+                                                <p class="text-fs_15 font-medium">Sales</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="lg:col-span-12 md:col-span-12 sm:col-span-12 col-span-12">
+                                <div class="grid grid-cols-12 gap-6 mb-6">
+                                    <div class="lg:col-span-12 md:col-span-12 sm:col-span-12 col-span-12">
+                                        <div id="account" role="tabpanel" aria-labelledby="account-tab">
+                                            <div class="grid grid-cols-12 gap-6">
+                                                <div class="lg:col-span-6 col-span-12">
+                                                    <div class="card h-100">
+                                                        <div class="card-body p-0">
+                                                            <h5 class="card-title">Change
+                                                                Profile</h5>
+                                                            <p class="card-subtitle">Change
+                                                                your profile picture
+                                                                from here</p>
+                                                            <div class="text-center">
+                                                                <div class="rounded-full d-flex align-items-center justify-content-center bg-primary text-white fw-bold mx-auto mt-6"
+                                                                    style="width:120px;height:120px;font-size:42px;">
+                                                                  {{ userInitials() }}
+                                                                </div>
+                                                                 <div class="d-flex  gap-3 mt-4 mb-4" style="justify-content: center;">
+          <button type="button"
+          class="v-btn v-btn--elevated v-theme--BLUE_THEME  v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated bg-secondary px-3"
+        >
+          Cancel
+        </button>
+        <button type="button"
+          class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+         >Upload
+        </button>
+      
+      </div>
+                                                                <p class="card-subtitle">Allowed
+                                                                    JPG, GIF or PNG.
+                                                                    Max size of
+                                                                    800K</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="lg:col-span-6 col-span-12">
+                                                    <div class="card h-100">
+                                                        <div class="card-body p-0">
+                                                            <h5 class="card-title">Change
+                                                                Password</h5>
+                                                            <p class="card-subtitle">To
+                                                                change your password
+                                                                please confirm
+                                                                here</p>
+                                                            <form class="mt-6">
+                                                                <div class="flex flex-col gap-4">
+                                                                    <div>
+                                                                        <label
+                                                                            class="text-dark dark:text-darklink font-semibold mb-2 block ">Current
+                                                                            Password</label>
+                                                                        <input type="password" class="form-control py-2"
+                                                                            value="12345678910">
+                                                                    </div>
+                                                                    <div>
+                                                                        <label
+                                                                            class="text-dark dark:text-darklink font-semibold mb-2 block ">New
+                                                                            Password</label>
+                                                                        <input type="password" class="form-control py-2"
+                                                                            value="12345678910">
+                                                                    </div>
+                                                                    <div>
+                                                                        <label
+                                                                            class="text-dark dark:text-darklink font-semibold mb-2 block ">Confirm
+                                                                            Password</label>
+                                                                        <input type="password" class="form-control py-2"
+                                                                            value="12345678910">
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-span-12">
+                                                    <div class="card">
+                                                        <div class="card-body p-0">
+                                                            <h5 class="card-title">Personal
+                                                                Details</h5>
+                                                            <p class="card-subtitle">To
+                                                                change your personal
+                                                                detail , edit and
+                                                                save from here</p>
+                                                            <form class="mt-6">
+                                                                <div class="grid grid-cols-12 gap-x-6 gap-y-4">
+                                                                    <div class="lg:col-span-6 col-span-12">
+                                                                        <div class="flex flex-col gap-4">
+                                                                            <div>
+                                                                                <label
+                                                                                    class="text-dark dark:text-darklink font-semibold mb-2 block ">Your
+                                                                                    Name</label>
+                                                                                <input type="text"
+                                                                                    class="form-control py-2"
+                                                                                    [value]="userName()"
+                                                                                    placeholder="Your name">
+                                                                            </div>
+                                                                            <div>
+                                                                                <label
+                                                                                    class="text-dark dark:text-darklink font-semibold mb-2 block ">Your
+                                                                                    Location</label>
+                                                                                <select class="form-control py-2">
+                                                                                    <option selected="">United
+                                                                                        Kingdom</option>
+                                                                                    <option value="1">United
+                                                                                        States</option>
+                                                                                    <option value="2">United
+                                                                                        Kingdom</option>
+                                                                                    <option value="3">India</option>
+                                                                                    <option value="3">Russia</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div>
+                                                                                <label
+                                                                                    class="text-dark dark:text-darklink font-semibold mb-2 block ">Email</label>
+                                                                                <input type="email"
+                                                                                    class="form-control py-2"
+                                                                                    [value]="userEmail()"
+                                                                                    placeholder="Your email">
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="lg:col-span-6 col-span-12">
+                                                                        <div class="flex flex-col gap-4">
+                                                                            <div>
+                                                                                <label
+                                                                                    class="text-dark dark:text-darklink font-semibold mb-2 block ">Store
+                                                                                    Name</label>
+                                                                                <input type="text"
+                                                                                    class="form-control py-2"
+                                                                                    placeholder="Maxima Studio">
+                                                                            </div>
+                                                                            <div>
+                                                                                <label
+                                                                                    class="text-dark dark:text-darklink font-semibold mb-2 block ">Currency</label>
+                                                                                <select class="form-control py-2">
+                                                                                    <option selected="">India
+                                                                                        (INR)</option>
+                                                                                    <option value="1">US
+                                                                                        Dollar
+                                                                                        ($)</option>
+                                                                                    <option value="2">United
+                                                                                        Kingdom
+                                                                                        (Pound)</option>
+                                                                                    <option value="3">India
+                                                                                        (INR)</option>
+                                                                                    <option value="3">Russia
+                                                                                        (Ruble)</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div>
+                                                                                <label
+                                                                                    class="text-dark dark:text-darklink font-semibold mb-2 block ">Phone</label>
+                                                                                <input type="text"
+                                                                                    class="form-control py-2"
+                                                                                    placeholder="+91 12345 65478">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-span-12">
+                                                                        <div>
+                                                                            <label
+                                                                                class="text-dark dark:text-darklink font-semibold mb-2 block ">Address</label>
+                                                                            <input type="text" class="form-control py-2"
+                                                                                placeholder="814 Howard Street, 120065, India">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-span-12">
+                                                                                 <div class="d-flex  gap-3 mt-4 mb-4" style="justify-content: end;">
+          <button type="button"
+          class="v-btn v-btn--elevated v-theme--BLUE_THEME  v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated bg-secondary px-3"
+        >
+          Cancel
+        </button>
+        <button type="button"
+          class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+         >Save
+        </button>
+      
+      </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+            <div id="followers" class="hidden" role="tabpanel" aria-labelledby="Followers-tab">
+                <div class="sm:flex items-center justify-between mt-3 mb-4">
+                    <h3 class="mb-3 sm:mb-0 font-semibold text-dark dark:text-white text-2xl gap-2 flex items-center">
+                        Followers
+                        <span
+                            class="flex items-center leading-normal rounded-full bg-secondary  text-xs px-2 py-0.5 font-medium text-white w-fit">20</span>
+                    </h3>
+                    <form class="relative">
+                        <input type="text" class="form-control search-chat py-2 ps-10" id="text-srh"
+                            style="padding-left: 43px !important;" placeholder="Search Followers">
+                        <i class="ti ti-search absolute top-1.5 start-0 translate-middle-y text-lg text-dark dark:text-darklink  ms-3"
+                            style="top:20px"></i>
+                    </form>
+                </div>
+
+                <div class="grid grid-cols-12 gap-6">
+                    <div class="xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_8.jpg" alt="" class="rounded-full h-10 w-10">
+                                <div class="">
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        Betty Adams</h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>Sint
+                                        Maarten</span>
+                                </div>
+                                <button class="btn ms-auto btn-outline-primary py-1 px-2">Follow</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_2.jpg" alt="" class="rounded-full h-10 w-10">
+                                <div class="">
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        Virginia Wong</h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>Tunesia</span>
+                                </div>
+                                <button class="btn ms-auto btn-outline-primary py-1 px-2">Follow</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_3.jpg" alt="" class="rounded-full h-10 w-10">
+                                <div class="">
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        Birdie Burgess</h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>Algeria</span>
+                                </div>
+                                <button class="btn ms-auto py-1 px-2">Followed</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class=" xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_4.jpg" alt="" class="rounded-full h-10 w-10"
+                                    width="40" height="40">
+                                <div>
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        Steven</h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>Malaysia</span>
+                                </div>
+                                <button class="btn ms-auto py-1 px-2">Followed</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_5.jpg" alt="" class="rounded-full h-10 w-10"
+                                    width="40" height="40">
+                                <div>
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        Rhodes</h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>Grenada</span>
+                                </div>
+                                <button class="btn ms-auto py-1 px-2">Followed</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_6.jpg" alt="" class="rounded-full h-10 w-10"
+                                    width="40" height="40">
+                                <div>
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        Effie Gross</h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>Azerbaijan</span>
+                                </div>
+                                <button class="btn ms-auto btn-outline-primary py-1 px-2">Follow</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_7.jpg" alt="" class="rounded-full h-10 w-10"
+                                    width="40" height="40">
+                                <div>
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        Barton</h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>French
+                                        Southern </span>
+                                </div>
+                                <button class="btn ms-auto btn-outline-primary py-1 px-2">Follow</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_8.jpg" alt="" class="rounded-full h-10 w-10"
+                                    width="40" height="40">
+                                <div>
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        John</h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>Nauru</span>
+                                </div>
+                                <button class="btn ms-auto py-1 px-2">Followed</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_9.jpg" alt="" class="rounded-full h-10 w-10"
+                                    width="40" height="40">
+                                <div>
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        Elizabeth </h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>Djibouti</span>
+                                </div>
+                                <button class="btn ms-auto py-1 px-2">Followed</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_10.jpg" alt="" class="rounded-full h-10 w-10"
+                                    width="40" height="40">
+                                <div>
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        Jon Cohen</h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>United
+                                        States</span>
+                                </div>
+                                <button class="btn ms-auto py-1 px-2">Followed</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_8.jpg" alt="" class="rounded-full h-10 w-10"
+                                    width="40" height="40">
+                                <div>
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        Dwayn</h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>Equatorial
+                                        Guinea</span>
+                                </div>
+                                <button class="btn ms-auto py-1 px-2">Follow</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_2.jpg" alt="" class="rounded-full h-10 w-10"
+                                    width="40" height="40">
+                                <div>
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        Willie </h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>Solomon
+                                        Islands</span>
+                                </div>
+                                <button class="btn ms-auto py-1 px-2">Followed</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_3.jpg" alt="" class="rounded-full h-10 w-10"
+                                    width="40" height="40">
+                                <div>
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        Harvey</h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>Uruguay</span>
+                                </div>
+                                <button class="btn ms-auto py-1 px-2">Followed</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_4.jpg" alt="" class="rounded-full h-10 w-10"
+                                    width="40" height="40">
+                                <div>
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        Alice George</h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>Madagascar</span>
+                                </div>
+                                <button class="btn ms-auto btn-outline-primary py-1 px-2">Follow</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_5.jpg" alt="" class="rounded-full h-10 w-10"
+                                    width="40" height="40">
+                                <div>
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        Simpson</h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>Bahrain</span>
+                                </div>
+                                <button class="btn ms-auto py-1 px-2">Followed</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_3.jpg" alt="" class="rounded-full h-10 w-10"
+                                    width="40" height="40">
+                                <div>
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        Francis Barber</h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>Colombia</span>
+                                </div>
+                                <button class="btn ms-auto py-1 px-2 btn-outline-primary">Follow</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_7.jpg" alt="" class="rounded-full h-10 w-10"
+                                    width="40" height="40">
+                                <div>
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        Christofer</h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>Maldives</span>
+                                </div>
+                                <button class="btn ms-auto py-1 px-2">Followed</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_8.jpg" alt="" class="rounded-full h-10 w-10"
+                                    width="40" height="40">
+                                <div>
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        Nelson</h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>St.
+                                        Helena</span>
+                                </div>
+                                <button class="btn ms-auto py-1 px-2">Followed</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_9.jpg" alt="" class="rounded-full h-10 w-10"
+                                    width="40" height="40">
+                                <div>
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        Marlyn</h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>South
+                                        Africa</span>
+                                </div>
+                                <button class="btn ms-auto py-1 px-2">Followed</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" xl:col-span-4 lg:col-span-6 md:col-span-6 col-span-12">
+                        <div class="card">
+                            <div class="card-body flex items-center gap-4">
+                                <img src="/assets/images/profile/user_10.jpg" alt="" class="rounded-full h-10 w-10"
+                                    width="40" height="40">
+                                <div>
+                                    <h5 class="text-lg mb-0 leading-normal">
+                                        Alica</h5>
+                                    <span class="text-xs text-bodytext dark:text-darklink
+                                                  flex items-center gap-1"><i
+                                            class="ti ti-map-pin text-sm  text-bodytext dark:text-darklink"></i>Suriname</span>
+                                </div>
+                                <button class="btn ms-auto py-1 px-2">Followed</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+            <div id="friends" class="hidden" role="tabpanel" aria-labelledby="Friends-tab">
+                <div class="sm:flex items-center justify-between mt-3 mb-4">
+                    <h3 class="mb-3 sm:mb-0 font-semibold text-dark dark:text-white text-2xl gap-2 flex items-center">
+                        Friends
+                        <span
+                            class="flex items-center leading-normal rounded-full bg-secondary  text-xs px-2 py-0.5 font-medium text-white w-fit">20</span>
+                    </h3>
+                    <form class="relative">
+                        <input type="text" class="form-control search-chat py-2 ps-10" id="text-srh"
+                            placeholder="Search Followers" style="padding-left: 43px !important;">
+                        <i class="ti ti-search absolute top-1.5 start-0 translate-middle-y text-lg text-dark dark:text-darklink  ms-3"
+                            style="top:20px"></i>
+                    </form>
+                </div>
+
+                <div class="grid grid-cols-12 gap-6">
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_7.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Jonny Adams</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Medical
+                                    Secretary</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_2.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Inez Lyons</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Medical
+                                    Technician</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_3.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Steve Bryan</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Preschool
+                                    Teacher</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_4.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Smash Bryant</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Legal
+                                    Secretary</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_5.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Paul Benson</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Safety
+                                    Engineer</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_6.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Roberta Francis</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Nursing
+                                    Administrator</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_7.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Billy Rogers</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Legal
+                                    Secretary</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_8.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Rian Brewer</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Comptroller</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_9.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Patricka Knight</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Retail Store
+                                    Manager</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_10.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Francis Sutton</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Astronomer</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_5.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Bernice Henry</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Security
+                                    Consultant</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_2.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Estella Garcia</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Lead Software Test
+                                    Engineer</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_3.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Norman Moran</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Engineer
+                                    Technician</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_4.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Jesson Matthews</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Lead Software
+                                    Engineer</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_5.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Mcyan Perez</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Special Education
+                                    Teacher</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_6.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Liily Martin</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Transportation
+                                    Manager</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_7.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Elvsh Wong</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Logistics
+                                    Manager</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_8.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Edith Taylor</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Union
+                                    Representative</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_9.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Violet Jackson</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Agricultural
+                                    Inspector</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden animate-card">
+                            <div class="card-body pb-5 text-center">
+                                <img src="/assets/images/profile/user_10.jpg" alt=""
+                                    class="rounded-full mb-3 h-20 w-20 mx-auto">
+                                <h5 class="text-lg mb-0 leading-normal">
+                                    Phoebe Owens</h5>
+                                <span class="text-xs text-dark font-medium dark:text-darklink">Safety
+                                    Engineer</span>
+                            </div>
+                            <ul class="px-3 py-3 bg-lightgray dark:bg-darkprimary flex items-center justify-center mb-0 gap-4 border-t border-border dark:border-darkborder
+                                                ">
+                                <li class="position-relative">
+                                    <a class="text-primary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative ">
+                                    <a class="text-error text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-info text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-github"></i>
+                                    </a>
+                                </li>
+                                <li class="position-relative">
+                                    <a class="text-secondary text-lg" href="javascript:void(0)">
+                                        <i class="ti ti-brand-twitter"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+            <div id="gallery" class="hidden" role="tabpanel" aria-labelledby="Gallery-tab">
+                <div class="sm:flex items-center justify-between mt-3 mb-4">
+                    <h3 class="mb-3 sm:mb-0 font-semibold text-dark dark:text-white text-2xl gap-2 flex items-center">
+                        Gallery
+                        <span
+                            class="flex items-center leading-normal rounded-full bg-secondary  text-xs px-2 py-0.5 font-medium text-white w-fit">12</span>
+                    </h3>
+                    <form class="relative">
+                        <input type="text" class="form-control search-chat py-2 ps-10" id="text-srh"
+                            placeholder="Search Followers" style="padding-left: 43px !important;">
+                        <i class="ti ti-search absolute top-1.5 start-0 translate-middle-y text-lg text-dark dark:text-darklink  ms-3"
+                            style="top:20px"></i>
+                    </form>
+                </div>
+
+                <div class="grid grid-cols-12 gap-6 mt-7">
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card overflow-hidden rounded-md animate-card">
+                            <div class="card-body p-0">
+                                <img src="/assets/images/profile/s1.jpg" alt=""
+                                    class="w-full max-w-full object-cover h-56">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <h6 class="text-base">
+                                            Isuava wakceajo fe.jpg</h6>
+                                        <span class="text-xs text-dark font-medium dark:text-darklink
+                                                  ">Wed, Dec 14, 2023</span>
+                                    </div>
+                                    <div>
+                                        <div class="hs-dropdown relative inline-flex">
+                                            <button id="hs-dropdown-custom-icon-trigger " type="button"
+                                                class="hs-dropdown-toggle flex justify-center items-center ">
+                                                <i
+                                                    class="ti ti-dots-vertical text-bodytext dark:text-darklink hover:text-primary"></i>
+                                            </button>
+
+                                            <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0  hidden min-w-40 z-[2]"
+                                                aria-labelledby="hs-dropdown-custom-icon-trigger" role="menu">
+                                                <div class="flex flex-col">
+                                                    <div class="py-2 px-4 bg-hover">
+                                                        <a class=" flex gap-2 items-center " href="#">
+                                                            <i class="ti ti-link text-base"></i>Isuava
+                                                            wakceajo fe.jpg
+                                                        </a>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card  animate-card overflow-hidden rounded-2">
+                            <div class="card-body p-0">
+                                <img src="/assets/images/profile/s2.jpg" alt=""
+                                    class="w-full max-w-full object-cover h-56">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <h6 class="text-base">Ip
+                                            docmowe vemremrif.jpg</h6>
+                                        <span class="text-xs text-dark font-medium dark:text-darklink">Wed, Dec 14,
+                                            2023</span>
+                                    </div>
+                                    <div>
+                                        <div class="hs-dropdown relative inline-flex">
+                                            <button id="hs-dropdown-custom-icon-trigger " type="button"
+                                                class="hs-dropdown-toggle flex justify-center items-center ">
+                                                <i
+                                                    class="ti ti-dots-vertical text-bodytext dark:text-darklink hover:text-primary"></i>
+                                            </button>
+
+                                            <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0  hidden min-w-40 z-[2]"
+                                                aria-labelledby="hs-dropdown-custom-icon-trigger" role="menu">
+                                                <div class="flex flex-col">
+                                                    <div class="py-2 px-4 bg-hover">
+                                                        <a class=" flex gap-2 items-center " href="#">
+                                                            <i class="ti ti-link text-base"></i>docmowe
+                                                            vemremrif.jpg
+                                                        </a>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card  animate-card overflow-hidden rounded-2">
+                            <div class="card-body p-0">
+                                <img src="/assets/images/profile/s3.jpg" alt=""
+                                    class="w-full max-w-full object-cover h-56">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <h6 class="text-base">
+                                            Duan cosudos utaku.jpg</h6>
+                                        <span class="text-xs text-dark font-medium dark:text-darklink">Wed, Dec 14,
+                                            2023</span>
+                                    </div>
+                                    <div>
+                                        <div class="hs-dropdown relative inline-flex">
+                                            <button id="hs-dropdown-custom-icon-trigger " type="button"
+                                                class="hs-dropdown-toggle flex justify-center items-center ">
+                                                <i
+                                                    class="ti ti-dots-vertical text-bodytext dark:text-darklink hover:text-primary"></i>
+                                            </button>
+
+                                            <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0  hidden min-w-40 z-[2]"
+                                                aria-labelledby="hs-dropdown-custom-icon-trigger" role="menu">
+                                                <div class="flex flex-col">
+                                                    <div class="py-2 px-4 bg-hover">
+                                                        <a class=" flex gap-2 items-center " href="#">
+                                                            <i class="ti ti-link text-base"></i>Duan
+                                                            cosudos utaku.jpg
+                                                        </a>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card  animate-card overflow-hidden rounded-2">
+                            <div class="card-body p-0">
+                                <img src="/assets/images/profile/s4.jpg" alt=""
+                                    class="w-full max-w-full object-cover h-56">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <h6 class="text-base">Fu
+                                            netbuv oggu.jpg</h6>
+                                        <span class="text-xs text-dark font-medium dark:text-darklink">Wed, Dec 14,
+                                            2023</span>
+                                    </div>
+                                    <div>
+                                        <div class="hs-dropdown relative inline-flex">
+                                            <button id="hs-dropdown-custom-icon-trigger " type="button"
+                                                class="hs-dropdown-toggle flex justify-center items-center ">
+                                                <i
+                                                    class="ti ti-dots-vertical text-bodytext dark:text-darklink hover:text-primary"></i>
+                                            </button>
+
+                                            <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0  hidden min-w-40 z-[2]"
+                                                aria-labelledby="hs-dropdown-custom-icon-trigger" role="menu">
+                                                <div class="flex flex-col">
+                                                    <div class="py-2 px-4 bg-hover">
+                                                        <a class=" flex gap-2 items-center " href="#">
+                                                            <i class="ti ti-link text-base"></i>netbuv
+                                                            oggu.jpg
+                                                        </a>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card  animate-card overflow-hidden rounded-2">
+                            <div class="card-body p-0">
+                                <img src="/assets/images/profile/s5.jpg" alt=""
+                                    class="w-full max-w-full object-cover h-56">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <h6 class="text-base">Di
+                                            sekog do.jpg</h6>
+                                        <span class="text-xs text-dark font-medium dark:text-darklink">Wed, Dec 14,
+                                            2023</span>
+                                    </div>
+                                    <div>
+                                        <div class="hs-dropdown relative inline-flex">
+                                            <button id="hs-dropdown-custom-icon-trigger " type="button"
+                                                class="hs-dropdown-toggle flex justify-center items-center ">
+                                                <i
+                                                    class="ti ti-dots-vertical text-bodytext dark:text-darklink hover:text-primary"></i>
+                                            </button>
+
+                                            <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0  hidden min-w-40 z-[2]"
+                                                aria-labelledby="hs-dropdown-custom-icon-trigger" role="menu">
+                                                <div class="flex flex-col">
+                                                    <div class="py-2 px-4 bg-hover">
+                                                        <a class=" flex gap-2 items-center " href="#">
+                                                            <i class="ti ti-link text-base"></i>sekog
+                                                            do.jpg
+                                                        </a>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card  animate-card overflow-hidden rounded-2">
+                            <div class="card-body p-0">
+                                <img src="/assets/images/profile/s6.jpg" alt=""
+                                    class="w-full max-w-full object-cover h-56">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <h6 class="text-base">Lo
+                                            jogu camhiisi.jpg</h6>
+                                        <span class="text-xs text-dark font-medium dark:text-darklink">Thu, Dec 15,
+                                            2023</span>
+                                    </div>
+                                    <div>
+                                        <div class="hs-dropdown relative inline-flex">
+                                            <button id="hs-dropdown-custom-icon-trigger " type="button"
+                                                class="hs-dropdown-toggle flex justify-center items-center ">
+                                                <i
+                                                    class="ti ti-dots-vertical text-bodytext dark:text-darklink hover:text-primary"></i>
+                                            </button>
+
+                                            <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0  hidden min-w-40 z-[2]"
+                                                aria-labelledby="hs-dropdown-custom-icon-trigger" role="menu">
+                                                <div class="flex flex-col">
+                                                    <div class="py-2 px-4 bg-hover">
+                                                        <a class=" flex gap-2 items-center " href="#">
+                                                            <i class="ti ti-link text-base"></i> jogu
+                                                            camhiisi.jpg
+                                                        </a>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card  animate-card overflow-hidden rounded-2">
+                            <div class="card-body p-0">
+                                <img src="/assets/images/profile/s7.jpg" alt=""
+                                    class="w-full max-w-full object-cover h-56">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <h6 class="text-base">
+                                            Orewac huosazud robuf.jpg</h6>
+                                        <span class="text-xs text-dark font-medium dark:text-darklink">Fri, Dec 16,
+                                            2023</span>
+                                    </div>
+                                    <div>
+                                        <div class="hs-dropdown relative inline-flex">
+                                            <button id="hs-dropdown-custom-icon-trigger " type="button"
+                                                class="hs-dropdown-toggle flex justify-center items-center ">
+                                                <i
+                                                    class="ti ti-dots-vertical text-bodytext dark:text-darklink hover:text-primary"></i>
+                                            </button>
+
+                                            <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0  hidden min-w-40 z-[2]"
+                                                aria-labelledby="hs-dropdown-custom-icon-trigger" role="menu">
+                                                <div class="flex flex-col">
+                                                    <div class="py-2 px-4 bg-hover">
+                                                        <a class=" flex gap-2 items-center " href="#">
+                                                            <i class="ti ti-link text-base"></i>Orewac
+                                                            huosazud robuf.jpg
+                                                        </a>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card  animate-card overflow-hidden rounded-2">
+                            <div class="card-body p-0">
+                                <img src="/assets/images/profile/s8.jpg" alt=""
+                                    class="w-full max-w-full object-cover h-56">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <h6 class="text-base">
+                                            Nira biolaizo tuzi.jpg</h6>
+                                        <span class="text-xs text-dark font-medium dark:text-darklink">Sat, Dec 17,
+                                            2023</span>
+                                    </div>
+                                    <div>
+                                        <div class="hs-dropdown relative inline-flex">
+                                            <button id="hs-dropdown-custom-icon-trigger " type="button"
+                                                class="hs-dropdown-toggle flex justify-center items-center ">
+                                                <i
+                                                    class="ti ti-dots-vertical text-bodytext dark:text-darklink hover:text-primary"></i>
+                                            </button>
+
+                                            <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0  hidden min-w-40 z-[2]"
+                                                aria-labelledby="hs-dropdown-custom-icon-trigger" role="menu">
+                                                <div class="flex flex-col">
+                                                    <div class="py-2 px-4 bg-hover">
+                                                        <a class=" flex gap-2 items-center " href="#">
+                                                            <i class="ti ti-link text-base"></i>Nira
+                                                            biolaizo tuzi.jpg
+                                                        </a>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card  animate-card overflow-hidden rounded-2">
+                            <div class="card-body p-0">
+                                <img src="/assets/images/profile/s9.jpg" alt=""
+                                    class="w-full max-w-full object-cover h-56">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <h6 class="text-base">
+                                            Peri metu ejvu.jpg</h6>
+                                        <span class="text-xs text-dark font-medium dark:text-darklink">Sun, Dec 18,
+                                            2023</span>
+                                    </div>
+                                    <div>
+                                        <div class="hs-dropdown relative inline-flex">
+                                            <button id="hs-dropdown-custom-icon-trigger " type="button"
+                                                class="hs-dropdown-toggle flex justify-center items-center ">
+                                                <i
+                                                    class="ti ti-dots-vertical text-bodytext dark:text-darklink hover:text-primary"></i>
+                                            </button>
+
+                                            <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0  hidden min-w-40 z-[2]"
+                                                aria-labelledby="hs-dropdown-custom-icon-trigger" role="menu">
+                                                <div class="flex flex-col">
+                                                    <div class="py-2 px-4 bg-hover">
+                                                        <a class=" flex gap-2 items-center " href="#">
+                                                            <i class="ti ti-link text-base"></i>Peri
+                                                            metu ejvu.jpgs
+                                                        </a>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card  animate-card overflow-hidden rounded-2">
+                            <div class="card-body p-0">
+                                <img src="/assets/images/profile/s10.jpg" alt=""
+                                    class="w-full max-w-full object-cover h-56">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <h6 class="text-base">
+                                            Vurnohot tajraje isusufuj.jpg</h6>
+                                        <span class="text-xs text-dark font-medium dark:text-darklink">Mon, Dec 19,
+                                            2023</span>
+                                    </div>
+                                    <div>
+                                        <div class="hs-dropdown relative inline-flex">
+                                            <button id="hs-dropdown-custom-icon-trigger " type="button"
+                                                class="hs-dropdown-toggle flex justify-center items-center ">
+                                                <i
+                                                    class="ti ti-dots-vertical text-bodytext dark:text-darklink hover:text-primary"></i>
+                                            </button>
+
+                                            <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0  hidden min-w-40 z-[2]"
+                                                aria-labelledby="hs-dropdown-custom-icon-trigger" role="menu">
+                                                <div class="flex flex-col">
+                                                    <div class="py-2 px-4 bg-hover">
+                                                        <a class=" flex gap-2 items-center " href="#">
+                                                            <i class="ti ti-link text-base"></i>Vurnohot
+                                                            tajraje isusufuj.jpg
+                                                        </a>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card  animate-card overflow-hidden rounded-2">
+                            <div class="card-body p-0">
+                                <img src="/assets/images/profile/s11.jpg" alt=""
+                                    class="w-full max-w-full object-cover h-56">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <h6 class="text-base">
+                                            Juc oz
+                                            ma.jpg</h6>
+                                        <span class="text-xs text-dark font-medium dark:text-darklink">Tue, Dec 20,
+                                            2023</span>
+                                    </div>
+                                    <div>
+                                        <div class="hs-dropdown relative inline-flex">
+                                            <button id="hs-dropdown-custom-icon-trigger " type="button"
+                                                class="hs-dropdown-toggle flex justify-center items-center ">
+                                                <i
+                                                    class="ti ti-dots-vertical text-bodytext dark:text-darklink hover:text-primary"></i>
+                                            </button>
+
+                                            <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0  hidden min-w-40 z-[2]"
+                                                aria-labelledby="hs-dropdown-custom-icon-trigger" role="menu">
+                                                <div class="flex flex-col">
+                                                    <div class="py-2 px-4 bg-hover">
+                                                        <a class=" flex gap-2 items-center " href="#">
+                                                            <i class="ti ti-link text-base"></i>Juc
+                                                            ozma.jpg
+                                                        </a>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
+                        <div class="card  animate-card overflow-hidden rounded-2">
+                            <div class="card-body p-0">
+                                <img src="/assets/images/profile/s12.jpg" alt=""
+                                    class="w-full max-w-full object-cover h-56">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <h6 class="text-base">
+                                            Povipvez marjelliz zuuva.jpg</h6>
+                                        <span class="text-xs text-dark font-medium dark:text-darklink">Wed, Dec 21,
+                                            2023</span>
+                                    </div>
+                                    <div>
+                                        <div class="hs-dropdown relative inline-flex">
+                                            <button id="hs-dropdown-custom-icon-trigger " type="button"
+                                                class="hs-dropdown-toggle flex justify-center items-center ">
+                                                <i
+                                                    class="ti ti-dots-vertical text-bodytext dark:text-darklink hover:text-primary"></i>
+                                            </button>
+
+                                            <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0  hidden min-w-40 z-[2]"
+                                                aria-labelledby="hs-dropdown-custom-icon-trigger" role="menu">
+                                                <div class="flex flex-col">
+                                                    <div class="py-2 px-4 bg-hover">
+                                                        <a class=" flex gap-2 items-center " href="#">
+                                                            <i class="ti ti-link text-base"></i>Povipvez
+                                                            marjelliz zuuva.jpg
+                                                        </a>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!---Tabs Content End--->
+    </div>
+
+</div>

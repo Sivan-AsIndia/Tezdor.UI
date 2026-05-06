@@ -2,11 +2,12 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": "91409bbb-b865-4879-b6f4-f59581969389"
   },
   "newProjectRoot": "projects",
   "projects": {
-    "Tezdor.UI": {
+    "TezdorAngular_Project": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -20,12 +21,19 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
-                "glob": "**/*",
+               "glob": "**/*",
                 "input": "public"
-              }
+              },
+                   {
+    "glob": "**/*",
+    "input": "src/assets",
+    "output": "/assets"
+  }
             ],
-            "styles": [
-              "src/styles.css"
+             "styles": [
+              "src/custom-theme.scss",
+            "src/assets/css/styles.css",
+  "src/styles.css"
             ]
           },
           "configurations": {
@@ -56,10 +64,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "Tezdor.UI:build:production"
+              "buildTarget": "TezdorAngular_Project:build:production"
             },
             "development": {
-              "buildTarget": "Tezdor.UI:build:development"
+              "buildTarget": "TezdorAngular_Project:build:development"
             }
           },
           "defaultConfiguration": "development"

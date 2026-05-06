@@ -1,0 +1,889 @@
+<form [formGroup]="form" class="max-w-full">
+
+    <!-- 🔷 HEADER -->
+    <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+
+        <div>
+            <h4 class="fw-bold mb-1 mainheading">
+                {{ mode() === 'create' ? 'Create Employee' : 'Edit Employee' }}
+            </h4>
+            <small class="text-muted subdescription"> Define employee details, job info, and compliance
+            </small>
+        </div>
+        <!-- 🔷 ARROW BREADCRUMB -->
+        <div class="arrow-steps d-none d-md-flex">
+
+            <ul id="breadcrumb">
+                <li><a routerLink="/dashboard"><span class="fa fa-home"> </span>&nbsp;&nbsp;Home</a></li>
+                @if(mode() === 'edit'){
+                <li><a routerLink="/employees"><span class="fa fa-users"> </span>&nbsp;&nbsp; Employees</a></li>
+                }
+
+                <li>
+                    <a href="javascript:void(0)">
+                        <span class="fa fa-user-plus"></span>
+                        {{ mode() === 'create' ? 'Create' : 'Edit' }}
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+
+    </div>
+
+    <!-- ================= CORE ================= -->
+    <div class="card mb-3 section-card section-primary">
+        <div class="card-body">
+
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="ti ti-id"></i>
+                </div>
+                <h6 class="cardheader">Core Identity</h6>
+            </div>
+
+            <div class="row g-3">
+
+                <!-- <div class="col-md-3">
+                    <label class="form-label">Employee Code<span class="text-danger ms-1">*</span></label>
+                    <input class="form-control text-uppercase" maxlength="30" formControlName="employeeCode"
+                        placeholder="Emp-001" [class.is-invalid]="hasError('employeeCode')">
+                    @if(hasError('employeeCode')){
+                    <div class="text-danger mt-1">
+                        Employee Code is required
+                    </div>
+                    }
+                </div> -->
+
+                <div class="col-md-3">
+                    <label>First Name<span class="text-danger ms-1">*</span></label>
+                    <input class="form-control" formControlName="firstName" maxlength="100" placeholder="John"
+                        [class.is-invalid]="hasError('firstName')">
+                    @if(hasError('firstName')){
+                    <div class="text-danger mt-1">
+                        First Name is required
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label>Last Name</label>
+                    <input class="form-control" formControlName="lastName" maxlength="100" placeholder="Doe"
+                        [class.is-invalid]="hasError('lastName')">
+                    @if(hasError('lastName')){
+                    <div class="text-danger mt-1">
+                        Last Name is required
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label>Display Name</label>
+                    <input class="form-control" formControlName="lastName" maxlength="150" placeholder="Doe">
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= PERSONAL ================= -->
+    <div class="card mb-3 section-card section-info">
+        <div class="card-body">
+
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="ti ti-user"></i>
+                </div>
+                <h6 class="cardheader">Personal Information</h6>
+            </div>
+
+            <div class="row g-3">
+
+
+
+                <div class="col-md-3">
+                    <label>Date of Birth<span class="text-danger ms-1">*</span></label>
+                    <input type="date" class="form-control" formControlName="dateOfBirth"
+                        [class.is-invalid]="hasError('dateOfBirth')">
+                    @if(hasError('dateOfBirth')){
+                    <div class="text-danger mt-1">
+                        DOB is required
+                    </div>
+                    }
+                </div>
+
+
+                <div class="col-md-3">
+                    <label>Gender<span class="text-danger ms-1">*</span></label>
+
+                    <select class="form-select" formControlName="gender" [class.is-invalid]="hasError('gender')">
+                        <option value="">-- Select Gender --</option>
+                        @for (g of genders(); track g) {
+                        <option [ngValue]="g">
+                            {{ g }}
+                        </option>
+                        }
+
+                    </select>
+                    @if(hasError('gender')){
+                    <div class="text-danger mt-1">
+                        Gender is required
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label>Father/ Spouse / Guardian</label>
+                    <input class="form-control" formControlName="fatherOrSpouseOrGuardianName" maxlength="150"
+                        placeholder="Enter Father / Spouse / Guardian Name">
+                </div>
+
+
+                <div class="col-md-3">
+                    <label>Personal Mobile Number<span class="text-danger ms-1">*</span></label>
+                    <input class="form-control" type="tel" formControlName="personalmobileNumber"
+                        placeholder="9876543211" [class.is-invalid]="hasError('personalmobileNumber')">
+                    @if(hasError('personalmobileNumber')){
+                    <div class="text-danger mt-1">
+                        Enter valid mobile number
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label>Personal Email<span class="text-danger ms-1">*</span></label>
+                    <input class="form-control" type="email" formControlName="personalEmail"
+                        placeholder="john@compnay.com" maxlength="150" [class.is-invalid]="hasError('personalEmail')">
+                    @if(hasError('personalEmail')){
+                    <div class="text-danger mt-1">
+                        Enter valid email
+                    </div>
+                    }
+                </div>
+
+
+                <div class="col-md-3">
+                    <label>Work Mobile Number</label>
+                    <input class="form-control" type="tel" formControlName="workPhoneNumber" placeholder="9876500000"
+                        [class.is-invalid]="hasError('workPhoneNumber')">
+                    @if(hasError('workPhoneNumber')){
+                    <div class="text-danger mt-1">
+                        Enter valid mobile number
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label>Work Email</label>
+                    <input class="form-control" type="email" maxlength="150" formControlName="officialEmail"
+                        placeholder="john@xyz.com" [class.is-invalid]="hasError('officialEmail')">
+                    @if(hasError('officialEmail')){
+                    <div class="text-danger mt-1">
+                        Enter valid email
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label>Blood Group</label>
+
+                    <select class="form-select" formControlName="bloodGroup">
+                        <option value="">-- Select Blood Group --</option>
+
+                        @for (bg of bloodGroups(); track bg) {
+                        <option [value]="bg">{{ bg }}</option>
+                        }
+
+                    </select>
+                </div>
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ================= ADDRESS ================= -->
+    <div class="card mb-3 section-card section-warning">
+        <div class="card-body">
+
+            <!-- HEADER -->
+            <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="ti ti-map-pin"></i>
+                    </div>
+                    <h6 class="cardheader">Address Information</h6>
+                </div>
+
+                <!-- SAME AS -->
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" formControlName="sameAsPresentAddress"
+                        (change)="copyAddress()">
+
+                    <label class="form-check-label small">
+                        Use residential address as permanent address
+                    </label>
+                </div>
+            </div>
+
+            <!-- TABS -->
+            <div class="address-tabs mb-3">
+                <button type="button" [class.active]="activeAddressTab() === 'current'"
+                    (click)="activeAddressTab.set('current')">
+                    Residential
+                </button>
+
+                <button type="button" [class.active]="activeAddressTab() === 'permanent'"
+                    (click)="activeAddressTab.set('permanent')" [disabled]="form.controls.sameAsPresentAddress.value">
+                    Permanent
+                </button>
+
+
+            </div>
+
+            <!-- FORM -->
+            @if(activeAddressTab() === 'permanent'){
+
+            <div formGroupName="permanentAddress" id="permanentAddressSection" class="row g-2">
+
+                <div class="col-md-6">
+                    <label>Address Line 1<span class="text-danger ms-1">*</span></label>
+                    <input class="form-control" placeholder="123,Anna Salai" formControlName="addressLine1"
+                        [class.is-invalid]="hasErrorPath('permanentAddress.addressLine1')">
+                    @if(hasErrorPath('permanentAddress.addressLine1')){
+                    <div class="text-danger mt-1">
+                        Address Line1 is required
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-6">
+                    <label>Address Line 2</label>
+                    <input class="form-control" placeholder="South Block" formControlName="addressLine2">
+                </div>
+
+                <div class="col-md-3">
+                    <label>City<span class="text-danger ms-1">*</span></label>
+                    <input class="form-control" placeholder="Enter City" formControlName="city"
+                        [class.is-invalid]="hasErrorPath('permanentAddress.city')">
+                    @if(hasErrorPath('permanentAddress.city')){
+                    <div class="text-danger mt-1">
+                        City is required
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label>State<span class="text-danger ms-1">*</span></label>
+                    <select class="form-select" formControlName="stateId"
+                        [class.is-invalid]="hasErrorPath('permanentAddress.stateId')">
+
+                        <option value="">-- Select State --</option>
+                        @for (s of states(); track s.id) {
+                        <option [value]="s.id">{{ s.name }}</option>
+                        }
+                    </select>
+                    @if(hasErrorPath('permanentAddress.stateId')){
+                    <div class="text-danger mt-1">
+                        State is required
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label>Country<span class="text-danger ms-1">*</span></label>
+                    <select class="form-select" formControlName="countryId"
+                        [class.is-invalid]="hasErrorPath('permanentAddress.countryId')">
+                        <option value="">-- Select Country --</option>
+                        @for (c of countries(); track c.id) {
+                        <option [value]="c.id">{{ c.name }}</option>
+                        }
+                    </select>
+                    @if(hasErrorPath('permanentAddress.countryId')){
+                    <div class="text-danger mt-1">
+                        Country is required
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label>Postal Code<span class="text-danger ms-1">*</span></label>
+                    <input class="form-control" placeholder="Postal Code" formControlName="postalCode"
+                        [class.is-invalid]="hasErrorPath('permanentAddress.postalCode')">
+                    @if(hasErrorPath('permanentAddress.postalCode')){
+                    <div class="text-danger mt-1">
+                        Enter valid postal code
+                    </div>
+                    }
+                </div>
+
+            </div>
+
+            } @else {
+
+            <div formGroupName="currentAddress" id="currentAddressSection" class="row g-2">
+                <div class="col-md-6">
+                    <label>Address Line 1<span class="text-danger ms-1">*</span></label>
+                    <input class="form-control" placeholder="123,Anna Salai" formControlName="addressLine1"
+                        [class.is-invalid]="hasErrorPath('currentAddress.addressLine1')">
+                    @if(hasErrorPath('currentAddress.addressLine1')){
+                    <div class="text-danger mt-1">
+                        Address Line1 is required
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-6">
+                    <label>Address Line 2</label>
+                    <input class="form-control" placeholder="South Block" formControlName="addressLine2">
+                </div>
+
+                <div class="col-md-3">
+                    <label>City<span class="text-danger ms-1">*</span></label>
+                    <input class="form-control" placeholder="Enter City" formControlName="city"
+                        [class.is-invalid]="hasErrorPath('currentAddress.city')">
+                    @if(hasErrorPath('currentAddress.city')){
+                    <div class="text-danger mt-1">
+                        City is required
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label>State<span class="text-danger ms-1">*</span></label>
+                    <select class="form-select" formControlName="stateId"
+                        [class.is-invalid]="hasErrorPath('currentAddress.stateId')">
+
+                        <option value="">-- Select State --</option>
+                        @for (s of states(); track s.id) {
+                        <option [value]="s.id">{{ s.name }}</option>
+                        }
+                    </select>
+                    @if(hasErrorPath('currentAddress.stateId')){
+                    <div class="text-danger mt-1">
+                        State is required
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label>Country<span class="text-danger ms-1">*</span></label>
+                    <select class="form-select" formControlName="countryId"
+                        [class.is-invalid]="hasErrorPath('currentAddress.countryId')">
+                        <option value="">-- Select Country --</option>
+                        @for (c of countries(); track c.id) {
+                        <option [value]="c.id">{{ c.name }}</option>
+                        }
+                    </select>
+                    @if(hasErrorPath('currentAddress.countryId')){
+                    <div class="text-danger mt-1">
+                        Country is required
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label>Postal Code<span class="text-danger ms-1">*</span></label>
+                    <input class="form-control" placeholder="Postal Code" formControlName="postalCode"
+                        [class.is-invalid]="hasErrorPath('currentAddress.postalCode')">
+                    @if(hasErrorPath('currentAddress.postalCode')){
+                    <div class="text-danger mt-1">
+                        Enter valid postal code
+                    </div>
+                    }
+                </div>
+
+            </div>
+
+            }
+
+        </div>
+    </div>
+
+
+    <!-- ================= JOB ================= -->
+    <div class="card mb-3 section-card section-teal">
+        <div class="card-body">
+
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="ti ti-briefcase"></i>
+                </div>
+                <h6 class="cardheader">Job Information</h6>
+            </div>
+
+            <div class="row g-3">
+
+                <div class="col-md-3">
+                    <label>Department</label>
+
+                    <select class="form-select" formControlName="departmentId"
+                        [class.is-invalid]="hasError('departmentId')">
+                        <option value="">-- Select Department --</option>
+
+                        @for (dept of departments(); track dept.id) {
+                        <option [value]="dept.id">{{ dept.name }}</option>
+                        }
+
+                    </select>
+                    @if(hasError('departmentId')){
+                    <div class="text-danger mt-1">
+                        Department is required
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label>Designation</label>
+
+                    <select class="form-select" formControlName="designationId"
+                        [class.is-invalid]="hasError('designationId')">
+                        <option value="">-- Select Designation --</option>
+
+                        @for (des of designations(); track des.id) {
+                        <option [value]="des.id">{{ des.name }}</option>
+                        }
+
+                    </select>
+                    @if(hasError('designationId')){
+                    <div class="text-danger mt-1">
+                        Designation is required
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label>Date of Joining</label>
+                    <input type="date" class="form-control" formControlName="dateOfJoining"
+                        [class.is-invalid]="hasError('dateOfJoining')">
+                    @if(hasError('dateOfJoining')){
+                    <div class="text-danger mt-1">
+                        DOJ is required
+                    </div>
+                    }
+
+                </div>
+
+                <div class="col-md-3">
+                    <label>Probation End Date</label>
+
+                    <input type="date" class="form-control" formControlName="probationEndDate">
+                </div>
+
+                <div class="col-md-3">
+                    <label>Employment Type</label>
+                    <select class="form-select" formControlName="employmentType"
+                        [class.is-invalid]="hasError('employmentType')">
+                        <option value="FullTime">FullTime</option>
+                        <option value="PartTime">PartTime</option>
+                        <option value="Contract">Contract</option>
+                        <option value="Intern">Intern</option>
+                    </select>
+                    @if(hasError('employmentType')){
+                    <div class="text-danger mt-1">
+                        Employment Type is required
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Status<span class="text-danger ms-1">*</span></label>
+                    <select class="form-select" formControlName="status" [class.is-invalid]="hasError('status')">
+                        <option value="">-- Select Status --</option>
+                        @for (s of statuses(); track s) {
+                        <option [ngValue]="s">
+                            {{ s }}
+                        </option>
+                        }
+
+                    </select>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= BANK ================= -->
+    <div class="card mb-3 section-card section-success">
+        <div class="card-body">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="ti ti-building-bank"></i>
+                </div>
+                <h6 class="cardheader">Bank & Statutory</h6>
+            </div>
+
+            <div class="row g-3">
+
+                <div class="col-md-3">
+                    <label>Bank Name</label>
+                    <select class="form-select" formControlName="bankName" [class.is-invalid]="hasError('bankName')">
+                        <option value="">-- Select Bank -- </option>
+
+                        @for (b of bankNames(); track b.id) {
+                        <option [value]="b.id">{{ b.name }}</option>
+                        }
+
+                    </select>
+                    @if(hasError('bankName')){
+                    <div class="text-danger mt-1">
+                        Bank Name is required
+                    </div>
+                    }
+                </div>
+
+
+                <div class="col-md-3">
+                    <label>Account Number</label>
+                    <input class="form-control" maxlength="30" formControlName="bankAccountNumber"
+                        placeholder="1074161666" [class.is-invalid]="hasError('bankAccountNumber')">
+                    @if(hasError('bankAccountNumber')){
+                    <div class="text-danger mt-1">
+                        Enter valid account number
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label>IFSC</label>
+                    <input class="form-control" maxlength="10" formControlName="ifscCode" placeholder="IFSC0025"
+                        [class.is-invalid]="hasError('ifscCode')">
+                    @if(hasError('ifscCode')){
+                    <div class="text-danger mt-1">
+                        Enter valid IFSC code
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label>MICR Number</label>
+                    <input class="form-control" maxlength="10" formControlName="micrNumber" placeholder="600002123"
+                        [class.is-invalid]="hasError('micrNumber')">
+                    @if(hasError('micrNumber')){
+                    <div class="text-danger mt-1">
+                        Enter valid MICR Number
+                    </div>
+                    }
+
+                </div>
+
+
+
+                <div class="col-md-3">
+                    <label>PAN</label>
+                    <input class="form-control" maxlength="10" formControlName="panNumber" placeholder="PAN0001k"
+                        [class.is-invalid]="hasError('panNumber')">
+                    @if(hasError('panNumber')){
+                    <div class="text-danger mt-1">
+                        Enter valid PAN
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label>Aadhaar</label>
+                    <input class="form-control" maxlength="12" formControlName="aadhaarNumber"
+                        placeholder="0000 0000 0000" [class.is-invalid]="hasError('aadhaarNumber')">
+                    @if(hasError('aadhaarNumber')){
+                    <div class="text-danger mt-1">
+                        Enter valid aadhaar number
+                    </div>
+                    }
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="div-gap">
+                        <label class="form-label">UPI IDs</label>
+
+                        <!-- ADD BUTTON -->
+                        <button type="button" class="btn outline-btn btn-sm" style="font-size:10px ;"
+                            (click)="addUpi()">
+                            + Add UPI ID
+                        </button>
+                    </div>
+
+                    <div class="upi-container mt-2">
+
+                        <!-- LIST -->
+                        @for (upi of upiIds.controls; let i = $index; track i) {
+
+                        <div class="upi-row">
+
+                            <input class="form-control" placeholder="example@upi" [formControl]="upi"
+                                [class.is-invalid]="upi.invalid && (upi.touched || upi.dirty)">
+
+                            <button type="button" class="icon-btn delete" (click)="removeUpi(i)">
+                                <i class="ti ti-trash"></i>
+                            </button>
+
+                        </div>
+
+                        @if(upi.invalid && (upi.touched || upi.dirty)){
+                        <div class="text-danger small">
+                            Enter valid UPI ID (e.g. name@upi)
+                        </div>
+                        }
+
+                        }
+
+                        <!-- EMPTY STATE -->
+                        @if(upiIds.length === 0){
+                        <div class="empty-upi">
+                            <i class="ti ti-wallet"></i>
+                            <p>No UPI IDs added</p>
+                        </div>
+
+                        }
+
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= SALARY ================= -->
+    <div class="card mb-3 section-card section-danger">
+        <div class="card-body">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="ti ti-currency-rupee"></i>
+                </div>
+                <h6 class="cardheader">Salary</h6>
+            </div>
+
+            <div class="row g-3">
+
+                <div class="col-md-3">
+                    <label>Basic Salary</label>
+                    <input type="number" class="form-control" formControlName="basicSalary">
+                </div>
+
+                <div class="col-md-3">
+                    <label>Payment Mode</label>
+
+                    <select class="form-select" formControlName="paymentMode">
+
+                        <option [ngValue]="null">-- Select Payment Mode --</option>
+
+                        @for (mode of paymentModes(); track mode) {
+                        <option [ngValue]="mode">
+                            {{ formatEnum(mode) }}
+                        </option>
+                        }
+
+                    </select>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <!-- ================= ACADEMIC & EXPERIENCE ================= -->
+    <div class="card mb-3 section-card section-primary">
+        <div class="card-body">
+
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="ti ti-briefcase"></i>
+                </div>
+                <h6 class="cardheader">Academic & Experience</h6>
+
+            </div>
+
+
+            <form [formGroup]="form">
+
+                <div class="content-card">
+                    <div class="card-body-inner">
+
+                        <!-- ================= EDUCATION ================= -->
+                        <div class="section-block">
+
+                            <div class="sections-header">
+                                <div class="section-left">
+                                    <i class="ti ti-school text-success"></i>
+                                    <span>Education</span>
+                                </div>
+
+                                <button type="button" class="btn outline-btn btn-sm" (click)="addEducation()">
+                                    + Add Education
+                                </button>
+                            </div>
+
+                            <div class="section-box">
+
+                                @if(educations.length === 0){
+
+                                <div class="empty-state">
+                                    <i class="ti ti-school"></i>
+                                    <p>No Education Added</p>
+                                </div>
+
+                                } @else {
+
+                                @for (edu of educations.controls; let i = $index; track i) {
+
+                                <div class="row g-2 align-items-end mb-2">
+
+
+                                    <div class="col-md-3">
+                                        <label>Degree</label>
+                                        <select class="form-select" [formControl]="edu.controls.degree">
+                                            <option value="">-- Select Degree --</option>
+
+                                            @for (d of degrees(); track d.id) {
+                                            <option [value]="d.id">{{ d.name }}</option>
+                                            }
+
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label class="form-label">Specialization</label>
+                                        <input class="form-control" placeholder="Enter Specialization"
+                                            [formControl]="edu.controls.specialization">
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label class="form-label">Institute</label>
+                                        <input class="form-control" placeholder="Enter Institute Name"
+                                            [formControl]="edu.controls.instituteName">
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label class="form-label">Completion</label>
+                                        <input type="date" class="form-control"
+                                            [formControl]="edu.controls.dateOfCompletion">
+                                    </div>
+
+                                    <div class="col-md-1">
+                                        <button type="button" class="icon-btn delete" (click)="removeEducation(i)">
+                                            <i class="ti ti-trash"></i>
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                                }
+
+                                }
+
+                            </div>
+                        </div>
+
+                        <!-- ================= WORK EXPERIENCE ================= -->
+                        <div class="section-block mt-3">
+
+                            <div class="sections-header">
+                                <div class="section-left">
+                                    <i class="ti ti-briefcase text-success"></i>
+                                    <span>Work Experience</span>
+                                </div>
+
+                                <button type="button" class="btn outline-btn btn-sm" (click)="addWork()">
+                                    + Add Work Experience
+                                </button>
+                            </div>
+
+                            <div class="section-box">
+
+                                @if(workExperiences.length === 0){
+
+                                <div class="empty-state">
+                                    <i class="ti ti-briefcase"></i>
+                                    <p>No Work Experience Added</p>
+                                </div>
+
+                                } @else {
+
+                                @for (work of workExperiences.controls; let i = $index; track i) {
+
+                                <div class="row g-2 align-items-end mb-2">
+
+                                    <div class="col-md-4">
+                                        <label class="form-label">Company</label>
+                                        <input class="form-control" [formControl]="work.controls.companyName"
+                                            placeholder="XYZ Company">
+                                    </div>
+
+
+                                    <div class="col-md-3">
+                                        <label>Role</label>
+                                        <select class="form-select" [formControl]="work.controls.jobTitle">
+                                            <option value="">-- Select Role --</option>
+
+                                            @for (r of roles(); track r.id) {
+                                            <option [value]="r.id">{{ r.name }}</option>
+                                            }
+
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label class="form-label">From</label>
+                                        <input type="date" class="form-control" [formControl]="work.controls.fromDate">
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label class="form-label">To</label>
+                                        <input type="date" class="form-control" [formControl]="work.controls.toDate">
+                                    </div>
+
+                                    <div class="col-md-1">
+                                        <button type="button" class="icon-btn delete" (click)="removeWork(i)">
+                                            <i class="ti ti-trash"></i>
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                                }
+
+                                }
+
+                            </div>
+                        </div>
+
+                        <!-- 🔷 ACTION -->
+                        <!-- <div class="text-start mt-4">
+      <button type="button" (click)="save()" class="btn btn-primary px-4">
+        Save Employee
+      </button>
+    </div> -->
+
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    <!-- ================= ACTION ================= -->
+    <div class="text-end mb-5 gap-2 action-btn">
+        <button class="btn btn-cancel" (click)="reset()">Cancel</button>
+        <button class="btn btn-primary" type="submit" (click)="save()">
+            {{ mode() === 'create' ? 'Save' : 'Update' }}
+        </button>
+    </div>
+
+</form>
