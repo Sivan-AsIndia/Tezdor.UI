@@ -1,0 +1,1062 @@
+
+ :host {
+	 --si-primary: #0f2744;
+	 --si-primary-lt: #e6ecf8;
+	 --si-accent: #1d4ed8;
+	 --si-accent-lt: #eff6ff;
+	 --si-green: #15803d;
+	 --si-green-lt: #f0fdf4;
+	 --si-red: #b91c1c;
+	 --si-red-lt: #fff1f2;
+	 --si-amber: #b45309;
+	 --si-amber-lt: #fffbeb;
+	 --si-border: rgba(0, 0, 0, 0.08);
+	 --si-border-md: rgba(0, 0, 0, 0.13);
+	 --si-bg-page: #eef1f7;
+	 --si-bg-card: #fff;
+	 --si-bg-sec: #f6f8fc;
+	 --si-txt: #0f2744;
+	 --si-txt-muted: #4b5e7a;
+	 --si-txt-hint: #8fa0b5;
+	 --si-radius: 12px;
+	 --si-radius-sm: 7px;
+	 /* --si-shadow: 0 1px 4px rgba(15, 39, 68, 0.07), 0 1px 2px rgba(15, 39, 68, 0.04);
+	 --si-shadow-md: 0 6px 24px rgba(15, 39, 68, 0.09), 0 2px 6px rgba(15, 39, 68, 0.05); */
+	 display: block;
+	 /* background: var(--si-bg-page); */
+	 /* color: var(--si-txt);
+	 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	 padding: 20px; */
+}
+/* ── Page Header ────────────────────────────────────────────────── */
+ .si-page-header {
+	 display: flex;
+	 justify-content: space-between;
+	 align-items: flex-start;
+	 margin-bottom: 20px;
+	 flex-wrap: wrap;
+	 gap: 12px;
+}
+ .mainheading {
+	 font-size: 20px;
+	 font-weight: 700;
+	 color: var(--si-primary);
+	 letter-spacing: -0.3px;
+	 margin: 0 0 4px;
+}
+ .subdescription {
+	 font-size: 13px;
+	 color: var(--si-txt-muted);
+}
+ .si-breadcrumb {
+	 display: flex;
+	 align-items: center;
+	 gap: 6px;
+	 list-style: none;
+	 padding: 0;
+	 margin: 0;
+	 font-size: 12px;
+}
+ .si-breadcrumb li {
+	 display: flex;
+	 align-items: center;
+	 gap: 5px;
+	 color: var(--si-txt-muted);
+}
+ .si-breadcrumb li:not(:last-child)::after {
+	 content: '/';
+	 color: var(--si-border-md);
+	 margin-left: 6px;
+}
+ .si-breadcrumb li:last-child {
+	 color: var(--si-primary);
+	 font-weight: 500;
+}
+ .si-breadcrumb li i {
+	 font-size: 13px;
+}
+/* ── Success Banner ─────────────────────────────────────────────── */
+ .si-success-bar {
+	 display: flex;
+	 align-items: center;
+	 gap: 8px;
+	 padding: 12px 16px;
+	 background: var(--si-green-lt);
+	 border: 0.5px solid #86efac;
+	 border-radius: var(--si-radius-sm);
+	 color: var(--si-green);
+	 font-size: 13px;
+	 font-weight: 600;
+	 margin-bottom: 16px;
+}
+ .si-success-bar i {
+	 font-size: 17px;
+}
+/* ── Layout ─────────────────────────────────────────────────────── */
+ .si-layout {
+	 display: grid;
+	 grid-template-columns: 1fr 270px;
+	 gap: 18px;
+	 align-items: start;
+}
+/* ── Paper ──────────────────────────────────────────────────────── */
+ .si-paper {
+	 background: var(--si-bg-card);
+	 border: 0.5px solid var(--si-border);
+	 border-radius: var(--si-radius);
+	 box-shadow: var(--si-shadow-md);
+	 overflow: hidden;
+}
+/* ── Paper Top ──────────────────────────────────────────────────── */
+ .si-paper-top {
+	 display: grid;
+	 grid-template-columns: 1fr 310px;
+}
+ .si-bill-block {
+	 padding: 24px 28px 22px;
+	 border-right: 0.5px solid var(--si-border);
+}
+ .si-bill-label {
+	 font-size: 9px;
+	 font-weight: 700;
+	 letter-spacing: 0.12em;
+	 color: var(--si-txt-hint);
+	 text-transform: uppercase;
+	 margin-bottom: 14px;
+}
+/* ── Form Labels ────────────────────────────────────────────────── */
+ .si-lbl {
+	 font-size: 10px;
+	 font-weight: 600;
+	 color: var(--si-txt-muted);
+	 text-transform: uppercase;
+	 letter-spacing: 0.06em;
+	 margin-bottom: 5px;
+	 display: block;
+}
+ .si-req {
+	 color: var(--si-red);
+}
+ .si-req-wht {
+	 color: rgba(255, 100, 100, 0.8);
+}
+/* ── Select Wrapper ─────────────────────────────────────────────── */
+ .si-sel-wrap {
+	 position: relative;
+	 display: flex;
+	 align-items: center;
+	 border: 0.5px solid var(--si-border-md);
+	 border-radius: var(--si-radius-sm);
+	 background: var(--si-bg-card);
+	 overflow: hidden;
+}
+ .si-sel-wrap.si-err-border {
+	 border-color: #fca5a5;
+}
+ .si-sel {
+	 flex: 1;
+	 border: none;
+	 outline: none;
+	 padding: 8px 28px 8px 11px;
+	 font-size: 13px;
+	 background: transparent;
+	 color: var(--si-txt);
+	 appearance: none;
+	 cursor: pointer;
+}
+ .si-sel-arrow {
+	 position: absolute;
+	 right: 9px;
+	 font-size: 13px;
+	 color: var(--si-txt-hint);
+	 pointer-events: none;
+}
+ .si-sel-arrow.si-sel-arrow--id {
+	 color: rgba(255, 255, 255, 0.4);
+}
+/* ── Customer Chip ──────────────────────────────────────────────── */
+ .si-customer-chip {
+	 margin-top: 9px;
+	 padding: 9px 11px;
+	 background: linear-gradient(135deg, #f6f8fc 0%, #eef1f7 100%);
+	 border-radius: var(--si-radius-sm);
+	 border: 0.5px solid var(--si-border);
+	 display: flex;
+	 flex-direction: column;
+	 gap: 5px;
+}
+ .si-customer-chip-row {
+	 display: flex;
+	 align-items: center;
+	 gap: 6px;
+	 font-size: 12px;
+	 color: var(--si-txt-muted);
+}
+ .si-customer-chip-row i {
+	 font-size: 13px;
+	 color: var(--si-accent);
+}
+/* ── Input Wrapper ──────────────────────────────────────────────── */
+ .si-inp-wrap {
+	 display: flex;
+	 align-items: center;
+	 border: 0.5px solid var(--si-border-md);
+	 border-radius: var(--si-radius-sm);
+	 overflow: hidden;
+	 background: var(--si-bg-card);
+}
+ .si-inp-wrap.si-err-border {
+	 border-color: #fca5a5;
+}
+ .si-inp-icon {
+	 padding: 0 9px;
+	 font-size: 14px;
+	 color: var(--si-txt-hint);
+}
+ .si-inp {
+	 flex: 1;
+	 border: none;
+	 outline: none;
+	 padding: 8px 11px;
+	 font-size: 13px;
+	 background: transparent;
+	 color: var(--si-txt);
+}
+ .si-inp::placeholder {
+	 color: var(--si-txt-hint);
+}
+ .si-inp.si-inp--right {
+	 text-align: right;
+}
+ .si-inp-suffix {
+	 padding: 0 9px;
+	 font-size: 12px;
+	 color: var(--si-txt-muted);
+	 background: var(--si-bg-sec);
+	 border-left: 0.5px solid var(--si-border);
+	 align-self: stretch;
+	 display: flex;
+	 align-items: center;
+}
+ .si-textarea {
+	 width: 100%;
+	 border: 0.5px solid var(--si-border-md);
+	 border-radius: var(--si-radius-sm);
+	 padding: 8px 11px;
+	 font-size: 13px;
+	 color: var(--si-txt);
+	 background: var(--si-bg-card);
+	 resize: none;
+	 outline: none;
+	 font-family: inherit;
+}
+ .si-textarea::placeholder {
+	 color: var(--si-txt-hint);
+}
+ .si-field {
+	 display: flex;
+	 flex-direction: column;
+	 gap: 5px;
+	 margin-top: 13px;
+}
+ .si-field.si-field--top {
+	 margin-top: 0;
+}
+ .si-err-msg {
+	 font-size: 11px;
+	 color: var(--si-red);
+	 display: flex;
+	 align-items: center;
+	 gap: 4px;
+	 margin-top: 3px;
+}
+/* ── Identity Block (dark panel) ────────────────────────────────── */
+ .si-identity-block {
+	 background: linear-gradient(160deg, #0f2744 0%, #163560 100%);
+	 padding: 22px 20px 20px;
+	 display: flex;
+	 flex-direction: column;
+}
+ .si-invoice-heading {
+	 display: flex;
+	 align-items: center;
+	 gap: 9px;
+	 font-size: 14px;
+	 font-weight: 700;
+	 color: rgba(255, 255, 255, 0.9);
+	 letter-spacing: 0.1em;
+	 text-transform: uppercase;
+	 margin-bottom: 20px;
+	 padding-bottom: 16px;
+	 border-bottom: 0.5px solid rgba(255, 255, 255, 0.15);
+}
+ .si-invoice-heading i {
+	 font-size: 20px;
+	 color: rgba(255, 255, 255, 0.6);
+}
+ .si-id-row {
+	 display: flex;
+	 align-items: center;
+	 justify-content: space-between;
+	 padding: 9px 0;
+	 border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+	 gap: 12px;
+}
+ .si-id-row:last-child {
+	 border-bottom: none;
+}
+ .si-id-key {
+	 font-size: 10px;
+	 font-weight: 600;
+	 color: rgba(255, 255, 255, 0.5);
+	 text-transform: uppercase;
+	 letter-spacing: 0.06em;
+	 white-space: nowrap;
+}
+ .si-id-code {
+	 font-size: 13px;
+	 font-weight: 700;
+	 color: #fff;
+	 font-variant-numeric: tabular-nums;
+}
+ .si-auto-pill {
+	 font-size: 9px;
+	 font-weight: 700;
+	 background: rgba(255, 255, 255, 0.15);
+	 color: rgba(255, 255, 255, 0.8);
+	 border-radius: 4px;
+	 padding: 2px 6px;
+	 letter-spacing: 0.06em;
+}
+ .si-id-val-group {
+	 display: flex;
+	 align-items: center;
+	 gap: 7px;
+}
+ .si-id-input-wrap.si-err-border input {
+	 border-color: #fca5a5;
+}
+ .si-id-input {
+	 border: 0.5px solid rgba(255, 255, 255, 0.2);
+	 border-radius: var(--si-radius-sm);
+	 padding: 6px 9px;
+	 font-size: 12px;
+	 background: rgba(255, 255, 255, 0.08);
+	 color: #fff;
+	 outline: none;
+	 text-align: right;
+	 width: 150px;
+	/* Date picker arrow color in webkit */
+	 color-scheme: dark;
+}
+ .si-id-input:focus {
+	 border-color: rgba(255, 255, 255, 0.45);
+}
+ .si-id-sel-wrap {
+	 position: relative;
+	 display: inline-block;
+}
+ .si-id-sel {
+	 border: 0.5px solid rgba(255, 255, 255, 0.2);
+	 border-radius: var(--si-radius-sm);
+	 padding: 6px 28px 6px 9px;
+	 font-size: 12px;
+	 background: rgba(255, 255, 255, 0.08);
+	 color: #fff;
+	 outline: none;
+	 appearance: none;
+	 width: 150px;
+	 cursor: pointer;
+}
+ .si-id-sel option {
+	 background: #1e3a5f;
+	 color: #fff;
+}
+/* ── GST Segment Button ─────────────────────────────────────────── */
+ .si-gst-seg {
+	 display: inline-flex;
+	 border: 0.5px solid rgba(255, 255, 255, 0.2);
+	 border-radius: var(--si-radius-sm);
+	 overflow: hidden;
+}
+ .si-gst-btn {
+	 padding: 6px 11px;
+	 font-size: 11px;
+	 font-weight: 600;
+	 background: transparent;
+	 border: none;
+	 cursor: pointer;
+	 color: rgba(255, 255, 255, 0.6);
+	 letter-spacing: 0.03em;
+	 font-family: inherit;
+}
+ .si-gst-btn + .si-gst-btn {
+	 border-left: 0.5px solid rgba(255, 255, 255, 0.2);
+}
+ .si-gst-btn.active {
+	 background: rgba(255, 255, 255, 0.18);
+	 color: #fff;
+}
+/* ── Paper Body (Line Items) ────────────────────────────────────── */
+ .si-section-title {
+	 display: flex;
+	 align-items: center;
+	 gap: 9px;
+	 padding: 13px 22px;
+	 font-size: 12px;
+	 font-weight: 600;
+	 color: var(--si-txt);
+	 background: var(--si-bg-sec);
+	 border-bottom: 0.5px solid var(--si-border);
+	 border-top: 0.5px solid var(--si-border);
+	 text-transform: uppercase;
+	 letter-spacing: 0.05em;
+}
+ .si-section-title i {
+	 font-size: 16px;
+	 color: var(--si-accent);
+}
+ .si-section-badge {
+	 font-size: 11px;
+	 font-weight: 600;
+	 background: var(--si-accent-lt);
+	 color: var(--si-accent);
+	 border: 0.5px solid #bfdbfe;
+	 border-radius: 20px;
+	 padding: 2px 9px;
+}
+ .si-alert-banner {
+	 display: flex;
+	 align-items: center;
+	 gap: 8px;
+	 padding: 10px 16px;
+	 background: var(--si-red-lt);
+	 border: 0.5px solid #fca5a5;
+	 border-radius: var(--si-radius-sm);
+	 color: var(--si-red);
+	 font-size: 12px;
+	 font-weight: 500;
+	 margin: 12px 20px 0;
+}
+ .si-lines-wrap {
+	 display: flex;
+	 flex-direction: column;
+	 gap: 10px;
+	 padding: 16px 20px;
+}
+/* ── Line Item Card ─────────────────────────────────────────────── */
+ .si-line-card {
+	 background: var(--si-bg-card);
+	 border: 0.5px solid var(--si-border);
+	 border-radius: var(--si-radius);
+	 padding: 14px 16px;
+	 display: flex;
+	 flex-direction: column;
+	 gap: 12px;
+	 position: relative;
+	 overflow: hidden;
+}
+
+ .si-line-card.si-line-card--err {
+	 border-color: #fca5a5;
+}
+ .si-line-card.si-line-card--err::before {
+	 background: var(--si-red);
+}
+ .si-line-hdr {
+	 display: flex;
+	 align-items: center;
+	 gap: 10px;
+}
+ .si-line-num {
+	 width: 26px;
+	 height: 26px;
+	 border-radius: 50%;
+	 background: var(--color-primary);
+	 color: #fff;
+	 font-size: 11px;
+	 font-weight: 700;
+	 display: flex;
+	 align-items: center;
+	 justify-content: center;
+	 flex-shrink: 0;
+}
+ .si-line-total-chip {
+	 display: flex;
+	 align-items: center;
+	 gap: 8px;
+}
+ .si-line-total-label {
+	 font-size: 9px;
+	 font-weight: 700;
+	 letter-spacing: 0.07em;
+	 color: var(--si-txt-hint);
+	 text-transform: uppercase;
+}
+ .si-line-total-chip strong {
+	 font-size: 14px;
+	 font-weight: 700;
+	 color: var(--si-primary);
+}
+ .si-del-btn {
+	 width: 30px;
+	 height: 30px;
+	 border-radius: var(--si-radius-sm);
+	 border: 0.5px solid var(--si-border-md);
+	 background: transparent;
+	 color: var(--si-txt-hint);
+	 display: flex;
+	 align-items: center;
+	 justify-content: center;
+	 cursor: pointer;
+	 margin-left: auto;
+	 font-size: 15px;
+	 transition: color 0.15s, background 0.15s;
+}
+ .si-del-btn:hover:not(:disabled) {
+	 background: var(--si-red-lt);
+	 color: var(--si-red);
+	 border-color: #fca5a5;
+}
+ .si-del-btn:disabled {
+	 opacity: 0.35;
+	 cursor: not-allowed;
+}
+/* ── Line Item Rows ─────────────────────────────────────────────── */
+ .si-li-row {
+	 display: grid;
+	 gap: 10px;
+	 grid-template-columns: repeat(4, 1fr);
+}
+ .si-li-lbl {
+	 font-size: 10px;
+	 font-weight: 600;
+	 text-transform: uppercase;
+	 letter-spacing: 0.05em;
+	 color: var(--si-txt-muted);
+	 display: block;
+	 margin-bottom: 4px;
+}
+ .si-li-field {
+	 display: flex;
+	 flex-direction: column;
+}
+ .si-li-field.si-li-field--full {
+	 margin-bottom: 2px;
+}
+ .si-li-row--calc {
+	 background: var(--si-bg-sec);
+	 border-top: 0.5px dashed var(--si-border-md);
+	 padding: 10px 10px 8px;
+	 margin: 2px 0 0;
+	 border-radius: 0 0 8px 8px;
+}
+ .si-calc-val {
+	 font-size: 13px;
+	 font-weight: 500;
+	 color: var(--si-txt-muted);
+	 padding: 6px 2px;
+}
+ .si-calc-val.si-calc-val--strong {
+	 color: var(--si-primary);
+	 font-weight: 700;
+	 font-size: 14px;
+}
+/* ── Rupee Prefix Input ─────────────────────────────────────────── */
+ .si-rupee-wrap {
+	 display: flex;
+	 align-items: center;
+	 border: 0.5px solid var(--si-border-md);
+	 border-radius: var(--si-radius-sm);
+	 overflow: hidden;
+	 background: var(--si-bg-card);
+}
+ .si-rupee-wrap.si-err-border {
+	 border-color: #fca5a5;
+}
+ .si-rupee-sym {
+	 padding: 0 8px;
+	 font-size: 12px;
+	 color: var(--si-txt-muted);
+	 background: var(--si-bg-sec);
+	 border-right: 0.5px solid var(--si-border);
+	 align-self: stretch;
+	 display: flex;
+	 align-items: center;
+}
+/* ── Add Row Bar ────────────────────────────────────────────────── */
+ .si-add-row-bar {
+	 padding: 13px 22px;
+	 border-top: 0.5px solid var(--si-border);
+	 display: flex;
+	 justify-content: flex-end;
+}
+ .si-add-btn {
+	 display: inline-flex;
+	 align-items: center;
+	 gap: 6px;
+	 padding: 8px 18px;
+	 font-size: 12px;
+	 font-weight: 600;
+	 border: 1.5px dashed var(--si-accent);
+	 border-radius: var(--si-radius-sm);
+	 background: var(--si-accent-lt);
+	 color: var(--si-accent);
+	 cursor: pointer;
+	 letter-spacing: 0.02em;
+	 font-family: inherit;
+	 transition: background 0.15s;
+}
+ .si-add-btn:hover {
+	 background: #dbeafe;
+}
+ .si-add-btn i {
+	 font-size: 14px;
+}
+/* ── Empty State ────────────────────────────────────────────────── */
+ .si-empty-state {
+	 display: flex;
+	 align-items: center;
+	 justify-content: center;
+	 gap: 10px;
+	 padding: 28px;
+	 color: var(--si-txt-hint);
+	 font-size: 13px;
+}
+ .si-empty-state i {
+	 font-size: 20px;
+}
+/* ── Paper Footer ───────────────────────────────────────────────── */
+ .si-paper-footer {
+	 display: grid;
+	 grid-template-columns: 1fr 300px;
+	 border-top: 0.5px solid var(--si-border);
+}
+ .si-payment-section {
+	 padding: 20px 24px;
+	 border-right: 0.5px solid var(--si-border);
+}
+ .si-payment-title {
+	 display: flex;
+	 align-items: center;
+	 gap: 8px;
+	 font-size: 11px;
+	 font-weight: 700;
+	 color: var(--si-txt);
+	 text-transform: uppercase;
+	 letter-spacing: 0.07em;
+	 margin-bottom: 16px;
+	 padding-bottom: 10px;
+	 border-bottom: 0.5px solid var(--si-border);
+}
+ .si-payment-title i {
+	 font-size: 16px;
+	 color: var(--si-accent);
+}
+ .si-pay-grid {
+	 display: grid;
+	 grid-template-columns: repeat(2, 1fr);
+	 gap: 14px;
+	 margin-bottom: 16px;
+}
+ .si-pay-field {
+	 display: flex;
+	 flex-direction: column;
+	 gap: 5px;
+}
+ .si-pay-lbl {
+	 font-size: 10px;
+	 font-weight: 600;
+	 color: var(--si-txt-muted);
+	 text-transform: uppercase;
+	 letter-spacing: 0.05em;
+	 display: block;
+}
+ .si-hint {
+	 font-size: 10px;
+	 color: var(--si-txt-hint);
+}
+ .si-pay-status-row {
+	 display: flex;
+	 align-items: center;
+	 gap: 8px;
+}
+ .si-auto-note {
+	 font-size: 10px;
+	 color: var(--si-txt-hint);
+	 font-style: italic;
+}
+/* ── Payment Badges ─────────────────────────────────────────────── */
+ .si-pay-badge {
+	 display: inline-flex;
+	 align-items: center;
+	 gap: 5px;
+	 padding: 5px 11px;
+	 border-radius: 20px;
+	 font-size: 12px;
+	 font-weight: 600;
+}
+ .si-badge--unpaid {
+	 background: var(--si-red-lt);
+	 color: var(--si-red);
+	 border: 0.5px solid #fca5a5;
+}
+ .si-badge--partial {
+	 background: var(--si-amber-lt);
+	 color: var(--si-amber);
+	 border: 0.5px solid #fcd34d;
+}
+ .si-badge--paid {
+	 background: var(--si-green-lt);
+	 color: var(--si-green);
+	 border: 0.5px solid #86efac;
+}
+/* ── Charges Toggles ────────────────────────────────────────────── */
+ .si-charges-section {
+	 border-top: 0.5px solid var(--si-border);
+	 padding-top: 14px;
+	 display: flex;
+	 flex-direction: column;
+	 gap: 10px;
+}
+ .si-charge-row {
+	 display: flex;
+	 align-items: center;
+	 gap: 12px;
+	 font-size: 13px;
+}
+ .si-charge-label {
+	 display: flex;
+	 align-items: center;
+	 gap: 8px;
+	 color: var(--si-txt-muted);
+	 cursor: pointer;
+	 font-size: 12px;
+	 font-weight: 500;
+}
+ .si-charge-label i {
+	 color: var(--si-txt-hint);
+	 font-size: 15px;
+}
+ .si-toggle-wrap {
+	 display: inline-flex;
+	 align-items: center;
+}
+ .si-toggle-wrap input[type="checkbox"] {
+	 display: none;
+}
+ .si-toggle-box {
+	 width: 18px;
+	 height: 18px;
+	 border: 1.5px solid var(--si-border-md);
+	 border-radius: 4px;
+	 display: inline-flex;
+	 align-items: center;
+	 justify-content: center;
+	 font-size: 11px;
+	 color: var(--si-accent);
+	 cursor: pointer;
+	 background: var(--si-bg-card);
+	 transition: border-color 0.15s, background 0.15s;
+}
+ .si-charge-inp {
+	 max-width: 130px;
+}
+/* ── Totals Block ───────────────────────────────────────────────── */
+ .si-totals-block {
+	 padding: 20px;
+	 background: white;
+}
+ .si-tot-table {
+	 width: 100%;
+	 border-collapse: collapse;
+}
+ .si-tot-table tr {
+	 border-bottom: 0.5px solid var(--si-border);
+}
+ .si-tot-table tr:last-child {
+	 border-bottom: none;
+}
+ .si-tot-table td {
+	 padding: 8px 4px;
+	 vertical-align: middle;
+}
+ .si-tot-lbl {
+	 font-size: 12px;
+	 color: var(--si-txt-muted);
+	 width: 55%;
+}
+ .si-tot-lbl.si-tot-lbl--sub {
+	 font-size: 11px;
+	 color: var(--si-txt-hint);
+	 padding-left: 12px;
+}
+ .si-tot-val {
+	 text-align: right;
+	 font-size: 13px;
+	 font-weight: 500;
+	 color: var(--si-txt);
+	 font-variant-numeric: tabular-nums;
+}
+ .si-tot-val.si-tot-val--sub {
+	 font-size: 12px;
+	 color: var(--si-txt-hint);
+}
+ .si-tot-icon-row {
+	 display: flex;
+	 align-items: center;
+	 gap: 5px;
+}
+ .si-tot-icon-row i {
+	 font-size: 13px;
+}
+ .si-tot-grand-row td {
+	 padding: 12px 4px;
+	 background: var(--si-primary-lt);
+	 border-radius: 4px;
+}
+ .si-tot-grand-lbl {
+	 font-size: 13px;
+	 font-weight: 700;
+	 color: var(--si-primary);
+}
+ .si-tot-grand-val {
+	 text-align: right;
+	 font-size: 18px;
+	 font-weight: 800;
+	 color: var(--si-primary);
+	 font-variant-numeric: tabular-nums;
+}
+ .si-balance-danger {
+	 color: var(--si-red) !important;
+	 font-weight: 700;
+}
+ .si-balance-safe {
+	 color: var(--si-green) !important;
+	 font-weight: 700;
+}
+ .si-tot-divider td {
+	 padding: 2px 0;
+}
+ .si-tot-divider hr {
+	 border: none;
+	 border-top: 1px solid var(--si-border-md);
+}
+ .si-tot-paid-lbl {
+	 color: var(--si-green) !important;
+}
+ .si-tot-paid-val {
+	 color: var(--si-green) !important;
+	 text-align: right;
+	 font-weight: 500;
+}
+/* ── Sidebar ────────────────────────────────────────────────────── */
+ .si-sidebar {
+	 display: flex;
+	 flex-direction: column;
+	 gap: 13px;
+}
+ .si-scard {
+	 background: var(--si-bg-card);
+	 border: 0.5px solid var(--si-border);
+	 border-radius: var(--si-radius);
+	 overflow: hidden;
+	 box-shadow: var(--si-shadow);
+}
+ .si-scard.si-scard--rules {
+	 border-left: 3px solid var(--si-amber);
+}
+ .si-scard.si-scard--rules .si-scard-hdr {
+	 background: var(--si-bg-sec);
+	 color: var(--si-txt);
+}
+ .si-scard.si-scard--rules .si-scard-hdr i {
+	 color: var(--si-amber);
+}
+ .si-scard-hdr {
+	    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 14px;
+    background: #0f27440d;
+    font-size: 11px;
+    font-weight: 600;
+    color: black;
+    /* text-transform: uppercase; */
+    letter-spacing: 0.06em;
+}
+ .si-scard-hdr i {
+	 font-size: 15px;
+	 color: black;
+}
+ .si-scard-body {
+	 padding: 12px 14px;
+}
+ .si-srow {
+	 display: flex;
+	 justify-content: space-between;
+	 align-items: center;
+	 padding: 7px 0;
+	 border-bottom: 0.5px solid var(--si-border);
+	 font-size: 12px;
+	 gap: 8px;
+}
+ .si-srow:last-child {
+	 border-bottom: none;
+}
+ .si-srow.si-srow--grand {
+	 padding: 9px 10px;
+	 background: var(--si-primary-lt);
+	 margin: 2px -14px;
+	 border-radius: 6px;
+	 border-bottom: none;
+}
+ .si-srow.si-srow--danger .si-slbl, .si-srow.si-srow--danger .si-sval {
+	 color: var(--si-red);
+	 font-weight: 700;
+}
+ .si-slbl {
+	 color: var(--si-txt-muted);
+}
+ .si-sval {
+	 font-weight: 600;
+	 color: var(--si-txt);
+	 font-variant-numeric: tabular-nums;
+}
+ .si-sdivider {
+	 border-top: 0.5px solid var(--si-border-md);
+	 margin: 4px 0;
+}
+ .si-slbl-grand {
+	 font-size: 13px;
+	 font-weight: 600;
+	 color: var(--si-primary);
+}
+ .si-sval-grand {
+	 font-size: 16px;
+	 font-weight: 800;
+	 color: var(--si-primary);
+}
+/* ── Info Chips (Quick Info card) ───────────────────────────────── */
+ .si-info-chip {
+	 display: flex;
+	 align-items: center;
+	 justify-content: space-between;
+	 padding: 6px 0;
+	 border-bottom: 0.5px solid var(--si-border);
+	 font-size: 12px;
+	 gap: 8px;
+}
+ .si-info-chip:last-child {
+	 border-bottom: none;
+}
+ .si-chip-lbl {
+	 color: var(--si-txt-muted);
+	 font-size: 11px;
+}
+ .si-chip-val {
+	 color: var(--si-txt);
+	 font-weight: 500;
+	 text-align: right;
+}
+ .si-chip-code {
+	 font-weight: 700;
+	 color: var(--si-primary);
+}
+/* ── Status Chips ───────────────────────────────────────────────── */
+ .si-status-chip {
+	 font-size: 11px;
+	 font-weight: 600;
+	 border-radius: 20px;
+	 padding: 3px 9px;
+}
+ .si-status-chip.si-status-chip--draft {
+	 background: #f1f5f9;
+	 color: #475569;
+}
+ .si-status-chip.si-status-chip--confirmed {
+	 background: var(--si-accent-lt);
+	 color: var(--si-accent);
+}
+ .si-status-chip.si-status-chip--dispatched {
+	 background: var(--si-amber-lt);
+	 color: var(--si-amber);
+}
+ .si-status-chip.si-status-chip--delivered {
+	 background: var(--si-green-lt);
+	 color: var(--si-green);
+}
+/* ── Business Rules List ────────────────────────────────────────── */
+ .si-rules-list {
+	 list-style: none;
+	 padding: 0;
+	 margin: 0;
+	 display: flex;
+	 flex-direction: column;
+	 gap: 8px;
+}
+ .si-rules-list li {
+	 font-size: 11px;
+	 color: var(--si-txt-muted);
+	 padding-left: 14px;
+	 position: relative;
+	 line-height: 1.55;
+}
+ .si-rules-list li::before {
+	 content: '';
+	 position: absolute;
+	 left: 0;
+	 top: 6px;
+	 width: 5px;
+	 height: 5px;
+	 border-radius: 50%;
+	 background: var(--si-amber);
+}
+/* ── Footer Action Buttons ──────────────────────────────────────── */
+ .si-footer-actions {
+	 display: flex;
+	 align-items: center;
+	 gap: 10px;
+	 padding: 16px 0 8px;
+	 margin-top: 6px;
+	 border-top: 0.5px solid var(--si-border);
+}
+ .si-btn {
+	 display: inline-flex;
+	 align-items: center;
+	 gap: 7px;
+	 padding: 10px 22px;
+	 border-radius: var(--si-radius-sm);
+	 font-size: 13px;
+	 font-weight: 600;
+	 cursor: pointer;
+	 border: none;
+	 font-family: inherit;
+	 letter-spacing: 0.02em;
+	 transition: opacity 0.15s, box-shadow 0.15s;
+}
+ .si-btn i {
+	 font-size: 15px;
+}
+ .si-btn:hover {
+	 opacity: 0.88;
+}
+ .si-btn:active {
+	 transform: scale(0.98);
+}
+ .si-btn.si-btn--ghost {
+	 background: transparent;
+	 color: var(--si-txt-muted);
+	 border: 0.5px solid var(--si-border-md);
+}
+ .si-btn.si-btn--secondary {
+	 background: var(--si-bg-card);
+	 color: var(--si-primary);
+	 border: 1.5px solid var(--si-primary);
+}
+ .si-btn.si-btn--primary {
+	 background: var(--si-primary);
+	 color: #fff;
+	 box-shadow: 0 3px 10px rgba(15, 39, 68, 0.22);
+}
+ 

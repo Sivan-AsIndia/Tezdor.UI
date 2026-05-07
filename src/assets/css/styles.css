@@ -53550,3 +53550,10 @@ color:white
 [data-bs-theme=dark] .info-value{
     color:white !important
 }
+
+.before\:bg-lightsales::before{
+       background-color: #be00bf14 !important;
+}
+.text-sales{
+    color: #be00bf !important
+}

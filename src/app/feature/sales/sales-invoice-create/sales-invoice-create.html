@@ -1,0 +1,737 @@
+<div class="max-w-full">
+  <div class="full-container">
+    <div class="v-container v-container--fluid v-locale--is-ltr rounded-xl p-0">
+
+      <!-- ══ PAGE HEADER ══════════════════════════════════════════ -->
+      <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+        <div>
+          <h4 class="fw-bold mb-1 mainheading">
+            {{ invoiceNo() }}
+          </h4>
+          <small class="text-muted subdescription">
+            Create a new sales invoice — add customer, line items and post.
+          </small>
+        </div>
+        <div class="arrow-steps d-none d-md-flex">
+          <ul id="breadcrumb">
+            <li><a href="#"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a></li>
+            <li><a href="/sales-invoice-list"><span class="fa fa-file-text"></span>&nbsp;&nbsp;Sales Invoices</a></li>
+            <li><a><span class="fa fa-plus-circle"></span>&nbsp;&nbsp;Create</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ══ SUCCESS BANNER ═══════════════════════════════════════ -->
+      @if (saveSuccess) {
+        <div class="si-success-bar">
+          <i class="ti ti-circle-check"></i>
+          Sales invoice saved successfully! Redirecting…
+        </div>
+      }
+
+      <!-- ══ MAIN LAYOUT ══════════════════════════════════════════ -->
+      <div class="si-layout">
+
+        <!-- ── LEFT: Invoice Paper ──────────────────────────────── -->
+        <div class="si-main">
+          <div class="si-paper">
+
+            <!-- ┌─ PAPER TOP: Bill To + Invoice Identity ─────────── -->
+            <div class="si-paper-top">
+
+              <!-- LEFT: Bill To -->
+              <div class="si-bill-block">
+                <div class="si-bill-label">BILL TO (CUSTOMER)</div>
+
+                <!-- Customer select -->
+                <div class="si-field si-field--top">
+                  <label class="si-lbl si-lbl--req">Customer</label>
+                  <div class="si-sel-wrap" [class.si-err-border]="errCustomer">
+      <select class="si-sel"
+  (change)="onCustomerChange($any($event.target).value)">
+
+  <option value="">Select Customer</option>
+
+  @for (c of customerOptions; track c.value) {
+    <option 
+      [value]="c.value"
+      [selected]="c.value === customerId()">
+      {{ c.label }}
+    </option>
+  }
+
+</select>    <i class="ti ti-chevron-down si-sel-arrow"></i>
+                  </div>
+                  @if (errCustomer) {
+                    <div class="si-err-msg">
+                      <i class="ti ti-alert-circle"></i> Customer is required
+                    </div>
+                  }
+                </div>
+
+                <!-- Customer details chip -->
+                @if (selectedCustomer()) {
+                  <div class="si-customer-chip">
+                    <div class="si-customer-chip-row">
+                      <i class="ti ti-map-pin"></i>
+<span>{{ selectedCustomer()?.address }}</span>
+                    </div>
+                  @if (selectedCustomer()?.gstin) {
+  <div class="si-customer-chip-row">
+    <i class="ti ti-id-badge"></i>
+    <span>GSTIN: {{ selectedCustomer()?.gstin }}</span>
+  </div>
+}
+                  </div>
+                }
+
+                <!-- PO Reference -->
+                <div class="si-field si-field--mt">
+                  <label class="si-lbl">Purchase Order Reference</label>
+                  <div class="si-inp-wrap">
+                    <i class="ti ti-file-description si-inp-icon"></i>
+                    <input type="text" class="si-inp"
+                      [value]="poReference()"
+                      (input)="poReference.set($any($event.target).value)"
+                      placeholder="e.g. PO-2026-0041" />
+                  </div>
+                </div>
+
+                <!-- Delivery Address -->
+                <div class="si-field si-field--mt">
+                  <label class="si-lbl">Delivery Address</label>
+                  <textarea class="si-textarea" rows="2"
+                    [value]="deliveryAddress()"
+                    (input)="deliveryAddress.set($any($event.target).value)"
+                    placeholder="Ship-to address (if different from billing)…"></textarea>
+                </div>
+
+                <!-- Notes -->
+                <div class="si-field si-field--mt">
+                  <label class="si-lbl">Notes / Remarks</label>
+                  <textarea class="si-textarea" rows="2"
+                    [value]="notes()"
+                    (input)="notes.set($any($event.target).value)"
+                    placeholder="Any instructions, terms or notes…"></textarea>
+                </div>
+
+              </div>
+
+              <!-- RIGHT: Invoice Identity -->
+              <div class="si-identity-block">
+                <div class="si-invoice-heading">
+                  <i class="ti ti-file-invoice"></i>
+                  SALES INVOICE
+                </div>
+
+                <div class="si-identity-rows">
+
+                  <!-- Invoice No (auto) -->
+                  <div class="si-id-row">
+                    <span class="si-id-key">Invoice No</span>
+                    <div class="si-id-val-group">
+                      <span class="si-id-code">{{ invoiceNo() }}</span>
+                      <span class="si-auto-pill">AUTO</span>
+                    </div>
+                  </div>
+
+                  <!-- Invoice Date -->
+                  <div class="si-id-row">
+                    <span class="si-id-key">Invoice Date <span class="si-req">*</span></span>
+                    <div class="si-id-input-wrap" [class.si-err-border]="errDate">
+                      <input type="date" class="si-id-input"
+                        [value]="invoiceDate()"
+                        [max]="todayStr()"
+                        (change)="invoiceDate.set($any($event.target).value)" />
+                    </div>
+                  </div>
+
+                  <!-- Due Date -->
+                  <div class="si-id-row">
+                    <span class="si-id-key">Due Date</span>
+                    <div class="si-id-input-wrap">
+                      <input type="date" class="si-id-input"
+                        [value]="dueDate()"
+                        (change)="dueDate.set($any($event.target).value)" />
+                    </div>
+                  </div>
+
+                  <!-- Status -->
+                  <div class="si-id-row">
+                    <span class="si-id-key">Status <span class="si-req">*</span></span>
+                    <div class="si-id-sel-wrap">
+                      <select class="si-id-sel"
+                        [value]="invoiceStatus()"
+                        (change)="invoiceStatus.set($any($event.target).value)">
+                        @for (s of statusOptions; track s.value) {
+                          <option [value]="s.value">{{ s.label }}</option>
+                        }
+                      </select>
+                      <i class="ti ti-chevron-down si-sel-arrow si-sel-arrow--id"></i>
+                    </div>
+                  </div>
+
+                  <!-- GST Type toggle -->
+                  <div class="si-id-row si-id-row--gst">
+                    <span class="si-id-key">GST Type</span>
+                    <div class="si-gst-seg">
+                      <button type="button" class="si-gst-btn"
+                        [class.si-gst-btn--active]="gstType() === 'gst'"
+                        (click)="gstType.set('gst')">CGST + SGST</button>
+                      <button type="button" class="si-gst-btn"
+                        [class.si-gst-btn--active]="gstType() === 'igst'"
+                        (click)="gstType.set('igst')">IGST</button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+            <!-- /si-paper-top -->
+
+            <!-- ┌─ PAPER BODY: Line Items ─────────────────────────── -->
+            <div class="si-paper-body">
+
+              <div class="si-section-title">
+                <i class="ti ti-list-details"></i>
+                Line Items
+                <span class="si-section-badge">
+                  {{ lineItems().length }} item{{ lineItems().length !== 1 ? 's' : '' }}
+                </span>
+              </div>
+
+              <!-- No lines error -->
+              @if (errNoLines) {
+                <div class="si-alert-banner">
+                  <i class="ti ti-alert-circle"></i>
+                  At least one product line with qty and price is required.
+                </div>
+              }
+
+              <!-- Line Item Cards -->
+              <div class="si-lines-wrap">
+                @for (row of lineItems(); track row.sNo; let i = $index) {
+                  <div class="si-line-card" [class.si-line-card--err]="row.errProduct || row.errQty || row.errPrice">
+
+                    <!-- Card header -->
+                    <div class="si-line-hdr">
+                      <span class="si-line-num">#{{ i + 1 }}</span>
+                      <div class="si-line-total-chip">
+                        <span class="si-line-total-label">LINE TOTAL</span>
+                        <strong>₹{{ lineTotal(row) | number:'1.2-2' }}</strong>
+                      </div>
+                      <button type="button" class="si-del-btn"
+                        [disabled]="lineItems().length === 1"
+                        (click)="removeRow(row.sNo)" title="Remove row">
+                        <i class="ti ti-trash"></i>
+                      </button>
+                    </div>
+
+                    <!-- Row 1: Product full width -->
+                    <div class="si-li-field si-li-field--full">
+                      <label class="si-li-lbl">Product / Service <span class="si-req">*</span></label>
+                      <div class="si-sel-wrap" [class.si-err-border]="row.errProduct">
+                        <select class="si-sel"
+                          [value]="row.productCode"
+                          (change)="onProductSelect(row.sNo, $any($event.target).value)">
+                          <option value="">— Select product or service —</option>
+                          @for (p of productOptions; track p.value) {
+                            <option [value]="p.value"  [selected]="p.value === row.productCode">{{ p.label }}</option>
+                          }
+                        </select>
+                        <i class="ti ti-chevron-down si-sel-arrow"></i>
+                      </div>
+                      @if (row.errProduct) {
+                        <div class="si-err-msg">
+                          <i class="ti ti-alert-circle"></i> Product is required
+                        </div>
+                      }
+                    </div>
+
+                    <!-- Row 2: Qty | Unit | Unit Price | Discount -->
+                    <div class="si-li-row si-li-row--4">
+
+                      <div class="si-li-field">
+                        <label class="si-li-lbl">Qty <span class="si-req">*</span></label>
+                        <div [class.si-err-border]="row.errQty" class="si-inp-wrap si-inp-wrap--sm">
+                          <input type="number" class="si-inp si-inp--right"
+                            min="0.001" step="0.001"
+                            [value]="row.sNo"
+                            (input)="updateRow(row.sNo, 'quantity', +$any($event.target).value)"
+                            placeholder="0" />
+                        </div>
+                        @if (row.errQty) {
+                          <div class="si-err-msg"><i class="ti ti-alert-circle"></i> Qty > 0</div>
+                        }
+                      </div>
+
+                      <div class="si-li-field">
+                        <label class="si-li-lbl">Unit</label>
+                        <div class="si-sel-wrap si-sel-wrap--sm">
+                          <select class="si-sel"
+                            [value]="row.unitId"
+                            (change)="updateRow(row.sNo, 'unitId', +$any($event.target).value)">
+                            @for (u of unitOptions; track u.value) {
+                              <option [value]="u.value">{{ u.label }}</option>
+                            }
+                          </select>
+                          <i class="ti ti-chevron-down si-sel-arrow"></i>
+                        </div>
+                      </div>
+
+                      <div class="si-li-field">
+                        <label class="si-li-lbl">Unit Price <span class="si-req">*</span></label>
+                        <div class="si-rupee-wrap" [class.si-err-border]="row.errPrice">
+                          <span class="si-rupee-sym">₹</span>
+                          <input type="number" class="si-inp si-inp--right"
+                            min="0" step="0.01"
+                            [value]="row.unitPrice"
+                            (input)="updateRow(row.sNo, 'unitPrice', +$any($event.target).value)"
+                            placeholder="0.00" />
+                        </div>
+                        @if (row.errPrice) {
+                          <div class="si-err-msg"><i class="ti ti-alert-circle"></i> Price required</div>
+                        }
+                      </div>
+
+                      <div class="si-li-field">
+                        <label class="si-li-lbl">Discount %</label>
+                        <div class="si-inp-wrap si-inp-wrap--sm">
+                          <input type="number" class="si-inp si-inp--right"
+                            min="0" max="100" step="0.1"
+                            [value]="row.discountPercent"
+                            (input)="updateRow(row.sNo, 'discountPercent', +$any($event.target).value)"
+                            placeholder="0" />
+                          <span class="si-inp-suffix">%</span>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <!-- Row 3: Tax | Tax Amt | Sub Total | Line Total -->
+                    <div class="si-li-row si-li-row--4 si-li-row--calc">
+
+                      <div class="si-li-field">
+                        <label class="si-li-lbl">Tax Rate</label>
+                        <div class="si-sel-wrap si-sel-wrap--sm">
+                          <select class="si-sel"
+                            [value]="row.taxPercent"
+                            (change)="updateRow(row.sNo, 'taxPercent', +$any($event.target).value)">
+                            @for (t of taxOptions; track t.value) {
+                              <option [value]="t.value">{{ t.label }}</option>
+                            }
+                          </select>
+                          <i class="ti ti-chevron-down si-sel-arrow"></i>
+                        </div>
+                      </div>
+
+                      <div class="si-li-field">
+                        <label class="si-li-lbl">Tax Amount</label>
+                        <div class="si-calc-val">₹{{ lineTax(row) | number:'1.2-2' }}</div>
+                      </div>
+
+                      <div class="si-li-field">
+                        <label class="si-li-lbl">Sub Total</label>
+                        <div class="si-calc-val">₹{{ lineSubTotal(row) | number:'1.2-2' }}</div>
+                      </div>
+
+                      <div class="si-li-field">
+                        <label class="si-li-lbl">Line Total</label>
+                        <div class="si-calc-val si-calc-val--strong">₹{{ lineTotal(row) | number:'1.2-2' }}</div>
+                      </div>
+
+                    </div>
+
+                  </div>
+                }
+
+                <!-- Empty state -->
+                @if (lineItems().length === 0) {
+                  <div class="si-empty-state">
+                    <i class="ti ti-file-off"></i>
+                    <span>No line items yet — click <strong>+ Add</strong> below</span>
+                  </div>
+                }
+
+              </div>
+
+              <!-- Add Row -->
+              <div class="si-add-row-bar">
+                <button type="button" class="si-add-btn" (click)="addRow()">
+                  <i class="ti ti-plus"></i> Add
+                </button>
+              </div>
+
+            </div>
+            <!-- /si-paper-body -->
+
+            <!-- ┌─ PAPER FOOTER: Payment + Totals ─────────────────── -->
+            <div class="si-paper-footer">
+
+              <!-- LEFT: Payment Details -->
+              <div class="si-payment-section">
+                <div class="si-payment-title">
+                  <i class="ti ti-credit-card"></i>
+                  Payment Details
+                </div>
+
+                <div class="si-pay-grid">
+
+                  <!-- Amount Paid -->
+                  <div class="si-pay-field">
+                    <label class="si-pay-lbl">Amount Paid (₹)</label>
+                    <div class="si-rupee-wrap">
+                      <span class="si-rupee-sym">₹</span>
+                      <input type="number" class="si-inp si-inp--right"
+                        min="0" step="0.01" placeholder="0.00"
+                        [value]="amountPaid()"
+                        (input)="amountPaid.set(+$any($event.target).value)" />
+                    </div>
+                    <span class="si-hint">Partial payments allowed</span>
+                  </div>
+
+                  <!-- Payment Mode -->
+                  <div class="si-pay-field">
+                    <label class="si-pay-lbl">Payment Mode</label>
+                    <div class="si-sel-wrap">
+                      <select class="si-sel"
+                        [value]="paymentMode()"
+                        (change)="paymentMode.set($any($event.target).value)">
+                        <option value="">— Select —</option>
+                        @for (m of paymentModeOptions; track m.value) {
+                          <option [value]="m.value">{{ m.label }}</option>
+                        }
+                      </select>
+                      <i class="ti ti-chevron-down si-sel-arrow"></i>
+                    </div>
+                  </div>
+
+                  <!-- Payment Due Date -->
+                  <div class="si-pay-field">
+                    <label class="si-pay-lbl">Payment Due Date</label>
+                    <div class="si-inp-wrap">
+                      <i class="ti ti-calendar si-inp-icon"></i>
+                      <input type="date" class="si-inp"
+                        [value]="paymentDueDate()"
+                        (change)="paymentDueDate.set($any($event.target).value)" />
+                    </div>
+                  </div>
+
+                  <!-- Payment Status (auto) -->
+                  <div class="si-pay-field">
+                    <label class="si-pay-lbl">Payment Status</label>
+                    <div class="si-pay-status-row">
+                      <span class="si-pay-badge"
+                        [class.si-badge--unpaid]="paymentStatus() === 'unpaid'"
+                        [class.si-badge--partial]="paymentStatus() === 'partial'"
+                        [class.si-badge--paid]="paymentStatus() === 'paid'">
+                        @if (paymentStatus() === 'unpaid') { <i class="ti ti-x"></i> }
+                        @if (paymentStatus() === 'partial') { <i class="ti ti-clock"></i> }
+                        @if (paymentStatus() === 'paid') { <i class="ti ti-check"></i> }
+                        {{ capitalize(paymentStatus()) }}
+                      </span>
+                      <span class="si-auto-note">Auto-computed</span>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Charges toggles -->
+                <div class="si-charges-section">
+
+                  <div class="si-charge-row">
+                    <label class="si-charge-label">
+                      <span class="si-toggle-wrap">
+                        <input type="checkbox"
+                          [checked]="showFreight()"
+                          (change)="toggleFreight($any($event.target).checked)" />
+                        <span class="si-toggle-box">
+                          @if (showFreight()) { <i class="ti ti-check"></i> }
+                        </span>
+                      </span>
+                      <i class="ti ti-truck"></i>
+                      Add Freight / Shipping
+                    </label>
+                    @if (showFreight()) {
+                      <div class="si-rupee-wrap si-charge-inp">
+                        <span class="si-rupee-sym">₹</span>
+                        <input type="number" class="si-inp si-inp--right"
+                          min="0" step="0.01" placeholder="0.00"
+                          [value]="freightCharges()"
+                          (input)="freightCharges.set(+$any($event.target).value)" />
+                      </div>
+                    }
+                  </div>
+
+                  <div class="si-charge-row">
+                    <label class="si-charge-label">
+                      <span class="si-toggle-wrap">
+                        <input type="checkbox"
+                          [checked]="showCustomDuty()"
+                          (change)="toggleCustomDuty($any($event.target).checked)" />
+                        <span class="si-toggle-box">
+                          @if (showCustomDuty()) { <i class="ti ti-check"></i> }
+                        </span>
+                      </span>
+                      <i class="ti ti-shield"></i>
+                      Add Custom Duty
+                    </label>
+                    @if (showCustomDuty()) {
+                      <div class="si-rupee-wrap si-charge-inp">
+                        <span class="si-rupee-sym">₹</span>
+                        <input type="number" class="si-inp si-inp--right"
+                          min="0" step="0.01" placeholder="0.00"
+                          [value]="customDuty()"
+                          (input)="customDuty.set(+$any($event.target).value)" />
+                      </div>
+                    }
+                  </div>
+
+                </div>
+
+              </div>
+
+              <!-- RIGHT: Totals Block -->
+              <div class="si-totals-block">
+
+                <table class="si-tot-table">
+                  <tr>
+                    <td class="si-tot-lbl">Sub Total</td>
+                    <td class="si-tot-val">₹{{ subTotal() | number:'1.2-2' }}</td>
+                  </tr>
+                  <tr>
+                    <td class="si-tot-lbl">Tax Amount</td>
+                    <td class="si-tot-val">₹{{ totalTax() | number:'1.2-2' }}</td>
+                  </tr>
+
+                  <!-- GST Type toggle row -->
+                  <tr class="si-tot-gst-row">
+                    <td colspan="2">
+                      <div class="si-gst-toggle-row">
+                        <span class="si-gst-toggle-label">GST Type</span>
+                        <div class="si-gst-seg">
+                          <button type="button" class="si-gst-btn"
+                            [class.si-gst-btn--active]="gstType() === 'gst'"
+                            (click)="gstType.set('gst')">CGST + SGST</button>
+                          <button type="button" class="si-gst-btn"
+                            [class.si-gst-btn--active]="gstType() === 'igst'"
+                            (click)="gstType.set('igst')">IGST</button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- CGST + SGST -->
+                  @if (gstType() === 'gst') {
+                    <tr class="si-tot-sub-row">
+                      <td class="si-tot-lbl si-tot-lbl--sub">
+                        <span class="si-sub-dot"></span> CGST (50%)
+                      </td>
+                      <td class="si-tot-val si-tot-val--sub">₹{{ cgst() | number:'1.2-2' }}</td>
+                    </tr>
+                    <tr class="si-tot-sub-row">
+                      <td class="si-tot-lbl si-tot-lbl--sub">
+                        <span class="si-sub-dot"></span> SGST (50%)
+                      </td>
+                      <td class="si-tot-val si-tot-val--sub">₹{{ sgst() | number:'1.2-2' }}</td>
+                    </tr>
+                  }
+
+                  <!-- IGST -->
+                  @if (gstType() === 'igst') {
+                    <tr class="si-tot-sub-row">
+                      <td class="si-tot-lbl si-tot-lbl--sub">
+                        <span class="si-sub-dot"></span> IGST (100%)
+                      </td>
+                      <td class="si-tot-val si-tot-val--sub">₹{{ igst() | number:'1.2-2' }}</td>
+                    </tr>
+                  }
+
+                  <!-- Freight -->
+                  @if (showFreight() || freightCharges() > 0) {
+                    <tr>
+                      <td class="si-tot-lbl">
+                        <span class="si-tot-icon-row">
+                          <i class="ti ti-truck"></i> Freight Charges
+                        </span>
+                      </td>
+                      <td class="si-tot-val">₹{{ freightCharges() | number:'1.2-2' }}</td>
+                    </tr>
+                  }
+
+                  <!-- Custom Duty -->
+                  @if (showCustomDuty() || customDuty() > 0) {
+                    <tr>
+                      <td class="si-tot-lbl">
+                        <span class="si-tot-icon-row">
+                          <i class="ti ti-shield"></i> Custom Duty
+                        </span>
+                      </td>
+                      <td class="si-tot-val">₹{{ customDuty() | number:'1.2-2' }}</td>
+                    </tr>
+                  }
+
+                  <tr class="si-tot-divider"><td colspan="2"><hr /></td></tr>
+
+                  <!-- Grand Total -->
+                  <tr class="si-tot-grand-row">
+                    <td class="si-tot-grand-lbl">Grand Total</td>
+                    <td class="si-tot-grand-val">₹{{ grandTotal() | number:'1.2-2' }}</td>
+                  </tr>
+
+                  <!-- Amount Paid -->
+                  <tr>
+                    <td class="si-tot-lbl si-tot-paid-lbl">Amount Paid</td>
+                    <td class="si-tot-val si-tot-paid-val">− ₹{{ amountPaid() | number:'1.2-2' }}</td>
+                  </tr>
+
+                  <tr class="si-tot-divider"><td colspan="2"><hr /></td></tr>
+
+                  <!-- Balance Due -->
+                  <tr class="si-tot-balance-row">
+                    <td class="si-tot-lbl"
+                      [class.si-balance-danger]="balanceDue() > 0"
+                      [class.si-balance-safe]="balanceDue() <= 0">
+                      Balance Due
+                    </td>
+                    <td class="si-tot-val"
+                      [class.si-balance-danger]="balanceDue() > 0"
+                      [class.si-balance-safe]="balanceDue() <= 0">
+                      ₹{{ balanceDue() | number:'1.2-2' }}
+                    </td>
+                  </tr>
+
+                </table>
+
+              </div>
+
+            </div>
+            <!-- /si-paper-footer -->
+
+          </div>
+          <!-- /si-paper -->
+        </div>
+        <!-- /si-main -->
+
+        <!-- ── RIGHT SIDEBAR ─────────────────────────────────────── -->
+        <div class="si-sidebar">
+
+          <!-- Invoice Summary -->
+          <div class="si-scard">
+            <div class="si-scard-hdr">
+              <i class="ti ti-chart-bar"></i> Invoice Summary
+            </div>
+            <div class="si-scard-body">
+              <div class="si-srow">
+                <span class="si-slbl">Sub Total</span>
+                <span class="si-sval">₹{{ subTotal() | number:'1.2-2' }}</span>
+              </div>
+              <div class="si-srow">
+                <span class="si-slbl">Tax</span>
+                <span class="si-sval">₹{{ totalTax() | number:'1.2-2' }}</span>
+              </div>
+              @if (showFreight() || freightCharges() > 0) {
+                <div class="si-srow">
+                  <span class="si-slbl">Freight</span>
+                  <span class="si-sval">₹{{ freightCharges() | number:'1.2-2' }}</span>
+                </div>
+              }
+              @if (showCustomDuty() || customDuty() > 0) {
+                <div class="si-srow">
+                  <span class="si-slbl">Custom Duty</span>
+                  <span class="si-sval">₹{{ customDuty() | number:'1.2-2' }}</span>
+                </div>
+              }
+              <!-- <div class="si-sdivider"></div> -->
+              <div class="si-srow si-srow--grand">
+                <span class="si-slbl-grand">Grand Total</span>
+                <span class="si-sval-grand">₹{{ grandTotal() | number:'1.2-2' }}</span>
+              </div>
+              <div class="si-srow">
+                <span class="si-slbl" style="color:var(--si-green)">Amount Paid</span>
+                <span class="si-sval" style="color:var(--si-green)">₹{{ amountPaid() | number:'1.2-2' }}</span>
+              </div>
+              <!-- <div class="si-sdivider"></div> -->
+              <div class="si-srow si-srow--balance"
+                [class.si-srow--danger]="balanceDue() > 0">
+                <span class="si-slbl">Balance Due</span>
+                <span class="si-sval">₹{{ balanceDue() | number:'1.2-2' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Info -->
+          <div class="si-scard">
+            <div class="si-scard-hdr">
+              <i class="ti ti-info-circle"></i> Quick Info
+            </div>
+            <div class="si-scard-body">
+              <div class="si-info-chip">
+                <span class="si-chip-lbl">Invoice No</span>
+                <span class="si-chip-val si-chip-code">{{ invoiceNo() }}</span>
+              </div>
+              <div class="si-info-chip">
+                <span class="si-chip-lbl">Date</span>
+                <span class="si-chip-val">{{ invoiceDate() | date:'dd MMM yyyy' }}</span>
+              </div>
+              <div class="si-info-chip">
+                <span class="si-chip-lbl">Lines</span>
+                <span class="si-chip-val">{{ lineItems().length }} item{{ lineItems().length !== 1 ? 's' : '' }}</span>
+              </div>
+              <div class="si-info-chip">
+                <span class="si-chip-lbl">Status</span>
+                <span class="si-status-chip si-status-chip--{{ invoiceStatus() }}">
+                  {{ invoiceStatus() | titlecase }}
+                </span>
+              </div>
+              <div class="si-info-chip">
+                <span class="si-chip-lbl">Payment</span>
+                <span class="si-pay-badge si-pay-badge--sm"
+                  [class.si-badge--unpaid]="paymentStatus() === 'unpaid'"
+                  [class.si-badge--partial]="paymentStatus() === 'partial'"
+                  [class.si-badge--paid]="paymentStatus() === 'paid'">
+                  {{ capitalize(paymentStatus()) }}
+                </span>
+              </div>
+              <div class="si-info-chip">
+                <span class="si-chip-lbl">Customer</span>
+                <span class="si-chip-val">{{ selectedCustomer()?.label || '—' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Business Rules -->
+          <div class="si-scard si-scard--rules">
+            <div class="si-scard-hdr">
+              <i class="ti ti-alert-triangle"></i> Business Rules
+            </div>
+            <div class="si-scard-body">
+              <ul class="si-rules-list">
+                <li>Posting creates a stock OUT for all product lines</li>
+                <li>Posted invoices cannot be edited — raise a Credit Note</li>
+                <li>At least 1 line item with price is required to save</li>
+                <li>Discount cannot exceed 100% per line</li>
+                <li>GSTIN is mandatory for B2B transactions</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+        <!-- /si-sidebar -->
+
+      <div class="si-footer-actions" style="justify-content: end;">
+        <button type="button" class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="onCancel()">
+          Cancel
+        </button>
+        <button type="button" class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated" (click)="onSave()">
+         Save
+        </button>
+      </div>
+      </div>
+      <!-- /si-layout -->
+
+
+    </div>
+  </div>
+</div>

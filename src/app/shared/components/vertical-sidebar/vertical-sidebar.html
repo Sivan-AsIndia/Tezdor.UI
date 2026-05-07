@@ -214,6 +214,16 @@
           </a>
         </li>
 
+           <li class="sidebar-item">
+          <a    routerLink="/sales-invoice" class="cursor-pointer sidebar-link before:bg-lightsales hover:text-sales dark:hover:text-sales"
+            [class.active]="openMenu() === 'salesinvoice'" [class.text-sales]="openMenu() === 'salesinvoice'"
+            [class.activebg]="openMenu() === 'salesinvoice'" (click)="toggle('salesinvoice')">
+            <span class="aside-icon p-2 bg-danger-subtle rounded-1">
+<iconify-icon icon="solar:wallet-money-line-duotone" class="fs-6"></iconify-icon>            </span>
+            <span class="hide-menu flex-shrink-0">Sales Invoice</span>
+          </a>
+        </li>
+
         <!-- ══ EMPLOYEE MANAGEMENT ═══════════════════════════════════ -->
         <li class="nav-small-cap">
           <iconify-icon icon="solar:menu-dots-bold-duotone" class="nav-small-cap-icon fs-5"></iconify-icon>
@@ -305,7 +315,7 @@
           </div>
           <button type="button" (click)="logout()"
             class="btn btn-link p-0 position-relative"
-            title="Logout" style="color:inherit;">
+            title="Logout" style="color:inherit !important;">
             <iconify-icon icon="solar:logout-line-duotone" class="fs-8"></iconify-icon>
           </button>
         </div>

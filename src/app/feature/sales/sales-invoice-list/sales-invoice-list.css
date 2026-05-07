@@ -1,0 +1,180 @@
+/* ════════════════════════════════════════════════════════
+   sales-invoice-list.css
+════════════════════════════════════════════════════════ */
+
+/* ── Stat cards ─────────────────────────────────────────── */
+.sil-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 4px;
+}
+@media (max-width: 900px) { .sil-stats { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 500px) { .sil-stats { grid-template-columns: 1fr; } }
+
+.sil-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+}
+.sil-stat-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.sil-stat-icon--blue   { background: #eff6ff; color: #2563eb; }
+.sil-stat-icon--green  { background: #f0fdf4; color: #16a34a; }
+.sil-stat-icon--orange { background: #fff7ed; color: #ea580c; }
+.sil-stat-icon--red    { background: #fef2f2; color: #dc2626; }
+
+.sil-stat-value {
+  font-size: 18px; font-weight: 700;
+  color: #1a2744; line-height: 1.2;
+}
+.sil-stat-label {
+  font-size: 11.5px; color: #94a3b8; margin-top: 2px;
+}
+
+/* ── Filter selects ─────────────────────────────────────── */
+.sil-filter-sel {
+  padding: 7px 12px;
+  border: 1px solid rgba(0,0,0,.12);
+  border-radius: 8px;
+  background: #fff;
+  font-size: 13px;
+  color: #1a2744;
+  outline: none;
+  cursor: pointer;
+  height: 38px;
+  min-width: 120px;
+  transition: border-color .15s;
+}
+.sil-filter-sel:focus { border-color: #3b7fff; box-shadow: 0 0 0 3px rgba(59,127,255,.10); }
+
+/* ── Table extras ───────────────────────────────────────── */
+.sil-td-num {
+  font-size: 11px; font-weight: 600;
+  color: #94a3b8; text-align: center;
+  width: 36px;
+}
+.sil-td-date { font-size: 12.5px; white-space: nowrap; color: #475569; }
+.sil-td-amt  { font-size: 13px; font-weight: 600; text-align: right; white-space: nowrap; color: #1a2744; }
+.sil-td-paid { color: #16a34a !important; }
+.sil-bal-danger { color: #dc2626 !important; }
+.sil-dash { color: #cbd5e1; }
+
+/* Overdue row */
+.sil-tr-overdue td { background: #fff9f9 !important; }
+.sil-overdue-date { color: #dc2626; font-weight: 600; }
+.sil-overdue-days {
+  font-size: 10px; color: #dc2626; font-weight: 600;
+  margin-top: 2px;
+}
+
+/* Invoice number link */
+.sil-inv-no {
+  font-size: 13px; font-weight: 700; color: #2563eb;
+  text-decoration: none;
+  transition: color .15s;
+}
+.sil-inv-no:hover { color: #1d4ed8; text-decoration: underline; }
+.sil-ref { font-size: 10.5px; color: #94a3b8; margin-top: 2px; }
+
+/* Customer */
+.sil-customer-name  { font-size: 13px; font-weight: 600; color: #1a2744; }
+.sil-customer-gstin { font-size: 10.5px; color: #94a3b8; margin-top: 2px; font-family: monospace; }
+
+/* Type badge */
+.sil-type-badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 9px; border-radius: 5px;
+  font-size: 10.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .04em;
+  white-space: nowrap;
+}
+.sil-type-tax_invoice { background: #eff6ff; color: #2563eb; }
+.sil-type-proforma    { background: #f5f3ff; color: #7c3aed; }
+.sil-type-credit_note { background: #fef2f2; color: #dc2626; }
+.sil-type-debit_note  { background: #fff7ed; color: #ea580c; }
+
+/* Status badge */
+.sil-status-badge {
+  display: inline-flex; align-items: center;
+  padding: 4px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .03em; white-space: nowrap;
+}
+.sil-status-draft          { background: #f1f5f9; color: #64748b; }
+.sil-status-sent           { background: #eff6ff; color: #2563eb; }
+.sil-status-paid           { background: #dcfce7; color: #15803d; }
+.sil-status-partially_paid { background: #fff7ed; color: #c2410c; }
+.sil-status-overdue        { background: #fef2f2; color: #dc2626; }
+.sil-status-cancelled      { background: #f1f5f9; color: #94a3b8; }
+
+/* Paid chip */
+.sil-paid-chip {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 11px; font-weight: 700;
+  color: #15803d; background: #dcfce7;
+  padding: 2px 8px; border-radius: 10px;
+}
+
+/* Empty state */
+.sil-empty-cell { text-align: center; padding: 48px 0 !important; }
+.sil-empty {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.sil-empty i { font-size: 40px; color: #cbd5e1; }
+.sil-empty p { font-size: 14px; color: #94a3b8; margin: 0; }
+.sil-clear-filters {
+  margin-top: 6px;
+  padding: 6px 14px;
+  border: 1px solid #e2e8f0; border-radius: 6px;
+  background: #fff; color: #3b7fff;
+  font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: all .15s;
+}
+.sil-clear-filters:hover { background: #eff6ff; }
+
+/* ── Pagination ─────────────────────────────────────────── */
+.page-ellipsis {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px;
+  font-size: 14px; color: #94a3b8;
+}
+
+/* ── Delete modal custom styles ──────────────────────────── */
+.custom-box {
+  border-radius: 12px;
+  width: 400px;
+  margin: auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+}
+.icon-wrapper {
+  width: 60px; height: 60px;
+  margin: 0 auto 15px;
+  background: #fdecec; color: #ff4d4f;
+  border-radius: 50%;
+  display: flex; justify-content: center; align-items: center;
+  font-size: 26px;
+}
+.custom-box h2 { font-size: 20px; font-weight: 600; margin-bottom: 10px; }
+.custom-box p  { color: #6c757d; font-size: 14px; margin-bottom: 20px; line-height: 1.6; }
+.cancel-btn {
+  background: #fff; border: 1px solid #ccc;
+  padding: 9px 20px; border-radius: 6px;
+  font-size: 13px; cursor: pointer; transition: background .15s;
+}
+.cancel-btn:hover { background: #f5f5f5; }
+.delete-btn {
+  background: linear-gradient(180deg, #ff4d4f, #d9363e);
+  color: #fff; padding: 9px 20px; border-radius: 6px;
+  border: none; font-size: 13px; cursor: pointer; transition: opacity .15s;
+}
+.delete-btn:hover { opacity: .88; }

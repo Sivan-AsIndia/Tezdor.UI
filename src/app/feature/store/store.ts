@@ -50,6 +50,19 @@ export interface ITransactionOption {
   icon: string;
   color: string;
 }
+export const WAREHOUSE_OPTIONS: StoreWarehouse[] = [
+
+  {
+    id: 'WH01',
+    name: 'Main Warehouse'
+  },
+
+  {
+    id: 'WH02',
+    name: 'Secondary Store'
+  }
+
+];
 
 export const TRANSACTION_TYPES: ITransactionOption[] = [
   {

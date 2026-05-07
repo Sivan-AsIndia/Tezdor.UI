@@ -1,6 +1,6 @@
 // ── store.service.ts ───────────────────────────────────────
 import { Injectable, signal, computed } from '@angular/core';
-import { StoreMaintain, StockLedgerRow, StoreProduct, StoreWarehouse } from './store';
+import { StoreMaintain, StockLedgerRow, StoreProduct, StoreWarehouse, WAREHOUSE_OPTIONS } from './store';
 import { STORE_MAINTAIN } from './store.seed';
 import { ProductSummary } from '../product/product';
 
@@ -42,12 +42,7 @@ export class StoreDataClient {
     return [...map.values()];
   });
 
-  getWarehouses(): StoreWarehouse[] {
-  return [
-    { id: 'WH01', name: 'Main Warehouse' },
-    { id: 'WH02', name: 'Secondary Store' },
-  ];
-}
+
 
 getProducts(): StoreProduct[] {
   return this.productSummaries().map(p => ({
