@@ -1,18 +1,10 @@
 // ── store.service.ts ───────────────────────────────────────
 import { Injectable, signal, computed } from '@angular/core';
-import { StoreMaintain, StockLedgerRow } from './store';
+import { StoreMaintain, StockLedgerRow, StoreProduct, StoreWarehouse } from './store';
 import { STORE_MAINTAIN } from './store.seed';
+import { ProductSummary } from '../product/product';
 
-export interface ProductSummary {
-  productCode: string;
-  productName: string;
-  vendorCode: string;
-  vendorName: string;
-  totalIn: number;
-  totalOut: number;
-  closingStock: number;
-  transactionCount: number;
-}
+
 
 @Injectable({ providedIn: 'root' })
 export class StoreDataClient {
@@ -31,6 +23,7 @@ export class StoreDataClient {
           vendorCode:  t.vendorCode,
           vendorName:  t.vendorName,
           totalIn:     0,
+          unitId: 0,
           totalOut:    0,
           closingStock: 0,
           transactionCount: 0,
@@ -48,6 +41,35 @@ export class StoreDataClient {
 
     return [...map.values()];
   });
+
+  getWarehouses(): StoreWarehouse[] {
+  return [
+    { id: 'WH01', name: 'Main Warehouse' },
+    { id: 'WH02', name: 'Secondary Store' },
+  ];
+}
+
+getProducts(): StoreProduct[] {
+  return this.productSummaries().map(p => ({
+    code: p.productCode,
+    name: p.productName,
+    unitName: 'Nos',
+    unitId : 0
+  }));
+}
+
+getProductUnit(code: string): { name: string; unitName: string } | undefined {
+  return this.getProducts().find(p => p.code === code);
+}
+
+getCurrentBalance(productCode: string): number {
+  return this.productSummaries().find(p => p.productCode === productCode)?.closingStock ?? 0;
+}
+
+generateTnCode(): string {
+  const n = this._transactions().length + 1;
+  return `TN-${new Date().getFullYear()}-${String(n).padStart(4, '0')}`;
+}
 
   getLedgerRows(productCode: string): StockLedgerRow[] {
     const rows = this._transactions()

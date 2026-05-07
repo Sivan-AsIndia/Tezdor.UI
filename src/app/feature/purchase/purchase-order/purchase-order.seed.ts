@@ -1,4 +1,4 @@
-import { PurchaseOrder } from './purchase-order';
+import { PurchaseOrder } from "./purchase-order";
 
 export const SAMPLE_ORDERS: PurchaseOrder[] = [
   {
@@ -9,8 +9,8 @@ export const SAMPLE_ORDERS: PurchaseOrder[] = [
     shippingAddress: '12, Wood Lane, Chennai - 600001',
     notes: 'Urgent delivery required.',
     lineItems: [
-      { id: 1, productCode: 'PRD110', productName: '8x4x9mm Plywood',  unitId: 1, unitName: 'Pcs', quantity: 60, unitPrice: 450, taxPercent: 18, discount: 0,   total: 31860 },
-      { id: 2, productCode: 'PRD111', productName: 'Teak Wood Plank',   unitId: 6, unitName: 'Mtr', quantity: 20, unitPrice: 800, taxPercent: 18, discount: 200, total: 18640 },
+      { id: 1, productCode: 'PRD110', productName: '8x4x9mm Plywood', unitId: 1, unitName: 'Pcs', quantity: 60, unitPrice: 450, taxPercent: 18, discount: 0, total: 31860 },
+      { id: 2, productCode: 'PRD111', productName: 'Teak Wood Plank', unitId: 6, unitName: 'Mtr', quantity: 20, unitPrice: 800, taxPercent: 18, discount: 200, total: 18640 },
     ],
     subTotal: 43000, taxAmount: 7740, discountAmount: 200, shippingCharge: 500, grandTotal: 51040,
     status: 'received', createdAt: '2026-01-05',
@@ -32,8 +32,8 @@ export const SAMPLE_ORDERS: PurchaseOrder[] = [
     orderDate: '2026-01-12', expectedDate: '2026-02-01',
     deliveryMethod: 'pickup', paymentTerms: 'immediate',
     lineItems: [
-      { id: 1, productCode: 'PRD305', productName: 'PVC Pipe 25mm',  unitId: 6, unitName: 'Mtr', quantity: 200, unitPrice: 55, taxPercent: 12, discount: 500, total: 11820 },
-      { id: 2, productCode: 'PRD306', productName: 'PVC Elbow 25mm', unitId: 1, unitName: 'Pcs', quantity: 50,  unitPrice: 18, taxPercent: 12, discount: 0,   total: 1008  },
+      { id: 1, productCode: 'PRD305', productName: 'PVC Pipe 25mm', unitId: 6, unitName: 'Mtr', quantity: 200, unitPrice: 55, taxPercent: 12, discount: 500, total: 11820 },
+      { id: 2, productCode: 'PRD306', productName: 'PVC Elbow 25mm', unitId: 1, unitName: 'Pcs', quantity: 50, unitPrice: 18, taxPercent: 12, discount: 0, total: 1008 },
     ],
     subTotal: 12400, taxAmount: 1461, discountAmount: 500, shippingCharge: 0, grandTotal: 13361,
     status: 'pending', createdAt: '2026-01-12',
@@ -77,8 +77,8 @@ export const SAMPLE_ORDERS: PurchaseOrder[] = [
     orderDate: '2026-02-01', expectedDate: '2026-02-18',
     deliveryMethod: 'delivery', paymentTerms: 'net30',
     lineItems: [
-      { id: 1, productCode: 'PRD500', productName: 'Safety Helmet', unitId: 1, unitName: 'Pcs',   quantity: 25, unitPrice: 380, taxPercent: 12, discount: 0, total: 10640 },
-      { id: 2, productCode: 'PRD501', productName: 'Safety Gloves', unitId: 5, unitName: 'Dozen', quantity: 10, unitPrice: 280, taxPercent: 12, discount: 0, total: 3136  },
+      { id: 1, productCode: 'PRD500', productName: 'Safety Helmet', unitId: 1, unitName: 'Pcs', quantity: 25, unitPrice: 380, taxPercent: 12, discount: 0, total: 10640 },
+      { id: 2, productCode: 'PRD501', productName: 'Safety Gloves', unitId: 5, unitName: 'Dozen', quantity: 10, unitPrice: 280, taxPercent: 12, discount: 0, total: 3136 },
     ],
     subTotal: 12300, taxAmount: 1476, discountAmount: 0, shippingCharge: 300, grandTotal: 14076,
     status: 'received', createdAt: '2026-02-01',

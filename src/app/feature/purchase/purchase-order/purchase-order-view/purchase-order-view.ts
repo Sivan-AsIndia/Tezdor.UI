@@ -39,13 +39,13 @@ export class PurchaseOrderViewComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) {
       this.toast.error('Invalid Purchase Order ID.');
-      this.router.navigate(['/purchase-order-list']);
+      this.router.navigate(['/purchase-order']);
       return;
     }
     const found = this.service.getById(+id);
     if (!found) {
       this.toast.error('Purchase Order not found.');
-      this.router.navigate(['/purchase-order-list']);
+      this.router.navigate(['/purchase-order']);
       return;
     }
     this.po = found;
@@ -108,7 +108,7 @@ export class PurchaseOrderViewComponent implements OnInit {
 
   // ── Actions ────────────────────────────────────────────────────────
   goBack(): void {
-    this.router.navigate(['/purchase-order-list']);
+    this.router.navigate(['/purchase-order']);
   }
 
   printPO(): void {

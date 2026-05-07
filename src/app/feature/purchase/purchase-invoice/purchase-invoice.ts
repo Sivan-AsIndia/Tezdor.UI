@@ -37,6 +37,10 @@ export interface PurchaseInvoice {
   notes?:           string;
   createdAt?:       string;
   updatedAt?:       string;
+    freightCharges?:   number;
+      customDuty?:       number;
+        freightLabel?:    string;   // ← NEW
+  customDutyLabel?: string;  
 }
 
 // ── Select Options ────────────────────────────────────────
@@ -96,3 +100,12 @@ export const PO_OPTIONS: ISelectOption[] = [
   { value: 'PO-2026-006', label: 'PO-2026-006 · Metro Steel'    },
   { value: 'PO-2026-007', label: 'PO-2026-007 · Global Supplies'},
 ];
+export interface LineItem {
+  id         : number;
+  productCode: string;
+  productName: string;
+  unitId     : number;
+  qty        : number;
+  unitCost   : number;
+  taxPercent : number;
+}

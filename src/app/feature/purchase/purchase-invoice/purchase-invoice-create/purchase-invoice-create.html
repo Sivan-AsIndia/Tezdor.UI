@@ -13,330 +13,682 @@
         <div class="arrow-steps d-none d-md-flex">
           <ul id="breadcrumb">
             <li><a href="#"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a></li>
-            <li><a href="/purchase-invoice-list"><span class="fa fa-file"></span>&nbsp;&nbsp;Invoices</a></li>
+            <li><a href="/purchase-invoice"><span class="fa fa-file"></span>&nbsp;&nbsp;Invoices</a></li>
             <li><a><span class="fa fa-plus-circle"></span>&nbsp;&nbsp;{{ isEditMode ? 'Edit' : 'Create' }}</a></li>
           </ul>
         </div>
       </div>
 
-      <!-- ══ SECTION 1 · P-INVOICE HEADER ════════════════════════ -->
-      <div class="card mb-3 section-card" id="section-primary">
-        <div class="card-body">
-          <div class="section-header">
-            <div class="section-icon"><i class="ti ti-file-invoice"></i></div>
-            <h6 class="cardheader">P-Invoice Header</h6>
-          </div>
+      <div class="pi-layout">
 
-          <div class="row g-3">
+        <!-- ── LEFT: MAIN INVOICE AREA ──────────────────────────── -->
+        <div class="pi-main">
 
-            <!-- Supplier Invoice No (required) -->
-            <div class="col-md-3">
-              <label class="form-label cardlabel">Supplier Invoice No <span class="text-danger">*</span></label>
-              <input
-                class="form-control"
-                [class.is-invalid]="isInvalid('supplierInvNo', supplierInvNo())"
-                [value]="supplierInvNo()"
-                (input)="supplierInvNo.set($any($event.target).value)"
-                (blur)="touch('supplierInvNo')"
-                placeholder="e.g. KT-INV-4521">
-              @if (isInvalid('supplierInvNo', supplierInvNo())) {
-                <div class="invalid-feedback">Supplier Invoice No is required.</div>
-              }
-            </div>
+          <!-- ┌─ INVOICE PAPER CARD ─────────────────────────────── -->
+          <div class="pi-paper">
 
-            <!-- Invoice Date (required) -->
-            <div class="col-md-3">
-              <label class="form-label cardlabel">Invoice Date <span class="text-danger">*</span></label>
-              <input
-                type="date"
-                class="form-control"
-                [class.is-invalid]="isInvalid('invoiceDate', invoiceDate())"
-                [value]="invoiceDate()"
-                (change)="invoiceDate.set($any($event.target).value); touch('invoiceDate')"
-                (blur)="touch('invoiceDate')">
-              @if (isInvalid('invoiceDate', invoiceDate())) {
-                <div class="invalid-feedback">Invoice date is required.</div>
-              }
-            </div>
+            <!-- ── Paper Top: Brand + Invoice Identity ──────────── -->
+            <div class="pi-paper-top">
+              <div class="pi-addr-block pi-addr-block--to">
+                <div class="pi-addr-label">BILL TO (SUPPLIER)</div>
 
-            <!-- Invoice Status (required) -->
-            <div class="col-md-3">
-              <label class="form-label cardlabel">Invoice Status <span class="text-danger">*</span></label>
-              <select
-                class="form-select"
-                [class.is-invalid]="isInvalid('invoiceStatus', invoiceStatus())"
-                [value]="invoiceStatus()"
-                (change)="invoiceStatus.set($any($event.target).value); touch('invoiceStatus')"
-                (blur)="touch('invoiceStatus')">
-                <option value="">-- Select Status --</option>
-                @for (s of invoiceStatusOptions; track s.value) {
-                  <option [value]="s.value">{{ s.label }}</option>
-                }
-              </select>
-              @if (isInvalid('invoiceStatus', invoiceStatus())) {
-                <div class="invalid-feedback">Invoice status is required.</div>
-              }
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- ══ SECTION 2 · SUPPLIER & PO REF ═══════════════════════ -->
-      <div class="card mb-3 section-card section-info">
-        <div class="card-body">
-          <div class="section-header">
-            <div class="section-icon"><i class="ti ti-building-store"></i></div>
-            <h6 class="cardheader">Supplier Information</h6>
-          </div>
-
-          <div class="row g-3">
-
-            <!-- Supplier dropdown (required) -->
-            <div class="col-md-4">
-              <label class="form-label cardlabel">Supplier <span class="text-danger">*</span></label>
-              <select
-                class="form-select"
-                [class.is-invalid]="isInvalid('supplierId', supplierId())"
-                [value]="supplierId()"
-                (change)="supplierId.set($any($event.target).value); touch('supplierId')"
-                (blur)="touch('supplierId')">
-                <option value="">-- Select Supplier --</option>
-                @for (v of supplierOptions; track v.value) {
-                  <option [value]="v.value">{{ v.label }}</option>
-                }
-              </select>
-              @if (isInvalid('supplierId', supplierId())) {
-                <div class="invalid-feedback">Please select a supplier.</div>
-              }
-            </div>
-
-            <!-- Purchase Order Ref (optional) -->
-            <div class="col-md-4">
-              <label class="cardlabel">Purchase Order Ref</label>
-              <select
-                class="form-select"
-                [value]="poRef()"
-                (change)="poRef.set($any($event.target).value)">
-                <option value="">-- Select PO --</option>
-                @for (p of poOptions; track p.value) {
-                  <option [value]="p.value">{{ p.label }}</option>
-                }
-              </select>
-            </div>
-
-            <!-- Notes (optional) -->
-            <div class="col-md-4">
-              <label class="cardlabel">Notes</label>
-              <textarea
-                class="form-control"
-                rows="2"
-                placeholder="Any remarks..."
-                [value]="notes()"
-                (input)="notes.set($any($event.target).value)"></textarea>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- ══ SECTION 3 · LINE ITEMS ════════════════════════════════ -->
-      <div class="card mb-3 section-card section-warning">
-        <div class="card-body">
-          <div class="section-header">
-            <div class="section-icon"><i class="ti ti-list-details"></i></div>
-            <h6 class="cardheader">Line Items</h6>
-          </div>
-
-          <div class="border-table mb-3" style="overflow-x:auto;">
-            <table class="table table-sm mb-0" style="min-width:800px;">
-              <thead style="background:#8080800d;">
-                <tr>
-                  <th style="width:40px">#</th>
-                  <th>Product Name <span class="text-danger">*</span></th>
-                  <th>Unit</th>
-                  <th>Qty <span class="text-danger">*</span></th>
-                  <th>Unit Cost (₹)</th>
-                  <th>Tax / GST</th>
-                  <th>Line Total</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (row of lineItems(); track row.id) {
-                  <tr>
-                    <td class="text-muted align-middle">{{ $index + 1 }}</td>
-
-                    <!-- Product dropdown (required) -->
-                    <td>
-                      <select
-                        class="form-select form-select-sm"
-                        [class.is-invalid]="isRowInvalid(row.id, 'productCode', row.productCode)"
-                        [value]="row.productCode"
-                        (change)="onProductSelect(row, $any($event.target).value)"
-                        (blur)="touchRow(row.id, 'productCode')">
-                        <option value="">-- Select Product --</option>
-                        @for (p of product.products(); track p.productCode) {
-                          <option [value]="p.productCode">{{ p.productName }}</option>
-                        }
-                      </select>
-                      @if (isRowInvalid(row.id, 'productCode', row.productCode)) {
-                        <div class="invalid-feedback">Please select a product.</div>
+                <!-- Supplier Dropdown -->
+                <div class="pi-addr-field-group">
+                  <label class="pi-addr-field-label">Supplier <span class="pi-req">*</span></label>
+                  <div class="pi-select-wrap" [class.pi-input-error]="isInvalid('supplierId', supplierId())">
+                    <select
+                      class="pi-addr-select"
+                      [value]="supplierId()"
+                      (change)="supplierId.set($any($event.target).value); touch('supplierId')"
+                      (blur)="touch('supplierId')">
+                      <option value="">-- Select Supplier --</option>
+                      @for (v of supplierOptions; track v.value) {
+                        <option [value]="v.value">{{ v.label }}</option>
                       }
-                    </td>
+                    </select>
+                    <svg class="pi-select-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                  </div>
+                  @if (isInvalid('supplierId', supplierId())) {
+                    <div class="pi-error-msg">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                      Please select a supplier
+                    </div>
+                  }
+                </div>
 
-                    <!-- Unit -->
-                    <td>
-                      <select
-                        class="form-select form-select-sm"
-                        [value]="row.unitId"
-                        (change)="updateRow(row.id, 'unitId', +$any($event.target).value)">
-                        @for (u of unitOptions; track u.value) {
-                          <option [value]="u.value">{{ u.label }}</option>
-                        }
-                      </select>
-                    </td>
-
-                    <!-- Qty (required, > 0) -->
-                    <td>
-                      <input
-                        type="number"
-                        class="form-control form-control-sm"
-                        [class.is-invalid]="isRowInvalid(row.id, 'qty', row.qty)"
-                        min="0.001"
-                        step="0.001"
-                        [value]="row.qty"
-                        (input)="updateRow(row.id, 'qty', +$any($event.target).value)"
-                        (blur)="touchRow(row.id, 'qty')">
-                      @if (isRowInvalid(row.id, 'qty', row.qty)) {
-                        <div class="invalid-feedback">Qty must be &gt; 0.</div>
+                <!-- Purchase Order Ref -->
+                <div class="pi-addr-field-group pi-mt-8">
+                  <label class="pi-addr-field-label">Purchase Order Ref</label>
+                  <div class="pi-select-wrap">
+                    <select
+                      class="pi-addr-select"
+                      [value]="poRef()"
+                      (change)="poRef.set($any($event.target).value)">
+                      <option value="">-- Link to PO (optional) --</option>
+                      @for (p of poOptions; track p.value) {
+                        <option [value]="p.value">{{ p.label }}</option>
                       }
-                    </td>
-
-                    <!-- Unit Cost -->
-                    <td>
-                      <input
-                        type="number"
-                        class="form-control form-control-sm"
-                        min="0"
-                        [value]="row.unitCost"
-                        (input)="updateRow(row.id, 'unitCost', +$any($event.target).value)">
-                    </td>
-
-                    <!-- Tax -->
-                    <td>
-                      <select
-                        class="form-select form-select-sm"
-                        [value]="row.taxPercent"
-                        (change)="updateRow(row.id, 'taxPercent', +$any($event.target).value)">
-                        @for (t of taxOptions; track t.value) {
-                          <option [value]="t.value">{{ t.label }}</option>
-                        }
-                      </select>
-                    </td>
-
-                    <!-- Line Total -->
-                    <td class="align-middle fw-bold text-end pe-2">
-                      ₹{{ calcLineTotal(row) | number:'1.2-2' }}
-                    </td>
-
-                    <!-- Remove row -->
-                    <td class="align-middle text-center">
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-link text-danger p-0"
-                        (click)="removeRow(row.id)">
-                        <i class="ti ti-trash fs-5"></i>
-                      </button>
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </div>
-
-          <button
-            type="button"
-            class="btn btn-outline-primary btn-sm bg-primary"
-            (click)="addRow()">
-            <i class="ti ti-plus me-1"></i> Add Row
-          </button>
-
-        </div>
-      </div>
-
-      <!-- ══ SECTION 4 · TOTALS & PAYMENT ═════════════════════════ -->
-      <div class="card mb-3 section-card section-success">
-        <div class="card-body">
-          <div class="section-header">
-            <div class="section-icon"><i class="ti ti-currency-rupee"></i></div>
-            <h6 class="cardheader">Totals &amp; Payment</h6>
-          </div>
-
-          <div class="row g-3">
-
-            <!-- LEFT: Payment inputs -->
-            <div class="col-md-6">
-              <div class="row g-3">
-                <div class="col-12">
-                  <label class="cardlabel">Amount Paid (₹)</label>
-                  <input
-                    type="number"
-                    class="form-control"
-                    min="0"
-                    [value]="amountPaid()"
-                    (input)="amountPaid.set(+$any($event.target).value)"
-                    placeholder="0.00">
-                  <small class="text-muted">Partial payments allowed</small>
-                </div>
-                <div class="col-12">
-                  <label class="cardlabel">Payment Due Date</label>
-                  <input
-                    type="date"
-                    class="form-control"
-                    [value]="paymentDueDate()"
-                    (change)="paymentDueDate.set($any($event.target).value)">
-                </div>
-                <div class="col-12">
-                  <label class="cardlabel">Payment Status</label>
-                  <div class="form-control bg-light d-flex align-items-center gap-2" style="pointer-events:none;">
-                    <span
-                      class="badge rounded-2"
-                      [ngClass]="{
-                        'bg-lighterror  text-error':    paymentStatus() === 'unpaid',
-                        'bg-lightwarning text-warning': paymentStatus() === 'partial',
-                        'bg-lightsuccess text-success': paymentStatus() === 'paid'
-                      }">
-                      {{ capitalize(paymentStatus()) }}
-                    </span>
-                    <small class="text-muted">Auto-computed</small>
+                    </select>
+                    <svg class="pi-select-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <!-- RIGHT: Summary -->
-            <div class="col-md-6">
-              <div class="summary-table">
-                <div class="summary-row">
-                  <span>Grand Total</span>
-                  <span><strong>₹{{ grandTotal() | number:'1.2-2' }}</strong></span>
+                <!-- Notes -->
+                <div class="pi-addr-field-group pi-mt-8">
+                  <label class="pi-addr-field-label">Notes / Remarks</label>
+                  <textarea
+                    class="pi-addr-textarea"
+                    rows="2"
+                    placeholder="Any additional remarks..."
+                    [value]="notes()"
+                    (input)="notes.set($any($event.target).value)"></textarea>
                 </div>
-                <div class="summary-row">
-                  <span>Amount Paid</span>
-                  <span class="text-success">₹{{ amountPaid() | number:'1.2-2' }}</span>
-                </div>
-                <div class="summary-row grand-total">
-                  <span>Balance Due</span>
-                  <span [class]="balanceDue() > 0 ? 'text-danger' : 'text-success'">
-                    ₹{{ balanceDue() | number:'1.2-2' }}
+
+              </div>
+
+              <!-- RIGHT: Invoice identity block -->
+              <div class="pi-identity-block">
+                <div class="pi-invoice-label">PURCHASE INVOICE</div>
+
+                <!-- P-Invoice No (AUTO) -->
+                <div class="pi-identity-row">
+                  <span class="pi-identity-key">Invoice No</span>
+                  <span class="pi-identity-val pi-identity-val--code">
+                    {{ invoiceNo() }}
+                    <span class="pi-auto-pill">AUTO</span>
                   </span>
                 </div>
+
+                <!-- Invoice Date -->
+                <div class="pi-identity-row">
+                  <span class="pi-identity-key">Invoice Date <span class="pi-req">*</span></span>
+                  <div class="pi-identity-input-wrap" [class.pi-input-error]="isInvalid('invoiceDate', invoiceDate())">
+                    <input
+                      type="date"
+                      class="pi-identity-input"
+                      [value]="invoiceDate()"
+                      (change)="invoiceDate.set($any($event.target).value); touch('invoiceDate')"
+                      (blur)="touch('invoiceDate')">
+                  </div>
+                </div>
+
+                <!-- Supplier Invoice No -->
+                <div class="pi-identity-row">
+                  <span class="pi-identity-key">Supplier Inv No <span class="pi-req">*</span></span>
+                  <div class="pi-identity-input-wrap" [class.pi-input-error]="isInvalid('supplierInvNo', supplierInvNo())">
+                    <input
+                      type="text"
+                      class="pi-identity-input"
+                      placeholder="e.g. KT-INV-4521"
+                      [value]="supplierInvNo()"
+                      (input)="supplierInvNo.set($any($event.target).value)"
+                      (blur)="touch('supplierInvNo')">
+                  </div>
+                </div>
+
+                <!-- Invoice Status -->
+                <div class="pi-identity-row">
+                  <span class="pi-identity-key">Status <span class="pi-req">*</span></span>
+                  <div class="pi-identity-select-wrap" [class.pi-input-error]="isInvalid('invoiceStatus', invoiceStatus())">
+                    <select
+                      class="pi-identity-select"
+                      [value]="invoiceStatus()"
+                      (change)="invoiceStatus.set($any($event.target).value); touch('invoiceStatus')"
+                      (blur)="touch('invoiceStatus')">
+                      <option value="">-- Select --</option>
+                      @for (s of invoiceStatusOptions; track s.value) {
+                        <option [value]="s.value">{{ s.label }}</option>
+                      }
+                    </select>
+                  </div>
+                </div>
+
               </div>
             </div>
 
+            <!-- ── Paper Body: LINE ITEMS TABLE ────────────────── -->
+            <div class="pi-paper-body">
+              <div class="pi-section-title">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                Line Items
+                <span class="pi-section-badge">{{ lineItems().length }} item{{ lineItems().length !== 1 ? 's' : '' }}</span>
+              </div>
+
+              <!-- Line Item Cards -->
+              <div class="pi-lines-wrapper">
+
+                @for (row of lineItems(); track row.id; let idx = $index) {
+
+                  <div class="pi-line-card" [class.pi-tr-invalid]="rowHasError(row.id)">
+
+                    <!-- Header -->
+                    <div class="pi-line-header">
+                      <span class="pi-badge">#{{ idx + 1 }}</span>
+                      <div class="pi-line-total">
+                        <span>LINE TOTAL</span>
+                        <strong>₹{{ calcLineTotal(row) | number:'1.2-2' }}</strong>
+                      </div>
+                    </div>
+
+                    <!-- GRID -->
+                    <div class="pi-grid">
+
+                      <!-- Product Name -->
+                      <div class="pi-field">
+                        <label>Product Name</label>
+                        <div class="pi-cell-wrap">
+                          <div class="pi-select-wrap" [class.pi-cell-error]="isRowInvalid(row.id, 'productCode', row.productCode)">
+                            <select
+                              class="pi-cell-select"
+                              [value]="row.productCode"
+                              (change)="onProductSelect(row, $any($event.target).value)"
+                              (blur)="touchRow(row.id, 'productCode')">
+                              <option value="">— Select Product —</option>
+                              @for (p of product.products(); track p.productCode) {
+                                <option [value]="p.productCode">{{ p.productName }}</option>
+                              }
+                            </select>
+                            <svg class="pi-select-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                          </div>
+                          @if (isRowInvalid(row.id, 'productCode', row.productCode)) {
+                            <span class="pi-row-error-tip">Required</span>
+                          }
+                        </div>
+                      </div>
+
+                      <!-- Unit -->
+                      <div class="pi-field span-3">
+                        <label>Unit *</label>
+                        <div class="pi-select-wrap">
+                          <select
+                            class="pi-cell-select"
+                            [value]="row.unitId"
+                            (change)="updateRow(row.id, 'unitId', +$any($event.target).value)">
+                            @for (u of unitOptions; track u.value) {
+                              <option [value]="u.value">{{ u.label }}</option>
+                            }
+                          </select>
+                          <svg class="pi-select-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                      </div>
+
+                      <!-- Qty -->
+                      <div class="pi-field">
+                        <label>Qty *</label>
+                        <div class="pi-cell-wrap">
+                          <input
+                            type="number"
+                            class="pi-cell-input pi-cell-input-r"
+                            [class.pi-cell-error]="isRowInvalid(row.id, 'qty', row.qty)"
+                            min="0.001" step="0.001"
+                            [value]="row.qty"
+                            (input)="updateRow(row.id, 'qty', +$any($event.target).value)"
+                            (blur)="touchRow(row.id, 'qty')">
+                          @if (isRowInvalid(row.id, 'qty', row.qty)) {
+                            <span class="pi-row-error-tip">&gt; 0</span>
+                          }
+                        </div>
+                      </div>
+
+                      <!-- Unit Cost -->
+                      <div class="pi-field">
+                        <label>Unit Cost *</label>
+                        <div class="pi-cell-wrap">
+                          <div class="pi-rupee-wrap" [class.pi-cell-error]="isRowInvalid(row.id, 'unitCost', row.unitCost)">
+                            <input
+                              type="number"
+                              class="pi-cell-input pi-cell-input-r pi-cell-input-rupee"
+                              min="0" step="0.01"
+                              [value]="row.unitCost"
+                              (input)="updateRow(row.id, 'unitCost', +$any($event.target).value)"
+                              (blur)="touchRow(row.id, 'unitCost')">
+                          </div>
+                          @if (isRowInvalid(row.id, 'unitCost', row.unitCost)) {
+                            <span class="pi-row-error-tip">Required</span>
+                          }
+                        </div>
+                      </div>
+
+                      <!-- Tax -->
+                      <div class="pi-field">
+                        <label>Tax</label>
+                        <div class="pi-select-wrap">
+                          <select
+                            class="pi-cell-select"
+                            [value]="row.taxPercent"
+                            (change)="updateRow(row.id, 'taxPercent', +$any($event.target).value)">
+                            @for (t of taxOptions; track t.value) {
+                              <option [value]="t.value">{{ t.label }}</option>
+                            }
+                          </select>
+                          <svg class="pi-select-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                      </div>
+
+                      <!-- Tax Amt -->
+                      <div class="pi-field">
+                        <label>Tax Amt</label>
+                        <span class="pi-calc-val">₹{{ calcTaxAmt(row) | number:'1.2-2' }}</span>
+                      </div>
+
+                      <!-- Line Total -->
+                      <div class="pi-field">
+                        <label>Line Total</label>
+                        <div class="pi-calc-val">₹{{ calcLineTotal(row) | number:'1.2-2' }}</div>
+                      </div>
+
+                      <!-- Delete -->
+                      <div class="pi-actions">
+                        <button class="pi-del-btn" (click)="removeRow(row.id)">
+                          <i class="bi bi-trash3"></i>
+                        </button>
+                      </div>
+
+                    </div>
+                  </div>
+
+                }
+
+              </div>
+
+              <!-- Empty state -->
+              <div class="pi-table-scroll">
+                @if (lineItems().length === 0) {
+                  <div class="pi-empty-row">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>No line items yet — click <strong>+ Add Item</strong> to begin</span>
+                  </div>
+                }
+              </div>
+
+              <!-- Add Row -->
+              <div class="pi-add-row-bar">
+                <button type="button" class="pi-add-btn" (click)="addRow()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  Add Item
+                </button>
+              </div>
+
+            </div>
+            <!-- /pi-paper-body -->
+
+            <!-- ── Paper Footer: Totals + Payment ────────────────── -->
+            <div class="pi-paper-footer">
+
+              <!-- LEFT: Payment Details -->
+              <div class="pi-payment-section">
+                <div class="pi-payment-title">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                  Payment Details
+                </div>
+
+                <div class="pi-payment-grid">
+
+             
+
+                  <!-- Amount Paid -->
+                  <div class="pi-pay-field">
+                    <label class="pi-pay-label">Amount Paid (₹)</label>
+                    <div class="pi-rupee-wrap">
+                      <input
+                        type="number"
+                        class="pi-pay-input"
+                        min="0" step="0.01"
+                        placeholder="0.00"
+                        [value]="amountPaid()"
+                        (input)="amountPaid.set(+$any($event.target).value)">
+                    </div>
+                    <span class="pi-pay-hint">Partial payments allowed</span>
+                  </div>
+
+                  <!-- Payment Due Date -->
+                  <div class="pi-pay-field">
+                    <label class="pi-pay-label">Payment Due Date</label>
+                    <div class="pi-pay-input-wrap">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                      <input
+                        type="date"
+                        class="pi-pay-input pi-pay-input-date"
+                        [value]="paymentDueDate()"
+                        (change)="paymentDueDate.set($any($event.target).value)">
+                    </div>
+                  </div>
+
+                  <!-- Payment Status (auto) -->
+                  <div class="pi-pay-field">
+                    <label class="pi-pay-label">Payment Status</label>
+                    <div class="pi-pay-status-row">
+                      <span
+                        class="pi-pay-badge"
+                        [class.pi-badge-unpaid]="paymentStatus() === 'unpaid'"
+                        [class.pi-badge-partial]="paymentStatus() === 'partial'"
+                        [class.pi-badge-paid]="paymentStatus() === 'paid'">
+                        @if (paymentStatus() === 'unpaid') {
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                        }
+                        @if (paymentStatus() === 'partial') {
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        }
+                        @if (paymentStatus() === 'paid') {
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
+                        }
+                        {{ capitalize(paymentStatus()) }}
+                      </span>
+                      <span class="pi-auto-note">Auto-computed</span>
+                    </div>
+                  </div>
+
+                </div>
+
+<div class="pi-toggle-section mt-3">
+
+  <!-- Row 1: Freight -->
+  <div class="pi-toggle-row">
+    <label class="pi-toggle-label">
+      <input
+        type="checkbox"
+        class="pi-toggle-check"
+        [checked]="showFreight()"
+        (change)="toggleFreight($any($event.target).checked)">
+      <span class="pi-toggle-box">
+        @if (showFreight()) {
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        }
+      </span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="1" y="3" width="15" height="13" rx="1"/>
+        <path d="M16 8h4l3 5v3h-7V8z"/>
+        <circle cx="5.5" cy="18.5" r="2.5"/>
+        <circle cx="18.5" cy="18.5" r="2.5"/>
+      </svg>
+      Add Freight / Shipping Charges
+    </label>
+
+    <div class="pi-toggle-input-wrap">
+      @if (showFreight()) {
+        <input
+          type="number"
+          class="pi-toggle-amount"
+          min="0" step="0.01"
+          placeholder="0.00"
+          [value]="freightCharges()"
+          (input)="freightCharges.set(+$any($event.target).value)">
+      }
+    </div>
+  </div>
+
+  <!-- Row 2: Custom Duty -->
+  <div class="pi-toggle-row">
+    <label class="pi-toggle-label">
+      <input
+        type="checkbox"
+        class="pi-toggle-check"
+        [checked]="showCustomDuty()"
+        (change)="toggleCustomDuty($any($event.target).checked)">
+      <span class="pi-toggle-box">
+        @if (showCustomDuty()) {
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        }
+      </span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      Add Custom Duty
+    </label>
+
+    <div class="pi-toggle-input-wrap">
+      @if (showCustomDuty()) {
+        <input
+          type="number"
+          class="pi-toggle-amount"
+          min="0" step="0.01"
+          placeholder="0.00"
+          [value]="customDuty()"
+          (input)="customDuty.set(+$any($event.target).value)">
+      }
+    </div>
+  </div>
+
+</div>
+              
+              </div>
+
+              <!-- RIGHT: Totals block -->
+              <div class="pi-totals-block">
+                <table class="pi-totals-table">
+                  <tr>
+                    <td class="pi-tot-label">Sub Total</td>
+                    <td class="pi-tot-val">₹{{ subTotal() | number:'1.2-2' }}</td>
+                  </tr>
+                  <tr>
+                    <td class="pi-tot-label">Tax Amount</td>
+                    <td class="pi-tot-val">₹{{ totalTax() | number:'1.2-2' }}</td>
+                  </tr>
+ <tr>
+    <td colspan="2" class="pi-tot-gst-toggle">
+      <div class="pi-gst-switch">
+        <button
+          class="pi-gst-btn"
+          [class.active]="gstType() === 'gst'"
+          (click)="gstType.set('gst')">
+          CGST + SGST
+        </button>
+        <button
+          class="pi-gst-btn"
+          [class.active]="gstType() === 'igst'"
+          (click)="gstType.set('igst')">
+          IGST
+        </button>
+      </div>
+    </td>
+  </tr>
+
+  <!-- CGST + SGST rows -->
+  @if (gstType() === 'gst') {
+    <tr>
+      <td class="pi-tot-label">CGST (50%)</td>
+      <td class="pi-tot-val">₹{{ cgst() | number:'1.2-2' }}</td>
+    </tr>
+    <tr>
+      <td class="pi-tot-label">SGST (50%)</td>
+      <td class="pi-tot-val">₹{{ sgst() | number:'1.2-2' }}</td>
+    </tr>
+  }
+
+  <!-- IGST row -->
+  @if (gstType() === 'igst') {
+    <tr>
+      <td class="pi-tot-label">IGST</td>
+      <td class="pi-tot-val">₹{{ igst() | number:'1.2-2' }}</td>
+    </tr>
+  }
+
+                  <!-- Freight row — only show when enabled OR value > 0 -->
+                  @if (showFreight() || freightCharges() > 0) {
+                    <tr>
+                      <td class="pi-tot-label">
+                        <span style="display:inline-flex;align-items:center;gap:4px">
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="1" y="3" width="15" height="13" rx="1"/>
+                            <path d="M16 8h4l3 5v3h-7V8z"/>
+                            <circle cx="5.5" cy="18.5" r="2.5"/>
+                            <circle cx="18.5" cy="18.5" r="2.5"/>
+                          </svg>
+                          {{ freightLabel() }}
+                        </span>
+                      </td>
+                      <td class="pi-tot-val">₹{{ freightCharges() | number:'1.2-2' }}</td>
+                    </tr>
+                  }
+
+                  <!-- Custom Duty row — only show when enabled OR value > 0 -->
+                  @if (showCustomDuty() || customDuty() > 0) {
+                    <tr>
+                      <td class="pi-tot-label">
+                        <span style="display:inline-flex;align-items:center;gap:4px">
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                          </svg>
+                          {{ customDutyLabel() }}
+                        </span>
+                      </td>
+                      <td class="pi-tot-val">₹{{ customDuty() | number:'1.2-2' }}</td>
+                    </tr>
+                  }
+
+                  <tr class="pi-tot-divider"><td colspan="2"><hr></td></tr>
+                  <tr class="pi-tot-grand">
+                    <td class="pi-tot-label">Grand Total</td>
+                    <td class="pi-tot-val pi-tot-grand-val">₹{{ grandTotal() | number:'1.2-2' }}</td>
+                  </tr>
+                  <tr>
+                    <td class="pi-tot-label pi-tot-paid-label">Amount Paid</td>
+                    <td class="pi-tot-val pi-tot-paid-val">− ₹{{ amountPaid() | number:'1.2-2' }}</td>
+                  </tr>
+                  <tr class="pi-tot-divider"><td colspan="2"><hr></td></tr>
+                  <tr class="pi-tot-balance">
+                    <td class="pi-tot-label">Balance Due</td>
+                    <td class="pi-tot-val"
+                      [class.pi-balance-danger]="balanceDue() > 0"
+                      [class.pi-balance-safe]="balanceDue() <= 0">
+                      ₹{{ balanceDue() | number:'1.2-2' }}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+
+            </div>
+            <!-- /pi-paper-footer -->
+
           </div>
+          <!-- /pi-paper -->
+
         </div>
+        <!-- /pi-main -->
+
+        <!-- ── RIGHT SIDEBAR ───────────────────────────────────────── -->
+        <div class="pi-sidebar">
+
+          <!-- Invoice Summary Card -->
+          <div class="pi-scard">
+            <div class="pi-scard-header">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg>
+              Invoice Summary
+            </div>
+            <div class="pi-scard-body">
+
+              <div class="pi-sum-row">
+                <span class="pi-sum-label">Sub Total</span>
+                <span class="pi-sum-val">₹{{ subTotal() | number:'1.2-2' }}</span>
+              </div>
+              <div class="pi-sum-row">
+                <span class="pi-sum-label">Tax Amount</span>
+                <span class="pi-sum-val">₹{{ totalTax() | number:'1.2-2' }}</span>
+              </div>
+
+              <!-- Freight in sidebar — only show when enabled OR value > 0 -->
+              @if (showFreight() || freightCharges() > 0) {
+                <div class="pi-sum-row">
+                  <span class="pi-sum-label">{{ freightLabel() }}</span>
+                  <span class="pi-sum-val">₹{{ freightCharges() | number:'1.2-2' }}</span>
+                </div>
+              }
+
+              <!-- Custom Duty in sidebar — only show when enabled OR value > 0 -->
+              @if (showCustomDuty() || customDuty() > 0) {
+                <div class="pi-sum-row">
+                  <span class="pi-sum-label">{{ customDutyLabel() }}</span>
+                  <span class="pi-sum-val">₹{{ customDuty() | number:'1.2-2' }}</span>
+                </div>
+              }
+
+              <div class="pi-sum-divider"></div>
+
+              <div class="pi-sum-row pi-sum-row-grand">
+                <span class="pi-sum-label-grand">Grand Total</span>
+                <span class="pi-sum-val-grand">₹{{ grandTotal() | number:'1.2-2' }}</span>
+              </div>
+
+              <div class="pi-sum-row">
+                <span class="pi-sum-label">Amount Paid</span>
+                <span class="pi-sum-val pi-sum-paid">₹{{ amountPaid() | number:'1.2-2' }}</span>
+              </div>
+
+              <div class="pi-sum-divider"></div>
+
+              <div class="pi-sum-row">
+                <span class="pi-sum-label">Balance Due</span>
+                <span class="pi-sum-balance"
+                  [class.pi-balance-danger]="balanceDue() > 0"
+                  [class.pi-balance-safe]="balanceDue() <= 0">
+                  ₹{{ balanceDue() | number:'1.2-2' }}
+                </span>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Quick Info Card -->
+          <div class="pi-scard">
+            <div class="pi-scard-header">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              Quick Info
+            </div>
+            <div class="pi-scard-body">
+
+              <div class="pi-info-chip">
+                <span class="pi-chip-label">Invoice No</span>
+                <span class="pi-chip-val pi-chip-code">{{ invoiceNo() }}</span>
+              </div>
+              <div class="pi-info-chip">
+                <span class="pi-chip-label">Invoice Date</span>
+                <span class="pi-chip-val">{{ invoiceDate() | date:'dd MMM yyyy' }}</span>
+              </div>
+              <div class="pi-info-chip">
+                <span class="pi-chip-label">Total Lines</span>
+                <span class="pi-chip-val">{{ lineItems().length }} item{{ lineItems().length !== 1 ? 's' : '' }}</span>
+              </div>
+              <div class="pi-info-chip">
+                <span class="pi-chip-label">Payment Status</span>
+                <span
+                  class="pi-chip-badge"
+                  [class.pi-badge-unpaid]="paymentStatus() === 'unpaid'"
+                  [class.pi-badge-partial]="paymentStatus() === 'partial'"
+                  [class.pi-badge-paid]="paymentStatus() === 'paid'">
+                  {{ capitalize(paymentStatus()) }}
+                </span>
+              </div>
+              <div class="pi-info-chip">
+                <span class="pi-chip-label">Supplier</span>
+                <span class="pi-chip-val">{{ selectedSupplierName() || '—' }}</span>
+              </div>
+              <div class="pi-info-chip">
+                <span class="pi-chip-label">PO Ref</span>
+                <span class="pi-chip-val">{{ poRef() || '—' }}</span>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Business Rules Card -->
+          <div class="pi-scard pi-scard-rules">
+            <div class="pi-scard-header">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Business Rules
+            </div>
+            <div class="pi-scard-body">
+              <ul class="pi-rules-list">
+                <li>Posting creates Stock-IN for all product lines</li>
+                <li>Posted invoice cannot be edited — use Debit Note</li>
+                <li>Supplier Invoice No must be unique per supplier</li>
+                <li>At least 1 line item required to save</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+        <!-- /pi-sidebar -->
+
       </div>
 
       <!-- ══ ACTION BUTTONS ════════════════════════════════════════ -->

@@ -39,14 +39,14 @@ export class PurchaseInvoiceViewComponent implements OnInit {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (!idParam) {
       this.toast.error('Invalid invoice ID.');
-      this.router.navigate(['/purchaseinvoice-list']);
+      this.router.navigate(['/purchase-invoice']);
       return;
     }
 
     const inv = this.service.getById(+idParam);
     if (!inv) {
       this.toast.error('Invoice not found.');
-      this.router.navigate(['/purchaseinvoice-list']);
+      this.router.navigate(['/purchase-invoice']);
       return;
     }
 
@@ -75,7 +75,7 @@ export class PurchaseInvoiceViewComponent implements OnInit {
     return val.charAt(0).toUpperCase() + val.slice(1);
   }
 
-  goBack(): void { this.router.navigate(['/purchaseinvoice-list']); }
+  goBack(): void { this.router.navigate(['/purchase-invoice']); }
 
   goEdit(id: number): void { this.router.navigate(['/purchaseinvoice-edit', id]); }
 

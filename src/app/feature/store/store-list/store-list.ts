@@ -1,16 +1,17 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { ProductSummary, StoreDataClient } from '../store-data-client';
+import { StoreDataClient } from '../store-data-client';
 import { StockLedgerRow } from '../store';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { ProductSummary } from '../../product/product';
 
 @Component({
   selector: 'app-store-list',
-  imports: [CommonModule],
+  imports: [CommonModule,RouterLink],
   templateUrl:'./store-list.html',
   styleUrl: './store-list.css',
 })
 export class StoreListComponent {
-
   service = inject(StoreDataClient);
   searchValue  = signal('');
   currentPage  = signal(1);

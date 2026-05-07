@@ -13,7 +13,7 @@
             <div class="arrow-steps d-none d-md-flex">
               <ul id="breadcrumb">
                 <li><a href="#"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a></li>
-                <li><a routerLink="/purchase-order-list"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;Purchase</a></li>
+                <li><a routerLink="/purchase-order"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;Purchase</a></li>
                 
                 <li><a><span class="fa fa-plus-circle"></span>&nbsp;&nbsp;{{ pageCrumb() }}</a></li>
               </ul>
@@ -112,8 +112,8 @@
                   formControlName="vendorId"
                   [class.is-invalid]="hasError('vendorId')">
                   <option value="">-- Select Vendor --</option>
-                  @for (v of vendorOptions; track v.value) {
-                    <option [value]="v.value">{{ v.label }}</option>
+                  @for (v of vendorOptions; track v.code) {
+                    <option [value]="v.code">{{ v.name }}</option>
                   }
                 </select>
                 @if (hasError('vendorId')) {

@@ -49,13 +49,11 @@ export interface IStatusOption extends ISelectOption {
   hint: string;
 }
 
-export const VENDOR_OPTIONS: ISelectOption[] = [
-  { value: '1', label: 'Krishna Timber'  },
-  { value: '2', label: 'Metro Steel'     },
-  { value: '3', label: 'PipeMart Co'     },
-  { value: '4', label: 'Apex Hardware'   },
-  { value: '5', label: 'Global Supplies' },
-  { value: '6', label: 'Sun Electricals' },
+export const VENDOR_OPTIONS= [
+    { code: 'VEN001', name: 'Krishna Timber'  },
+  { code: 'VEN002', name: 'Metro Steel'     },
+  { code: 'VEN003', name: 'PipeMart Co'     },
+  { code: 'VEN004', name: 'BuildMart'       },
 ];
 
 export const VENDOR_MAP: Record<string, { code: string; name: string }> = {

@@ -11429,7 +11429,7 @@ html[dir=rtl] .toast-onload{
     width: calc(100% + 18px);
 }
  .sidebar-item .sidebar-link.active:before{
-    width: calc(100% + 18px);
+    width: calc(100% + 18px) !important;
 }
  .sidebar-item .second-level{
     padding-left: 20px;
