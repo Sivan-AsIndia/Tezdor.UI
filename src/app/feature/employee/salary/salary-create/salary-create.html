@@ -124,7 +124,7 @@
                                 <label class="form-label required">From Date</label>
                                 <input type="date" class="form-control" [value]="form().fromDate"
                                     (input)="setFromDate($any($event.target).value)"
-                                    [class.is-invalid]="hasError('fromDate')" />
+                                    [class.is-invalid]="hasError('fromDate')" readonly />
 
                                 @if(hasError('fromDate')){
                                 <div class="text-danger mt-1">
@@ -137,7 +137,7 @@
                                 <label class="form-label required">To Date</label>
                                 <input type="date" class="form-control" [value]="form().toDate"
                                     (input)="setToDate($any($event.target).value)"
-                                    [class.is-invalid]="hasError('toDate')" />
+                                    [class.is-invalid]="hasError('toDate')" readonly />
 
                                 @if(hasError('toDate')){
                                 <div class="text-danger mt-1">
@@ -212,10 +212,20 @@
                                             {{ formatAmount(l.netSalary) }}
                                         </td>
 
-                                        <td>
-                                            <button class="icon-btn delete" (click)="removeLine(l.salaryLineId)">
+
+
+                                        <td class="action-cell">
+
+                                            <button class="action-btn info" (click)="openDetails(l)"
+                                                title="View Payslip">
+                                                <i class="ti ti-info-circle"></i>
+                                            </button>
+
+                                            <button class="action-btn delete" (click)="removeLine(l.salaryLineId)"
+                                                title="Delete">
                                                 <i class="ti ti-trash"></i>
                                             </button>
+
                                         </td>
 
                                     </tr>
@@ -321,3 +331,151 @@
         </div>
     </div>
 </div>
+
+@if(showDetails()){
+<div class="modal-overlay" (click)="closeDetails()">
+
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+
+        <div class="payslip-modal">
+
+            <!-- HEADER -->
+            <div class="top-header">
+                <div>
+                    <h3>Company</h3>
+                    <!-- <small>{{ companyLocation }}</small> -->
+                </div>
+
+                <div class="text-end">
+                    <div>Payslip For the Month</div>
+                    <h5>{{ form().payrollPeriodId }}</h5>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- EMPLOYEE SUMMARY -->
+            <div class="summary-grid">
+
+                <div class="left">
+                    <h6>EMPLOYEE SUMMARY</h6>
+
+                    <div class="row-item">
+                        <span>Employee Name: </span>
+                        <span>{{ getEmployeeName(selectedLine()?.employeeId!) }}</span>
+                    </div>
+
+                    <div class="row-item">
+                        <span>Employee ID: </span>
+                        <span>{{ selectedLine()?.employeeId }}</span>
+                    </div>
+
+                    <div class="row-item">
+                        <span>Pay Period: </span>
+                        <span>{{ form().payrollPeriodId }}</span>
+                    </div>
+
+                    <div class="row-item">
+                        <span>Pay Date: </span>
+                        <span>{{ today() | date:'dd/MM/yyyy' }}</span>
+                    </div>
+                </div>
+
+                <!-- NET BOX -->
+                <div class="net-box">
+                    <div class="net-amount">
+                        {{ formatAmount(selectedLine()?.netSalary) }}
+                    </div>
+                    <div>Total Net Pay</div>
+
+                    <hr>
+
+                    <div class="row-item">
+                        <span>Paid Days</span>
+                        <span>{{ selectedLine()?.payableDays }}</span>
+                    </div>
+
+                    <div class="row-item">
+                        <span>LOP Days</span>
+                        <span>{{ 30 - selectedLine()?.payableDays! }}</span>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="salary-table">
+
+                <!-- Header -->
+                <div class="table-header">
+                    <div>EARNINGS</div>
+                    <div>AMOUNT</div>
+                    <div>DEDUCTIONS</div>
+                    <div>AMOUNT</div>
+                </div>
+
+                <!-- Rows -->
+                @for(r of rows(); track $index){
+
+                <div class="table-row">
+
+                    <!-- Earnings -->
+                    <div>
+                        {{ earnings()[$index]?.componentName || '' }}
+                    </div>
+
+                    <div>
+                        {{ formatAmount(earnings()[$index]?.amount) }}
+                    </div>
+
+                    <!-- Deductions -->
+                    <div>
+                        {{ deductions()[$index]?.componentName || '' }}
+                    </div>
+
+                    <div>
+                        {{ formatAmount(deductions()[$index]?.amount) }}
+                    </div>
+
+                </div>
+
+                }
+
+                <!-- Totals -->
+                <div class="table-total">
+                    <div>Gross Earnings</div>
+                    <div>{{ formatAmount(selectedLine()?.grossEarnings) }}</div>
+
+                    <div>Total Deductions</div>
+                    <div>{{ formatAmount(selectedLine()?.totalDeductions) }}</div>
+                </div>
+
+            </div>
+
+
+
+            <!-- NET PAYABLE -->
+            <div class="final-net">
+                <div>
+                    <strong>TOTAL NET PAYABLE</strong><br>
+                    <small>Gross Earnings - Total Deductions</small>
+                </div>
+
+                <div class="amount">
+                    {{ formatAmount(selectedLine()?.netSalary) }}
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            @if(selectedLine()?.netSalary !==0){
+            <div class="footer">
+                Amount In Words:
+                {{ numberToWords(selectedLine()?.netSalary) }}
+            </div>
+
+            }
+
+        </div>
+    </div>
+</div>
+}

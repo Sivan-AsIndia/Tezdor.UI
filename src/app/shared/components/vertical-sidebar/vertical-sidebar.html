@@ -271,9 +271,9 @@
         </li>
 
         <li class="sidebar-item">
-          <a class="sidebar-link before:bg-lightwarning hover:text-warning"
-            routerLink="/general-ledger-entries"
-            routerLinkActive="active-link text-warning">
+          <a routerLink="/general-ledger-entries" class="cursor-pointer sidebar-link before:bg-lighterror hover:text-error dark:hover:text-error"
+            [class.active]="isHighlighted('general-ledger')" [class.text-error]="isHighlighted('general-ledger')"
+            [class.activebg]="isHighlighted('general-ledger')" (click)="toggle('general-ledger')">
             <span class="aside-icon p-2 bg-warning-subtle rounded-1">
               <iconify-icon icon="solar:notebook-line-duotone" class="fs-6"></iconify-icon>
             </span>

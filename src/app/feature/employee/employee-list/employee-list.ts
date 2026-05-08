@@ -180,7 +180,7 @@ export class EmployeeListComponent {
 
 
   onEdit(emp: Employee) {
-    this.router.navigate(['/employee/edit', emp.employeeId]);
+    this.router.navigate(['/employees/edit', emp.employeeId]);
   }
 
   onAddEmp() {

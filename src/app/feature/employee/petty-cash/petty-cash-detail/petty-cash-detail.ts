@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ReconciliationStatus } from '../petty-cash';
 import { ToastNotifier } from '../../../../core/services/toast';
 import { MasterDataClient } from '../../../../core/services/master-data';
+import { EmployeeDataClient } from '../../employee-data-client';
 
 @Component({
   selector: 'app-petty-cash-detail',
@@ -15,6 +16,7 @@ import { MasterDataClient } from '../../../../core/services/master-data';
 export class PettyCashDetailComponent {
 
   private readonly service = inject(PettyCashDataClient);
+  private readonly empService = inject(EmployeeDataClient);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly toast = inject(ToastNotifier);
@@ -40,6 +42,7 @@ export class PettyCashDetailComponent {
   currentAction = signal<'reject' | 'cancel' | 'close' | 'reverse' | null>(null);
   currentId = signal<string | null>(null);
 
+  employees = this.empService.employees;
 
   expenseCategories = this.master.expenseCategories;
 
@@ -340,4 +343,19 @@ export class PettyCashDetailComponent {
   getAccountName(id?: string): string {
     return this.expenseLedgerAccounts().find(a => a.accountId === id)?.accountName || '-';
   }
+
+  employeeMap = computed(() => {
+    const map: Record<string, any> = {};
+    this.employees().forEach(e => {
+      map[e.employeeId!] = e;
+    });
+    return map;
+  });
+
+
+  getEmployeeName(id: string): string {
+    const emp = this.employeeMap()[id];
+    return emp ? `${emp.firstName} ${emp.lastName}` : '—';
+  }
+
 }

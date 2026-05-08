@@ -144,10 +144,16 @@ clip-path: polygon(0% 0%, calc(100% - 18px) 0%, 92% 50%, calc(100% - 18px) 100%,
 
 .sticky-summary {
   position: sticky;
-  top: 80px; /* adjust based on your header height */
-  z-index: 10;
+  top: 80px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* IE/Edge */
 }
 
+.sticky-summary::-webkit-scrollbar {
+  display: none;                /* Chrome/Safari */
+}
 .btn-cancel {
     background-color: rgb(156 163 175 / var(--tw-bg-opacity, 1));
 }

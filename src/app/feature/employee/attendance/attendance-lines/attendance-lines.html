@@ -327,95 +327,110 @@
 
 <!-- ADD ATTENDANCE MODAL -->
 @if(showModal()){
-<div class="modal fade" [class.show]="showModal()" style="display:block;">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
 
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    {{ selectedLine() ? 'Edit Attendance' : 'Add Attendance' }}
-                </h5>
-                <button type="button" class="btn-close" (click)="closeModal()"></button>
+<div class="modal-overlay">
+
+    <div class="attendance-modal">
+
+        <!-- HEADER -->
+        <div class="modal-header">
+            <div>
+                <h5>{{ selectedLine() ? 'Edit Attendance' : 'Add Attendance' }}</h5>
+                <small class="text-muted">Mark attendance quickly</small>
+            </div>
+            <button class="icon-btn" (click)="closeModal()">✕</button>
+        </div>
+
+        <!-- BODY -->
+        <div class="modal-body">
+
+            <!-- DATE -->
+            <div class="field">
+                <label>Date</label>
+                <input type="date" [value]="form().attendanceDate" (input)="setDate($any($event.target).value)"
+                    [class.is-invalid]="hasError('attendanceDate')">
+                @if(hasError('attendanceDate')){
+                <div class="field-error">
+                    {{ getError('attendanceDate') }}
+                </div>
+                }
             </div>
 
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Date</label>
-
-                    <input type="date" class="form-control" [disabled]="selectedLine() !== null"
-                        [value]="form().attendanceDate" (input)="setDate($any($event.target).value)"
-                        [min]="attendance()?.fromDate || ''" [max]="attendance()?.toDate || ''"
-                        [class.is-invalid]="hasError('attendanceDate')">
-
-                    @if(hasError('attendanceDate')){
-                    <div class="field-error">
-                        {{ getError('attendanceDate') }}
-                    </div>
-                    }
-                </div>
-
-                <!-- Employee Dropdown -->
-                <div class="mb-3">
-                    <label class="form-label">Employee</label>
-
-                    <select class="form-select" [disabled]="selectedLine() !== null" [value]="form().employeeId || ''"
-                        (input)="setEmployee($any($event.target).value)" [class.is-invalid]="hasError('employeeId')">
-
-                        <option value="">-- Select Employee --</option>
-
-                        @for (emp of employees(); track emp.employeeId) {
-                        <option [value]="emp.employeeId" [selected]="emp.employeeId === form().employeeId">
-                            {{ emp.firstName }} {{ emp.lastName }}
-                        </option>
-                        }
-
-                    </select>
-
-                    @if(hasError('employeeId')){
-                    <div class="field-error">
-                        {{ getError('employeeId') }}
-                    </div>
-                    }
-                </div>
-
-                <!-- In Time -->
-                <div class="mb-3">
-                    <label class="form-label">In Time</label>
-                    <input type="time" class="form-control" [value]="form().inTime"
-                        (input)="setInTime($any($event.target).value)" [class.is-invalid]="hasError('inTime')">
-
-                    @if(hasError('inTime')){
+            <!-- TIME -->
+            <div class="time-row">
+                <div class="field">
+                    <label>In Time</label>
+                    <input type="time" [value]="form().inTime" (input)="setInTime($any($event.target).value)"
+                        [class.is-invalid]="hasError('inTime')">
+                    @if(hasError('inTime'))
+                    {
                     <div class="field-error">
                         {{ getError('inTime') }}
                     </div>
                     }
                 </div>
 
-                <!-- Out Time -->
-                <div class="mb-3">
-                    <label class="form-label">Out Time</label>
-                    <input type="time" class="form-control" [value]="form().outTime"
-                        (input)="setOutTime($any($event.target).value)" [class.is-invalid]="hasError('outTime')">
-
-                    @if(hasError('outTime')){
+                <div class="field">
+                    <label>Out Time</label>
+                    <input type="time" [value]="form().outTime" (input)="setOutTime($any($event.target).value)"
+                        [class.is-invalid]="hasError('outTime')">
+                    @if(hasError('outTime'))
+                    {
                     <div class="field-error">
                         {{ getError('outTime') }}
                     </div>
                     }
                 </div>
-
             </div>
 
-            <div class="modal-footer">
-                <button class="btn btn-cancel" (click)="closeModal()">Cancel</button>
-                <button class="btn btn-primary" (click)="saveAttendance()">
-                    Save
-                </button>
+            <!-- EMPLOYEES -->
+            <div class="employee-section">
+
+                <div class="section-header">
+                    <label>Employees</label>
+
+                    <button class="select-all-btn" (click)="selectAll.set(!selectAll()); toggleSelectAll()">
+                        {{ selectAll() ? 'Unselect All' : 'Select All' }}
+                    </button>
+                </div>
+
+                <div class="employee-grid">
+
+                    @for(emp of employees(); track emp.employeeId){
+
+                    <div class="emp-chip" [class.active]="form().employeeIds.includes(emp.employeeId!)"
+                        (click)="toggleEmployee(emp.employeeId!)">
+
+                        <div class="avatar">
+                            {{ emp.firstName[0] }}
+                        </div>
+
+                        <span>
+                            {{ emp.firstName }}
+                        </span>
+
+                    </div>
+
+                    }
+
+                </div>
+
             </div>
 
         </div>
+
+        <!-- FOOTER -->
+        <div class="modal-footer">
+            <button class="btn-cancel" (click)="closeModal()">Cancel</button>
+            <button class="btn-save" (click)="saveAttendance()">
+                Save Attendance
+            </button>
+        </div>
+
     </div>
+
 </div>
+
 }
 
 

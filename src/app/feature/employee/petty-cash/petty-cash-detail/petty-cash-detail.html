@@ -91,7 +91,7 @@
 
           <div class="col-md-6 info-box">
             <label>Custodian</label>
-            <div>{{ pc.custodianEmployeeId }}</div>
+            <div>{{ getEmployeeName(pc.custodianEmployeeId) }}</div>
           </div>
 
           <div class="col-md-3 info-box">
@@ -363,7 +363,8 @@
     </div>
 
     <!-- RIGHT -->
-    <div class="col-lg-4">
+   <div class="col-lg-4 ">
+    <div class="sticky-summary">
       <div class="card mb-3">
         <div class="card-header  text-primary fw-semibold">
           Actions
@@ -462,7 +463,7 @@
 
         </div>
       </div>
-      <div class="sticky-summary">
+      <!-- <div class="sticky-summary"> -->
 
         <!-- CASH SUMMARY -->
         <div class="card mb-3">
@@ -487,7 +488,7 @@
           </div>
         </div>
 
-      </div>
+      <!-- </div> -->
 
       <div class="card mb-3 audit-card">
         <div class="card-header fw-semibold text-primary">
@@ -634,6 +635,7 @@
           </div>
 
         </div>
+      </div>
       </div>
 
     </div>

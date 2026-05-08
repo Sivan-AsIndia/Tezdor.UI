@@ -17,10 +17,10 @@ export class EmployeeDataClient {
 
 
   getEmployee(id: string) {
-  return computed(() =>
-    this._employees().find(e => e.employeeId === id) ?? null
-  );
-}
+    return computed(() =>
+      this._employees().find(e => e.employeeId === id) ?? null
+    );
+  }
 
   // ===== GET BY ID =====
   getById(id: string): Employee | undefined {
@@ -29,9 +29,19 @@ export class EmployeeDataClient {
 
   // ===== ADD =====
   add(employee: Employee) {
+
+    const list = this._employees();
+
+    const maxCode = list
+      .map(e => Number(e.employeeCode?.replace('EMP', '')) || 0)
+      .reduce((max, val) => Math.max(max, val), 0);
+
+    const employeeCode = `EMP${(maxCode + 1).toString().padStart(3, '0')}`;
+
     const newEmp: Employee = {
       ...employee,
-      employeeId: crypto.randomUUID(), // temp (backend later)
+      employeeId: crypto.randomUUID(),
+      employeeCode,
       createdAt: new Date()
     };
 

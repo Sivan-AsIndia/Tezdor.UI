@@ -50,13 +50,15 @@ export class AttendanceLinesComponent {
     outTime: ''
   });
 
+  selectAll = signal(false);
+
   // use service signal
   employees = this.empService.employees;
 
   showModal = signal(false);
 
   form = signal({
-    employeeId: '',
+    employeeIds: [] as string[],
     attendanceDate: new Date().toISOString().split('T')[0],
     inTime: '',
     outTime: ''
@@ -433,7 +435,7 @@ export class AttendanceLinesComponent {
     this.selectedLine.set(line);
 
     this.form.set({
-      employeeId: line.employeeId ?? '',
+      employeeIds: [line.employeeId ?? ''],
       attendanceDate: line.attendanceDate ?? new Date().toISOString().split('T')[0],
       inTime: line.inTime ?? '',
       outTime: line.outTime ?? ''
@@ -502,7 +504,7 @@ export class AttendanceLinesComponent {
     if (!this.canAdd()) return;
 
     this.form.set({
-      employeeId: '',
+      employeeIds: [],
       attendanceDate: new Date().toISOString().split('T')[0],
       inTime: '',
       outTime: ''
@@ -514,6 +516,7 @@ export class AttendanceLinesComponent {
   closeModal() {
     this.showModal.set(false);
     this.selectedLine.set(null);
+    this.selectAll.set(false);
   }
 
   setEmployee(value: string) {
@@ -542,7 +545,7 @@ export class AttendanceLinesComponent {
       this.setError('attendanceDate', 'Select date');
     }
 
-    if (!f.employeeId) {
+    if (!f.employeeIds) {
       this.setError('employeeId', 'Select employee');
     }
     if (!f.inTime) { this.setError('inTime', 'Enter in time'); }
@@ -556,6 +559,10 @@ export class AttendanceLinesComponent {
 
     if (f.inTime && f.outTime && f.inTime >= f.outTime) {
       this.setError('outTime', 'Out time must be greater than In time');
+    }
+    if(f.employeeIds.length === 0){
+      this.toast.error("Atleast select one employee to mark attendance")
+      return;
     }
 
     // stop if any error
@@ -599,26 +606,29 @@ export class AttendanceLinesComponent {
       } else {
 
         // CREATE NEW
-        const line: AttendanceLine = {
-          attendanceLineId: crypto.randomUUID(),
-          attendanceId: this.service.attendance()?.attendanceId!,
-          employeeId: f.employeeId,
-          attendanceDate: f.attendanceDate,
-          attendanceType: AttendanceType.Present,
-          inTime: f.inTime,
-          outTime: f.outTime,
-          workingHours,
-          overtimeHours: totalMinutes > 480
-            ? Math.round(totalMinutes - 480)
-            : 0,
-          isLate: f.inTime > '09:00',
-          isEarlyExit: f.outTime < '18:00',
-          isHalfDay: workingHours < 5,
-          timeLogs: []
-        };
+        f.employeeIds.forEach(empId => {
 
-        this.service.addLine(line);
-        this.toast.success("Added Successfully");
+          const line: AttendanceLine = {
+            attendanceLineId: crypto.randomUUID(),
+            attendanceId: this.service.attendance()?.attendanceId!,
+            employeeId: empId,
+            attendanceDate: f.attendanceDate,
+            attendanceType: AttendanceType.Present,
+            inTime: f.inTime,
+            outTime: f.outTime,
+            workingHours,
+            overtimeHours: totalMinutes > 480 ? Math.round(totalMinutes - 480) : 0,
+            isLate: f.inTime > '09:00',
+            isEarlyExit: f.outTime < '18:00',
+            isHalfDay: workingHours < 5,
+            timeLogs: []
+          };
+
+          this.service.addLine(line);
+
+        });
+
+        this.toast.success("Attendance added for selected employees");
       }
     } catch (err: any) {
       this.toast.error(err.message);
@@ -632,13 +642,41 @@ export class AttendanceLinesComponent {
 
     // ===== RESET FORM =====
     this.form.set({
-      employeeId: '',
+      employeeIds: [],
       attendanceDate: new Date().toISOString().split('T')[0], // 🔥 today
       inTime: '',
       outTime: ''
     });
     // ===== CLOSE MODAL =====
     this.closeModal();
+  }
+
+  toggleSelectAll() {
+    const all = this.selectAll();
+
+    if (all) {
+      this.form.update(f => ({
+        ...f,
+        employeeIds: this.employees().map(e => e.employeeId!)
+      }));
+    } else {
+      this.form.update(f => ({ ...f, employeeIds: [] }));
+    }
+  }
+
+  toggleEmployee(empId: string) {
+
+    this.form.update(f => {
+
+      const exists = f.employeeIds.includes(empId);
+
+      return {
+        ...f,
+        employeeIds: exists
+          ? f.employeeIds.filter(id => id !== empId)
+          : [...f.employeeIds, empId]
+      };
+    });
   }
 
   toggleView() {

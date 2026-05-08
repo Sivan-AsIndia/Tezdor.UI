@@ -6,6 +6,8 @@ import { ATTENDANCE_SEED } from './attendance.seed';
 import { ATTENDANCE_LINES_SEED } from './attendance-line.seed';
 import { PayrollPeriod } from './payroll-period';
 import { PAYROLL_PERIODS } from './payroll-period.seed';
+import { SALARY_COMPONENT_SEED } from '../salary/salary-component.seed';
+import { SalaryComponent } from '../salary/salary-component';
 
 @Injectable({ providedIn: 'root' })
 export class AttendanceDataClient {
@@ -15,6 +17,9 @@ export class AttendanceDataClient {
   private readonly _attendance = signal<Attendance | null>(null);
 
   private readonly _attendanceList = signal<Attendance[]>(ATTENDANCE_SEED);
+private readonly _components = signal<SalaryComponent[]>(SALARY_COMPONENT_SEED);
+
+
 
   private readonly _loading = signal(false);
 
@@ -23,9 +28,16 @@ export class AttendanceDataClient {
   attendance = this._attendance.asReadonly();
   attendanceList = this._attendanceList.asReadonly();
   loading = this._loading.asReadonly();
-    private readonly _periods = signal<PayrollPeriod[]>(PAYROLL_PERIODS);
 
-  periods = this._periods.asReadonly();
+ periods = computed<PayrollPeriod[]>(() =>
+  this._attendanceList().map(p => ({
+    id: p.attendancePeriodId,
+    name: p.attendancePeriodName,
+    fromDate: p.fromDate,
+    toDate: p.toDate,
+    status: p.status
+  }))
+);
 
 
   lines = computed(() => this._attendance()?.attendanceLines ?? []);
@@ -58,6 +70,10 @@ export class AttendanceDataClient {
 
 getByEmployee(empId: string) {
   return this.lines().filter(a => a.employeeId === empId);
+}
+
+getComponents() {
+  return this._components();
 }
 
 getByEmployeeAndDate(empId: string, from: string, to: string) {

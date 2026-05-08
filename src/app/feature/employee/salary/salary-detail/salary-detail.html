@@ -93,72 +93,227 @@
         </div>
 
     </div>
-                <div class="content-card">
-                    <div class="card-body-inner">
-    <!-- 🔷 TABLE -->
-    <div class="border-table">
-        <div class="v-table__wrapper">
+    <div class="content-card">
+        <div class="card-body-inner">
+            <!-- 🔷 TABLE -->
+            <div class="border-table">
+                <div class="v-table__wrapper">
 
-            <table>
-                <thead>
-                    <tr style="background:#8080800d;">
-                        <th>Employee</th>
-                        <th>Payable Days</th>
-                        <th>Basic</th>
-                        <th>Gross</th>
-                        <th>Deductions</th>
-                        <th>Net</th>
-                    </tr>
-                </thead>
+                    <table>
+                        <thead>
+                            <tr style="background:#8080800d;">
+                                <th>Employee</th>
+                                <th>Payable Days</th>
+                                <th>Basic</th>
+                                <th>Gross</th>
+                                <th>Deductions</th>
+                                <th>Net</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
 
-                <tbody>
+                        <tbody>
 
-                    @for(line of salary()?.salaryLines ?? []; track line.salaryLineId){
+                            @for(line of salary()?.salaryLines ?? []; track line.salaryLineId){
 
-                    <tr>
+                            <tr>
 
-                        <td class="fw-semibold">
-                            {{ getEmployeeName(line.employeeId) }}
-                        </td>
+                                <td class="fw-semibold">
+                                    {{ getEmployeeName(line.employeeId) }}
+                                </td>
 
-                        <td>{{ line.payableDays }}</td>
+                                <td>{{ line.payableDays }}</td>
 
-                        <td>₹ {{ formatAmount(line.basicSalary) }}</td>
+                                <td>₹ {{ formatAmount(line.basicSalary) }}</td>
 
-                        <td class="text-primary fw-semibold">
-                            ₹ {{ formatAmount(line.grossEarnings) }}
-                        </td>
+                                <td class="text-primary fw-semibold">
+                                    ₹ {{ formatAmount(line.grossEarnings) }}
+                                </td>
 
-                        <td class="text-danger">
-                            ₹ {{ formatAmount(line.totalDeductions) }}
-                        </td>
+                                <td class="text-danger">
+                                    ₹ {{ formatAmount(line.totalDeductions) }}
+                                </td>
 
-                        <td class="text-success fw-semibold">
-                            ₹ {{ formatAmount(line.netSalary) }}
-                        </td>
+                                <td class="text-success fw-semibold">
+                                    ₹ {{ formatAmount(line.netSalary) }}
+                                </td>
 
-                    </tr>
+                                <td class="text-end">
+                                    <button class="action-btn info" (click)="openDetails(line)" title="View Payslip">
+                                        <i class="ti ti-eye"></i>
+                                    </button>
+                                </td>
 
-                    }
+                            </tr>
 
-                    @if((salary()?.salaryLines?.length ?? 0) === 0){
-                    <tr>
-                        <td colspan="6" class="text-center py-4">
-                            No salary lines found
-                        </td>
-                    </tr>
-                    }
+                            }
 
-                </tbody>
+                            @if((salary()?.salaryLines?.length ?? 0) === 0){
+                            <tr>
+                                <td colspan="6" class="text-center py-4">
+                                    No salary lines found
+                                </td>
+                            </tr>
+                            }
 
-            </table>
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </div>
 
         </div>
-    </div>
-
-    </div>
     </div>
 
     }
 
 </div>
+
+@if(showDetails()){
+<div class="modal-overlay" (click)="closeDetails()">
+
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+
+        <div class="payslip-modal">
+
+            <!-- HEADER -->
+            <div class="top-header">
+                <div>
+                    <h3>Company</h3>
+                    <!-- <small>{{ companyLocation }}</small> -->
+                </div>
+
+                <div class="text-end">
+                    <div>Payslip For the Month</div>
+                    <h5>{{ salary()?.salaryMonth }}</h5>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- EMPLOYEE SUMMARY -->
+            <div class="summary-grid">
+
+                <div class="left">
+                    <h6>EMPLOYEE SUMMARY</h6>
+
+                    <div class="row-item">
+                        <span>Employee Name: </span>
+                        <span>{{ getEmployeeName(selectedLine()?.employeeId!) }}</span>
+                    </div>
+
+                    <div class="row-item">
+                        <span>Employee ID: </span>
+                        <span>{{ selectedLine()?.employeeId }}</span>
+                    </div>
+
+                    <div class="row-item">
+                        <span>Pay Period: </span>
+                        <span>{{ salary()?.salaryMonth }}</span>
+                    </div>
+
+                    <div class="row-item">
+                        <span>Pay Date: </span>
+                        <span>{{ today() | date:'dd/MM/yyyy' }}</span>
+                    </div>
+                </div>
+
+                <!-- NET BOX -->
+                <div class="net-box">
+                    <div class="net-amount">
+                        {{ formatAmount(selectedLine()?.netSalary) }}
+                    </div>
+                    <div>Total Net Pay</div>
+
+                    <hr>
+
+                    <div class="row-item">
+                        <span>Paid Days</span>
+                        <span>{{ selectedLine()?.payableDays }}</span>
+                    </div>
+
+                    <div class="row-item">
+                        <span>LOP Days</span>
+                        <span>{{ 30 - selectedLine()?.payableDays! }}</span>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="salary-table">
+
+                <!-- Header -->
+                <div class="table-header">
+                    <div>EARNINGS</div>
+                    <div>AMOUNT</div>
+                    <div>DEDUCTIONS</div>
+                    <div>AMOUNT</div>
+                </div>
+
+                <!-- Rows -->
+                @for(r of rows(); track $index){
+
+                <div class="table-row">
+
+                    <!-- Earnings -->
+                    <div>
+                        {{ earnings()[$index]?.componentName || '' }}
+                    </div>
+
+                    <div>
+                        {{ formatAmount(earnings()[$index]?.amount) }}
+                    </div>
+
+                    <!-- Deductions -->
+                    <div>
+                        {{ deductions()[$index]?.componentName || '' }}
+                    </div>
+
+                    <div>
+                        {{ formatAmount(deductions()[$index]?.amount) }}
+                    </div>
+
+                </div>
+
+                }
+
+                <!-- Totals -->
+                <div class="table-total">
+                    <div>Gross Earnings</div>
+                    <div>{{ formatAmount(selectedLine()?.grossEarnings) }}</div>
+
+                    <div>Total Deductions</div>
+                    <div>{{ formatAmount(selectedLine()?.totalDeductions) }}</div>
+                </div>
+
+            </div>
+
+
+
+            <!-- NET PAYABLE -->
+            <div class="final-net">
+                <div>
+                    <strong>TOTAL NET PAYABLE</strong><br>
+                    <small>Gross Earnings - Total Deductions</small>
+                </div>
+
+                <div class="amount">
+                    {{ formatAmount(selectedLine()?.netSalary) }}
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            @if(selectedLine()?.netSalary !==0){
+            <div class="footer">
+                Amount In Words:
+                {{ numberToWords(selectedLine()?.netSalary) }}
+            </div>
+
+            }
+
+        </div>
+    </div>
+</div>
+}
