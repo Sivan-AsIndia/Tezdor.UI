@@ -12,6 +12,37 @@
 
   }
 
+
+  .left-sidebar {
+  left: 20px;
+  top: 20px;
+  border-radius: 20px;
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 40px);
+}
+
+.scroll-sidebar {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+.scroll-sidebar {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  scrollbar-width: none;   
+  -ms-overflow-style: none; 
+}
+
+.scroll-sidebar::-webkit-scrollbar {
+  display: none;     
+}
+
+.fixed-profile {
+  position: static;
+}
   .first-level .sidebar-link .hide-menu {
     font-weight: 600;
     font-size: 13.5px;
@@ -142,11 +173,12 @@
     </a>
   </div>
 
+  <!-- Scroll area -->
   <div class="scroll-sidebar" data-simplebar="">
     <nav class="sidebar-nav">
       <ul id="sidebarnav" class="mb-0">
 
-        <!-- ══ HOME ══════════════════════════════════════════════════ -->
+        <!-- HOME -->
         <li class="nav-small-cap">
           <iconify-icon icon="solar:menu-dots-bold-duotone" class="nav-small-cap-icon fs-5"></iconify-icon>
           <span class="hide-menu">Home</span>
@@ -164,16 +196,19 @@
           </a>
         </li>
 
-        <!-- ══ PRODUCT MANAGEMENT ════════════════════════════════════ -->
+        <!-- PRODUCT MANAGEMENT -->
         <li class="nav-small-cap">
           <iconify-icon icon="solar:menu-dots-bold-duotone" class="nav-small-cap-icon fs-5"></iconify-icon>
           <span class="hide-menu">Product Management</span>
         </li>
 
         <li class="sidebar-item">
-          <a     routerLink="/products" class="cursor-pointer sidebar-link before:bg-lightwarning hover:text-warning dark:hover:text-warning"
-             [class.active]="openMenu() === 'productMenu'" [class.text-warning]="openMenu() === 'productMenu'"
-            [class.activebg]="openMenu() === 'productMenu'" (click)="toggle('productMenu')">
+          <a routerLink="/products"
+            class="cursor-pointer sidebar-link before:bg-lightwarning hover:text-warning dark:hover:text-warning"
+            [class.active]="openMenu() === 'productMenu'"
+            [class.text-warning]="openMenu() === 'productMenu'"
+            [class.activebg]="openMenu() === 'productMenu'"
+            (click)="toggle('productMenu')">
             <span class="aside-icon p-2 bg-warning-subtle rounded-1">
               <iconify-icon icon="solar:box-line-duotone" class="fs-6"></iconify-icon>
             </span>
@@ -182,9 +217,12 @@
         </li>
 
         <li class="sidebar-item">
-          <a    routerLink="/store" class="cursor-pointer sidebar-link before:bg-lightsuccess hover:text-success dark:hover:text-success"
-            [class.active]="openMenu() === 'storeMenu'" [class.text-success]="openMenu() === 'storeMenu'"
-            [class.activebg]="openMenu() === 'storeMenu'" (click)="toggle('storeMenu')">
+          <a routerLink="/store"
+            class="cursor-pointer sidebar-link before:bg-lightsuccess hover:text-success dark:hover:text-success"
+            [class.active]="openMenu() === 'storeMenu'"
+            [class.text-success]="openMenu() === 'storeMenu'"
+            [class.activebg]="openMenu() === 'storeMenu'"
+            (click)="toggle('storeMenu')">
             <span class="aside-icon p-2 bg-success-subtle rounded-1">
               <iconify-icon icon="mdi:warehouse" class="fs-6"></iconify-icon>
             </span>
@@ -193,9 +231,12 @@
         </li>
 
         <li class="sidebar-item">
-          <a    routerLink="/purchase-order" class="cursor-pointer sidebar-link  before:bg-lightinfo hover:text-info dark:hover:text-info"
-            [class.active]="openMenu() === 'purchaseMenu'" [class.text-info]="openMenu() === 'purchaseMenu'"
-            [class.activebg]="openMenu() === 'purchaseMenu'" (click)="toggle('purchaseMenu')">
+          <a routerLink="/purchase-order"
+            class="cursor-pointer sidebar-link before:bg-lightinfo hover:text-info dark:hover:text-info"
+            [class.active]="openMenu() === 'purchaseMenu'"
+            [class.text-info]="openMenu() === 'purchaseMenu'"
+            [class.activebg]="openMenu() === 'purchaseMenu'"
+            (click)="toggle('purchaseMenu')">
             <span class="aside-icon p-2 bg-info-subtle rounded-1">
               <iconify-icon icon="solar:cart-3-line-duotone" class="fs-6"></iconify-icon>
             </span>
@@ -204,9 +245,12 @@
         </li>
 
         <li class="sidebar-item">
-          <a    routerLink="/purchase-invoice" class="cursor-pointer sidebar-link before:bg-lightsuccess hover:text-success dark:hover:text-success"
-            [class.active]="openMenu() === 'purchaseinvoice'" [class.text-success]="openMenu() === 'purchaseinvoice'"
-            [class.activebg]="openMenu() === 'purchaseinvoice'" (click)="toggle('purchaseinvoice')">
+          <a routerLink="/purchase-invoice"
+            class="cursor-pointer sidebar-link before:bg-lightsuccess hover:text-success dark:hover:text-success"
+            [class.active]="openMenu() === 'purchaseinvoice'"
+            [class.text-success]="openMenu() === 'purchaseinvoice'"
+            [class.activebg]="openMenu() === 'purchaseinvoice'"
+            (click)="toggle('purchaseinvoice')">
             <span class="aside-icon p-2 bg-danger-subtle rounded-1">
               <iconify-icon icon="solar:document-text-line-duotone" class="fs-6"></iconify-icon>
             </span>
@@ -214,26 +258,33 @@
           </a>
         </li>
 
-           <li class="sidebar-item">
-          <a    routerLink="/sales-invoice" class="cursor-pointer sidebar-link before:bg-lightsales hover:text-sales dark:hover:text-sales"
-            [class.active]="openMenu() === 'salesinvoice'" [class.text-sales]="openMenu() === 'salesinvoice'"
-            [class.activebg]="openMenu() === 'salesinvoice'" (click)="toggle('salesinvoice')">
+        <li class="sidebar-item">
+          <a routerLink="/sales-invoice"
+            class="cursor-pointer sidebar-link before:bg-lightsales hover:text-sales dark:hover:text-sales"
+            [class.active]="openMenu() === 'salesinvoice'"
+            [class.text-sales]="openMenu() === 'salesinvoice'"
+            [class.activebg]="openMenu() === 'salesinvoice'"
+            (click)="toggle('salesinvoice')">
             <span class="aside-icon p-2 bg-danger-subtle rounded-1">
-<iconify-icon icon="solar:wallet-money-line-duotone" class="fs-6"></iconify-icon>            </span>
+              <iconify-icon icon="solar:wallet-money-line-duotone" class="fs-6"></iconify-icon>
+            </span>
             <span class="hide-menu flex-shrink-0">Sales Invoice</span>
           </a>
         </li>
 
-        <!-- ══ EMPLOYEE MANAGEMENT ═══════════════════════════════════ -->
+        <!-- EMPLOYEE MANAGEMENT -->
         <li class="nav-small-cap">
           <iconify-icon icon="solar:menu-dots-bold-duotone" class="nav-small-cap-icon fs-5"></iconify-icon>
           <span class="hide-menu">Employee Management</span>
         </li>
 
         <li class="sidebar-item">
-          <a routerLink="/employees" class="cursor-pointer sidebar-link  before:bg-lightwarning hover:text-warning dark:hover:text-warning"
-            [class.active]="isHighlighted('viewEmployees')" [class.text-warning]="isHighlighted('viewEmployees')"
-            [class.activebg]="isHighlighted('viewEmployees')" (click)="toggle('viewEmployees')">
+          <a routerLink="/employees"
+            class="cursor-pointer sidebar-link before:bg-lightwarning hover:text-warning dark:hover:text-warning"
+            [class.active]="isHighlighted('viewEmployees')"
+            [class.text-warning]="isHighlighted('viewEmployees')"
+            [class.activebg]="isHighlighted('viewEmployees')"
+            (click)="toggle('viewEmployees')">
             <span class="aside-icon p-2 bg-warning-subtle rounded-1">
               <iconify-icon icon="solar:users-group-rounded-line-duotone" class="fs-6"></iconify-icon>
             </span>
@@ -242,9 +293,12 @@
         </li>
 
         <li class="sidebar-item">
-          <a routerLink="/attendance" class="cursor-pointer sidebar-link before:bg-lightprimary hover:text-primary dark:hover:text-primary"
-            [class.active]="isHighlighted('attendance')" [class.text-primary]="isHighlighted('attendance')"
-            [class.activebg]="isHighlighted('attendance')" (click)="toggle('attendance')">
+          <a routerLink="/attendance"
+            class="cursor-pointer sidebar-link before:bg-lightprimary hover:text-primary dark:hover:text-primary"
+            [class.active]="isHighlighted('attendance')"
+            [class.text-primary]="isHighlighted('attendance')"
+            [class.activebg]="isHighlighted('attendance')"
+            (click)="toggle('attendance')">
             <span class="aside-icon p-2 bg-success-subtle rounded-1">
               <iconify-icon icon="solar:calendar-date-line-duotone" class="fs-6"></iconify-icon>
             </span>
@@ -253,9 +307,12 @@
         </li>
 
         <li class="sidebar-item">
-          <a routerLink="/salary" class="cursor-pointer sidebar-link before:bg-lightsuccess hover:text-success dark:hover:text-success"
-            [class.active]="isHighlighted('salary')" [class.text-success]="isHighlighted('salary')"
-            [class.activebg]="isHighlighted('salary')" (click)="toggle('salary')">
+          <a routerLink="/salary"
+            class="cursor-pointer sidebar-link before:bg-lightsuccess hover:text-success dark:hover:text-success"
+            [class.active]="isHighlighted('salary')"
+            [class.text-success]="isHighlighted('salary')"
+            [class.activebg]="isHighlighted('salary')"
+            (click)="toggle('salary')">
             <span class="aside-icon p-2 bg-info-subtle rounded-1">
               <iconify-icon icon="solar:wallet-money-line-duotone" class="fs-6"></iconify-icon>
             </span>
@@ -264,9 +321,12 @@
         </li>
 
         <li class="sidebar-item">
-          <a routerLink="/petty-cash" class="cursor-pointer sidebar-link before:bg-lighterror hover:text-error dark:hover:text-error"
-            [class.active]="isHighlighted('petty-cash')" [class.text-error]="isHighlighted('petty-cash')"
-            [class.activebg]="isHighlighted('petty-cash')" (click)="toggle('petty-cash')">
+          <a routerLink="/petty-cash"
+            class="cursor-pointer sidebar-link before:bg-lighterror hover:text-error dark:hover:text-error"
+            [class.active]="isHighlighted('petty-cash')"
+            [class.text-error]="isHighlighted('petty-cash')"
+            [class.activebg]="isHighlighted('petty-cash')"
+            (click)="toggle('petty-cash')">
             <span class="aside-icon p-2 bg-danger-subtle rounded-1">
               <iconify-icon icon="solar:hand-money-line-duotone" class="fs-6"></iconify-icon>
             </span>
@@ -274,16 +334,19 @@
           </a>
         </li>
 
-                <!-- ══ EMPLOYEE MANAGEMENT ═══════════════════════════════════ -->
+        <!-- LEDGER -->
         <li class="nav-small-cap">
           <iconify-icon icon="solar:menu-dots-bold-duotone" class="nav-small-cap-icon fs-5"></iconify-icon>
           <span class="hide-menu">Ledger</span>
         </li>
 
         <li class="sidebar-item">
-          <a routerLink="/general-ledger-entries" class="cursor-pointer sidebar-link before:bg-lighterror hover:text-error dark:hover:text-error"
-            [class.active]="isHighlighted('general-ledger')" [class.text-error]="isHighlighted('general-ledger')"
-            [class.activebg]="isHighlighted('general-ledger')" (click)="toggle('general-ledger')">
+          <a routerLink="/general-ledger-entries"
+            class="cursor-pointer sidebar-link before:bg-lighterror hover:text-error dark:hover:text-error"
+            [class.active]="isHighlighted('general-ledger')"
+            [class.text-error]="isHighlighted('general-ledger')"
+            [class.activebg]="isHighlighted('general-ledger')"
+            (click)="toggle('general-ledger')">
             <span class="aside-icon p-2 bg-warning-subtle rounded-1">
               <iconify-icon icon="solar:notebook-line-duotone" class="fs-6"></iconify-icon>
             </span>
@@ -291,14 +354,14 @@
           </a>
         </li>
 
-
       </ul>
     </nav>
   </div>
 
-  <!-- Profile footer -->
-  <div class="mx-3 mt-3" [class.fixed-profile]="sidebar.isCollapsed() && sidebar.isHovered()">
-    <div class="card bg-primary-subtle mb-0 shadow-none p-0">
+  <!-- Profile footer — always at bottom, never overlaps -->
+@if (sidebar.isExpanded) {
+  <div class="mx-3 mt-auto">
+    <div class="card bg-primary-subtle mb-0 shadow-none p-0 profile-card">
       <div class="card-body p-4">
         <div class="d-flex align-items-center justify-content-between gap-3">
           <div class="d-flex align-items-center gap-3">
@@ -314,7 +377,7 @@
             </div>
           </div>
           <button type="button" (click)="logout()"
-            class="btn btn-link p-0 position-relative"
+            class="btn btn-link p-0"
             title="Logout" style="color:inherit !important;">
             <iconify-icon icon="solar:logout-line-duotone" class="fs-8"></iconify-icon>
           </button>
@@ -322,5 +385,5 @@
       </div>
     </div>
   </div>
-
+}
 </aside>

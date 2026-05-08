@@ -1,10 +1,8 @@
-// ── store.service.ts ───────────────────────────────────────
 import { Injectable, signal, computed } from '@angular/core';
-import { StoreMaintain, StockLedgerRow, StoreProduct, StoreWarehouse, WAREHOUSE_OPTIONS } from './store';
+import { StoreMaintain, StockLedgerRow, StoreProduct } from './store';
 import { STORE_MAINTAIN } from './store.seed';
 import { ProductSummary } from '../product/product';
-
-
+import { POLineItem, PurchaseOrder } from '../purchase/purchase-order/purchase-order'; 
 
 @Injectable({ providedIn: 'root' })
 export class StoreDataClient {
@@ -18,20 +16,20 @@ export class StoreDataClient {
     for (const t of this._transactions()) {
       if (!map.has(t.productCode)) {
         map.set(t.productCode, {
-          productCode: t.productCode,
-          productName: t.productName,
-          vendorCode:  t.vendorCode,
-          vendorName:  t.vendorName,
-          totalIn:     0,
-          unitId: 0,
-          totalOut:    0,
-          closingStock: 0,
+          productCode:      t.productCode,
+          productName:      t.productName,
+          vendorCode:       t.vendorCode,
+          vendorName:       t.vendorName,
+          totalIn:          0,
+          unitId:           0,
+          totalOut:         0,
+          closingStock:     0,
           transactionCount: 0,
         });
       }
       const s = map.get(t.productCode)!;
-      if (t.type === 'IN')  s.totalIn  += t.quantity;
-      else                  s.totalOut += t.quantity;
+      if (t.type === 'IN') s.totalIn  += t.quantity;
+      else                 s.totalOut += t.quantity;
       s.transactionCount++;
     }
 
@@ -42,29 +40,29 @@ export class StoreDataClient {
     return [...map.values()];
   });
 
+  getProducts(): StoreProduct[] {
+    return this.productSummaries().map(p => ({
+      code:     p.productCode,
+      name:     p.productName,
+      unitName: 'Nos',
+      unitId:   0,
+    }));
+  }
 
+  getProductUnit(code: string): { name: string; unitName: string } | undefined {
+    return this.getProducts().find(p => p.code === code);
+  }
 
-getProducts(): StoreProduct[] {
-  return this.productSummaries().map(p => ({
-    code: p.productCode,
-    name: p.productName,
-    unitName: 'Nos',
-    unitId : 0
-  }));
-}
+  getCurrentBalance(productCode: string): number {
+    return this.productSummaries()
+      .find(p => p.productCode === productCode)?.closingStock ?? 0;
+  }
 
-getProductUnit(code: string): { name: string; unitName: string } | undefined {
-  return this.getProducts().find(p => p.code === code);
-}
+  generateTnCode(): string {
+    const n = this._transactions().length + 1;
+    return `TN-${new Date().getFullYear()}-${String(n).padStart(4, '0')}`;
+  }
 
-getCurrentBalance(productCode: string): number {
-  return this.productSummaries().find(p => p.productCode === productCode)?.closingStock ?? 0;
-}
-
-generateTnCode(): string {
-  const n = this._transactions().length + 1;
-  return `TN-${new Date().getFullYear()}-${String(n).padStart(4, '0')}`;
-}
 
   getLedgerRows(productCode: string): StockLedgerRow[] {
     const rows = this._transactions()
@@ -72,6 +70,7 @@ generateTnCode(): string {
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
     let runningStock = 0;
+
     return rows.map((t, index) => {
       const oldStock = runningStock;
       const received = t.type === 'IN'  ? t.quantity : 0;
@@ -79,7 +78,7 @@ generateTnCode(): string {
       const total    = oldStock + received;
       const closing  = total - issued;
 
-      runningStock = closing; 
+      runningStock = closing;
 
       return {
         sNo:         index + 1,
@@ -106,5 +105,65 @@ generateTnCode(): string {
 
   deleteTransaction(id: number): void {
     this._transactions.update(list => list.filter(t => t.id !== id));
+  }
+
+
+addFromPO(po: PurchaseOrder): void {
+  const today = new Date().toISOString().split('T')[0];
+
+  po.lineItems.forEach(item => {
+    const qty      = Number(item.quantity);  
+    const received = Number(item.receivedQuantity ?? 0);
+    const pendingQty = qty - received;
+
+    if (pendingQty <= 0) return;
+
+    this.addTransaction({
+      id:          0,
+      date:        today,
+      vendorCode:  po.vendorCode,
+      vendorName:  po.vendorName,
+      productCode: item.productCode,
+      productName: item.productName,
+      type:        'IN',
+      quantity:    pendingQty, 
+    } as StoreMaintain);
+  });
+}
+  addPartialReceive(po: PurchaseOrder, line: POLineItem, qty: number): void {
+    if (qty <= 0) return;
+  const cleanQty = Number(qty);
+    const today = new Date().toISOString().split('T')[0];
+
+    this.addTransaction({
+      id:          0,
+      date:        today,
+      vendorCode:  po.vendorCode,
+      vendorName:  po.vendorName,
+      productCode: line.productCode,
+      productName: line.productName,
+      type:        'IN',
+     quantity: cleanQty,
+    } as StoreMaintain);
+  }
+
+  revertFromPO(po: PurchaseOrder): void {
+    const today = new Date().toISOString().split('T')[0];
+
+    po.lineItems.forEach(item => {
+      const receivedQty = item.receivedQuantity ?? 0;
+      if (receivedQty <= 0) return;
+
+      this.addTransaction({
+        id:          0,
+        date:        today,
+        vendorCode:  po.vendorCode,
+        vendorName:  po.vendorName,
+        productCode: item.productCode,
+        productName: item.productName,
+        type:        'OUT',
+        quantity:    receivedQty,
+      } as StoreMaintain);
+    });
   }
 }

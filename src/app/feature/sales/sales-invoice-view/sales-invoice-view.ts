@@ -14,7 +14,8 @@ import {
 
 import {
   ActivatedRoute,
-  Router
+  Router,
+  RouterLink
 } from '@angular/router';
 
 import { ToastNotifier } from '../../../core/services/toast';
@@ -33,7 +34,7 @@ import { SalesInvoiceDataClient } from '../sales-invoice-data-client';
     CommonModule,
     DatePipe,
     DecimalPipe,
-    TitleCasePipe
+    TitleCasePipe,RouterLink
   ],
   templateUrl: './sales-invoice-view.html',
   styleUrl: './sales-invoice-view.css',
@@ -50,10 +51,7 @@ export class SalesInvoiceView {
   private toast =
     inject(ToastNotifier);
 
-  // SIGNAL
   invoice = signal<SalesInvoice | null>(null);
-
-  // COMPUTED
 
   canEdit = computed(() => {
 
@@ -114,7 +112,6 @@ export class SalesInvoiceView {
       .amountPaid || 0;
   });
 
-  // INIT
 
   ngOnInit(): void {
 
@@ -155,7 +152,6 @@ export class SalesInvoiceView {
     this.invoice.set(data);
   }
 
-  // NAVIGATION
 
   onBack(): void {
 
@@ -176,7 +172,6 @@ export class SalesInvoiceView {
     ]);
   }
 
-  // ACTIONS
 
   onPrint(): void {
 
@@ -204,7 +199,6 @@ export class SalesInvoiceView {
     );
   }
 
-  // HELPERS
 
   statusIcon(
     status: SalesInvoiceStatus
