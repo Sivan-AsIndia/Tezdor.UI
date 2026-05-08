@@ -7,6 +7,11 @@ import { AttendanceStatus } from '../attendance';
 import { AttendanceDataClient } from '../attendance-data-client';
 import { EmployeeDataClient } from '../../employee-data-client';
 import { ToastNotifier } from '../../../../core/services/toast';
+import { Permission, PermissionStatus, PermissionType } from '../../permission/permission';
+import { PermissionDataClient } from '../../permission/permission-data-client';
+import { Leave, LeaveStatus } from '../../leave/leave';
+import { LeaveTypeDataClient } from '../../leave/leave-type-data-client';
+import { LeaveDataClient } from '../../leave/leave-data-client';
 
 @Component({
   selector: 'app-attendance-lines',
@@ -20,6 +25,9 @@ export class AttendanceLinesComponent {
   private readonly router = inject(Router);
   private readonly toast = inject(ToastNotifier);
   private readonly empService = inject(EmployeeDataClient);
+  private readonly permissionService = inject(PermissionDataClient);
+  private readonly leaveTypeService = inject(LeaveTypeDataClient);
+    private readonly leaveService = inject(LeaveDataClient);
 
 
   private readonly route = inject(ActivatedRoute);
@@ -35,6 +43,12 @@ export class AttendanceLinesComponent {
 
   errors = signal<Record<string, string>>({});
   selectedRow = signal<AttendanceLine | null>(null);
+
+  showPermissionModal = signal(false);
+
+  showQuickMenu = signal(false);
+
+selectedPermission = signal<Permission | null>(null);
 
   searchValue = signal('');
   page = signal(1);
@@ -54,8 +68,40 @@ export class AttendanceLinesComponent {
 
   // use service signal
   employees = this.empService.employees;
-
+  permissions = this.permissionService.permissions;
+hoveredPermission = signal<Permission | null>(null);
   showModal = signal(false);
+popoverX = signal(0);
+popoverY = signal(0);
+
+hoveredLeave = signal<Leave | null>(null);
+
+leavePopoverX = signal(0);
+
+leavePopoverY = signal(0);
+showLeaveModal = signal(false);
+
+
+leaveTypes =
+  this.leaveTypeService.leaveTypes;
+selectedLeave = signal<Leave | null>(null);
+
+
+showPermissionPopover(
+  event: MouseEvent,
+  permission: Permission
+) {
+
+  this.popoverX.set(event.clientX);
+  this.popoverY.set(event.clientY);
+
+  this.hoveredPermission.set(permission);
+}
+
+hidePermissionPopover() {
+  this.hoveredPermission.set(null);
+}
+
 
   form = signal({
     employeeIds: [] as string[],
@@ -64,6 +110,39 @@ export class AttendanceLinesComponent {
     outTime: ''
   });
   viewMode = signal<'table' | 'grid'>('table');
+
+  permissionTypes = Object.values(PermissionType);
+
+  permissionForm = signal({
+  employeeId: '',
+  permissionDate: new Date().toISOString().split('T')[0],
+
+  fromTime: '',
+  toTime: '',
+
+  permissionType: PermissionType.Personal,
+
+  reason: ''
+});
+
+
+
+leaveErrors = signal<Record<string, string>>({});
+
+leaveForm = signal({
+
+  employeeId: '',
+
+  leaveTypeId: '',
+
+  fromDate: '',
+  toDate: '',
+
+  reason: '',
+
+  status: LeaveStatus.Pending
+
+});
 
 
 
@@ -561,7 +640,7 @@ export class AttendanceLinesComponent {
       this.setError('outTime', 'Out time must be greater than In time');
     }
     if(f.employeeIds.length === 0){
-      this.toast.error("Atleast select one employee to mark attendance")
+      this.toast.error("Please select at least one employee to mark attendance.")
       return;
     }
 
@@ -758,4 +837,660 @@ export class AttendanceLinesComponent {
     event.stopPropagation(); // prevent opening picker
     this.filterDate.set('');
   }
+
+  permissionHours = computed(() => {
+
+  const f = this.permissionForm();
+
+  if (!f.fromTime || !f.toTime) return 0;
+
+  const start = new Date(`1970-01-01T${f.fromTime}`);
+  const end = new Date(`1970-01-01T${f.toTime}`);
+
+  const diff = (end.getTime() - start.getTime()) / 3600000;
+
+  return diff > 0
+    ? Number(diff.toFixed(2))
+    : 0;
+
+});
+
+// ===============================
+// OPEN / CLOSE
+// ===============================
+
+openPermissionModal(permission?: Permission) {
+
+  if (permission) {
+
+    this.selectedPermission.set(permission);
+
+    this.permissionForm.set({
+      employeeId: permission.employeeId,
+      permissionDate: permission.permissionDate,
+
+      fromTime: permission.fromTime,
+      toTime: permission.toTime,
+
+      permissionType:
+        permission.permissionType ?? PermissionType.Personal,
+
+      reason: permission.reason ?? ''
+    });
+
+  } else {
+
+    this.selectedPermission.set(null);
+
+    this.permissionForm.set({
+      employeeId: '',
+      permissionDate: new Date().toISOString().split('T')[0],
+
+      fromTime: '',
+      toTime: '',
+
+      permissionType: PermissionType.Personal,
+
+      reason: ''
+    });
+
+  }
+
+  this.errors.set({});
+  this.showQuickMenu.set(false);
+  this.showPermissionModal.set(true);
+}
+
+closePermissionModal() {
+  this.showPermissionModal.set(false);
+  this.selectedPermission.set(null);
+}
+
+// ===============================
+// SETTERS
+// ===============================
+
+setPermissionEmployee(value: string) {
+  this.permissionForm.update(f => ({
+    ...f,
+    employeeId: value
+  }));
+}
+
+setPermissionDate(value: string) {
+  this.permissionForm.update(f => ({
+    ...f,
+    permissionDate: value
+  }));
+}
+
+setFromTime(value: string) {
+  this.permissionForm.update(f => ({
+    ...f,
+    fromTime: value
+  }));
+}
+
+setToTime(value: string) {
+  this.permissionForm.update(f => ({
+    ...f,
+    toTime: value
+  }));
+}
+
+setPermissionType(type: PermissionType) {
+  this.permissionForm.update(f => ({
+    ...f,
+    permissionType: type
+  }));
+}
+
+setReason(value: string) {
+  this.permissionForm.update(f => ({
+    ...f,
+    reason: value
+  }));
+}
+
+// ===============================
+// VALIDATION
+// ===============================
+
+validatePermission(): boolean {
+
+  const f = this.permissionForm();
+
+  this.errors.set({});
+
+  if (!f.employeeId) {
+    this.setError('employeeId', 'Select employee');
+  }
+
+  if (!f.permissionDate) {
+    this.setError('permissionDate', 'Select date');
+  }
+
+  if (!f.fromTime) {
+    this.setError('fromTime', 'Enter from time');
+  }
+
+  if (!f.toTime) {
+    this.setError('toTime', 'Enter to time');
+  }
+
+  if (
+    f.fromTime &&
+    f.toTime &&
+    f.fromTime >= f.toTime
+  ) {
+    this.setError(
+      'toTime',
+      'To time must be greater than from time'
+    );
+  }
+
+  if (!f.reason?.trim()) {
+    this.setError('reason', 'Enter reason');
+  }
+
+  return Object.keys(this.errors()).length === 0;
+}
+
+// ===============================
+// SAVE
+// ===============================
+
+savePermission() {
+
+  if (!this.validatePermission()) {
+    this.toast.error('Please fix validation errors');
+    return;
+  }
+
+  const f = this.permissionForm();
+
+  const permission: Permission = {
+
+    permissionId:
+      this.selectedPermission()?.permissionId
+      ?? crypto.randomUUID(),
+
+    permissionNumber:
+      this.selectedPermission()?.permissionNumber
+      ?? `PER-${Date.now()}`,
+
+    employeeId: f.employeeId,
+
+    permissionDate: f.permissionDate,
+
+    fromTime: f.fromTime,
+    toTime: f.toTime,
+
+    totalHours: this.permissionHours(),
+
+    permissionType: f.permissionType,
+
+    reason: f.reason,
+
+    status:
+      this.selectedPermission()?.status
+      ?? PermissionStatus.Pending,
+
+    appliedOn:
+      this.selectedPermission()?.appliedOn
+      ?? new Date(),
+
+    createdAt:
+      this.selectedPermission()?.createdAt
+      ?? new Date(),
+
+    updatedAt: new Date()
+  };
+
+  try {
+
+    if (this.selectedPermission()) {
+
+      this.permissionService.update(permission);
+
+      this.toast.success('Permission updated successfully');
+
+    } else {
+
+      this.permissionService.add(permission);
+
+      this.toast.success('Permission added successfully');
+    }
+
+    this.closePermissionModal();
+
+  } catch (err: any) {
+
+    this.toast.error(err.message || 'Failed to save permission');
+  }
+}
+
+hasPermission(empId: string, date: string): boolean {
+
+  return this.permissions().some(p =>
+    p.employeeId === empId &&
+    p.permissionDate === date &&
+    p.status !== PermissionStatus.Cancelled
+  );
+}
+
+getPermission(empId: string, date: string) {
+
+  return this.permissions().find(p =>
+    p.employeeId === empId &&
+    p.permissionDate === date &&
+    p.status !== PermissionStatus.Cancelled
+  );
+}
+
+openPermissionForRow(row: AttendanceLine) {
+
+  const existing = this.getPermission(
+    row.employeeId,
+    row.attendanceDate
+  );
+
+  if (existing) {
+
+    this.openPermissionModal(existing);
+
+  } else {
+
+    this.selectedPermission.set(null);
+
+    this.permissionForm.set({
+      employeeId: row.employeeId,
+      permissionDate: row.attendanceDate,
+      fromTime: row.inTime || '',
+      toTime: row.outTime || '',
+      permissionType: PermissionType.Personal,
+      reason: ''
+    });
+
+    this.showPermissionModal.set(true);
+  }
+}
+
+empTotalPermissions = computed(() => {
+
+  const empId = this.selectedEmployee();
+
+  if (!empId) return 0;
+
+  return this.permissions().filter(p =>
+
+    p.employeeId === empId &&
+
+    p.status !== PermissionStatus.Cancelled
+
+  ).length;
+
+});
+
+
+isAbsent(empId: string, date: string): boolean {
+
+  const line = this.getLine(empId, date);
+
+  // Explicit absent
+  if (line?.attendanceType === AttendanceType.Absent) {
+
+    console.log("true-------------------");
+    return true;
+  }
+
+  // No attendance and past date
+  console.log(date);
+   console.log(this.isPastDate(date));
+    console.log(!line && this.isPastDate(date));
+  return !line && this.isPastDate(date);
+}
+
+isPastDate(date: string): boolean {
+
+  // Parse manually
+  const [year, month, day] = date.split('-').map(Number);
+
+  const checkDate = new Date(year, month - 1, day);
+
+  const today = new Date();
+
+  // Remove time
+  today.setHours(0, 0, 0, 0);
+
+  return checkDate < today;
+}
+
+openLeaveModal(
+  leave?: Leave,
+  date?: string
+) {
+
+  // ===== EDIT =====
+  if (leave) {
+
+    this.selectedLeave.set(leave);
+
+    this.leaveForm.set({
+
+      employeeId: leave.employeeId,
+
+      leaveTypeId:
+        leave.leaveTypeId ?? '',
+
+      fromDate: leave.fromDate,
+
+      toDate: leave.toDate,
+
+      reason: leave.reason ?? '',
+
+      status:
+        leave.status ??
+        LeaveStatus.Pending
+    });
+
+  }
+
+  // ===== CREATE =====
+  else {
+
+    const selectedDate =
+      date ??
+      new Date()
+        .toISOString()
+        .split('T')[0];
+
+    this.selectedLeave.set(null);
+
+    this.leaveForm.set({
+
+      employeeId: '',
+
+      leaveTypeId: '',
+
+      fromDate: selectedDate,
+
+      toDate: selectedDate,
+
+      reason: '',
+
+      status: LeaveStatus.Pending
+    });
+  }
+
+  this.leaveErrors.set({});
+  this.showQuickMenu.set(false);
+  this.showLeaveModal.set(true);
+}
+
+validateLeave(): boolean {
+
+  const f = this.leaveForm();
+
+  const errors: Record<string, string> = {};
+
+  // EMPLOYEE
+  if (!f.employeeId) {
+    errors['employeeId'] =
+      'Employee is required';
+  }
+
+  // LEAVE TYPE
+  if (!f.leaveTypeId) {
+    errors['leaveTypeId'] =
+      'Leave type is required';
+  }
+
+  // FROM DATE
+  if (!f.fromDate) {
+    errors['fromDate'] =
+      'From date is required';
+  }
+
+  // TO DATE
+  if (!f.toDate) {
+    errors['toDate'] =
+      'To date is required';
+  }
+
+  // DATE VALIDATION
+  if (
+    f.fromDate &&
+    f.toDate &&
+    new Date(f.fromDate) >
+    new Date(f.toDate)
+  ) {
+
+    errors['toDate'] =
+      'To date must be after from date';
+  }
+
+  // REASON
+  if (!f.reason?.trim()) {
+    errors['reason'] =
+      'Reason is required';
+  }
+
+  this.leaveErrors.set(errors);
+
+  return Object.keys(errors).length === 0;
+}
+
+saveLeave() {
+
+  // VALIDATE
+  if (!this.validateLeave()) {
+
+    this.toast.error(
+      'Please fix validation errors'
+    );
+
+    return;
+  }
+
+  
+
+  const f = this.leaveForm();
+
+    // FROM > TO CHECK
+  if (
+    new Date(f.fromDate) >
+    new Date(f.toDate)
+  ) {
+
+    this.leaveErrors.update(e => ({
+      ...e,
+      toDate:
+        'To date cannot be earlier than from date'
+    }));
+
+    this.toast.error(
+      'Invalid leave date range'
+    );
+
+    return;
+  }
+
+    const alreadyExists =
+    this.leaveService.exists(
+
+      f.employeeId,
+
+      f.fromDate,
+
+      f.toDate,
+
+      this.selectedLeave()?.leaveId
+    );
+
+  if (alreadyExists) {
+
+    this.leaveErrors.update(e => ({
+      ...e,
+
+      fromDate:
+        'Leave already applied for selected dates',
+
+      toDate:
+        'Leave already applied for selected dates'
+    }));
+
+    this.toast.error(
+      'Leave already exists for selected date range'
+    );
+
+    return;
+  }
+
+
+  const leave: Leave = {
+
+    leaveId:
+      this.selectedLeave()?.leaveId ??
+      crypto.randomUUID(),
+
+    leaveNumber:
+      this.selectedLeave()?.leaveNumber ??
+      `LEV-${Date.now()}`,
+
+    employeeId: f.employeeId,
+
+    leaveTypeId: f.leaveTypeId,
+
+    fromDate: f.fromDate,
+
+    toDate: f.toDate,
+
+    reason: f.reason,
+
+    status:
+      f.status ??
+      LeaveStatus.Pending,
+
+    appliedOn:
+      this.selectedLeave()?.appliedOn ??
+      new Date(),
+
+    createdAt:
+      this.selectedLeave()?.createdAt ??
+      new Date(),
+
+    updatedAt: new Date()
+  };
+
+  // EDIT
+  if (this.selectedLeave()) {
+
+    this.leaveService.update(leave);
+
+    this.toast.success(
+      'Leave updated successfully'
+    );
+  }
+
+  // CREATE
+  else {
+
+    this.leaveService.add(leave);
+
+    this.toast.success(
+      'Leave added successfully'
+    );
+  }
+
+  // CLOSE
+  this.showLeaveModal.set(false);
+
+  this.selectedLeave.set(null);
+
+  // RESET FORM
+  this.leaveForm.set({
+
+    employeeId: '',
+
+    leaveTypeId: '',
+
+    fromDate: '',
+
+    toDate: '',
+
+    reason: '',
+
+    status: LeaveStatus.Pending
+  });
+
+  this.leaveErrors.set({});
+}
+
+hasLeaveError(field: string): boolean {
+
+  return !!this.leaveErrors()[field];
+}
+
+getLeaveError(field: string): string {
+
+  return this.leaveErrors()[field];
+}
+
+showLeavePopover(
+  event: MouseEvent,
+  leave?: Leave
+) {
+
+  if (!leave) return;
+
+  this.leavePopoverX.set(
+    event.clientX
+  );
+
+  this.leavePopoverY.set(
+    event.clientY
+  );
+
+  this.hoveredLeave.set(leave);
+}
+
+
+// HIDE
+
+hideLeavePopover() {
+
+  this.hoveredLeave.set(null);
+}
+
+
+// GET LEAVE
+
+getLeaveByAttendance(
+  attendanceId: string
+) {
+
+  return this.leaveService
+    .leaves()
+    .find(x =>
+
+      x.leaveId === attendanceId
+    );
+}
+
+getLeaveTypeName(
+  leaveTypeId?: string
+): string {
+
+  if (!leaveTypeId) {
+    return '-';
+  }
+
+  return this.leaveTypes()
+    .find(x =>
+      x.leaveTypeId === leaveTypeId
+    )
+    ?.leaveTypeName ?? '-';
+}
+
 }
