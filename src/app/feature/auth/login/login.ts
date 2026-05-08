@@ -1,4 +1,7 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+// ── Login Component ──────────────────────────────────────────
+// ✅ Angular 21 — constructor-based init, no OnInit/NgZone.
+
+import { Component, inject, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -10,7 +13,7 @@ import { AuthService } from '../../../core/services/auth';
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
 
@@ -29,7 +32,11 @@ export class LoginComponent implements OnInit {
   apiError = signal('');
   apiSuccess = signal('');
 
-  ngOnInit(): void {
+  /**
+   * ✅ Constructor replaces ngOnInit().
+   *    Redirects authenticated users to the dashboard immediately.
+   */
+  constructor() {
     if (this.authService.checkAuth()) {
       this.router.navigate(['/dashboard']);
     }

@@ -80,13 +80,13 @@
                                 }
                             </div>
                             <!-- VIEW TOGGLE -->
-                            <button class="icon-btn view-toggle" (click)="toggleView()"
+                            <!-- <button class="icon-btn view-toggle" (click)="toggleView()"
                                 [title]="viewMode() === 'table' ? 'Grid View' : 'Table View'">
 
                                 <i class="ti" [class]="viewMode() === 'table' ? 'ti-layout-grid' : 'ti-table'">
                                 </i>
 
-                            </button>
+                            </button> -->
                             <!-- ADD BUTTON -->
                             @if(canAdd()){
                             <button
@@ -97,52 +97,7 @@
                                 Add
                             </button>
                             }
-                            <!-- <button
-                                class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-primary v-btn--density-default v-btn--size-default v-btn--variant-elevated ml-auto"
-                                (click)="openPermissionModal()">
 
-                                <i class="mdi-account-multiple-plus mdi v-icon mr-2"></i>
-                                permission
-                            </button> -->
-
-                            <!-- ACTION MENU -->
-                            <div class="header-action-menu">
-
-                                <!-- MENU BUTTON -->
-                                <button class="menu-trigger-btn" (click)="showQuickMenu.set(!showQuickMenu())">
-
-                                    <i class="ti ti-dots-vertical"></i>
-
-                                </button>
-
-                                <!-- MENU -->
-                                @if(showQuickMenu()){
-
-                                <div class="quick-menu-popover">
-
-                                    <!-- ADD PERMISSION -->
-                                    <button class="quick-menu-item" (click)="openPermissionModal()">
-
-                                        <i class="ti ti-clock-hour-4"></i>
-
-                                        <span>Add Permission</span>
-
-                                    </button>
-
-                                    <!-- ADD LEAVE -->
-                                    <button class="quick-menu-item" (click)="openLeaveModal()">
-
-                                        <i class="ti ti-calendar-off"></i>
-
-                                        <span>Add Leave</span>
-
-                                    </button>
-
-                                </div>
-
-                                }
-
-                            </div>
                         </div>
                     </div>
 
@@ -185,7 +140,7 @@
                                             <td class="fw-semibold">
                                                 <div class="d-flex align-items-center gap-2">
 
-                                                    <div class="avatar text-clr"
+                                                    <div class="avatar"
                                                         [style.background]="getAvatarColor(getEmployeeName(s.employeeId))">
                                                         {{ getEmployeeName(s.employeeId).charAt(0) }}
                                                     </div>
@@ -253,7 +208,7 @@
 
                     @else{
 
-                    <div class="attendance-grid-wrapper">
+                    <div class="attendance-grid-wrapper" style="width: 98%;">
 
                         <div class="attendance-header">
 
@@ -263,7 +218,7 @@
                             </div>
 
                             <!-- Dates -->
-                            <div class="days-row">
+                            <div class="days-row" style="width: 98%;">
 
                                 @for(date of dates(); track date){
 
@@ -303,7 +258,7 @@
                                         </span>
 
                                         } @else {
-                                        <span class="dot empty" [class.absent]="isAbsent(emp.employeeId!, date)"></span>
+                                        <span class="dot empty"></span>
                                         }
 
                                     </div>
@@ -466,7 +421,7 @@
 
         <!-- FOOTER -->
         <div class="modal-footer">
-            <button class="btn-cancel-perm" (click)="closeModal()">Cancel</button>
+            <button class="btn-cancel" (click)="closeModal()">Cancel</button>
             <button class="btn-save" (click)="saveAttendance()">
                 Save Attendance
             </button>
@@ -599,15 +554,6 @@
                     <strong class="chip-value">{{ employeeAttendanceLine().length }}</strong>
                 </div>
 
-                <!-- PERMISSION -->
-                <div class="ledger-chip chip-permission">
-                    <span class="chip-label">Permissions</span>
-
-                    <strong class="chip-value">
-                        {{ empTotalPermissions() }}
-                    </strong>
-                </div>
-
             </div>
 
             <!-- TABLE -->
@@ -665,23 +611,7 @@
 
                                                 {{ getStatusLabel(row.attendanceType) }}
 
-                                            </span>
-                                            <!-- PERMISSION BADGE -->
-                                            @if(hasPermission(row.employeeId, row.attendanceDate)){
-
-                                            <span class="permission-mini-badge" (mouseenter)="showPermissionPopover(
-                                                $event,
-                                                getPermission(row.employeeId,row.attendanceDate)!
-                                            )" (mouseleave)="hidePermissionPopover()">
-
-                                                <i class="ti ti-clock-hour-4"></i>
-
-                                                Perm
-
-                                            </span>
-
-                                            }
-                                        </td>
+                                            </span></td>
                                         <!-- ACTIONS -->
                                         <td>
                                             <div class="d-flex align-items-center gap-2">
@@ -700,36 +630,10 @@
 
                                                 } @else {
 
-                                                    @if(row.attendanceType !== AttendanceType.Leave){
                                                 <!-- EDIT -->
                                                 <button class="icon-btn edit" title="Edit" (click)="startEdit(row)">
                                                     <i class="ti ti-pencil"></i>
                                                 </button>
-                                                    }
-
-                                                    @if(row.attendanceType === AttendanceType.Leave){
-                                                        <div class="leave-pop-wrapper">
-
-    <!-- INFO ICON -->
-    <button class="icon-btn info"
-
-        (mouseenter)="showLeavePopover(
-          $event,
-          getLeaveByAttendance(row.attendanceId)
-        )"
-
-        (mouseleave)="hideLeavePopover()">
-
-        <i class="ti ti-info-circle"></i>
-
-    </button>
-
-</div>
-                                                    }
-
-
-
-
 
                                                 }
 
@@ -803,542 +707,6 @@
 
         </div>
     </div>
-</div>
-
-}
-
-
-@if(hoveredPermission()){
-
-<div class="permission-popover-fixed" [style.left.px]="popoverX() + 20" [style.top.px]="popoverY() - 20">
-
-    <div class="popover-title">
-        Permission Details
-    </div>
-
-    <div class="popover-row">
-        <span>Type</span>
-        <strong>
-            {{ hoveredPermission()?.permissionType }}
-        </strong>
-    </div>
-
-    <div class="popover-row">
-        <span>From</span>
-        <strong>
-            {{ hoveredPermission()?.fromTime }}
-        </strong>
-    </div>
-
-    <div class="popover-row">
-        <span>To</span>
-        <strong>
-            {{ hoveredPermission()?.toTime }}
-        </strong>
-    </div>
-
-    <div class="popover-row">
-        <span>Hours</span>
-        <strong>
-            {{ hoveredPermission()?.totalHours }}
-        </strong>
-    </div>
-
-    <div class="popover-row">
-        <span>Status</span>
-
-        <span class="status-pill">
-            {{ hoveredPermission()?.status }}
-        </span>
-    </div>
-
-    @if(hoveredPermission()?.reason){
-
-    <div class="popover-reason">
-        {{ hoveredPermission()?.reason }}
-    </div>
-
-    }
-
-</div>
-
-}
-
-
-<!-- ADD PERMISSION MODAL -->
-@if(showPermissionModal()){
-
-<div class="modal-overlay">
-
-    <div class="attendance-modal permission-modal">
-
-        <!-- HEADER -->
-        <div class="modal-header">
-            <div>
-                <h5>
-                    {{ selectedPermission() ? 'Edit Permission' : 'Add Permission' }}
-                </h5>
-
-                <small class="text-muted">
-                    Apply employee permission request
-                </small>
-            </div>
-
-            <button class="icon-btn" (click)="closePermissionModal()">
-                ✕
-            </button>
-        </div>
-
-        <!-- BODY -->
-        <div class="modal-body">
-
-            <!-- DATE -->
-            <div class="field">
-                <label>Permission Date</label>
-
-                <input type="date" [value]="permissionForm().permissionDate"
-                    (input)="setPermissionDate($any($event.target).value)"
-                    [class.is-invalid]="hasError('permissionDate')">
-
-                @if(hasError('permissionDate')){
-                <div class="field-error">
-                    {{ getError('permissionDate') }}
-                </div>
-                }
-            </div>
-
-            <!-- EMPLOYEE -->
-            <div class="field">
-                <label>Employee</label>
-
-                <select [value]="permissionForm().employeeId"
-                    (change)="setPermissionEmployee($any($event.target).value)"
-                    [class.is-invalid]="hasError('employeeId')">
-
-                    <option value="">Select Employee</option>
-
-                    @for(emp of employees(); track emp.employeeId){
-
-                    <option [value]="emp.employeeId">
-                        {{ emp.firstName }} {{ emp.lastName }}
-                    </option>
-
-                    }
-
-                </select>
-
-                @if(hasError('employeeId')){
-                <div class="field-error">
-                    {{ getError('employeeId') }}
-                </div>
-                }
-            </div>
-
-            <!-- TIME -->
-            <div class="time-row">
-
-                <div class="field">
-                    <label>From Time</label>
-
-                    <input type="time" [value]="permissionForm().fromTime"
-                        (input)="setFromTime($any($event.target).value)" [class.is-invalid]="hasError('fromTime')">
-
-                    @if(hasError('fromTime')){
-                    <div class="field-error">
-                        {{ getError('fromTime') }}
-                    </div>
-                    }
-                </div>
-
-                <div class="field">
-                    <label>To Time</label>
-
-                    <input type="time" [value]="permissionForm().toTime" (input)="setToTime($any($event.target).value)"
-                        [class.is-invalid]="hasError('toTime')">
-
-                    @if(hasError('toTime')){
-                    <div class="field-error">
-                        {{ getError('toTime') }}
-                    </div>
-                    }
-                </div>
-
-            </div>
-
-            <!-- PERMISSION TYPE -->
-            <div class="field">
-
-                <label>Permission Type</label>
-
-                <div class="type-grid">
-
-                    @for(type of permissionTypes; track type){
-
-                    <div class="type-chip" [class.active]="permissionForm().permissionType === type"
-                        (click)="setPermissionType(type)">
-
-                        {{ type }}
-
-                    </div>
-
-                    }
-
-                </div>
-
-            </div>
-
-            <!-- REASON -->
-            <div class="field">
-
-                <label>Reason</label>
-
-                <textarea rows="4" placeholder="Enter reason..." [value]="permissionForm().reason"
-                    (input)="setReason($any($event.target).value)" [class.is-invalid]="hasError('reason')">
-                </textarea>
-
-                @if(hasError('reason')){
-                <div class="field-error">
-                    {{ getError('reason') }}
-                </div>
-                }
-
-            </div>
-
-            <!-- SUMMARY -->
-            <div class="permission-summary">
-
-                <div class="summary-item">
-                    <span>Total Hours</span>
-
-                    <strong>
-                        {{ permissionHours() }} hrs
-                    </strong>
-                </div>
-
-                <div class="summary-item">
-                    <span>Status</span>
-
-                    <span class="status-badge pending">
-                        Pending
-                    </span>
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- FOOTER -->
-        <div class="modal-footer">
-
-            <button class="btn-cancel-perm" (click)="closePermissionModal()">
-                Cancel
-            </button>
-
-            <button class="btn-save" (click)="savePermission()">
-
-                Save Permission
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-}
-
-<!-- LEAVE MODAL -->
-@if(showLeaveModal()){
-
-
-<div class="leave-overlay">
-
-    <div class="leave-popup">
-
-        <!-- HEADER -->
-        <div class="leave-popup-header">
-
-            <div>
-                <h4 class="leave-popup-title">
-                    {{ selectedLeave() ? 'Edit Leave' : 'Apply Leave' }}
-                </h4>
-
-                <p class="leave-popup-subtitle">
-                    Manage employee leave request
-                </p>
-            </div>
-
-            <button class="leave-close-btn" (click)="showLeaveModal.set(false)">
-
-                <i class="ti ti-x"></i>
-
-            </button>
-
-        </div>
-
-        <!-- BODY -->
-        <div class="leave-popup-body">
-
-            <div class="leave-form-grid">
-
-                <!-- EMPLOYEE -->
-                <div class="leave-group">
-
-                    <label class="leave-label">
-                        Employee
-                    </label>
-
-                    <select class="leave-input" [class.is-invalid]="hasLeaveError('employeeId')"
-                        [value]="leaveForm().employeeId" (change)="leaveForm.update(f => ({
-                              ...f,
-                              employeeId: $any($event.target).value
-                            }))">
-
-                        <option value="">
-                            Select Employee
-                        </option>
-
-                        @for(emp of employees(); track emp.employeeId){
-
-                        <option [value]="emp.employeeId">
-
-                            {{ emp.firstName }}
-                            {{ emp.lastName }}
-
-                        </option>
-
-                        }
-
-                    </select>
-
-                    @if(hasLeaveError('employeeId')){
-
-                    <div class="field-error">
-                        {{ getLeaveError('employeeId') }}
-                    </div>
-
-                    }
-
-                </div>
-
-                <!-- LEAVE TYPE -->
-                <div class="leave-group">
-
-                    <label class="leave-label">
-                        Leave Type
-                    </label>
-
-                    <select class="leave-input" [class.is-invalid]="hasLeaveError('leaveTypeId')"
-                        [value]="leaveForm().leaveTypeId" (change)="leaveForm.update(f => ({
-                              ...f,
-                              leaveTypeId: $any($event.target).value
-                            }))">
-
-                        <option value="">
-                            Select Leave Type
-                        </option>
-
-                        @for(type of leaveTypes(); track type.leaveTypeId){
-
-                        <option [value]="type.leaveTypeId">
-
-                            {{ type.leaveTypeName }}
-
-                        </option>
-
-                        }
-
-                    </select>
-
-                    @if(hasLeaveError('leaveTypeId')){
-
-                    <div class="field-error">
-                        {{ getLeaveError('leaveTypeId') }}
-                    </div>
-
-                    }
-
-                </div>
-
-                <!-- FROM DATE -->
-                <div class="leave-group">
-
-                    <label class="leave-label">
-                        From Date
-                    </label>
-
-                    <input type="date" class="leave-input" [class.is-invalid]="hasLeaveError('fromDate')"
-                        [value]="leaveForm().fromDate" (input)="leaveForm.update(f => ({
-                             ...f,
-                             fromDate: $any($event.target).value
-                           }))">
-
-                    @if(hasLeaveError('fromDate')){
-
-                    <div class="field-error">
-                        {{ getLeaveError('fromDate') }}
-                    </div>
-
-                    }
-
-                </div>
-
-                <!-- TO DATE -->
-                <div class="leave-group">
-
-                    <label class="leave-label">
-                        To Date
-                    </label>
-
-                    <input type="date" class="leave-input" [class.is-invalid]="hasLeaveError('toDate')"
-                        [min]="leaveForm().fromDate" [value]="leaveForm().toDate" (input)="leaveForm.update(f => ({
-                             ...f,
-                             toDate: $any($event.target).value
-                           }))">
-
-                    @if(hasLeaveError('toDate')){
-
-                    <div class="field-error">
-                        {{ getLeaveError('toDate') }}
-                    </div>
-
-                    }
-
-                </div>
-
-            </div>
-
-            <!-- REASON -->
-            <div class="leave-group">
-
-                <label class="leave-label">
-                    Reason
-                </label>
-
-                <textarea class="leave-textarea" rows="3" placeholder="Enter leave reason..."
-                    [class.is-invalid]="hasLeaveError('reason')" (input)="leaveForm.update(f => ({
-                            ...f,
-                            reason: $any($event.target).value
-                          }))">{{ leaveForm().reason }}</textarea>
-
-                @if(hasLeaveError('reason')){
-
-                <div class="field-error">
-                    {{ getLeaveError('reason') }}
-                </div>
-
-                }
-
-            </div>
-
-        </div>
-
-        <!-- FOOTER -->
-        <div class="leave-popup-footer">
-
-            <button class="btn-cancel-perm" (click)="showLeaveModal.set(false)">
-
-                Cancel
-
-            </button>
-
-            <button class="btn-save" (click)="saveLeave()">
-
-
-                Save Leave
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-}@if(hoveredLeave()){
-
-<div class="leave-popover-fixed"
-
-     [style.left.px]="leavePopoverX() + 18"
-     [style.top.px]="leavePopoverY() - 20">
-
-    <div class="popover-title">
-
-        Leave Details
-
-    </div>
-
-    <!-- TYPE -->
-    <div class="popover-row">
-
-        <span>Leave Type</span>
-
-        <strong>
-            {{ getLeaveTypeName(
-                hoveredLeave()?.leaveTypeId
-            ) }}
-        </strong>
-
-    </div>
-
-    <!-- FROM -->
-    <div class="popover-row">
-
-        <span>From</span>
-
-        <strong>
-            {{ hoveredLeave()?.fromDate }}
-        </strong>
-
-    </div>
-
-    <!-- TO -->
-    <div class="popover-row">
-
-        <span>To</span>
-
-        <strong>
-            {{ hoveredLeave()?.toDate }}
-        </strong>
-
-    </div>
-
-    <!-- DAYS -->
-    <div class="popover-row">
-
-        <span>Total Days</span>
-
-        <strong>
-            {{ hoveredLeave()?.totalDays }}
-        </strong>
-
-    </div>
-
-    <!-- STATUS -->
-    <div class="popover-row">
-
-        <span>Status</span>
-
-        <span class="status-pill">
-
-            {{ hoveredLeave()?.status }}
-
-        </span>
-
-    </div>
-
-    <!-- REASON -->
-    @if(hoveredLeave()?.reason){
-
-    <div class="popover-reason">
-
-        {{ hoveredLeave()?.reason }}
-
-    </div>
-
-    }
-
 </div>
 
 }

@@ -1,14 +1,13 @@
 @if (invoice(); as inv) {
 
 <div class="siv-host">
-
-  <!-- HEADER -->
+ <!-- 🔷 HEADER -->
   <div class="d-flex justify-content-between align-items-center" id="TopHeading">
     <div>
       <h4 class="fw-bold mb-1 mainheading">Sales Invoice Details</h4>
-      <small class="text-muted subdescription">
-        View complete sales invoice information, customer details, payment summary, and item-wise billing details.
-      </small>
+  <small class="text-muted subdescription">
+  View complete sales invoice information, customer details, payment summary, and item-wise billing details.
+</small>
     </div>
     <div class="arrow-steps d-none d-md-flex">
       <ul id="breadcrumb">
@@ -19,23 +18,17 @@
     </div>
   </div>
 
+ 
+
   <!-- BODY -->
   <div class="siv-body">
 
     <!-- DOCUMENT -->
-    <div class="siv-document" id="siv-print-area">
+    <div
+      class="siv-document"
+      id="siv-print-area">
 
-      <!-- ── COPY TYPE BANNER ── -->
-      @if (inv.invoiceCopyType) {
-        <div class="siv-copy-type-banner">
-          {{ inv.invoiceCopyType === 'original_for_buyer'          ? 'ORIGINAL FOR BUYER'
-           : inv.invoiceCopyType === 'duplicate_for_transporter'   ? 'DUPLICATE FOR TRANSPORTER'
-           : inv.invoiceCopyType === 'triplicate_for_supplier'     ? 'TRIPLICATE FOR SUPPLIER'
-           : '' }}
-        </div>
-      }
-
-      <!-- ── DOC HEADER ── -->
+      <!-- HEADER -->
       <div class="siv-doc-header">
 
         <!-- COMPANY -->
@@ -56,26 +49,32 @@
             </div>
 
             <div class="siv-company-meta">
-              <span>GSTIN: {{ inv.companyGSTIN }}</span>
+
+              <span>
+                GSTIN:
+                {{ inv.companyGSTIN }}
+              </span>
+
               <span class="siv-dot">·</span>
-              <span>PAN: {{ inv.companyPAN }}</span>
+
+              <span>
+                PAN:
+                {{ inv.companyPAN }}
+              </span>
+
             </div>
 
-            @if (inv.companyPhone || inv.companyEmail) {
-              <div class="siv-company-meta">
-                @if (inv.companyPhone) {
-                  <i class="ti ti-phone"></i>
-                  {{ inv.companyPhone }}
-                }
-                @if (inv.companyPhone && inv.companyEmail) {
-                  <span class="siv-dot">·</span>
-                }
-                @if (inv.companyEmail) {
-                  <i class="ti ti-mail"></i>
-                  {{ inv.companyEmail }}
-                }
-              </div>
-            }
+            <div class="siv-company-meta">
+
+              <i class="ti ti-phone"></i>
+              {{ inv.companyPhone }}
+
+              <span class="siv-dot">·</span>
+
+              <i class="ti ti-mail"></i>
+              {{ inv.companyEmail }}
+
+            </div>
 
           </div>
 
@@ -85,44 +84,69 @@
         <div class="siv-id-block">
 
           <div class="siv-doc-title">
-            {{ inv.invoiceType === 'proforma' ? 'PROFORMA INVOICE' : 'TAX INVOICE' }}
+            TAX INVOICE
           </div>
 
           <table class="siv-id-table">
 
             <tr>
-              <td class="siv-id-key">Invoice No.</td>
-              <td class="siv-id-val siv-id-val--code">{{ inv.invoiceNumber }}</td>
-            </tr>
+              <td class="siv-id-key">
+                Invoice No.
+              </td>
 
-            <tr>
-              <td class="siv-id-key">Invoice Date</td>
-              <td class="siv-id-val">{{ inv.invoiceDate | date:'dd MMM yyyy' }}</td>
-            </tr>
-
-            <tr>
-              <td class="siv-id-key">Due Date</td>
-              <td class="siv-id-val">
-                {{ inv.dueDate ? (inv.dueDate | date:'dd MMM yyyy') : '—' }}
+              <td class="siv-id-val siv-id-val--code">
+                {{ inv.invoiceNumber }}
               </td>
             </tr>
 
             <tr>
-              <td class="siv-id-key">Financial Year</td>
-              <td class="siv-id-val">{{ inv.financialYear }}</td>
+              <td class="siv-id-key">
+                Invoice Date
+              </td>
+
+              <td class="siv-id-val">
+                {{ inv.invoiceDate | date:'dd MMM yyyy' }}
+              </td>
+            </tr>
+
+            <tr>
+              <td class="siv-id-key">
+                Due Date
+              </td>
+
+              <td class="siv-id-val">
+
+                {{
+                  inv.dueDate
+                    ? (inv.dueDate | date:'dd MMM yyyy')
+                    : '—'
+                }}
+
+              </td>
+            </tr>
+
+            <tr>
+              <td class="siv-id-key">
+                Financial Year
+              </td>
+
+              <td class="siv-id-val">
+                {{ inv.financialYear }}
+              </td>
             </tr>
 
             @if (inv.referencePONo) {
-              <tr>
-                <td class="siv-id-key">PO Reference</td>
-                <td class="siv-id-val">{{ inv.referencePONo }}</td>
-              </tr>
-            }
 
-            @if (inv.eWayBillNo) {
               <tr>
-                <td class="siv-id-key">e-Way Bill No.</td>
-                <td class="siv-id-val siv-id-val--code">{{ inv.eWayBillNo }}</td>
+
+                <td class="siv-id-key">
+                  PO Reference
+                </td>
+
+                <td class="siv-id-val">
+                  {{ inv.referencePONo }}
+                </td>
+
               </tr>
             }
 
@@ -132,110 +156,7 @@
 
       </div>
 
-      <!-- ── TRANSPORT / DISPATCH DETAILS ── -->
-      @if (
-        inv.modeTermsOfPayment ||
-        inv.buyerOrderNo       ||
-        inv.buyerOrderDate     ||
-        inv.dispatchedThrough  ||
-        inv.destination        ||
-        inv.motorVehicleNo     ||
-        inv.billOfLadingNo     ||
-        inv.termsOfDelivery    ||
-        inv.otherReferences
-      ) {
-        <div class="siv-transport-section">
-
-          <div class="siv-section-bar">
-            <i class="ti ti-truck"></i>
-            Dispatch &amp; Delivery Details
-          </div>
-
-          <div class="siv-transport-grid">
-
-            @if (inv.modeTermsOfPayment) {
-              <div class="siv-transport-item">
-                <span class="siv-transport-key">Mode / Terms of Payment</span>
-                <span class="siv-transport-val">{{ inv.modeTermsOfPayment }}</span>
-              </div>
-            }
-
-            @if (inv.buyerOrderNo) {
-              <div class="siv-transport-item">
-                <span class="siv-transport-key">Buyer's Order No.</span>
-                <span class="siv-transport-val">{{ inv.buyerOrderNo }}</span>
-              </div>
-            }
-
-            @if (inv.buyerOrderDate) {
-              <div class="siv-transport-item">
-                <span class="siv-transport-key">Buyer's Order Date</span>
-                <span class="siv-transport-val">{{ inv.buyerOrderDate | date:'dd MMM yyyy' }}</span>
-              </div>
-            }
-
-            @if (inv.otherReferences) {
-              <div class="siv-transport-item">
-                <span class="siv-transport-key">Other References</span>
-                <span class="siv-transport-val">{{ inv.otherReferences }}</span>
-              </div>
-            }
-
-            @if (inv.dispatchDocNo) {
-              <div class="siv-transport-item">
-                <span class="siv-transport-key">Dispatch Doc No.</span>
-                <span class="siv-transport-val">{{ inv.dispatchDocNo }}</span>
-              </div>
-            }
-
-            @if (inv.deliveryNoteDate) {
-              <div class="siv-transport-item">
-                <span class="siv-transport-key">Delivery Note Date</span>
-                <span class="siv-transport-val">{{ inv.deliveryNoteDate | date:'dd MMM yyyy' }}</span>
-              </div>
-            }
-
-            @if (inv.dispatchedThrough) {
-              <div class="siv-transport-item">
-                <span class="siv-transport-key">Dispatched Through</span>
-                <span class="siv-transport-val">{{ inv.dispatchedThrough }}</span>
-              </div>
-            }
-
-            @if (inv.destination) {
-              <div class="siv-transport-item">
-                <span class="siv-transport-key">Destination</span>
-                <span class="siv-transport-val">{{ inv.destination }}</span>
-              </div>
-            }
-
-            @if (inv.billOfLadingNo) {
-              <div class="siv-transport-item">
-                <span class="siv-transport-key">Bill of Lading / LR-RR No.</span>
-                <span class="siv-transport-val">{{ inv.billOfLadingNo }}</span>
-              </div>
-            }
-
-            @if (inv.motorVehicleNo) {
-              <div class="siv-transport-item">
-                <span class="siv-transport-key">Motor Vehicle No.</span>
-                <span class="siv-transport-val">{{ inv.motorVehicleNo }}</span>
-              </div>
-            }
-
-            @if (inv.termsOfDelivery) {
-              <div class="siv-transport-item">
-                <span class="siv-transport-key">Terms of Delivery</span>
-                <span class="siv-transport-val">{{ inv.termsOfDelivery }}</span>
-              </div>
-            }
-
-          </div>
-
-        </div>
-      }
-
-      <!-- ── ADDRESSES ── -->
+      <!-- ADDRESSES -->
       <div class="siv-addresses">
 
         <!-- BILL TO -->
@@ -246,21 +167,35 @@
             BILL TO
           </div>
 
-          <div class="siv-addr-name">{{ inv.customerName }}</div>
+          <div class="siv-addr-name">
+            {{ inv.customerName }}
+          </div>
 
-          <div class="siv-addr-body">{{ inv.billingAddress }}</div>
+          <div class="siv-addr-body">
+            {{ inv.billingAddress }}
+          </div>
 
           @if (inv.customerGSTIN) {
+
             <div class="siv-addr-chip">
+
               <i class="ti ti-id-badge"></i>
-              GSTIN: {{ inv.customerGSTIN }}
+
+              GSTIN:
+              {{ inv.customerGSTIN }}
+
             </div>
           }
 
           @if (inv.customerPAN) {
+
             <div class="siv-addr-chip">
+
               <i class="ti ti-credit-card"></i>
-              PAN: {{ inv.customerPAN }}
+
+              PAN:
+              {{ inv.customerPAN }}
+
             </div>
           }
 
@@ -276,28 +211,45 @@
             SHIP TO
           </div>
 
-          <div class="siv-addr-name">{{ inv.customerName }}</div>
+          <div class="siv-addr-name">
+            {{ inv.customerName }}
+          </div>
 
           <div class="siv-addr-body">
-            {{ inv.shippingAddress || inv.billingAddress }}
+
+            {{
+              inv.shippingAddress
+                || inv.billingAddress
+            }}
+
           </div>
 
           <div class="siv-addr-chip">
+
             <i class="ti ti-map"></i>
-            Place of Supply: {{ inv.placeOfSupply }}
+
+            Place of Supply:
+            {{ inv.placeOfSupply }}
+
           </div>
 
         </div>
 
       </div>
 
-      <!-- ── LINE ITEMS ── -->
+      <!-- ITEMS -->
       <div class="siv-items-section">
 
         <div class="siv-section-bar">
+
           <i class="ti ti-list-details"></i>
+
           Line Items
-          <span class="siv-section-count">{{ inv.lineItems.length }}</span>
+
+          <span class="siv-section-count">
+            {{ inv.lineItems.length }}
+          </span>
+
         </div>
 
         <div class="siv-table-wrap">
@@ -305,7 +257,9 @@
           <table class="siv-items-table">
 
             <thead>
+
               <tr>
+
                 <th>#</th>
                 <th>Product</th>
                 <th>HSN</th>
@@ -317,48 +271,94 @@
                 <th>GST %</th>
                 <th>Tax</th>
                 <th>Total</th>
+
               </tr>
+
             </thead>
 
             <tbody>
-              @for (row of inv.lineItems; track row.sNo) {
+
+              @for (
+                row of inv.lineItems;
+                track row.sNo;
+                let i = $index
+              ) {
+
                 <tr>
 
                   <td>{{ row.sNo }}</td>
 
                   <td>
-                    <div class="siv-product-name">{{ row.itemName }}</div>
-                    <div class="siv-product-code">{{ row.productCode }}</div>
+
+                    <div class="siv-product-name">
+                      {{ row.itemName }}
+                    </div>
+
+                    <div class="siv-product-code">
+                      {{ row.productCode }}
+                    </div>
+
                   </td>
 
-                  <td>{{ row.hsnSacCode || '—' }}</td>
-
-                  <td>{{ row.quantity }}</td>
-
-                  <td>{{ row.unitOfMeasure }}</td>
-
-                  <td>₹{{ row.unitPrice | number:'1.2-2' }}</td>
+                  <td>
+                    {{ row.hsnSacCode || '—' }}
+                  </td>
 
                   <td>
+                    {{ row.quantity }}
+                  </td>
+
+                  <td>
+                    {{ row.unitOfMeasure }}
+                  </td>
+
+                  <td>
+                    ₹{{ row.unitPrice | number:'1.2-2' }}
+                  </td>
+
+                  <td>
+
                     @if (row.discountPercent > 0) {
+
                       {{ row.discountPercent }}%
+
                     } @else {
+
                       —
                     }
+
                   </td>
-
-                  <td>₹{{ row.taxableAmount | number:'1.2-2' }}</td>
-
-                  <td>{{ row.gstRate }}%</td>
 
                   <td>
-                    ₹{{ (row.cgstAmount + row.sgstAmount + row.igstAmount) | number:'1.2-2' }}
+                    ₹{{ row.taxableAmount | number:'1.2-2' }}
                   </td>
 
-                  <td>₹{{ row.lineTotal | number:'1.2-2' }}</td>
+                  <td>
+                    {{ row.gstRate }}%
+                  </td>
+
+                  <td>
+
+                    ₹{{
+                      (
+                        row.cgstAmount +
+                        row.sgstAmount +
+                        row.igstAmount
+                      ) | number:'1.2-2'
+                    }}
+
+                  </td>
+
+                  <td>
+
+                    ₹{{ row.lineTotal | number:'1.2-2' }}
+
+                  </td>
 
                 </tr>
+
               }
+
             </tbody>
 
           </table>
@@ -367,189 +367,38 @@
 
       </div>
 
-      <!-- ── HSN-WISE TAX SUMMARY ── -->
-      @if (inv.hsnWiseTaxSummary && inv.hsnWiseTaxSummary.length > 0) {
-        <div class="siv-hsn-section">
-
-          <div class="siv-section-bar">
-            <i class="ti ti-receipt-tax"></i>
-            HSN / SAC Tax Summary
-          </div>
-
-          <div class="siv-table-wrap">
-
-            <table class="siv-items-table">
-
-              <thead>
-                <tr>
-                  <th>HSN / SAC</th>
-                  <th>Taxable Value</th>
-                  <th>CGST Rate</th>
-                  <th>CGST Amount</th>
-                  <th>SGST Rate</th>
-                  <th>SGST Amount</th>
-                  <th>IGST Rate</th>
-                  <th>IGST Amount</th>
-                  <th>Total Tax</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                @for (row of inv.hsnWiseTaxSummary; track row.hsnSac) {
-                  <tr>
-                    <td class="siv-id-val--code">{{ row.hsnSac }}</td>
-                    <td>₹{{ row.taxableValue | number:'1.2-2' }}</td>
-                    <td>{{ row.cgstRate }}%</td>
-                    <td>₹{{ row.cgstAmount | number:'1.2-2' }}</td>
-                    <td>{{ row.sgstRate }}%</td>
-                    <td>₹{{ row.sgstAmount | number:'1.2-2' }}</td>
-                    <td>{{ row.igstRate }}%</td>
-                    <td>₹{{ row.igstAmount | number:'1.2-2' }}</td>
-                    <td><strong>₹{{ row.totalTaxAmount | number:'1.2-2' }}</strong></td>
-                  </tr>
-                }
-              </tbody>
-
-              <tfoot>
-                <tr class="siv-hsn-total-row">
-                  <td><strong>Total</strong></td>
-                  <td><strong>₹{{ inv.taxSummary.totalTaxableValue | number:'1.2-2' }}</strong></td>
-                  <td></td>
-                  <td><strong>₹{{ inv.taxSummary.totalCGST | number:'1.2-2' }}</strong></td>
-                  <td></td>
-                  <td><strong>₹{{ inv.taxSummary.totalSGST | number:'1.2-2' }}</strong></td>
-                  <td></td>
-                  <td><strong>₹{{ inv.taxSummary.totalIGST | number:'1.2-2' }}</strong></td>
-                  <td><strong>₹{{ inv.taxSummary.totalTaxAmount | number:'1.2-2' }}</strong></td>
-                </tr>
-              </tfoot>
-
-            </table>
-
-          </div>
-
-        </div>
-      }
-
-      <!-- ── TOTALS ── -->
-      <div class="siv-totals-section">
-
-        <div class="siv-totals-words">
-
-          <div class="siv-words-row">
-            <span class="siv-words-label">Amount in Words:</span>
-            <span class="siv-words-val">{{ inv.taxSummary.amountInWords }}</span>
-          </div>
-
-          @if (inv.taxSummary.taxAmountInWords) {
-            <div class="siv-words-row">
-              <span class="siv-words-label">Tax Amount in Words:</span>
-              <span class="siv-words-val">{{ inv.taxSummary.taxAmountInWords }}</span>
-            </div>
-          }
-
-        </div>
-
-        <div class="siv-totals-table">
-
-          <div class="siv-total-row">
-            <span class="siv-total-key">Sub Total</span>
-            <span class="siv-total-val">₹{{ inv.taxSummary.subTotal | number:'1.2-2' }}</span>
-          </div>
-
-          @if (inv.taxSummary.totalCGST > 0) {
-            <div class="siv-total-row">
-              <span class="siv-total-key">CGST</span>
-              <span class="siv-total-val">₹{{ inv.taxSummary.totalCGST | number:'1.2-2' }}</span>
-            </div>
-          }
-
-          @if (inv.taxSummary.totalSGST > 0) {
-            <div class="siv-total-row">
-              <span class="siv-total-key">SGST</span>
-              <span class="siv-total-val">₹{{ inv.taxSummary.totalSGST | number:'1.2-2' }}</span>
-            </div>
-          }
-
-          @if (inv.taxSummary.totalIGST > 0) {
-            <div class="siv-total-row">
-              <span class="siv-total-key">IGST</span>
-              <span class="siv-total-val">₹{{ inv.taxSummary.totalIGST | number:'1.2-2' }}</span>
-            </div>
-          }
-
-          @if (inv.taxSummary.roundOff !== 0) {
-            <div class="siv-total-row">
-              <span class="siv-total-key">Round Off</span>
-              <span class="siv-total-val">₹{{ inv.taxSummary.roundOff | number:'1.2-2' }}</span>
-            </div>
-          }
-
-          <div class="siv-total-row siv-total-row--grand">
-            <span class="siv-total-key">Grand Total</span>
-            <span class="siv-total-val">₹{{ inv.taxSummary.grandTotal | number:'1.2-2' }}</span>
-          </div>
-
-        </div>
-
-      </div>
-
-      <!-- ── FOOTER ── -->
+      <!-- FOOTER -->
       <div class="siv-doc-footer">
 
         <div class="siv-footer-left">
 
-          <!-- DECLARATION -->
-          @if (inv.declaration) {
-            <div class="siv-declaration-box">
-              <div class="siv-declaration-label">Declaration</div>
-              <div class="siv-declaration-text">{{ inv.declaration }}</div>
-            </div>
-          }
-
-          <!-- BANK DETAILS -->
-          @if (inv.companyBankDetails) {
-            <div class="siv-bank-box">
-              <div class="siv-bank-label">
-                <i class="ti ti-building-bank"></i>
-                Company's Bank Details
-              </div>
-              <div class="siv-bank-row">
-                <span class="siv-bank-key">Bank Name</span>
-                <span class="siv-bank-val">{{ inv.companyBankDetails.bankName }}</span>
-              </div>
-              <div class="siv-bank-row">
-                <span class="siv-bank-key">Account No.</span>
-                <span class="siv-bank-val siv-id-val--code">{{ inv.companyBankDetails.accountNo }}</span>
-              </div>
-              <div class="siv-bank-row">
-                <span class="siv-bank-key">Branch &amp; IFSC</span>
-                <span class="siv-bank-val siv-id-val--code">{{ inv.companyBankDetails.branch }} / {{ inv.companyBankDetails.ifscCode }}</span>
-              </div>
-            </div>
-          }
-
-          <div class="siv-footer-note">This is a computer generated invoice.</div>
+          <div class="siv-footer-note">
+            This is a computer generated invoice.
+          </div>
 
           <div class="siv-footer-meta">
-            Created: {{ inv.createdAt | date:'dd MMM yyyy, hh:mm a' }}
+
+            Created:
+            {{ inv.createdAt | date:'dd MMM yyyy, hh:mm a' }}
+
           </div>
 
         </div>
 
         <div class="siv-footer-right">
 
-          <!-- CUSTOMER SEAL -->
-          <div class="siv-seal-box">
-            <div class="siv-sig-line"></div>
-            <div class="siv-sig-label">Customer's Seal &amp; Signature</div>
-          </div>
-
-          <!-- AUTHORISED SIGNATORY -->
           <div class="siv-sig-box">
+
             <div class="siv-sig-line"></div>
-            <div class="siv-sig-label">Authorised Signatory</div>
-            <div class="siv-sig-company">{{ inv.companyName }}</div>
+
+            <div class="siv-sig-label">
+              Authorised Signatory
+            </div>
+
+            <div class="siv-sig-company">
+              {{ inv.companyName }}
+            </div>
+
           </div>
 
         </div>
@@ -558,168 +407,170 @@
 
     </div>
 
-    <!-- ── RIGHT PANEL ── -->
+    <!-- RIGHT PANEL -->
     <div class="siv-meta-panel">
 
       <!-- ACTIONS -->
       <div class="siv-meta-card siv-meta-card--actions">
 
         <div class="siv-meta-hdr">
+
           <i class="ti ti-bolt"></i>
           Actions
+
         </div>
 
         <div class="siv-meta-body siv-action-list">
 
-          <button class="siv-action-btn" (click)="onPrint()">
+          <button
+            class="siv-action-btn"
+            (click)="onPrint()">
+
             <i class="ti ti-printer"></i>
             Print Invoice
           </button>
 
+
           @if (canEdit()) {
-            <button class="siv-action-btn siv-action-btn--edit" (click)="onEdit()">
+
+            <button
+              class="siv-action-btn siv-action-btn--edit"
+              (click)="onEdit()">
+
               <i class="ti ti-edit"></i>
               Edit Invoice
             </button>
           }
 
           @if (canCancel()) {
-            <button class="siv-action-btn siv-action-btn--danger" (click)="onCancel()">
+
+            <button
+              class="siv-action-btn siv-action-btn--danger"
+              (click)="onCancel()">
+
               <i class="ti ti-ban"></i>
               Cancel Invoice
             </button>
           }
 
+          <!-- @if (canRaiseCreditNote()) {
+
+            <button
+              class="siv-action-btn"
+              (click)="onCreditNote()">
+
+              <i class="ti ti-file-minus"></i>
+              Raise Credit Note
+            </button>
+          } -->
+
         </div>
 
       </div>
 
-      <!-- INVOICE STATUS -->
-      <div class="siv-meta-card siv-meta-card--actions">
+         <div class="siv-meta-card siv-meta-card--actions">
 
         <div class="siv-meta-hdr">
-          <i class="ti ti-info-circle"></i>
-          Invoice Status
+
+          <i class="ti ti-bolt"></i>
+              Invoice Status
+
         </div>
 
         <div class="siv-meta-body siv-action-list">
 
-          <div class="siv-status-item">
-            <span class="siv-status-label">Payment Status</span>
-            <span
-              class="siv-pay-badge"
-              [class.siv-badge--unpaid]="inv.payment.paymentStatus === 'unpaid'"
-              [class.siv-badge--partial]="inv.payment.paymentStatus === 'partial'"
-              [class.siv-badge--paid]="inv.payment.paymentStatus === 'paid'">
-              <i class="ti ti-{{ payStatusIcon(inv.payment.paymentStatus) }}"></i>
-              {{ inv.payment.paymentStatus | titlecase }}
-            </span>
-          </div>
+    <div class="siv-status-item">
 
-          <div class="siv-status-item">
-            <span class="siv-status-label">Grand Total</span>
-            <span class="siv-grand-pill">₹{{ inv.taxSummary.grandTotal | number:'1.2-2' }}</span>
-          </div>
+      <span class="siv-status-label">
+        Payment Status
+      </span>
 
-          @if (inv.taxSummary.totalTaxAmount > 0) {
-            <div class="siv-status-item">
-              <span class="siv-status-label">Total Tax</span>
-              <span class="siv-grand-pill">₹{{ inv.taxSummary.totalTaxAmount | number:'1.2-2' }}</span>
-            </div>
-          }
+      <span
+        class="siv-pay-badge"
 
-          <div class="siv-status-item">
-            <span class="siv-status-label">Amount Paid</span>
-            <span class="siv-grand-pill">₹{{ inv.payment.amountPaid | number:'1.2-2' }}</span>
-          </div>
+        [class.siv-badge--unpaid]="
+          inv.payment.paymentStatus === 'unpaid'
+        "
 
-          <div class="siv-status-item">
-            <span class="siv-status-label">Balance Due</span>
-            <span
-              class="siv-balance-pill"
-              [class.siv-balance-pill--danger]="inv.payment.balanceDue > 0"
-              [class.siv-balance-pill--safe]="inv.payment.balanceDue <= 0">
-              ₹{{ inv.payment.balanceDue | number:'1.2-2' }}
-            </span>
-          </div>
+        [class.siv-badge--partial]="
+          inv.payment.paymentStatus === 'partial'
+        "
 
-          @if (inv.payment.overdueDays > 0) {
-            <div class="siv-status-item">
-              <span class="siv-status-label">Overdue By</span>
-              <span class="siv-balance-pill siv-balance-pill--danger">
-                {{ inv.payment.overdueDays }} days
-              </span>
-            </div>
-          }
+        [class.siv-badge--paid]="
+          inv.payment.paymentStatus === 'paid'
+        ">
 
-          <div class="siv-status-item">
-            <span class="siv-status-label">Invoice Status</span>
-            <span class="siv-status-badge siv-status-badge--{{ inv.status }}">
-              <i class="ti ti-{{ statusIcon(inv.status) }}"></i>
-              {{ inv.status | titlecase }}
-            </span>
-          </div>
+        <i
+          class="ti ti-{{ payStatusIcon(inv.payment.paymentStatus) }}">
+        </i>
+
+        {{ inv.payment.paymentStatus | titlecase }}
+
+      </span>
+
+    </div>
+
+
+    <div class="siv-status-item">
+
+      <span class="siv-status-label">
+        Grand Total
+      </span>
+
+      <span class="siv-grand-pill">
+        ₹{{ inv.taxSummary.grandTotal | number:'1.2-2' }}
+      </span>
+
+    </div>
+
+
+    <div class="siv-status-item">
+
+      <span class="siv-status-label">
+        Balance Due
+      </span>
+
+      <span
+        class="siv-balance-pill"
+
+        [class.siv-balance-pill--danger]="
+          inv.payment.balanceDue > 0
+        "
+
+        [class.siv-balance-pill--safe]="
+          inv.payment.balanceDue <= 0
+        ">
+
+        ₹{{ inv.payment.balanceDue | number:'1.2-2' }}
+
+      </span>
+
+    </div>
+
+
+      <div class="siv-status-item">
+
+      <span class="siv-status-label">
+        Invoice Status
+      </span>
+
+      
+
+      <span
+        class="siv-status-badge siv-status-badge--{{ inv.status }}">
+
+        <i class="ti ti-{{ statusIcon(inv.status) }}"></i>
+
+        {{ inv.status | titlecase }}
+      </span>
+
+    </div>
+
 
         </div>
 
       </div>
 
-      <!-- PAYMENT INFO -->
-      @if (inv.payment.paymentMode || inv.payment.transactionRefNo || inv.payment.paymentDate) {
-        <div class="siv-meta-card siv-meta-card--actions">
-
-          <div class="siv-meta-hdr">
-            <i class="ti ti-wallet"></i>
-            Payment Info
-          </div>
-
-          <div class="siv-meta-body siv-action-list">
-
-            @if (inv.payment.paymentTerms) {
-              <div class="siv-status-item">
-                <span class="siv-status-label">Payment Terms</span>
-                <span class="siv-status-val">{{ inv.payment.paymentTerms }}</span>
-              </div>
-            }
-
-            @if (inv.payment.paymentMode) {
-              <div class="siv-status-item">
-                <span class="siv-status-label">Payment Mode</span>
-                <span class="siv-status-val">{{ inv.payment.paymentMode | uppercase }}</span>
-              </div>
-            }
-
-            @if (inv.payment.paymentDate) {
-              <div class="siv-status-item">
-                <span class="siv-status-label">Payment Date</span>
-                <span class="siv-status-val">{{ inv.payment.paymentDate | date:'dd MMM yyyy' }}</span>
-              </div>
-            }
-
-            @if (inv.payment.transactionRefNo) {
-              <div class="siv-status-item">
-                <span class="siv-status-label">Transaction Ref</span>
-                <span class="siv-status-val siv-id-val--code">{{ inv.payment.transactionRefNo }}</span>
-              </div>
-            }
-
-          </div>
-
-        </div>
-      }
-
-      <!-- NOTES -->
-      @if (inv.notes) {
-        <div class="siv-meta-card siv-meta-card--actions">
-          <div class="siv-meta-hdr">
-            <i class="ti ti-notes"></i>
-            Notes
-          </div>
-          <div class="siv-meta-body">
-            <p class="siv-notes-text">{{ inv.notes }}</p>
-          </div>
-        </div>
-      }
 
     </div>
 

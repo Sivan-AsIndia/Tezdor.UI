@@ -52,7 +52,7 @@ export class PurchaseInvoiceListComponent {
         (inv.supplierInvoiceNo ?? '').toLowerCase().includes(q) ||
         (inv.supplierName ?? '').toLowerCase().includes(q)      ||
         (inv.supplierCode ?? '').toLowerCase().includes(q)      ||
-        (inv.poRef ?? '').toLowerCase().includes(q);    
+        (inv.poRef ?? '').toLowerCase().includes(q);            // ✅ null-safe fix
 
       const matchInvStatus = !f.invoiceStatus || inv.invoiceStatus === f.invoiceStatus;
       const matchPayStatus = !f.paymentStatus  || inv.paymentStatus === f.paymentStatus;
@@ -80,9 +80,10 @@ export class PurchaseInvoiceListComponent {
       .filter(Boolean).length
   );
 
+  // ── Search ────────────────────────────────────────────
   onSearch(value: string): void {
     this.searchValue.set(value);
-    this.currentPage.set(1);
+    this.currentPage.set(1); // ✅ reset page on every search keystroke
   }
 
   clearSearch(): void {
@@ -90,6 +91,7 @@ export class PurchaseInvoiceListComponent {
     this.currentPage.set(1);
   }
 
+  // ── Filter actions ────────────────────────────────────
   toggleFilter(): void {
     if (this.showFilter()) { this.closeFilter(); return; }
     this.tempFilters.set({ ...this.filters() });
@@ -133,6 +135,7 @@ export class PurchaseInvoiceListComponent {
     }));
   }
 
+  // ── Pagination ────────────────────────────────────────
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages()) this.currentPage.set(page);
   }
@@ -142,6 +145,7 @@ export class PurchaseInvoiceListComponent {
     this.currentPage.set(1);
   }
 
+  // ── Delete ────────────────────────────────────────────
   DeletePopupView(inv: PurchaseInvoice): void { this.selectedInv.set(inv); }
 
   confirmDelete(): void {
@@ -152,6 +156,7 @@ export class PurchaseInvoiceListComponent {
     }
   }
 
+  // ── Helpers ───────────────────────────────────────────
   capitalize(val: string): string {
     if (!val) return '';
     return val.charAt(0).toUpperCase() + val.slice(1);

@@ -1,11 +1,66 @@
 // ── Product Detail Print Template ────────────────────────────
 // Generates the HTML content for printing a Product Profile.
-// Design follows the teacher_detail.html reference template.
+// ✅ Updated: Now includes Product Images in the print output.
 
 import { Product, CATEGORY_OPTIONS, BRAND_OPTIONS, UNIT_OPTIONS, TAX_OPTIONS } from '../../feature/product/product';
 import { COMPANY_INFO } from './company-info';
 import { PROFILE_PRINT_CSS } from './profile-print-styles';
 import { formatPrintDate, formatIndianNumber } from './number-to-words';
+
+/**
+ * Builds an <img> tag that works for both remote URLs and base64 data-URIs.
+ * Applies cross-origin only when the source is not a data URI.
+ */
+function buildImgTag(url: string, width: number, height: number, alt: string): string {
+  const crossOrigin = url.startsWith('data:') ? '' : ' crossorigin="anonymous"';
+  return `<img src="${url}" alt="${alt}" width="${width}" height="${height}"${crossOrigin}
+    style="object-fit:cover; border-radius:6px; border:1px solid #e0e0e0;"
+    onerror="this.style.display='none';" />`;
+}
+
+/**
+ * Builds the Product Images HTML section for the print template.
+ * Shows the primary image large and remaining thumbnails in a row.
+ */
+function buildImagesSection(p: Product): string {
+  const imgs = Array.isArray(p.images) ? p.images : [];
+  if (imgs.length === 0) return '';
+
+  // Find the primary image (or fallback to first)
+  const primaryIdx = imgs.findIndex(i => i.isPrimary);
+  const primary = imgs[primaryIdx !== -1 ? primaryIdx : 0];
+  const others = imgs.filter((_, i) => i !== (primaryIdx !== -1 ? primaryIdx : 0));
+
+  let html = `
+  <!-- ═══ Product Images ═══ -->
+  <div class="section-title">Product Images</div>
+  <div style="margin-bottom:22px;">
+
+    <!-- Primary Image -->
+    <div style="text-align:center; margin-bottom:12px;">
+      ${buildImgTag(primary.url, 320, 220, p.productName + ' - Primary')}
+      <div style="font-size:10px; color:#888; margin-top:4px;">Primary Image</div>
+    </div>`;
+
+  // Additional thumbnails
+  if (others.length > 0) {
+    html += `
+    <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">`;
+    others.forEach((img, idx) => {
+      html += `
+      <div style="text-align:center;">
+        ${buildImgTag(img.url, 140, 100, p.productName + ' - Image ' + (idx + 2))}
+      </div>`;
+    });
+    html += `
+    </div>`;
+  }
+
+  html += `
+  </div>`;
+
+  return html;
+}
 
 /**
  * Builds the full HTML document string for a Product Detail print page.
@@ -39,6 +94,9 @@ export function buildProductPrintHtml(p: Product): string {
   const stockLevel = (p.reorderLevel && p.currentStock <= p.reorderLevel)
     ? '<span style="color:#c0392b;font-weight:600;">⚠ Low Stock</span>'
     : '<span style="color:#27ae60;font-weight:600;">Healthy</span>';
+
+  // ✅ Build the images section
+  const imagesHtml = buildImagesSection(p);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -99,6 +157,9 @@ export function buildProductPrintHtml(p: Product): string {
       <div class="stat-card-value">${marginPct}</div>
     </div>
   </div>
+
+  <!-- ═══ Product Images ═══ -->
+  ${imagesHtml}
 
   <!-- ═══ Basic Information ═══ -->
   <div class="section-title">Basic Information</div>
