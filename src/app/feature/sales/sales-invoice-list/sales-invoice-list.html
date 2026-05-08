@@ -1,0 +1,390 @@
+<div class="max-w-full">
+  <div class="full-container">
+    <div class="v-container v-container--fluid v-locale--is-ltr rounded-xl p-0">
+
+      <!-- ══ HEADER ══════════════════════════════════════════════ -->
+      <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+        <div>
+          <h4 class="fw-bold mb-1 mainheading">Sales Invoice</h4>
+          <small class="text-muted subdescription">
+            View, manage, and track all your sales invoices in one place.
+          </small>
+        </div>
+        <div class="arrow-steps d-none d-md-flex">
+          <ul id="breadcrumb">
+            <li><a href="#"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a></li>
+            <!-- <li><a href="#"><span class="fa fa-list"></span>&nbsp;&nbsp;Sales</a></li> -->
+            <li><a><span class="fa fa-file"></span>&nbsp;&nbsp;Invoices</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <div class="card-body-inner">
+          <div class="table-topbar">
+            <div class="table-title-badge">
+              <h5 class="tableheading">Sales Summary</h5>
+              <span class="count-badge">{{ filteredCount() }}</span>
+            </div>
+
+            <div class="topbar-actions">
+
+              <!-- Search -->
+              <div class="search-box">
+                <input type="text" placeholder="Search invoice, customer…"
+                  [value]="searchValue()"
+                  (input)="onSearch($any($event.target).value)" />
+                @if (!searchValue()) {
+                  <button class="icon-clear" type="button">
+                    <i class="bi bi-search"></i>
+                  </button>
+                }
+                @if (searchValue()) {
+                  <button class="icon-clear" type="button" (click)="clearSearch()">
+                    <i class="bi bi-x"></i>
+                  </button>
+                }
+              </div>
+
+              <!-- FILTER BUTTON -->
+<div class="filter-wrapper">
+  <button class="filter-btn" style="width:35px;"  (click)="toggleFilter()">
+    <i class="ti ti-filter fs-5"></i>
+    @if (activeFilterCount() > 0) {
+      <span class="filter-dot">{{ activeFilterCount() }}</span>
+    }
+  </button>
+</div>
+
+@if (showFilter()) {
+  <div class="filter-overlay" (click)="closeFilter()"></div>
+
+  <div class="filter-panel"  [style.top.px]="filterTop"
+                    [style.right.px]="filterRight">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-bold mb-0">Filter</h5>
+      <button class="btn btn-sm bg-secondary" (click)="resetFilters()">Reset</button>
+    </div>
+
+    <!-- STATUS -->
+<!-- STATUS -->
+<div class="mb-3">
+  <label class="fw-semibold mb-2 d-block">Status</label>
+  <div class="chip-group">
+    @for (s of statuses(); track s) {
+      <span class="filter-chip {{ statusChipClass(s) }}"
+        [class.active]="tempFilters().status === s"
+        (click)="selectStatus(s)">
+        {{ capitalize(s) }}
+      </span>
+    }
+  </div>
+</div>
+
+<!-- TYPE -->
+<div class="mb-3">
+  <label class="fw-semibold mb-2 d-block">Invoice Type</label>
+  <div class="chip-group">
+    @for (t of invoiceTypes(); track t) {
+      <span class="filter-chip {{ typeChipClass(t) }}"
+        [class.active]="tempFilters().type === t"
+        (click)="selectType(t)">
+        {{ capitalize(t) }}
+      </span>
+    }
+  </div>
+</div>
+    <!-- ACTIONS -->
+    <div class="d-flex gap-2 mt-4">
+      <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated bg-secondary px-3"
+        (click)="closeFilter()">Cancel</button>
+      <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+        (click)="applyFilters()">Apply</button>
+    </div>
+
+  </div>
+}
+
+              <!-- Add button -->
+              <a routerLink="/sales-invoice/create"
+                class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-primary v-btn--density-default v-btn--size-default v-btn--variant-elevated"
+                style="text-transform:capitalize;letter-spacing:0;padding:0 14px;">
+                <i class="ti ti-plus me-1"></i> New
+              </a>
+
+            </div>
+          </div>
+
+          <!-- ── TABLE ─────────────────────────────────────────── -->
+          <div class="border-table">
+            <div class="v-table v-theme--BLUE_THEME v-table--density-default">
+              <div class="v-table__wrapper">
+                <table>
+                  <thead>
+                    <tr style="background:#8080800d;">
+                      <th class="text-subtitle-1 font-weight-semibold">#</th>
+                      <!-- <th class="text-subtitle-1 font-weight-semibold">Invoice No.</th> -->
+                      <th class="text-subtitle-1 font-weight-semibold">Customer</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Type</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Date</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Due Date</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Amount</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Paid</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Balance</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Status</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    @if (pagedInvoices().length === 0) {
+                      <tr>
+                        <td colspan="11" class="sil-empty-cell">
+                          <div class="sil-empty">
+                            <i class="ti ti-file-off"></i>
+                            <p>No invoices found</p>
+                       
+                          </div>
+                        </td>
+                      </tr>
+                    }
+
+                    @for (inv of pagedInvoices(); track inv.id; let i = $index) {
+                      <tr [class.sil-tr-overdue]="inv.status === 'overdue'">
+
+                        <!-- # -->
+                        <td class="sil-td-num">
+                          {{ entryStart() + i }}
+                        </td>
+
+                        <!-- Invoice Number -->
+                        <!-- <td>
+                          <a class="sil-inv-no" [routerLink]="['/sales-invoice', inv.id]">
+                            {{ inv.invoiceNumber }}
+                          </a>
+                          @if (inv.referencePONo) {
+                            <div class="sil-ref">{{ inv.referencePONo }}</div>
+                          }
+                        </td> -->
+
+                        <!-- Customer -->
+                        <td>
+                          <div class="sil-customer-name">{{ inv.customerName }}</div>
+                          <div class="sil-customer-gstin" title="{{inv.customerGSTIN}} ">{{ inv.customerGSTIN || '—' }}</div>
+                        </td>
+
+                        <!-- Type -->
+                        <td>
+                          <span class="sil-type-badge" [class]="'sil-type-' + inv.invoiceType">
+                            {{ typeLabel(inv.invoiceType) }}
+                          </span>
+                        </td>
+
+                        <!-- Date -->
+                        <td class="sil-td-date">
+                          {{ inv.invoiceDate | date:'dd MMM yyyy' }}
+                        </td>
+
+                        <!-- Due Date -->
+                        <td class="sil-td-date">
+                          <span [class.sil-overdue-date]="inv.status === 'overdue'">
+                            {{ inv.dueDate | date:'dd MMM yyyy' }}
+                          </span>
+                          @if (inv.payment.overdueDays > 0) {
+                            <div class="sil-overdue-days">{{ inv.payment.overdueDays }}d overdue</div>
+                          }
+                        </td>
+
+                        <!-- Amount -->
+                        <td class="sil-td-amt">
+                          ₹{{ inv.taxSummary.invoiceTotal | number:'1.2-2' }}
+                        </td>
+
+                        <!-- Paid -->
+                        <td class="sil-td-amt sil-td-paid">
+                          @if (inv.payment.amountPaid > 0) {
+                            ₹{{ inv.payment.amountPaid | number:'1.2-2' }}
+                          } @else {
+                            <span class="sil-dash">—</span>
+                          }
+                        </td>
+
+                        <!-- Balance -->
+                        <td class="sil-td-amt" [class.sil-bal-danger]="inv.payment.balanceDue > 0">
+                          @if (inv.payment.balanceDue > 0) {
+                            ₹{{ inv.payment.balanceDue | number:'1.2-2' }}
+                          } @else {
+                            <span class="sil-paid-chip"><i class="ti ti-check"></i> Paid</span>
+                          }
+                        </td>
+
+                        <!-- Status -->
+                        <td>
+                          <span class="sil-status-badge sil-status-{{ inv.status }}">
+                            {{ statusLabel(inv.status) }}
+                          </span>
+                        </td>
+
+                        <!-- Actions -->
+                        <td>
+                          <div class="d-flex align-center gap-1">
+
+                            <!-- View -->
+                            <a [routerLink]="['/sales-invoice', inv.id]"
+                              class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                              title="View">
+                              <span class="v-btn__content">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-eye text-info"
+                                  width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5"
+                                  stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/>
+                                  <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/>
+                                </svg>
+                              </span>
+                            </a>
+
+                            <!-- Edit -->
+                            <a [routerLink]="['/sales-invoice/edit', inv.id]"
+                              class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                              title="Edit">
+                              <span class="v-btn__content">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-pencil text-primary"
+                                  width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5"
+                                  stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"/>
+                                  <path d="M13.5 6.5l4 4"/>
+                                </svg>
+                              </span>
+                            </a>
+
+                            <!-- Delete -->
+                            <button type="button" title="Delete"
+                              class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                              data-bs-toggle="modal" data-bs-target="#deleteModal"
+                              (click)="openDelete(inv)">
+                              <span class="v-btn__content">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-trash text-error"
+                                  width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5"
+                                  stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M4 7l16 0"/><path d="M10 11l0 6"/><path d="M14 11l0 6"/>
+                                  <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/>
+                                  <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/>
+                                </svg>
+                              </span>
+                            </button>
+
+                          </div>
+                        </td>
+
+                      </tr>
+                    }
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- end table -->
+
+          <hr class="v-divider v-theme--BLUE_THEME" aria-orientation="horizontal" role="separator"
+              style="border-style:solid;">
+
+          <!-- ── PAGINATION ────────────────────────────────────── -->
+          <div class="d-sm-flex justify-md-space-between align-center Pagination">
+
+            <!-- Rows per page + entry info -->
+            <div class="d-flex align-items-center fs-13 gap-2">
+              <span style="font-size:12px;">Rows Per Page</span>
+              <select class="form-select form-select-sm w-auto"
+                [value]="pageSize()"
+                (change)="onPageSizeChange($any($event.target).value)">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+              </select>
+              <!-- <span style="font-size:12px;color:#888;">
+                Showing {{ entryStart() }}–{{ entryEnd() }} of {{ filteredCount() }}
+              </span> -->
+            </div>
+
+            <!-- Page buttons -->
+            <nav class="v-pagination v-theme--BLUE_THEME text-subtitle-1 text-grey100"
+                 role="navigation" aria-label="Pagination Navigation">
+              <ul class="pagination-list">
+
+                <!-- Prev -->
+                <li>
+                  <button class="page-btn" [disabled]="currentPage() === 1" (click)="prevPage()">
+                    <span class="mdi mdi-chevron-left" style="font-size:26px;"></span>
+                  </button>
+                </li>
+
+                <!-- Page numbers -->
+                @for (p of pageNumbers(); track $index) {
+                  <li>
+                    @if (p === '...') {
+                      <span class="page-ellipsis">…</span>
+                    } @else {
+                      <button class="page-btn" [class.active]="currentPage() === p"
+                        (click)="goPage(p)">{{ p }}</button>
+                    }
+                  </li>
+                }
+
+                <!-- Next -->
+                <li>
+                  <button class="page-btn" [disabled]="currentPage() === totalPages()" (click)="nextPage()">
+                    <span class="mdi mdi-chevron-right" style="font-size:26px;"></span>
+                  </button>
+                </li>
+
+              </ul>
+            </nav>
+
+          </div>
+          <!-- end pagination -->
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ DELETE MODAL ═══════════════════════════════════════════ -->
+<div class="modal fade" id="deleteModal" tabindex="-1"
+     data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content custom-box text-center p-4">
+
+      <div class="icon-wrapper">
+        <i class="ti ti-trash"></i>
+      </div>
+
+      <h2>Delete Invoice</h2>
+
+      <p>
+        Are you sure you want to delete
+        <strong>{{ deleteTarget()?.invoiceNumber }}</strong>
+        for <strong>{{ deleteTarget()?.customerName }}</strong>?
+        This action cannot be undone.
+      </p>
+
+      <div class="btn-group justify-content-center gap-3">
+        <button class="cancel-btn bg-secondary" data-bs-dismiss="modal" (click)="cancelDelete()">
+          Cancel
+        </button>
+        <button class="delete-btn" data-bs-dismiss="modal" (click)="confirmDelete()">
+          Yes, Delete
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

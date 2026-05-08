@@ -162,117 +162,187 @@
         </div>
 
         <!-- ══ SECTION 3 · LINE ITEMS ══════════════════════════════════════ -->
-        <div class="card mb-3 section-card section-warning">
-          <div class="card-body">
+    <div class="card mb-3 section-card section-warning">
+  <div class="card-body">
 
-            <div class="section-header">
-              <div class="section-icon"><i class="ti ti-list-details"></i></div>
-              <h6 class="cardheader">Line Items</h6>
+    <div class="section-header">
+      <div class="section-icon">
+        <i class="ti ti-list-details"></i>
+      </div>
+
+      <h6 class="cardheader">Line Items</h6>
+    </div>
+
+    <!-- FLEX LINE ITEMS -->
+    <div class="line-items-wrap">
+
+      @for (row of lineItems(); track row.id) {
+
+        <div class="line-card mb-3">
+          <div class="line-card-top">
+
+            <div class="line-no">
+              #{{ $index + 1 }}
             </div>
 
-            <div class="border-table mb-3" style="overflow-x:auto;">
-              <table class="table table-sm mb-0 line-items-table">
-                <thead style="background:#8080800d;">
-                  <tr>
-                    <th style="width:40px">#</th>
-                    <th >Product Name <span style="color: red;">*</span></th>
-                    <th >Unit</th>
-                    <th>Qty</th>
-                    <th>Unit Price</th>
-                    <th>Discount (₹)</th>
-                    <th>Tax</th>
-                    <th style="text-align:right;">Total</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (row of lineItems(); track row.id) {
-                    <tr>
-                      <td class="text-muted align-middle text-center">{{ $index + 1 }}</td>
-<td>
-  <select
-    class="form-select form-select-sm"
-    [class.is-invalid]="isInvalidProduct(row)"
-    [value]="row.productCode"
-    (change)="onProductSelect(row, $any($event.target).value)"
-  >
-    <option value="">-- Select Product --</option>
+            <button
+              type="button"
+              class="delete-btn"
+              (click)="removeRow(row.id)">
 
-    @for (p of product.products(); track p.productCode) {
-      <option [value]="p.productCode">
-        {{ p.productName }}
-      </option>
-    }
-  </select>
+              <i class="ti ti-trash"></i>
 
-  @if (isInvalidProduct(row)) {
-    <div class="invalid-feedback">Product is required.</div>
-  }
-</td>
-
-                      <td>
-                        <select class="form-select form-select-sm"
-                          [value]="row.unitId"
-                          (change)="updateRow(row.id, 'unitId', $any($event.target).value)">
-                          @for (u of unitOptions; track u.value) {
-                            <option [value]="u.value">{{ u.label }}</option>
-                          }
-                        </select>
-                      </td>
-
-                      <td>
-                        <input type="number" class="form-control form-control-sm"
-                          min="1"
-                          [value]="row.quantity"
-                          (input)="updateRow(row.id, 'quantity', $any($event.target).value)">
-                      </td>
-
-                      <td>
-                        <input type="number" class="form-control form-control-sm"
-                          min="0"
-                          [value]="row.unitPrice"
-                          (input)="updateRow(row.id, 'unitPrice', $any($event.target).value)">
-                      </td>
-
-                      <td>
-                        <input type="number" class="form-control form-control-sm"
-                          min="0"
-                          [value]="row.discount"
-                          (input)="updateRow(row.id, 'discount', $any($event.target).value)">
-                      </td>
-
-                      <td>
-                        <select class="form-select form-select-sm"
-                          [value]="row.taxPercent"
-                          (change)="updateRow(row.id, 'taxPercent', $any($event.target).value)">
-                          @for (t of taxOptions; track t.value) {
-                            <option [value]="t.value">{{ t.label }}</option>
-                          }
-                        </select>
-                      </td>
-
-                      <td class="align-middle fw-bold text-end pe-2">
-                        ₹{{ calcRowTotal(row) | number:'1.2-2' }}
-                      </td>
-
-                      <td class="align-middle text-center">
-                        <button type="button" class="btn btn-sm btn-link text-danger p-0"
-                          (click)="removeRow(row.id)">
-                          <i class="ti ti-trash fs-5"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
-
-            <button type="button" class="btn bg-primary btn-sm" (click)="addRow()">
-              <i class="ti ti-plus me-1"></i> Add Row
             </button>
 
           </div>
+          <div class="field">
+            <label>
+              Product Name
+              <span class="req">*</span>
+            </label>
+
+            <select
+              class="form-select form-select-sm"
+              [class.is-invalid]="isInvalidProduct(row)"
+              [value]="row.productCode"
+              (change)="onProductSelect(row, $any($event.target).value)">
+
+              <option value="">
+                -- Select Product --
+              </option>
+
+              @for (p of product.products(); track p.productCode) {
+
+                <option [value]="p.productCode">
+                  {{ p.productName }}
+                </option>
+
+              }
+
+            </select>
+
+            @if (isInvalidProduct(row)) {
+              <div class="invalid-feedback d-block">
+                Product is required.
+              </div>
+            }
+
+          </div>
+
+          <!-- ROW -->
+          <div class="line-grid">
+
+            <!-- UNIT -->
+            <div class="field">
+              <label>Unit</label>
+
+              <select
+                class="form-select form-select-sm"
+                [value]="row.unitId"
+                (change)="updateRow(row.id, 'unitId', $any($event.target).value)">
+
+                @for (u of unitOptions; track u.value) {
+
+                  <option [value]="u.value">
+                    {{ u.label }}
+                  </option>
+
+                }
+
+              </select>
+            </div>
+
+            <!-- QTY -->
+            <div class="field">
+              <label>Qty</label>
+
+              <input
+                type="number"
+                class="form-control form-control-sm"
+                min="1"
+                [value]="row.quantity"
+                (input)="updateRow(row.id, 'quantity', $any($event.target).value)">
+            </div>
+
+            <!-- PRICE -->
+            <div class="field">
+              <label>Unit Price</label>
+
+              <input
+                type="number"
+                class="form-control form-control-sm"
+                min="0"
+                [value]="row.unitPrice"
+                (input)="updateRow(row.id, 'unitPrice', $any($event.target).value)">
+            </div>
+
+            <!-- DISCOUNT -->
+            <div class="field">
+              <label>Discount</label>
+
+              <input
+                type="number"
+                class="form-control form-control-sm"
+                min="0"
+                [value]="row.discount"
+                (input)="updateRow(row.id, 'discount', $any($event.target).value)">
+            </div>
+
+            <!-- TAX -->
+            <div class="field">
+              <label>Tax</label>
+
+              <select
+                class="form-select form-select-sm"
+                [value]="row.taxPercent"
+                (change)="updateRow(row.id, 'taxPercent', $any($event.target).value)">
+
+                @for (t of taxOptions; track t.value) {
+
+                  <option [value]="t.value">
+                    {{ t.label }}
+                  </option>
+
+                }
+
+              </select>
+            </div>
+
+          </div>
+
+          <!-- TOTAL -->
+          <div class="line-total">
+
+            <span>Total</span>
+
+            <strong>
+              ₹{{ calcRowTotal(row) | number:'1.2-2' }}
+            </strong>
+
+          </div>
+
         </div>
+
+      }
+
+    </div>
+
+ <div  style="justify-content: end;display: flex;">
+     <!-- ADD -->
+    <button
+      type="button"
+      class="btn bg-primary btn-sm"
+      (click)="addRow()">
+
+      <i class="ti ti-plus me-1"></i>
+
+      Add Row
+
+    </button>
+
+ </div>
+  </div>
+</div>
 
         <!-- ══ SECTION 4 · ORDER SUMMARY ══════════════════════════════════ -->
         <div class="card mb-3 section-card section-success">
@@ -323,6 +393,233 @@
             </div>
           </div>
         </div>
+
+        <!-- ═════════ SECTION · ADDITIONAL DETAILS ═════════ -->
+<div class="card mb-3 section-card section-info">
+
+  <div class="card-body">
+
+    <div class="section-header">
+
+      <div class="section-icon">
+        <i class="ti ti-settings"></i>
+      </div>
+
+      <h6 class="cardheader">
+        Additional Details
+      </h6>
+
+    </div>
+
+    <div class="row g-3">
+
+      <!-- PO NUMBER -->
+      <div class="col-md-3">
+
+        <label class="form-label cardlabel required">
+          PO Number
+        </label>
+
+        <input
+          type="text"
+          class="form-control text-uppercase"
+          formControlName="poNumber"
+          placeholder="PO-2026-001"
+          [class.is-invalid]="hasError('poNumber')" />
+
+        @if (hasError('poNumber')) {
+
+          <div class="invalid-feedback">
+            PO Number is required.
+          </div>
+
+        }
+
+      </div>
+
+      <!-- WAREHOUSE -->
+      <div class="col-md-3">
+
+        <label class="form-label cardlabel required">
+          Warehouse
+        </label>
+
+        <select
+          class="form-select"
+          formControlName="warehouseId"
+          [class.is-invalid]="hasError('warehouseId')">
+
+          <option value="">
+            -- Select Warehouse --
+          </option>
+
+          @for (w of warehouseOptions; track w.value) {
+
+            <option [value]="w.value">
+              {{ w.label }}
+            </option>
+
+          }
+
+        </select>
+
+        @if (hasError('warehouseId')) {
+
+          <div class="invalid-feedback">
+            Warehouse is required.
+          </div>
+
+        }
+
+      </div>
+
+      <!-- EXCHANGE RATE -->
+      <div class="col-md-3">
+
+        <label class="form-label cardlabel">
+          Exchange Rate
+        </label>
+
+        <input
+          type="number"
+          class="form-control"
+          min="0"
+          step="0.01"
+          formControlName="exchangeRate"
+          placeholder="1.00" />
+
+      </div>
+
+      <!-- REFERENCE NUMBER -->
+      <div class="col-md-3">
+
+        <label class="form-label cardlabel">
+          Reference Number
+        </label>
+
+        <input
+          type="text"
+          class="form-control"
+          formControlName="referenceNumber"
+          placeholder="REF-001" />
+
+      </div>
+
+      <!-- INCOTERMS -->
+      <div class="col-md-4">
+
+        <label class="form-label cardlabel">
+          Incoterms
+        </label>
+
+        <input
+          type="text"
+          class="form-control"
+          formControlName="incoterms"
+          placeholder="FOB / CIF / EXW" />
+
+      </div>
+
+      <!-- ROUNDING -->
+      <div class="col-md-4">
+
+        <label class="form-label cardlabel">
+          Round Off Amount
+        </label>
+
+        <input
+          type="number"
+          class="form-control"
+          formControlName="roundingAmount"
+          placeholder="0.00" />
+
+      </div>
+
+      <!-- APPROVED BY -->
+      <div class="col-md-4">
+
+        <label class="form-label cardlabel">
+          Approved By
+        </label>
+
+        <input
+          type="text"
+          class="form-control"
+          formControlName="approvedBy"
+          placeholder="Approver Name" />
+
+      </div>
+
+      <!-- APPROVED ON -->
+      <div class="col-md-4">
+
+        <label class="form-label cardlabel">
+          Approved On
+        </label>
+
+        <input
+          type="datetime-local"
+          class="form-control"
+          formControlName="approvedOn" />
+
+      </div>
+
+      <!-- CANCELLED ON -->
+      <div class="col-md-4">
+
+        <label class="form-label cardlabel">
+          Cancelled On
+        </label>
+
+        <input
+          type="datetime-local"
+          class="form-control"
+          formControlName="cancelledOn" />
+
+      </div>
+
+      <!-- CANCELLATION REASON -->
+      <div class="col-md-4">
+
+        <label class="form-label cardlabel">
+          Cancellation Reason
+        </label>
+
+        <textarea
+          rows="3"
+          class="form-control"
+          formControlName="cancellationReason"
+          placeholder="Reason for cancellation">
+        </textarea>
+
+      </div>
+
+      <!-- REMARKS -->
+      <div class="col-md-12">
+
+        <label class="form-label cardlabel">
+          Remarks
+        </label>
+
+        <textarea
+          rows="4"
+          class="form-control"
+          formControlName="remarks"
+          maxlength="500"
+          placeholder="Additional notes...">
+        </textarea>
+
+        <small class="text-muted">
+          Maximum 500 characters
+        </small>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
 
         <!-- ══ FOOTER ACTIONS ═════════════════════════════════════════════ -->
         <div class="d-flex mb-md-0 mb-3 gap-3" style="justify-content:flex-end;">

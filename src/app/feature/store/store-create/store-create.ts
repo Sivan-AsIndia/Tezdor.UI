@@ -3,7 +3,7 @@ import { StoreDataClient } from '../store-data-client';
 import { Router, RouterLink } from '@angular/router';
 import { UNIT_OPTIONS } from '../../product/product';
 import { VENDOR_OPTIONS } from '../../purchase/purchase-order/purchase-order';
-import { ADJUSTMENT_REASONS, REFERENCE_TYPES, ReferenceType, StepId, StockLineItem, StoreProduct, StoreWarehouse, TRANSACTION_TYPES, TransactionType, TYPE_FIELD_CONFIG, TypeFieldConfig, VALUATION_METHODS } from '../store';
+import { ADJUSTMENT_REASONS, REFERENCE_TYPES, ReferenceType, StepId, StockLineItem, StoreProduct, StoreWarehouse, TRANSACTION_TYPES, TransactionType, TYPE_FIELD_CONFIG, TypeFieldConfig, VALUATION_METHODS, WAREHOUSE_OPTIONS } from '../store';
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 
 @Component({
@@ -213,8 +213,8 @@ export class StoreCreateComponent {
   }
 
   ngOnInit() {
-    this.warehouses = this.service.getWarehouses();
-    this.products   = this.service.getProducts();
+ this.warehouses = WAREHOUSE_OPTIONS;
+     this.products   = this.service.getProducts();
     if (this.warehouses.length) this.warehouseId.set(this.warehouses[0].id);
   }
   onSubmit() {

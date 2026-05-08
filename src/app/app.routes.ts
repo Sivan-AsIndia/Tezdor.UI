@@ -132,6 +132,32 @@ export const routes: Routes = [
             .then(m => m.PurchaseInvoiceViewComponent),
       },
 
+      // ── Sales Invoice ────────────────────────────────────────
+
+{
+        path: 'sales-invoice',
+        loadComponent: () =>
+          import('./feature/sales/sales-invoice-list/sales-invoice-list')
+            .then(m => m.SalesInvoiceListComponent),
+      },
+      {
+        path: 'sales-invoice/create',
+        loadComponent: () =>
+          import('./feature/sales/sales-invoice-create/sales-invoice-create')
+            .then(m => m.SalesInvoiceCreateComponent),
+      },
+    {
+        path: 'sales-invoice/edit/:id',
+        loadComponent: () =>
+          import('./feature/sales/sales-invoice-create/sales-invoice-create')
+            .then(m => m.SalesInvoiceCreateComponent),
+      },
+  {
+        path: 'sales-invoice/:id',
+        loadComponent: () =>
+          import('./feature/sales/sales-invoice-view/sales-invoice-view')
+            .then(m => m.SalesInvoiceView),
+      },
       // ── Employees ───────────────────────────────────────────────
       {
         path: 'employees',
