@@ -11,6 +11,7 @@ import {
 } from '../purchase-order';
 import { ToastNotifier }         from '../../../../core/services/toast';
 import { PurchaseOrderDataClient } from '../purchase-order-data-client';
+import { PrintService }           from '../../../../core/print/print.service';
 
 @Component({
   selector:    'app-purchaseorderview',
@@ -25,6 +26,7 @@ export class PurchaseOrderViewComponent implements OnInit {
   private router  = inject(Router);
   private toast   = inject(ToastNotifier);
   private service = inject(PurchaseOrderDataClient);
+  private printService = inject(PrintService);
 
   po!: PurchaseOrder;
 
@@ -112,6 +114,6 @@ export class PurchaseOrderViewComponent implements OnInit {
   }
 
   printPO(): void {
-    window.print();
+    this.printService.printPurchaseOrder(this.po);
   }
 }

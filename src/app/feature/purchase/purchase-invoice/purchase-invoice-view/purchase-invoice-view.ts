@@ -4,6 +4,7 @@ import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { PurchaseInvoiceDataClient } from '../purchase-invoice-data-client';
 import { ToastNotifier } from '../../../../core/services/toast';
 import { CommonModule } from '@angular/common';
+import { PrintService } from '../../../../core/print/print.service';
 
 @Component({
   selector: 'app-purchase-invoice-view',
@@ -17,6 +18,7 @@ export class PurchaseInvoiceViewComponent implements OnInit {
   private readonly router  = inject(Router);
   private readonly route   = inject(ActivatedRoute);
   private readonly service = inject(PurchaseInvoiceDataClient);
+  private readonly printService = inject(PrintService);
 
   invoice = signal<PurchaseInvoice | null>(null);
 
@@ -79,5 +81,10 @@ export class PurchaseInvoiceViewComponent implements OnInit {
 
   goEdit(id: number): void { this.router.navigate(['/purchaseinvoice-edit', id]); }
 
-  printPage(): void { window.print(); }
+  printPage(): void {
+    const inv = this.invoice();
+    if (inv) {
+      this.printService.printPurchaseInvoice(inv);
+    }
+  }
 }
