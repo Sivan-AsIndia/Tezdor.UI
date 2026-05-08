@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { GeneralLedgerEntry } from '../general-ledger-entry';
 import { GeneralLedgerEntryClient } from '../general-ledger-entry-client';
 import { CommonModule } from '@angular/common';
+import { PrintService } from '../../../core/print/print.service';
 
 @Component({
   selector: 'app-general-ledger-entry-detail',
@@ -14,6 +15,7 @@ import { CommonModule } from '@angular/common';
 export class GeneralLedgerEntryDetailComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly gleService = inject(GeneralLedgerEntryClient);
+  private readonly printService = inject(PrintService);
 
   entry = signal<GeneralLedgerEntry | null>(null);
 
@@ -37,7 +39,10 @@ export class GeneralLedgerEntryDetailComponent {
   }
 
   print() {
-    window.print();
+    const e = this.entry();
+    if (e) {
+      this.printService.printGeneralLedgerEntry(e);
+    }
   }
 
   setTab(tab: 'overview' | 'audit') {

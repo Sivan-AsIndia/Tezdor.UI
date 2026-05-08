@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductDataClient } from '../product-data-client';
 import { Product } from '../product';
 import { CommonModule, DecimalPipe } from '@angular/common';
+import { PrintService } from '../../../core/print/print.service';
 
 @Component({
   selector: 'app-product-view',
@@ -16,6 +17,7 @@ export class ProductViewComponent implements OnInit {
   private route   = inject(ActivatedRoute);
   private router  = inject(Router);
   private service = inject(ProductDataClient);
+  private printService = inject(PrintService);
 
   // ✅ PRODUCT
   product = signal<Product | null>(null);
@@ -87,7 +89,10 @@ moveLens(event: MouseEvent) {
 }
 
   print() {
-    window.print();
+    const p = this.product();
+    if (p) {
+      this.printService.printProduct(p);
+    }
   }
 
 

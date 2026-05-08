@@ -6,6 +6,7 @@ import { ReconciliationStatus } from '../petty-cash';
 import { ToastNotifier } from '../../../../core/services/toast';
 import { MasterDataClient } from '../../../../core/services/master-data';
 import { EmployeeDataClient } from '../../employee-data-client';
+import { PrintService } from '../../../../core/print/print.service';
 
 @Component({
   selector: 'app-petty-cash-detail',
@@ -21,6 +22,7 @@ export class PettyCashDetailComponent {
   private readonly router = inject(Router);
   private readonly toast = inject(ToastNotifier);
   private readonly master = inject(MasterDataClient);
+  private readonly printService = inject(PrintService);
 
   // ===== GET ID =====
   id = this.route.snapshot.paramMap.get('id')!;
@@ -49,6 +51,17 @@ export class PettyCashDetailComponent {
   expenseLedgerAccounts = this.master.expenseLedgerAccount;
 
   // ===== HELPERS =====
+  print() {
+    const pc = this.pettyCash();
+    if (pc) {
+      this.printService.printPettyCash(
+        pc,
+        this.lines(),
+        (id: string) => this.getEmployeeName(id)
+      );
+    }
+  }
+
   formatAmount(val?: number) {
     return (val ?? 0).toLocaleString('en-IN', {
       minimumFractionDigits: 2
