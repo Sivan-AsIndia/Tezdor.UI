@@ -156,9 +156,9 @@
                         </tr>
                       }
 
-                      @for (po of paginatedOrders(); track po.id) {
+                      @for (po of paginatedOrders(); track po.id;let i = $index) {
                         <tr>
-                          <td class="text-subtitle-1 textSecondary">{{ po.id }}</td>
+                          <td class="text-subtitle-1 textSecondary">{{ i+1 }}</td>
 
                           <!-- <td class="text-subtitle-1 textSecondary text-no-wrap">
                             <strong>{{ po.poNumber }}</strong>

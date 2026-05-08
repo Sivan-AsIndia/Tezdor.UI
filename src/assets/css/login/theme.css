@@ -946,7 +946,7 @@ select:focus {
 .btn {
   border-radius: 9999px;
   border-color: var(--color-primary);
-  background-color: var(--color-primary);
+  background-color: var(--color-primary) !important;
   padding-left: 1.25rem;
   padding-right: 1.25rem;
   padding-top: 0.625rem;
@@ -962,7 +962,7 @@ select:focus {
 }
 
 .btn:hover {
-  background-color: var(--color-primary-emphasis);
+  background-color: color-mix(in srgb, var(--color-primary) 75%, black) !important;
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
