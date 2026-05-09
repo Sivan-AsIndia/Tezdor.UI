@@ -10,7 +10,7 @@ import {
   UserInfo,
 } from '../models/auth';
 
-const API_BASE = 'http://localhost:5234/api/auth';
+const API_BASE = '/api/auth';
  
 
 const TOKEN_KEY = 'tezdor_token';
