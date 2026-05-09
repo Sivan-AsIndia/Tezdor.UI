@@ -7,11 +7,11 @@ import { AttendanceStatus } from '../attendance';
 import { AttendanceDataClient } from '../attendance-data-client';
 import { EmployeeDataClient } from '../../employee-data-client';
 import { ToastNotifier } from '../../../../core/services/toast';
-import { Permission, PermissionStatus, PermissionType } from '../../permission/permission';
 import { PermissionDataClient } from '../../permission/permission-data-client';
-import { Leave, LeaveStatus } from '../../leave/leave';
 import { LeaveTypeDataClient } from '../../leave/leave-type-data-client';
 import { LeaveDataClient } from '../../leave/leave-data-client';
+import { Permission, PermissionStatus, PermissionType } from '../../permission/permission';
+import { Leave, LeaveStatus } from '../../leave/leave';
 
 @Component({
   selector: 'app-attendance-lines',

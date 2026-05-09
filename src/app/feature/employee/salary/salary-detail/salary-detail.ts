@@ -6,6 +6,7 @@ import { Salary } from '../salary';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { SalaryLine } from '../salary-line';
 import { CommonModule } from '@angular/common';
+import { PrintService } from '../../../../core/print/print.service';
 
 @Component({
   selector: 'app-salary-detail',
@@ -18,6 +19,7 @@ export class SalaryDetailComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly salaryService = inject(SalaryDataClient);
   private readonly empService = inject(EmployeeDataClient);
+  private readonly printService = inject(PrintService);
 
   salary = signal<Salary | null>(null);
 
@@ -63,7 +65,10 @@ export class SalaryDetailComponent {
   }
 
   print() {
-    window.print()
+    const sal = this.salary();
+    if (sal) {
+      this.printService.printSalary(sal, (id: string) => this.getEmployeeName(id));
+    }
   }
 
   openDetails(line: SalaryLine) {

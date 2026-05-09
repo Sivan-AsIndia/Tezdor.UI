@@ -1,10 +1,17 @@
-import { Component, computed, inject, signal, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { BRAND_OPTIONS, CATEGORY_OPTIONS, DISCOUNT_OPTIONS, IDiscountOption, ISelectOption, IStatusOption, Product, PRODUCT_TYPE_OPTIONS, STATUS_OPTIONS, STATUS_OPTIONSPRODUCT, TabId, TAX_OPTIONS, TEMPLATE_OPTIONS, UNIT_OPTIONS } from '../product';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ProductDataClient } from '../product-data-client';
+// ── Product Create / Edit Component ──────────────────────────
+// ✅ Angular 21 — uses input() signal for route params,
+//    effect() instead of subscribe(), no OnInit/NgZone.
 
+import { Component, computed, inject, signal, input, effect } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import {
+  BRAND_OPTIONS, CATEGORY_OPTIONS, DISCOUNT_OPTIONS, IDiscountOption,
+  ISelectOption, IStatusOption, Product, PRODUCT_TYPE_OPTIONS,
+  STATUS_OPTIONSPRODUCT, TabId, TAX_OPTIONS, TEMPLATE_OPTIONS, UNIT_OPTIONS,
+} from '../product';
+import { Router } from '@angular/router';
+import { ProductDataClient } from '../product-data-client';
 
 declare var bootstrap: any;
 
@@ -15,73 +22,80 @@ declare var bootstrap: any;
   templateUrl: './product-create.html',
   styleUrl: './product-create.css',
 })
-export class ProductCreateComponent implements OnInit {
+export class ProductCreateComponent {
 
-  @Input() editMode = false;
-  @Input() productData: Partial<Product> | null = null;
-
-  private fb = inject(FormBuilder);
+  private fb     = inject(FormBuilder);
   private router = inject(Router);
-  private route = inject(ActivatedRoute);
+  service        = inject(ProductDataClient);
 
-  service = inject(ProductDataClient);
-  editId!: number;
-  activeTab = signal<TabId>('general');
-  isDragging = signal(false);
+  /**
+   * ✅ Angular 21 input() signal — binds ':id' from the route
+   *    automatically via withComponentInputBinding() in app.config.
+   */
+  id = input<string>();
+
+  /** Computed: are we in edit mode? Derived from the route param. */
+  editMode = computed(() => !!this.id());
+
+  /** The numeric ID being edited (0 if creating). */
+  editId = computed(() => {
+    const raw = this.id();
+    return raw ? +raw : 0;
+  });
+
+  activeTab    = signal<TabId>('general');
+  isDragging   = signal(false);
   imagePreviews = signal<string[]>([]);
   selectedFiles = signal<File[]>([]);
-  currentIndex = signal(0);
-  primaryIndex = signal(0);
-  dragStartX = signal(0);
+  currentIndex  = signal(0);
+  primaryIndex  = signal(0);
+  dragStartX    = signal(0);
   pendingDeleteIndex = signal<number | null>(null);
 
   readonly maxImages = 5;
 
-  categoryOptions: ISelectOption[] = CATEGORY_OPTIONS;
-  brandOptions: ISelectOption[] = BRAND_OPTIONS;
-  unitOptions = UNIT_OPTIONS;
-  taxOptions: ISelectOption[] = TAX_OPTIONS;
-  discountTypes: IDiscountOption[] = DISCOUNT_OPTIONS;
-  statusOptions: IStatusOption[] = STATUS_OPTIONSPRODUCT;
-  templateOptions: ISelectOption[] = TEMPLATE_OPTIONS;
-  ProductType: ISelectOption[] = PRODUCT_TYPE_OPTIONS;
+  categoryOptions: ISelectOption[]    = CATEGORY_OPTIONS;
+  brandOptions: ISelectOption[]       = BRAND_OPTIONS;
+  unitOptions                         = UNIT_OPTIONS;
+  taxOptions: ISelectOption[]         = TAX_OPTIONS;
+  discountTypes: IDiscountOption[]    = DISCOUNT_OPTIONS;
+  statusOptions: IStatusOption[]      = STATUS_OPTIONSPRODUCT;
+  templateOptions: ISelectOption[]    = TEMPLATE_OPTIONS;
+  ProductType: ISelectOption[]        = PRODUCT_TYPE_OPTIONS;
 
   productForm: FormGroup = this.fb.group({
-
-    productCode: ['', [Validators.required, Validators.maxLength(30)]],
-    productName: ['', [Validators.required, Validators.maxLength(200)]],
-    categoryId: ['', Validators.required],
-    brandId: [''],
-    unitId: ['', Validators.required],
-    barcode: ['', Validators.maxLength(50)],
-    costPrice: [null, [Validators.required, Validators.min(0.01)]],
-    sellingPrice: [null, [Validators.required, Validators.min(0.01)]],
-    taxId: [''],
-    isInclusiveTax: [false],
-    discountType: ['none'],
-    discountValue: [null],
-    reorderLevel: [0],
-    maxStockLevel: [0],
-    currentStock: [0],
-    description: [''],
-    metaTagTitle: [''],
+    productCode:        ['', [Validators.required, Validators.maxLength(30)]],
+    productName:        ['', [Validators.required, Validators.maxLength(200)]],
+    categoryId:         ['', Validators.required],
+    brandId:            [''],
+    unitId:             ['', Validators.required],
+    barcode:            ['', Validators.maxLength(50)],
+    costPrice:          [null, [Validators.required, Validators.min(0.01)]],
+    sellingPrice:       [null, [Validators.required, Validators.min(0.01)]],
+    taxId:              [''],
+    isInclusiveTax:     [false],
+    discountType:       ['none'],
+    discountValue:      [null],
+    reorderLevel:       [0],
+    maxStockLevel:      [0],
+    currentStock:       [0],
+    description:        [''],
+    metaTagTitle:       [''],
     metaTagDescription: [''],
-    isPhysical: [false],
-    productTemplate: [''],
-    ProductType: [''],
-    status: ['active'],
-    mediaFiles: [[]],
+    isPhysical:         [false],
+    productTemplate:    [''],
+    ProductType:        [''],
+    status:             ['active'],
+    mediaFiles:         [[]],
   });
 
-
-  pageTitle = computed(() => this.editMode ? 'Edit Product' : 'Create Product');
+  pageTitle = computed(() => this.editMode() ? 'Edit Product' : 'Create Product');
   pageSubtitle = computed(() =>
-    this.editMode
+    this.editMode()
       ? 'Update existing product details and manage your inventory.'
       : 'Add new products and manage your inventory efficiently from a single place.'
   );
-  pageCrumb = computed(() => this.editMode ? 'Edit' : 'Create');
-
+  pageCrumb = computed(() => this.editMode() ? 'Edit' : 'Create');
 
   sellingPriceWarn = computed(() => {
     const cost = this.productForm.get('costPrice')?.value;
@@ -93,31 +107,46 @@ export class ProductCreateComponent implements OnInit {
     this.productForm.get('discountType')?.value !== 'none'
   );
 
+  /**
+   * ✅ Constructor replaces ngOnInit().
+   *    Uses effect() to react to route param changes,
+   *    and another effect() to auto-generate product code.
+   */
+  constructor() {
+    // ── effect #1: Load product data in edit mode ──
+    effect(() => {
+      const routeId = this.id();
+      if (routeId) {
+        const product = this.service.getById(+routeId);
+        if (product) {
+          this.productForm.patchValue(product);
+          this.productForm.get('currentStock')?.setValue(product.currentStock ?? 0);
 
-  ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.editMode = true;
-      this.editId = +id;
-      const product = this.service.getById(+id);
-      console.log(product);
-
-      if (product) {
-        this.productForm.patchValue(product);
-        this.productForm.get('currentStock')?.setValue(product.currentStock ?? 0);
+          // Restore images for edit mode
+          if (Array.isArray(product.images) && product.images.length) {
+            const previews = product.images.map(img => img.url);
+            this.imagePreviews.set(previews);
+            const pIdx = product.images.findIndex(img => img.isPrimary);
+            this.primaryIndex.set(pIdx !== -1 ? pIdx : 0);
+            this.currentIndex.set(0);
+          }
+        } else {
+          this.router.navigate(['/products']);
+        }
       } else {
-        this.router.navigate(['/products']);
+        this.generateProductCode();
       }
-    } else {
-      this.generateProductCode();
-    }
+    });
+
+    // ── effect #2: Auto-regenerate product code on category change (create mode only) ──
+    // ✅ Using toObservable() isn't needed here; a simple valueChanges listener
+    //    inside the constructor is fine since the form lives as long as the component.
     this.productForm.get('categoryId')?.valueChanges.subscribe(() => {
-      if (!this.editMode) {
+      if (!this.editMode()) {
         this.generateProductCode();
       }
     });
   }
-
 
   generateProductCode(): void {
     const categoryId = this.productForm.get('categoryId')?.value;
@@ -131,18 +160,12 @@ export class ProductCreateComponent implements OnInit {
     const existingCount = this.service.products()
       .filter(p => p.categoryId === +categoryId).length;
     const nextNum = String(existingCount + 1).padStart(3, '0');
-
-    const code = `${prefix}${nextNum}`;
-
-    this.productForm.get('productCode')?.setValue(code);
+    this.productForm.get('productCode')?.setValue(`${prefix}${nextNum}`);
   }
-
-
 
   setTab(tab: TabId) {
     this.activeTab.set(tab);
   }
-
 
   onMultipleSelect(e: Event) {
     const input = e.target as HTMLInputElement;
@@ -171,7 +194,6 @@ export class ProductCreateComponent implements OnInit {
       console.log('Dropped files:', input.files);
     }
   }
-
 
   removeImage(index: number, event: Event) {
     event.stopPropagation();
@@ -210,12 +232,10 @@ export class ProductCreateComponent implements OnInit {
     }
   }
 
-
   prev() { if (this.currentIndex() > 0) this.currentIndex.update(v => v - 1); }
   next() { if (this.currentIndex() < this.imagePreviews().length - 1) this.currentIndex.update(v => v + 1); }
   goTo(i: number) { this.currentIndex.set(i); }
   setPrimary() { this.primaryIndex.set(this.currentIndex()); }
-
 
   onDragStart(e: MouseEvent) { this.dragStartX.set(e.clientX); }
   onDragEnd(e: MouseEvent) {
@@ -235,9 +255,7 @@ export class ProductCreateComponent implements OnInit {
 
     files.slice(0, remaining).forEach(file => {
       if (!file.type.startsWith('image/')) return;
-
       this.selectedFiles.update(arr => [...arr, file]);
-
       const reader = new FileReader();
       reader.onload = ev => {
         this.imagePreviews.update(arr => [...arr, ev.target?.result as string]);
@@ -252,15 +270,13 @@ export class ProductCreateComponent implements OnInit {
     return !!(c?.invalid && c?.touched);
   }
 
-
   buildImagesPayload() {
     return this.imagePreviews().map((img, index) => ({
       id: index + 1,
       url: img,
-      isPrimary: index === this.primaryIndex()
+      isPrimary: index === this.primaryIndex(),
     }));
   }
-
 
   onSave() {
     if (!this.productForm.valid) {
@@ -271,31 +287,25 @@ export class ProductCreateComponent implements OnInit {
     const formVal = this.productForm.value;
     const imagesPayload = this.buildImagesPayload();
 
-    if (this.editMode) {
-
-      const existing = this.service.getById(this.editId)!;
-
+    if (this.editMode()) {
+      const existing = this.service.getById(this.editId())!;
       const updated: Product = {
         ...existing,
         ...formVal,
         status: formVal.status,
         images: imagesPayload,
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       };
-
       this.service.updateProduct(updated);
-
     } else {
-
       const newProduct: Product = {
         ...formVal,
         status: formVal.status,
         images: imagesPayload,
         currentStock: formVal.currentStock ?? 0,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       };
-
       this.service.addProduct(newProduct);
     }
 
@@ -304,6 +314,5 @@ export class ProductCreateComponent implements OnInit {
 
   onCancel() {
     this.router.navigate(['/products']);
-
   }
 }

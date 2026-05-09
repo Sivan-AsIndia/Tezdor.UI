@@ -1,5 +1,6 @@
+// purchaseorderview.component.ts
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe, DecimalPipe, TitleCasePipe, UpperCasePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
   PurchaseOrder,
@@ -8,34 +9,34 @@ import {
   DELIVERY_OPTIONS,
   STATUS_OPTIONS,
 } from '../purchase-order';
-import { ToastNotifier } from '../../../../core/services/toast';
+import { ToastNotifier }         from '../../../../core/services/toast';
 import { PurchaseOrderDataClient } from '../purchase-order-data-client';
-import { PrintService } from '../../../../core/print/print.service';
+import { PrintService }           from '../../../../core/print/print.service';
 
 @Component({
-  selector: 'app-purchaseorderview',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './purchase-order-view.html',
-  styleUrl: './purchase-order-view.css',
+  selector:    'app-purchaseorderview',
+  standalone:  true,
+  imports:     [CommonModule, RouterModule],
+  templateUrl:'./purchase-order-view.html',
+  styleUrl:    './purchase-order-view.css',
 })
 export class PurchaseOrderViewComponent implements OnInit {
 
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private toast = inject(ToastNotifier);
+  private route   = inject(ActivatedRoute);
+  private router  = inject(Router);
+  private toast   = inject(ToastNotifier);
   private service = inject(PurchaseOrderDataClient);
   private printService = inject(PrintService);
 
   po!: PurchaseOrder;
 
   paymentTermsOptions = PAYMENT_TERMS_OPTIONS;
-  deliveryOptions = DELIVERY_OPTIONS;
-  statusOptions = STATUS_OPTIONS;
+  deliveryOptions     = DELIVERY_OPTIONS;
+  statusOptions       = STATUS_OPTIONS;
 
   activeTab = signal<'overview' | 'vendor' | 'lineitems' | 'summary'>('overview');
 
-
+  // ── Lifecycle ──────────────────────────────────────────────────────
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) {
@@ -52,11 +53,14 @@ export class PurchaseOrderViewComponent implements OnInit {
     this.po = found;
   }
 
-
+  // ── Tab ────────────────────────────────────────────────────────────
   setTab(tab: 'overview' | 'vendor' | 'lineitems' | 'summary'): void {
     this.activeTab.set(tab);
   }
 
+  // ── Helpers ────────────────────────────────────────────────────────
+
+  /** Two-letter initials from vendor name for avatar */
   getVendorInitials(): string {
     if (!this.po?.vendorName) return '??';
     const parts = this.po.vendorName.trim().split(' ');
@@ -65,42 +69,46 @@ export class PurchaseOrderViewComponent implements OnInit {
     return first + second;
   }
 
+  /** CSS class for status text color (emp-meta span) */
   getStatusClass(status?: string): string {
     const map: Record<POStatus, string> = {
-      draft: 'status-draft',
-      approved: 'status-approved',
-      sent_to_supplier: 'status-sent',
-      partial: 'status-partial',
-      received: 'status-received',
+      pending:   'status-pending',
+      approved:  'status-approved',
+      received:  'status-received',
+      partial:   'status-partial',
       cancelled: 'status-cancelled',
     };
-    return map[status as POStatus] ?? 'status-draft';
+    return map[status as POStatus] ?? 'status-pending';
   }
 
+  /** CSS class for pf-chip colored badge */
   getChipClass(status?: string): string {
     const map: Record<POStatus, string> = {
-      draft: 'draft',
-      approved: 'approved',
-      sent_to_supplier: 'sent',
-      partial: 'partial',
-      received: 'received',
+      pending:   'pending',
+      approved:  'approved',
+      received:  'received',
+      partial:   'partial',
       cancelled: 'cancelled',
     };
-    return map[status as POStatus] ?? 'draft';
+    return map[status as POStatus] ?? 'pending';
   }
 
+  /** Status hint text from STATUS_OPTIONS */
   getStatusHint(status?: string): string {
     return this.statusOptions.find(s => s.value === status)?.hint ?? '';
   }
 
+  /** Payment terms label */
   getPaymentTermsLabel(value?: string): string {
     return this.paymentTermsOptions.find(p => p.value === value)?.label ?? value ?? '—';
   }
 
+  /** Delivery method label */
   getDeliveryLabel(value?: string): string {
     return this.deliveryOptions.find(d => d.value === value)?.label ?? value ?? '—';
   }
 
+  // ── Actions ────────────────────────────────────────────────────────
   goBack(): void {
     this.router.navigate(['/purchase-order']);
   }

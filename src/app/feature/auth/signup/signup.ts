@@ -1,4 +1,7 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+// ── Signup Component ─────────────────────────────────────────
+// ✅ Angular 21 — constructor-based init, no OnInit/NgZone.
+
+import { Component, inject, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -10,7 +13,7 @@ import { AuthService } from '../../../core/services/auth';
   templateUrl: './signup.html',
   styleUrl: './signup.css',
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent {
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
 
@@ -33,7 +36,11 @@ export class SignupComponent implements OnInit {
   apiError = signal('');
   apiSuccess = signal('');
 
-  ngOnInit(): void {
+  /**
+   * ✅ Constructor replaces ngOnInit().
+   *    Redirects already-authenticated users to the dashboard.
+   */
+  constructor() {
     if (this.authService.checkAuth()) {
       this.router.navigate(['/dashboard']);
     }
@@ -122,10 +129,10 @@ export class SignupComponent implements OnInit {
     this.apiError.set('');
     this.apiSuccess.set('');
 
-    const isNameValid = this.validateName();
-    const isEmailValid = this.validateEmail();
+    const isNameValid     = this.validateName();
+    const isEmailValid    = this.validateEmail();
     const isPasswordValid = this.validatePassword();
-    const isConfirmValid = this.validateConfirmPassword();
+    const isConfirmValid  = this.validateConfirmPassword();
 
     if (!isNameValid || !isEmailValid || !isPasswordValid || !isConfirmValid) return;
 
@@ -138,7 +145,6 @@ export class SignupComponent implements OnInit {
       .subscribe((res) => {
         if (res.success) {
           this.apiSuccess.set(res.message);
-          // Redirect to login after a short delay
           setTimeout(() => this.router.navigate(['/login']), 2500);
         } else {
           this.apiError.set(res.message);

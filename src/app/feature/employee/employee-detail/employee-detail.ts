@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Employee } from '../employee';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { EmployeeDataClient } from '../employee-data-client';
+import { PrintService } from '../../../core/print/print.service';
 
 @Component({
   selector: 'app-employee-detail',
@@ -16,6 +17,7 @@ export class EmployeeDetailComponent {
 
   private readonly route = inject(ActivatedRoute);
   private readonly empService = inject(EmployeeDataClient);
+  private readonly printService = inject(PrintService);
 
   activeTab = signal<'personal' | 'job' | 'salary' | 'pay'>('personal');
 
@@ -41,7 +43,10 @@ export class EmployeeDetailComponent {
   }
 
   print() {
-    window.print();
+    const emp = this.employee();
+    if (emp) {
+      this.printService.printEmployee(emp);
+    }
   }
 
   // 🔹 helpers

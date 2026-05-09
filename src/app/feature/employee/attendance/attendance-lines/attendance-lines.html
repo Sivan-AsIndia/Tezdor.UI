@@ -81,12 +81,13 @@
                             </div>
                             <!-- VIEW TOGGLE -->
                             <button class="icon-btn view-toggle bg-primary" (click)="toggleView()"
+
                                 [title]="viewMode() === 'table' ? 'Grid View' : 'Table View'">
 
                                 <i class="ti" [class]="viewMode() === 'table' ? 'ti-layout-grid' : 'ti-table'">
                                 </i>
 
-                            </button>
+                            </button> -->
                             <!-- ADD BUTTON -->
                             @if(canAdd()){
                             <button
@@ -97,52 +98,7 @@
                                 Add
                             </button>
                             }
-                            <!-- <button
-                                class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-primary v-btn--density-default v-btn--size-default v-btn--variant-elevated ml-auto"
-                                (click)="openPermissionModal()">
 
-                                <i class="mdi-account-multiple-plus mdi v-icon mr-2"></i>
-                                permission
-                            </button> -->
-
-                            <!-- ACTION MENU -->
-                            <div class="header-action-menu">
-
-                                <!-- MENU BUTTON -->
-                                <button class="menu-trigger-btn" (click)="showQuickMenu.set(!showQuickMenu())">
-
-                                    <i class="ti ti-dots-vertical"></i>
-
-                                </button>
-
-                                <!-- MENU -->
-                                @if(showQuickMenu()){
-
-                                <div class="quick-menu-popover">
-
-                                    <!-- ADD PERMISSION -->
-                                    <button class="quick-menu-item" (click)="openPermissionModal()">
-
-                                        <i class="ti ti-clock-hour-4"></i>
-
-                                        <span>Add Permission</span>
-
-                                    </button>
-
-                                    <!-- ADD LEAVE -->
-                                    <button class="quick-menu-item" (click)="openLeaveModal()">
-
-                                        <i class="ti ti-calendar-off"></i>
-
-                                        <span>Add Leave</span>
-
-                                    </button>
-
-                                </div>
-
-                                }
-
-                            </div>
                         </div>
                     </div>
 
@@ -185,7 +141,7 @@
                                             <td class="fw-semibold">
                                                 <div class="d-flex align-items-center gap-2">
 
-                                                    <div class="avatar text-clr"
+                                                    <div class="avatar"
                                                         [style.background]="getAvatarColor(getEmployeeName(s.employeeId))">
                                                         {{ getEmployeeName(s.employeeId).charAt(0) }}
                                                     </div>
@@ -253,7 +209,7 @@
 
                     @else{
 
-                    <div class="attendance-grid-wrapper">
+                    <div class="attendance-grid-wrapper" style="width: 98%;">
 
                         <div class="attendance-header">
 
@@ -263,7 +219,7 @@
                             </div>
 
                             <!-- Dates -->
-                            <div class="days-row">
+                            <div class="days-row" style="width: 98%;">
 
                                 @for(date of dates(); track date){
 
@@ -303,7 +259,7 @@
                                         </span>
 
                                         } @else {
-                                        <span class="dot empty" [class.absent]="isAbsent(emp.employeeId!, date)"></span>
+                                        <span class="dot empty"></span>
                                         }
 
                                     </div>
@@ -466,7 +422,7 @@
 
         <!-- FOOTER -->
         <div class="modal-footer">
-            <button class="btn-cancel-perm" (click)="closeModal()">Cancel</button>
+            <button class="btn-cancel" (click)="closeModal()">Cancel</button>
             <button class="btn-save" (click)="saveAttendance()">
                 Save Attendance
             </button>
@@ -672,23 +628,7 @@
 
                                                 {{ getStatusLabel(row.attendanceType) }}
 
-                                            </span>
-                                            <!-- PERMISSION BADGE -->
-                                            @if(hasPermission(row.employeeId, row.attendanceDate)){
-
-                                            <span class="permission-mini-badge" (mouseenter)="showPermissionPopover(
-                                                $event,
-                                                getPermission(row.employeeId,row.attendanceDate)!
-                                            )" (mouseleave)="hidePermissionPopover()">
-
-                                                <i class="ti ti-clock-hour-4"></i>
-
-                                                Perm
-
-                                            </span>
-
-                                            }
-                                        </td>
+                                            </span></td>
                                         <!-- ACTIONS -->
                                         <td>
                                             <div class="d-flex align-items-center gap-2">

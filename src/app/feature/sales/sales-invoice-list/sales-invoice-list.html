@@ -203,14 +203,13 @@
                         </td>
 
                         <!-- Paid -->
-                 <td class="sil-td-amt sil-td-paid">
-  @if ((inv.payment.amountPaid ?? 0) > 0) {
-    ₹{{ (inv.payment.amountPaid ?? 0) | number:'1.2-2' }}
-  } @else {
-    <span class="sil-dash">—</span>
-  }
-</td>
-
+                        <td class="sil-td-amt sil-td-paid">
+                          @if (inv.payment.amountPaid > 0) {
+                            ₹{{ inv.payment.amountPaid | number:'1.2-2' }}
+                          } @else {
+                            <span class="sil-dash">—</span>
+                          }
+                        </td>
 
                         <!-- Balance -->
                         <td class="sil-td-amt" [class.sil-bal-danger]="inv.payment.balanceDue > 0">

@@ -292,22 +292,3 @@
   color: gray;
 }
 
-
-/* 
-html, body {
-  overflow: hidden;
-  height: 100%;
-}
-
-#main-wrapper {
-  height: 100vh;
-  overflow: hidden;
-}
-
-.page-wrapper {
-  height: 100vh;
-  overflow-y: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
- */
