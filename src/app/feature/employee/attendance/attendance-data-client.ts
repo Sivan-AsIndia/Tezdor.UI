@@ -330,4 +330,25 @@ addLine(line: AttendanceLine) {
 
     return Promise.resolve(this._attendance()!);
   }
+
+removeByAttendanceId(
+  attendanceId: string
+) {
+
+  const current = this._attendance();
+
+  if (!current) return;
+
+  this._attendance.set({
+
+    ...current,
+
+    attendanceLines:
+      (current.attendanceLines ?? [])
+        .filter(x =>
+
+          x.attendanceId !== attendanceId
+        )
+  });
+}
 }
