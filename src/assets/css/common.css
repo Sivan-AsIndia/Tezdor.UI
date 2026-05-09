@@ -158,6 +158,12 @@ color: #fff;
     gap: 12px;
 }
 
+@media (max-width:518px) {
+  .topbar-actions{
+   flex-wrap: wrap;
+  }
+}
+
 .search-box {
     position: relative;
     min-width: 220px;
@@ -261,6 +267,8 @@ color: #fff;
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 8px;
+    justify-content: space-between;
+    gap: 23px;
     padding-right: 8px;
 }
 
@@ -307,4 +315,21 @@ color: #fff;
 /* Create */
 .section-card{
   padding: 0 !important; 
+}
+
+@media (max-width:823px) {
+  #section-primary .row .col-md-3{
+   flex-wrap: wrap;
+  }
+}
+.salary-summary{
+    flex-wrap: wrap;
+    gap: 24px;
+}
+.emp-hero-header{
+      flex-wrap: wrap;
+    gap: 20px;
+}
+.emp-tabs{
+      flex-wrap: wrap;
 }

@@ -3,10 +3,11 @@ import { PurchaseOrder, POStatus } from '../purchase-order';
 import { PurchaseOrderDataClient } from '../purchase-order-data-client';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ResponsiveTable } from '../../../../shared/components/responsive/responsive-table';
 
 @Component({
   selector: 'app-purchase-order-list',
-  imports: [RouterLink,CommonModule],
+  imports: [RouterLink,CommonModule,ResponsiveTable],
   templateUrl:'./purchase-order-list.html',
   styleUrl: './purchase-order-list.css',
 })

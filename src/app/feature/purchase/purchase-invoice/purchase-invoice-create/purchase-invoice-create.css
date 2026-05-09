@@ -40,6 +40,7 @@
 .pi-identity-row {
   display: flex; align-items: center; gap: 12px;
   width: 100%; justify-content: flex-end;
+  flex-wrap: wrap;
 }
 .pi-identity-key {
   font-size: 12px; font-weight: 600; color: #6b7280;
@@ -279,7 +280,7 @@ justify-content: flex-end;
 
 /* ── Paper Footer: Payment + Totals ──────────────────────────────────────── */
 .pi-paper-footer {
-  display: grid; grid-template-columns: 1fr auto;
+  display: grid;   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 24px; padding: 24px 28px; background: #ffffff; align-items: start;
 }
 
@@ -288,7 +289,7 @@ justify-content: flex-end;
   font-size: 12.5px; font-weight: 700; color: #374151;
   text-transform: uppercase; letter-spacing: .4px; margin-bottom: 14px;
 }
-.pi-payment-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.pi-payment-grid { display: grid;   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
 
 .pi-pay-label {
   font-size: 11.5px; font-weight: 600; color: #6b7280;
@@ -1258,7 +1259,7 @@ clip-path: polygon(0% 0%, calc(100% - 18px) 0%, 92% 50%, calc(100% - 18px) 100%,
 /* 🔥 GRID FIX */
 .pi-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* clean 4 column layout */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 14px;
 }
 
@@ -1444,4 +1445,24 @@ background: #80808017;
 .pi-toggle-label:has(.pi-toggle-check:checked) .pi-toggle-box {
   background: #22c55e;
   border-color: #22c55e;
+}
+
+
+@media (max-width:795px) {
+  .pi-paper-top,.pi-payment-grid{
+    display: block;
+  }
+  
+}
+@media (max-width:500px) {
+  .pi-identity-input-wrap,.pi-identity-input,.pi-identity-select-wrap{
+width: 100%;
+  }
+  .pi-addr-block--to{
+          padding-right: 0;
+        border-right: none;
+  }
+  .pi-totals-table tr{
+    display: block;
+  }
 }

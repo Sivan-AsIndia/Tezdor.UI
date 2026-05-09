@@ -124,3 +124,6 @@ tfoot tr td {
     border: 1px solid #ddd !important;
   }
 }
+#Invoice_view{
+      flex-wrap: wrap;
+}

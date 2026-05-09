@@ -67,12 +67,20 @@
 .sc-stepper {
   display: flex;
   align-items: center;
-  gap: 0;
+  gap: 20px;
   padding: 16px 20px;
   background:white;
   border: 0.5px solid rgba(128, 128, 128, 0.247);
   border-radius: 10px;
+      flex-wrap: wrap;
 }
+
+@media(max-width:500px) {
+  .sc-step-line{
+    display: none;
+  }
+}
+
 
 .sc-step {
   display: flex;

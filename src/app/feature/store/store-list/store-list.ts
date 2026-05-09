@@ -4,10 +4,11 @@ import { StockLedgerRow } from '../store';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ProductSummary } from '../../product/product';
+import { ResponsiveTable } from '../../../shared/components/responsive/responsive-table';
 
 @Component({
   selector: 'app-store-list',
-  imports: [CommonModule,RouterLink],
+  imports: [CommonModule,RouterLink,ResponsiveTable],
   templateUrl:'./store-list.html',
   styleUrl: './store-list.css',
 })

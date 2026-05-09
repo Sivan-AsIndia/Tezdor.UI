@@ -3,10 +3,11 @@ import { ProductDataClient } from '../product-data-client';
 import { CommonModule } from '@angular/common';
 import { Product } from '../product';
 import { RouterLink } from '@angular/router';
+import { ResponsiveTable } from '../../../shared/components/responsive/responsive-table';
 
 @Component({
   selector: 'app-product-list',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink,ResponsiveTable],
   templateUrl: './product-list.html',
   styleUrl: './product-list.css',
 })

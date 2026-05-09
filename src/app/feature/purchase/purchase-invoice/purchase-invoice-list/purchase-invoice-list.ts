@@ -3,10 +3,11 @@ import { PurchaseInvoice, InvoiceStatus, PaymentStatus } from '../purchase-invoi
 import { PurchaseInvoiceDataClient } from '../purchase-invoice-data-client';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { ResponsiveTable } from '../../../../shared/components/responsive/responsive-table';
 
 @Component({
   selector: 'app-purchase-invoice-list',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink,ResponsiveTable],
   templateUrl: './purchase-invoice-list.html',
   styleUrl: './purchase-invoice-list.css',
 })

@@ -11,7 +11,13 @@
 
 
   }
-
+ /* ─── PROFILE FOOTER ─── */
+  .fixed-profile {
+    flex-shrink: 0;       /* FIX: never shrink the profile */
+    position: static;     /* FIX: use flex flow, not absolute */
+    width: 100%;
+  }
+ 
 
   .left-sidebar {
   left: 20px;
@@ -151,7 +157,7 @@
 </style>
 <aside class="left-sidebar with-vertical"
   (mouseenter)="sidebar.isHovered.set(true)"
-  (mouseleave)="sidebar.isHovered.set(false)">
+  (mouseleave)="sidebar.isHovered.set(false)"   [class.sidebar-collapsed]="!sidebar.isExpanded">
 
   <!-- Logo -->
   <div class="brand-logo d-flex align-items-center justify-content-between">
@@ -358,9 +364,8 @@
     </nav>
   </div>
 
-  <!-- Profile footer — always at bottom, never overlaps -->
-@if (sidebar.isExpanded) {
-  <div class="mx-3 mt-auto">
+  <div class="mx-3 mt-auto ">
+    @if (sidebar.isExpanded) {
     <div class="card bg-primary-subtle mb-0 shadow-none p-0 profile-card">
       <div class="card-body p-4">
         <div class="d-flex align-items-center justify-content-between gap-3">
@@ -384,6 +389,7 @@
         </div>
       </div>
     </div>
+    }
   </div>
-}
+
 </aside>

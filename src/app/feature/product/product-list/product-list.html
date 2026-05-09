@@ -117,7 +117,7 @@
 
 
                                 <button type="button"
-                                    class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-primary v-btn--density-default  v-btn--size-default v-btn--variant-elevated ml-auto"
+                                    class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-primary v-btn--density-default  v-btn--size-default v-btn--variant-elevated"
                                     aria-haspopup="dialog"
                                     style="text-transform: capitalize; letter-spacing: 0px;padding-left: 10px;padding-right: 10px;"
                                     routerLink="/products/create"><span class="v-btn__overlay"></span><span
@@ -132,9 +132,9 @@
                         <!-- TABLE -->
                         <div class="border-table">
                             <div class="v-table v-theme--BLUE_THEME v-table--density-default"><!---->
-                                <div class="v-table__wrapper">
-                                    <table>
-                                        <thead>
+                                <div class="v-table__wrapper" >
+                           <table appResponsiveTable [hidePriority]="[3, 2, 4, 1]" [stickyLastCol]="true">    
+                                  <thead>
                                             <tr style="background: #8080800d;">
                                                 <th class="text-subtitle-1 font-weight-semibold">#</th>
                                                 <!-- <th class="text-subtitle-1 font-weight-semibold">Product Code</th> -->
@@ -181,6 +181,7 @@
                                                         } @else {
                                                         <span>{{ p.currentStock }}</span>
                                                         }
+                                                        </td>
                                               <td>
   @if (p.status.toLowerCase() === 'active') {
     <span class="badge bg-lightsuccess text-success rounded-2">Active</span>
@@ -259,7 +260,7 @@
                                             }
                                         </tbody>
                                     </table>
-                                </div><!---->
+                                </div>
                             </div>
                         </div>
                         <hr class="v-divider v-theme--BLUE_THEME" aria-orientation="horizontal" role="separator"

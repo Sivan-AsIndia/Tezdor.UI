@@ -4,11 +4,12 @@ import { RouterLink } from '@angular/router';
 import { InvoiceType, SalesInvoice, SalesInvoiceStatus } from '../sales-invoice';
 import { SAMPLE_INVOICES } from '../sales-invoice.seed';
 import { SalesInvoiceDataClient } from '../sales-invoice-data-client';
+import { ResponsiveTable } from '../../../shared/components/responsive/responsive-table';
 
 @Component({
   selector: 'app-sales-invoice-list',
   standalone: true,
-  imports: [CommonModule, DatePipe, DecimalPipe, RouterLink],
+  imports: [CommonModule, DatePipe, DecimalPipe, RouterLink,ResponsiveTable],
   templateUrl: './sales-invoice-list.html',
   styleUrl: './sales-invoice-list.css',
 })
