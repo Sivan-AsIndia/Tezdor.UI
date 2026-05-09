@@ -12,10 +12,11 @@ import { LeaveTypeDataClient } from '../../leave/leave-type-data-client';
 import { LeaveDataClient } from '../../leave/leave-data-client';
 import { Permission, PermissionStatus, PermissionType } from '../../permission/permission';
 import { Leave, LeaveStatus } from '../../leave/leave';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-attendance-lines',
-  imports: [ConfirmModalComponent, RouterModule],
+  imports: [ConfirmModalComponent, RouterModule,CommonModule],
   templateUrl: './attendance-lines.html',
   styleUrl: './attendance-lines.css',
 })
@@ -85,6 +86,9 @@ export class AttendanceLinesComponent {
   leaveTypes =
     this.leaveTypeService.leaveTypes;
   selectedLeave = signal<Leave | null>(null);
+
+    showLeaveDetailsPopup =
+  signal(false);
 
 
   showPermissionPopover(
@@ -1589,5 +1593,27 @@ export class AttendanceLinesComponent {
 
     ).size;
   });
+
+
+
+
+
+openLeavePopup(
+  leave?: Leave
+) {
+
+  if (!leave) return;
+
+  this.selectedLeave.set(leave);
+
+  this.showLeaveDetailsPopup.set(true);
+}
+
+closeLeavePopup() {
+
+  this.showLeaveDetailsPopup.set(false);
+
+  this.selectedLeave.set(null);
+}
 
 }

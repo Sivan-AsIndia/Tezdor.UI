@@ -49,6 +49,7 @@
                         </div>
 
                         <div class="topbar-actions">
+                             @if(viewMode() === 'table'){
                             <!-- DATE FILTER -->
                             <div class="date-filter" (click)="openDatePicker(dateInput)">
 
@@ -79,6 +80,7 @@
                                 </button>
                                 }
                             </div>
+                        }
                             <!-- VIEW TOGGLE -->
                             <button class="icon-btn view-toggle bg-primary" (click)="toggleView()"
                                 [title]="viewMode() === 'table' ? 'Grid View' : 'Table View'">
@@ -242,6 +244,45 @@
                             </div>
                         </div>
                     </div>
+                                        <!-- PAGINATION -->
+                    <div class="pagination-bar">
+
+                        <!-- Page Size -->
+                        <div class="d-flex align-items-center fs-13"><!--!--><span class="me-2"
+                                style="font-size: 12px;">Rows Per Page</span>
+                            <select class="form-select form-select-sm w-auto"
+                                (change)="changePageSize($any($event.target).value)">
+                                <option [selected]="pageSize() === 5">5</option>
+                                <option [selected]="pageSize() === 10">10</option>
+                                <option [selected]="pageSize() === 25">25</option>
+                            </select><!--!-->
+                            <!--!--><span class="ms-2" style="font-size: 12px;">Entries</span>
+                        </div>
+
+                        <!-- PAGINATION CONTROLS -->
+
+                        <div class="pagination-controls">
+
+                            <nav class="v-pagination v-theme--BLUE_THEME text-subtitle-1 text-grey100" role="navigation"
+                                aria-label="Pagination Navigation" data-test="v-pagination-root">
+                                <ul class="pagination-list">
+                                    <li><button class="page-btn" (click)="changePage(page()-1)"
+                                            [disabled]="page() === 1"><span class="mdi mdi-chevron-left"
+                                                style="font-size: 26px;"></span></button></li>
+                                    @for(p of [].constructor(totalPages()); let i = $index; track i){
+                                    <button class="page-btn" (click)="changePage(i+1)" [class.active]="page() === i+1">
+                                        {{ i+1 }}
+                                    </button>
+                                    }
+                                    <li><button class="page-btn" (click)="changePage(page()+1)"
+                                            [disabled]="page() === totalPages()"><span class="mdi mdi-chevron-right"
+                                                style="font-size: 26px;"></span></button></li>
+                                </ul>
+                            </nav>
+
+                        </div>
+
+                    </div>
 
                     }
 
@@ -314,45 +355,7 @@
                     </div>
                     }
 
-                    <!-- PAGINATION -->
-                    <div class="pagination-bar">
 
-                        <!-- Page Size -->
-                        <div class="d-flex align-items-center fs-13"><!--!--><span class="me-2"
-                                style="font-size: 12px;">Rows Per Page</span>
-                            <select class="form-select form-select-sm w-auto"
-                                (change)="changePageSize($any($event.target).value)">
-                                <option [selected]="pageSize() === 5">5</option>
-                                <option [selected]="pageSize() === 10">10</option>
-                                <option [selected]="pageSize() === 25">25</option>
-                            </select><!--!-->
-                            <!--!--><span class="ms-2" style="font-size: 12px;">Entries</span>
-                        </div>
-
-                        <!-- PAGINATION CONTROLS -->
-
-                        <div class="pagination-controls">
-
-                            <nav class="v-pagination v-theme--BLUE_THEME text-subtitle-1 text-grey100" role="navigation"
-                                aria-label="Pagination Navigation" data-test="v-pagination-root">
-                                <ul class="pagination-list">
-                                    <li><button class="page-btn" (click)="changePage(page()-1)"
-                                            [disabled]="page() === 1"><span class="mdi mdi-chevron-left"
-                                                style="font-size: 26px;"></span></button></li>
-                                    @for(p of [].constructor(totalPages()); let i = $index; track i){
-                                    <button class="page-btn" (click)="changePage(i+1)" [class.active]="page() === i+1">
-                                        {{ i+1 }}
-                                    </button>
-                                    }
-                                    <li><button class="page-btn" (click)="changePage(page()+1)"
-                                            [disabled]="page() === totalPages()"><span class="mdi mdi-chevron-right"
-                                                style="font-size: 26px;"></span></button></li>
-                                </ul>
-                            </nav>
-
-                        </div>
-
-                    </div>
 
                 </div>
             </div>
@@ -696,10 +699,9 @@
                                                 <div class="leave-pop-wrapper">
 
                                                     <!-- INFO ICON -->
-                                                    <button class="icon-btn info" (mouseenter)="showLeavePopover(
-          $event,
+                                                    <button class="icon-btn info"  (click)="openLeavePopup(
           getLeaveByAttendance(row.attendanceId)
-        )" (mouseleave)="hideLeavePopover()">
+        )">
 
                                                         <i class="ti ti-info-circle"></i>
 
@@ -1237,85 +1239,253 @@
 
 </div>
 
-}@if(hoveredLeave()){
+}
 
-<div class="leave-popover-fixed" [style.left.px]="leavePopoverX() + 18" [style.top.px]="leavePopoverY() - 20">
 
-    <div class="popover-title">
+<!-- LEAVE DETAILS POPUP -->
 
-        Leave Details
+@if(showLeaveDetailsPopup() && selectedLeave()){
+
+<div class="leave-view-overlay"
+
+     (click)="closeLeavePopup()">
+
+    <div class="leave-view-modal"
+
+         (click)="$event.stopPropagation()">
+
+        <!-- HEADER -->
+        <div class="leave-view-header">
+
+            <div class="leave-view-left">
+
+                <div class="leave-view-icon">
+
+                    <i class="ti ti-calendar-off"></i>
+
+                </div>
+
+                <div>
+
+                    <h4 class="leave-view-title">
+
+                        Leave Information
+
+                    </h4>
+
+                    <p class="leave-view-subtitle">
+
+                        Employee leave request details
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <button class="leave-view-close"
+
+                    (click)="closeLeavePopup()">
+
+                <i class="ti ti-x"></i>
+
+            </button>
+
+        </div>
+
+        <!-- STATUS STRIP -->
+        <div class="leave-status-strip">
+
+            <div>
+
+                <div class="leave-strip-label">
+
+                    Current Status
+
+                </div>
+
+                <div class="leave-strip-date">
+
+                    Applied On:
+                    {{ selectedLeave()?.appliedOn | date:'dd/MM/yyyy' }}
+
+                </div>
+
+            </div>
+
+            <span class="leave-status-pill"
+
+                  [class.approved]="selectedLeave()?.status === 'Approved'"
+
+                  [class.pending]="selectedLeave()?.status === 'Pending'"
+
+                  [class.rejected]="selectedLeave()?.status === 'Rejected'">
+
+                {{ selectedLeave()?.status }}
+
+            </span>
+
+        </div>
+
+        <!-- BODY -->
+        <div class="leave-view-body">
+
+            <!-- INFO CARDS -->
+            <div class="leave-info-grid">
+
+                <!-- TYPE -->
+                <div class="leave-info-item">
+
+                    <div class="leave-info-icon purple">
+
+                        <i class="ti ti-briefcase"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span class="leave-info-label">
+
+                            Leave Type
+
+                        </span>
+
+                        <strong class="leave-info-value">
+
+                            {{ getLeaveTypeName(
+                              selectedLeave()?.leaveTypeId
+                            ) }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <!-- DAYS -->
+                <div class="leave-info-item">
+
+                    <div class="leave-info-icon blue">
+
+                        <i class="ti ti-calendar-event"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span class="leave-info-label">
+
+                            Total Days
+
+                        </span>
+
+                        <strong class="leave-info-value">
+
+                            {{ selectedLeave()?.totalDays }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <!-- FROM -->
+                <div class="leave-info-item">
+
+                    <div class="leave-info-icon green">
+
+                        <i class="ti ti-arrow-down"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span class="leave-info-label">
+
+                            From Date
+
+                        </span>
+
+                        <strong class="leave-info-value">
+
+                            {{ selectedLeave()?.fromDate }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <!-- TO -->
+                <div class="leave-info-item">
+
+                    <div class="leave-info-icon orange">
+
+                        <i class="ti ti-arrow-up"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span class="leave-info-label">
+
+                            To Date
+
+                        </span>
+
+                        <strong class="leave-info-value">
+
+                            {{ selectedLeave()?.toDate }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- REASON -->
+            @if(selectedLeave()?.reason){
+
+            <div class="leave-reason-card">
+
+                <div class="reason-header">
+
+                    <i class="ti ti-message-circle"></i>
+
+                    <span>
+                        Reason
+                    </span>
+
+                </div>
+
+                <p class="leave-reason-text">
+
+                    {{ selectedLeave()?.reason }}
+
+                </p>
+
+            </div>
+
+            }
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="leave-view-footer">
+
+            <button class="leave-close-action"
+
+                    (click)="closeLeavePopup()">
+
+                Close
+
+            </button>
+
+        </div>
 
     </div>
-
-    <!-- TYPE -->
-    <div class="popover-row">
-
-        <span>Leave Type</span>
-
-        <strong>
-            {{ getLeaveTypeName(
-            hoveredLeave()?.leaveTypeId
-            ) }}
-        </strong>
-
-    </div>
-
-    <!-- FROM -->
-    <div class="popover-row">
-
-        <span>From</span>
-
-        <strong>
-            {{ hoveredLeave()?.fromDate }}
-        </strong>
-
-    </div>
-
-    <!-- TO -->
-    <div class="popover-row">
-
-        <span>To</span>
-
-        <strong>
-            {{ hoveredLeave()?.toDate }}
-        </strong>
-
-    </div>
-
-    <!-- DAYS -->
-    <div class="popover-row">
-
-        <span>Total Days</span>
-
-        <strong>
-            {{ hoveredLeave()?.totalDays }}
-        </strong>
-
-    </div>
-
-    <!-- STATUS -->
-    <div class="popover-row">
-
-        <span>Status</span>
-
-        <span class="status-pill">
-
-            {{ hoveredLeave()?.status }}
-
-        </span>
-
-    </div>
-
-    <!-- REASON -->
-    @if(hoveredLeave()?.reason){
-
-    <div class="popover-reason">
-
-        {{ hoveredLeave()?.reason }}
-
-    </div>
-
-    }
 
 </div>
 
