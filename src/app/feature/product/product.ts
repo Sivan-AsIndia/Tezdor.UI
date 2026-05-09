@@ -83,14 +83,15 @@ export const UNIT_OPTIONS:{ value: number; label: string }[] = [
   { value: 3, label: 'Litre' },
   { value: 4, label: 'Box' },
   { value:5, label: 'Dozen' },
-];
+  { value:5, label: 'Mtr' }
 
+];
 export const TAX_OPTIONS: ISelectOption[] = [
-  { value: '',  label: 'None' },
-  { value: '1', label: 'GST 5%' },
-  { value: '2', label: 'GST 12%' },
-  { value: '3', label: 'GST 18%' },
-  { value: '4', label: 'GST 28%' },
+  { value: '0', label: 'None (0%)' },
+  { value: '5', label: 'GST 5%' },
+  { value: '12', label: 'GST 12%' },
+  { value: '18', label: 'GST 18%' },
+  { value: '28', label: 'GST 28%' },
 ];
 
 export const DISCOUNT_OPTIONS: IDiscountOption[] = [

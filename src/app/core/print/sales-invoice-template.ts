@@ -196,7 +196,7 @@ export function buildSalesInvoicePrintHtml(inv: SalesInvoice): string {
         </div>
         <div class="meta-row">
           <span class="meta-label">Due Date</span>
-          <span class="meta-value">${formatPrintDate(inv.dueDate)}</span>
+          <span class="meta-value">${formatPrintDate(inv.dueDate??undefined)}</span>
         </div>
         <div class="meta-row">
           <span class="meta-label">Financial Year</span>

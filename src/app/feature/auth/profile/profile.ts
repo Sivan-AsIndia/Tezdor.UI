@@ -19,4 +19,25 @@ export class ProfileComponent {
     const name = this.currentUser()?.name ?? '';
     return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U';
   });
+
+  
+
+  profileImageUrl: string | null = null;
+showRemove = false;
+
+onFileSelected(event: Event): void {
+  const file = (event.target as HTMLInputElement).files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    this.profileImageUrl = e.target?.result as string;
+  };
+  reader.readAsDataURL(file);
+}
+
+removeProfileImage(): void {
+  this.profileImageUrl = null;
+  this.showRemove = false;
+}
+
 }

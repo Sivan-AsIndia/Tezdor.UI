@@ -54,7 +54,6 @@ export class PurchaseOrderListComponent {
     });
   });
 
-  // ── Pagination ────────────────────────────────────────────────────────────
   totalPages = computed(() =>
     Math.max(1, Math.ceil(this.filteredOrders().length / this.pageSize()))
   );
@@ -72,7 +71,6 @@ export class PurchaseOrderListComponent {
     [this.filters().status, this.filters().vendor].filter(Boolean).length
   );
 
-  // ── Filter Actions ────────────────────────────────────────────────────────
   toggleFilter(): void {
     if (this.showFilter()) { this.closeFilter(); return; }
     this.tempFilters.set({ ...this.filters() });
@@ -113,13 +111,11 @@ export class PurchaseOrderListComponent {
     this.closeFilter();
   }
 
-  // ── Search ────────────────────────────────────────────────────────────────
   clearSearch(): void {
     this.searchValue.set('');
     this.currentPage.set(1);
   }
 
-  // ── Pagination Actions ────────────────────────────────────────────────────
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages()) this.currentPage.set(page);
   }
@@ -129,7 +125,6 @@ export class PurchaseOrderListComponent {
     this.currentPage.set(1);
   }
 
-  // ── Delete ────────────────────────────────────────────────────────────────
   DeletePopupView(po: PurchaseOrder): void { this.selectedPO.set(po); }
 
   confirmDelete(): void {
@@ -140,31 +135,35 @@ export class PurchaseOrderListComponent {
     }
   }
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
-  capitalize(val: string): string {
-    return val.charAt(0).toUpperCase() + val.slice(1);
-  }
+statusBadgeClass(s: POStatus): string {
+  const map: Record<POStatus, string> = {
+    draft:            'bg-lightsecondary text-secondary',
+    approved:         'bg-lightsuccess text-success',
+    sent_to_supplier: 'bg-lightwarning text-warning',
+    partial:          'bg-lightprimary text-primary',
+    received:         'bg-lightinfo text-info',
+    cancelled:        'bg-lighterror text-error',
+  };
+  return map[s] ?? '';
+}
 
-  statusBadgeClass(s: POStatus): string {
-    const map: Record<POStatus, string> = {
-      pending:   'bg-lightsecondary text-secondary',
-      approved:  'bg-lightsuccess text-success',
-      received:  'bg-lightinfo text-info',
-      partial:   'bg-lightprimary text-primary',
-      cancelled: 'bg-lighterror text-error',
-    };
-    return map[s] ?? '';
-  }
+statusChipClass(s: POStatus): string {
+  const map: Record<POStatus, string> = {
+    draft:            'chip-draft',
+    approved:         'chip-approved',
+    sent_to_supplier: 'chip-sent',
+    partial:          'chip-partial',
+    received:         'chip-received',
+    cancelled:        'chip-cancelled',
+  };
+  return map[s] ?? '';
+}
 
-  statusChipClass(s: POStatus): string {
-    const map: Record<POStatus, string> = {
-      pending:   'chip-pending',
-      approved:  'chip-approved',
-      received:  'chip-received',
-      partial:   'chip-partial',
-      cancelled: 'chip-cancelled',
-    };
-    return map[s] ?? '';
-  }
+capitalize(val: string): string {
+  return val
+    .split('_')
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
 
 }
