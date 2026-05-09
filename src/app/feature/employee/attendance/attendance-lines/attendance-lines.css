@@ -2,6 +2,14 @@ input::placeholder {
   color: #999;
 }
 
+input[type="date"] {
+ font-size: 14px;
+}
+
+input[type="time"] {
+font-size: 14px;
+}
+
 
 /* :root {
   --color-primary:       #5D4ED3;

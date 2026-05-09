@@ -80,7 +80,7 @@
                                 }
                             </div>
                             <!-- VIEW TOGGLE -->
-                            <button class="icon-btn view-toggle" (click)="toggleView()"
+                            <button class="icon-btn view-toggle bg-primary" (click)="toggleView()"
                                 [title]="viewMode() === 'table' ? 'Grid View' : 'Table View'">
 
                                 <i class="ti" [class]="viewMode() === 'table' ? 'ti-layout-grid' : 'ti-table'">
@@ -593,12 +593,19 @@
                     <span class="chip-label">Total OT</span>
                     <strong class="chip-value">{{ formatMinutes(empTotalOT()) }}</strong>
                 </div>
-
                 <div class="ledger-chip chip-count">
-                    <span class="chip-label">Entries</span>
-                    <strong class="chip-value">{{ employeeAttendanceLine().length }}</strong>
-                </div>
 
+                    <span class="chip-label">
+                        Leaves
+                    </span>
+
+                    <strong class="chip-value">
+
+                        {{ totalLeaves() }}
+
+                    </strong>
+
+                </div>
                 <!-- PERMISSION -->
                 <div class="ledger-chip chip-permission">
                     <span class="chip-label">Permissions</span>
@@ -700,32 +707,28 @@
 
                                                 } @else {
 
-                                                    @if(row.attendanceType !== AttendanceType.Leave){
+                                                @if(row.attendanceType !== AttendanceType.Leave){
                                                 <!-- EDIT -->
                                                 <button class="icon-btn edit" title="Edit" (click)="startEdit(row)">
                                                     <i class="ti ti-pencil"></i>
                                                 </button>
-                                                    }
+                                                }
 
-                                                    @if(row.attendanceType === AttendanceType.Leave){
-                                                        <div class="leave-pop-wrapper">
+                                                @if(row.attendanceType === AttendanceType.Leave){
+                                                <div class="leave-pop-wrapper">
 
-    <!-- INFO ICON -->
-    <button class="icon-btn info"
-
-        (mouseenter)="showLeavePopover(
+                                                    <!-- INFO ICON -->
+                                                    <button class="icon-btn info" (mouseenter)="showLeavePopover(
           $event,
           getLeaveByAttendance(row.attendanceId)
-        )"
+        )" (mouseleave)="hideLeavePopover()">
 
-        (mouseleave)="hideLeavePopover()">
+                                                        <i class="ti ti-info-circle"></i>
 
-        <i class="ti ti-info-circle"></i>
+                                                    </button>
 
-    </button>
-
-</div>
-                                                    }
+                                                </div>
+                                                }
 
 
 
@@ -1258,10 +1261,7 @@
 
 }@if(hoveredLeave()){
 
-<div class="leave-popover-fixed"
-
-     [style.left.px]="leavePopoverX() + 18"
-     [style.top.px]="leavePopoverY() - 20">
+<div class="leave-popover-fixed" [style.left.px]="leavePopoverX() + 18" [style.top.px]="leavePopoverY() - 20">
 
     <div class="popover-title">
 
@@ -1276,7 +1276,7 @@
 
         <strong>
             {{ getLeaveTypeName(
-                hoveredLeave()?.leaveTypeId
+            hoveredLeave()?.leaveTypeId
             ) }}
         </strong>
 

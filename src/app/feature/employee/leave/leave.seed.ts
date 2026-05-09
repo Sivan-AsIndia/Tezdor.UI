@@ -5,219 +5,211 @@ const leaveType = LEAVE_TYPES;
 
 export const LEAVES: Leave[] = [
 
-  // ===================== 1 =====================
-  {
-    leaveId: crypto.randomUUID(),
-    leaveNumber: 'LEV-2026-001',
+//   {
+//     leaveId: crypto.randomUUID(),
+//     leaveNumber: 'LEV-2026-001',
 
-    employeeId: 'EMP001',
+//     employeeId: 'EMP001',
 
-    leaveTypeId: leaveType.find(x => x.leaveTypeCode === 'CL')!.leaveTypeId!,
+//     leaveTypeId: leaveType.find(x => x.leaveTypeCode === 'CL')!.leaveTypeId!,
 
-    fromDate: '2026-05-02',
-    toDate: '2026-05-03',
+//     fromDate: '2026-05-02',
+//     toDate: '2026-05-03',
 
-    totalDays: 2,
+//     totalDays: 2,
 
-    reason: 'Personal work',
+//     reason: 'Personal work',
 
-    status: LeaveStatus.Approved,
+//     status: LeaveStatus.Approved,
 
-    appliedOn: new Date('2026-04-28'),
-    approvedBy: 'EMP010',
-    approvedOn: new Date('2026-04-29'),
+//     appliedOn: new Date('2026-04-28'),
+//     approvedBy: 'EMP010',
+//     approvedOn: new Date('2026-04-29'),
 
-    remarks: 'Approved',
+//     remarks: 'Approved',
 
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
+//     createdAt: new Date(),
+//     updatedAt: new Date()
+//   },
 
-  // ===================== 2 =====================
-  {
-    leaveId: crypto.randomUUID(),
-    leaveNumber: 'LEV-2026-002',
+//   {
+//     leaveId: crypto.randomUUID(),
+//     leaveNumber: 'LEV-2026-002',
 
-    employeeId: 'EMP002',
+//     employeeId: 'EMP002',
 
-    leaveTypeId: leaveType.find(x => x.leaveTypeCode === 'SL')!.leaveTypeId!,
+//     leaveTypeId: leaveType.find(x => x.leaveTypeCode === 'SL')!.leaveTypeId!,
 
-    fromDate: '2026-05-05',
-    toDate: '2026-05-05',
+//     fromDate: '2026-05-05',
+//     toDate: '2026-05-05',
 
-    totalDays: 1,
+//     totalDays: 1,
 
-    reason: 'Fever and cold',
+//     reason: 'Fever and cold',
 
-    status: LeaveStatus.Approved,
+//     status: LeaveStatus.Approved,
 
-    appliedOn: new Date('2026-05-04'),
-    approvedBy: 'EMP010',
-    approvedOn: new Date('2026-05-04'),
+//     appliedOn: new Date('2026-05-04'),
+//     approvedBy: 'EMP010',
+//     approvedOn: new Date('2026-05-04'),
 
-    remarks: 'Medical leave approved',
+//     remarks: 'Medical leave approved',
 
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
+//     createdAt: new Date(),
+//     updatedAt: new Date()
+//   },
 
-  // ===================== 3 =====================
-  {
-    leaveId: crypto.randomUUID(),
-    leaveNumber: 'LEV-2026-003',
+//   {
+//     leaveId: crypto.randomUUID(),
+//     leaveNumber: 'LEV-2026-003',
 
-    employeeId: 'EMP003',
+//     employeeId: 'EMP003',
 
-    leaveTypeId: leaveType.find(x => x.leaveTypeCode === 'EL')!.leaveTypeId!,
+//     leaveTypeId: leaveType.find(x => x.leaveTypeCode === 'EL')!.leaveTypeId!,
 
-    fromDate: '2026-05-10',
-    toDate: '2026-05-12',
+//     fromDate: '2026-05-10',
+//     toDate: '2026-05-12',
 
-    totalDays: 3,
+//     totalDays: 3,
 
-    reason: 'Family function',
+//     reason: 'Family function',
 
-    status: LeaveStatus.Pending,
+//     status: LeaveStatus.Pending,
 
-    appliedOn: new Date('2026-05-01'),
+//     appliedOn: new Date('2026-05-01'),
 
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
+//     createdAt: new Date(),
+//     updatedAt: new Date()
+//   },
 
-  // ===================== 4 =====================
-  {
-    leaveId: crypto.randomUUID(),
-    leaveNumber: 'LEV-2026-004',
+//   {
+//     leaveId: crypto.randomUUID(),
+//     leaveNumber: 'LEV-2026-004',
 
-    employeeId: 'EMP004',
+//     employeeId: 'EMP004',
 
-    leaveTypeId: leaveType.find(x => x.leaveTypeCode === 'LOP')!.leaveTypeId!,
+//     leaveTypeId: leaveType.find(x => x.leaveTypeCode === 'LOP')!.leaveTypeId!,
 
-    fromDate: '2026-05-15',
-    toDate: '2026-05-16',
+//     fromDate: '2026-05-15',
+//     toDate: '2026-05-16',
 
-    totalDays: 2,
+//     totalDays: 2,
 
-    reason: 'Personal travel',
+//     reason: 'Personal travel',
 
-    status: LeaveStatus.Approved,
+//     status: LeaveStatus.Approved,
 
-    appliedOn: new Date('2026-05-10'),
-    approvedBy: 'EMP002',
-    approvedOn: new Date('2026-05-11'),
+//     appliedOn: new Date('2026-05-10'),
+//     approvedBy: 'EMP002',
+//     approvedOn: new Date('2026-05-11'),
 
-    remarks: 'Approved as unpaid leave',
+//     remarks: 'Approved as unpaid leave',
 
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
+//     createdAt: new Date(),
+//     updatedAt: new Date()
+//   },
 
-  // ===================== 5 =====================
-  {
-    leaveId: crypto.randomUUID(),
-    leaveNumber: 'LEV-2026-005',
+//   {
+//     leaveId: crypto.randomUUID(),
+//     leaveNumber: 'LEV-2026-005',
 
-    employeeId: 'EMP005',
+//     employeeId: 'EMP005',
 
-    leaveTypeId: leaveType.find(x => x.leaveTypeCode === 'CL')!.leaveTypeId!,
+//     leaveTypeId: leaveType.find(x => x.leaveTypeCode === 'CL')!.leaveTypeId!,
 
-    fromDate: '2026-05-20',
-    toDate: '2026-05-20',
+//     fromDate: '2026-05-20',
+//     toDate: '2026-05-20',
 
-    totalDays: 1,
+//     totalDays: 1,
 
-    reason: 'Bank work',
+//     reason: 'Bank work',
 
-    status: LeaveStatus.Rejected,
+//     status: LeaveStatus.Rejected,
 
-    appliedOn: new Date('2026-05-18'),
+//     appliedOn: new Date('2026-05-18'),
 
-    rejectedBy: 'EMP010',
-    rejectedOn: new Date('2026-05-19'),
+//     rejectedBy: 'EMP010',
+//     rejectedOn: new Date('2026-05-19'),
 
-    rejectionReason: 'Project deadline',
+//     rejectionReason: 'Project deadline',
 
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
+//     createdAt: new Date(),
+//     updatedAt: new Date()
+//   },
 
-  // ===================== 6 =====================
-  {
-    leaveId: crypto.randomUUID(),
-    leaveNumber: 'LEV-2026-006',
+//   {
+//     leaveId: crypto.randomUUID(),
+//     leaveNumber: 'LEV-2026-006',
 
-    employeeId: 'EMP006',
+//     employeeId: 'EMP006',
 
-    leaveTypeId: leaveType.find(x => x.leaveTypeCode === 'ML')!.leaveTypeId!,
+//     leaveTypeId: leaveType.find(x => x.leaveTypeCode === 'ML')!.leaveTypeId!,
 
-    fromDate: '2026-06-01',
-    toDate: '2026-11-27',
+//     fromDate: '2026-06-01',
+//     toDate: '2026-11-27',
 
-    totalDays: 180,
+//     totalDays: 180,
 
-    reason: 'Maternity leave',
+//     reason: 'Maternity leave',
 
-    status: LeaveStatus.Approved,
+//     status: LeaveStatus.Approved,
 
-    appliedOn: new Date('2026-05-15'),
-    approvedBy: 'EMP002',
-    approvedOn: new Date('2026-05-16'),
+//     appliedOn: new Date('2026-05-15'),
+//     approvedBy: 'EMP002',
+//     approvedOn: new Date('2026-05-16'),
 
-    remarks: 'Approved based on policy',
+//     remarks: 'Approved based on policy',
 
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
+//     createdAt: new Date(),
+//     updatedAt: new Date()
+//   },
 
-  // ===================== 7 =====================
-  {
-    leaveId: crypto.randomUUID(),
-    leaveNumber: 'LEV-2026-007',
+//   {
+//     leaveId: crypto.randomUUID(),
+//     leaveNumber: 'LEV-2026-007',
 
-    employeeId: 'EMP007',
+//     employeeId: 'EMP007',
 
-    leaveTypeId: leaveType.find(x => x.leaveTypeCode === 'SL')!.leaveTypeId!,
+//     leaveTypeId: leaveType.find(x => x.leaveTypeCode === 'SL')!.leaveTypeId!,
 
-    fromDate: '2026-05-08',
-    toDate: '2026-05-09',
+//     fromDate: '2026-05-08',
+//     toDate: '2026-05-09',
 
-    totalDays: 2,
+//     totalDays: 2,
 
-    reason: 'Health issue',
+//     reason: 'Health issue',
 
-    status: LeaveStatus.Pending,
+//     status: LeaveStatus.Pending,
 
-    appliedOn: new Date('2026-05-07'),
+//     appliedOn: new Date('2026-05-07'),
 
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
+//     createdAt: new Date(),
+//     updatedAt: new Date()
+//   },
 
-  // ===================== 8 =====================
-  {
-    leaveId: crypto.randomUUID(),
-    leaveNumber: 'LEV-2026-008',
+//   {
+//     leaveId: crypto.randomUUID(),
+//     leaveNumber: 'LEV-2026-008',
 
-    employeeId: 'EMP009',
+//     employeeId: 'EMP009',
 
-    leaveTypeId: leaveType.find(x => x.leaveTypeCode === 'CL')!.leaveTypeId!,
+//     leaveTypeId: leaveType.find(x => x.leaveTypeCode === 'CL')!.leaveTypeId!,
 
-    fromDate: '2026-05-25',
-    toDate: '2026-05-25',
+//     fromDate: '2026-05-25',
+//     toDate: '2026-05-25',
 
-    totalDays: 1,
+//     totalDays: 1,
 
-    reason: 'Festival celebration',
+//     reason: 'Festival celebration',
 
-    status: LeaveStatus.Approved,
+//     status: LeaveStatus.Approved,
 
-    appliedOn: new Date('2026-05-20'),
-    approvedBy: 'EMP002',
-    approvedOn: new Date('2026-05-21'),
+//     appliedOn: new Date('2026-05-20'),
+//     approvedBy: 'EMP002',
+//     approvedOn: new Date('2026-05-21'),
 
-    createdAt: new Date(),
-    updatedAt: new Date()
-  }
+//     createdAt: new Date(),
+//     updatedAt: new Date()
+//   }
 
 ];
