@@ -1042,6 +1042,29 @@ export class AttendanceLinesComponent {
 
     const f = this.permissionForm();
 
+    const hasLeave =
+      this.leaveService
+        .leaves()
+        .some(l =>
+
+          l.employeeId === f.employeeId &&
+
+          l.status !== LeaveStatus.Cancelled &&
+
+          f.permissionDate >= l.fromDate &&
+
+          f.permissionDate <= l.toDate
+        );
+
+    if (hasLeave) {
+
+      this.toast.error(
+        'Permission cannot be applied because leave already exists on this date'
+      );
+
+      return;
+    }
+
     const permission: Permission = {
 
       permissionId:
