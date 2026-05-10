@@ -20,10 +20,13 @@ export class SalesInvoiceDataClient {
     return this.invoices().find(invoice => invoice.id === id);
   }
 
-  addInvoice(invoice: SalesInvoice) {
-    this.invoices.update(list => [invoice, ...list]);
-    this.addStoreOutFromInvoice(invoice);
-  }
+addInvoice(invoice: SalesInvoice) {
+  const newId = Math.max(0, ...this.invoices().map(i => i.id)) + 1;
+  const newInvoice: SalesInvoice = { ...invoice, id: newId };
+
+  this.invoices.update(list => [newInvoice, ...list]);
+  this.addStoreOutFromInvoice(newInvoice);
+}
 
   updateInvoice(updated: SalesInvoice) {
     const existing = this.invoices().find(inv => inv.id === updated.id);

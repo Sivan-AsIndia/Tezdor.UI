@@ -1,1 +1,288 @@
-<p>storeview works!</p>
+<!-- store-view.html -->
+<div class="sv-page">
+
+  <!-- ══ SCREEN-ONLY: TOP BAR ══════════════════════════════ -->
+  <div class="sv-topbar no-print">
+    <div class="sv-topbar-left">
+   
+      <div class="sv-breadcrumb">
+        <span>Store</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <span>Stock Ledger</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <span class="sv-bc-active">{{ product()?.productCode }}</span>
+      </div>
+    </div>
+    <div class="arrow-steps d-none d-md-flex">
+      <ul id="breadcrumb">
+        <li><a href="#"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a></li>
+        <li><a routerLink="/store"><span class="fa fa-warehouse"></span>&nbsp;&nbsp;Store</a></li>
+        <li><a><span class="fa fa-history"></span>&nbsp;&nbsp;Ledger</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══ PRINT HEADER (only visible on print) ══════════════ -->
+  <div class="sv-print-header print-only">
+    <div class="sv-print-logo">
+      <div class="sv-print-logo-mark">T</div>
+      <div>
+        <div class="sv-print-company">TEZDOR</div>
+        <div class="sv-print-tagline">Stock Ledger Report</div>
+      </div>
+    </div>
+    <div class="sv-print-meta">
+      <div class="sv-print-meta-row"><span>Printed On</span><strong>{{ today }}</strong></div>
+      <div class="sv-print-meta-row"><span>Product</span><strong>{{ product()?.productCode }}</strong></div>
+    </div>
+  </div>
+
+  <!-- ══ HERO BAND ════════════════════════════════════════════ -->
+  <div class="sv-hero">
+    <div class="sv-hero-left">
+      <div class="sv-hero-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+          <line x1="12" y1="22.08" x2="12" y2="12"/>
+        </svg>
+      </div>
+      <div class="sv-hero-info">
+        <div class="sv-hero-eyebrow">STOCK LEDGER</div>
+        <div class="sv-hero-title">{{ product()?.productName || '—' }}</div>
+        <div class="sv-hero-sub">
+          <span class="sv-code-pill">{{ product()?.productCode }}</span>
+          <span class="sv-vendor-tag">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            {{ product()?.vendorName || '—' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sv-kpi-row">
+      <div class="sv-kpi sv-kpi-in">
+        <div class="sv-kpi-top">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+          Total IN
+        </div>
+        <div class="sv-kpi-num">{{ totalIn() }}</div>
+      </div>
+      <div class="sv-kpi-sep"></div>
+      <div class="sv-kpi sv-kpi-out">
+        <div class="sv-kpi-top">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+          Total OUT
+        </div>
+        <div class="sv-kpi-num">{{ totalOut() }}</div>
+      </div>
+      <div class="sv-kpi-sep"></div>
+      <div class="sv-kpi sv-kpi-bal" [class.sv-kpi-danger]="closing() <= 0" [class.sv-kpi-warn]="closing() > 0 && closing() <= 20">
+        <div class="sv-kpi-top">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Balance
+        </div>
+        <div class="sv-kpi-num">{{ closing() }}</div>
+      </div>
+      <div class="sv-kpi-sep"></div>
+      <div class="sv-kpi sv-kpi-count">
+        <div class="sv-kpi-top">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          Entries
+        </div>
+        <div class="sv-kpi-num">{{ ledgerRows().length }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CONTENT ══════════════════════════════════════════════ -->
+  <div class="sv-content">
+
+    <!-- Action bar -->
+    <div class="sv-action-bar no-print">
+      <div class="sv-legend">
+        <span class="sv-leg-dot sv-leg-in"></span> IN &nbsp;
+        <span class="sv-leg-dot sv-leg-out"></span> OUT
+      </div>
+      <button class="sv-print-btn v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="printPage()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+          <rect x="6" y="14" width="12" height="8"/>
+        </svg>
+        Print
+      </button>
+    </div>
+
+    <!-- Table card -->
+    <div class="content-card sv-card">
+      <div class="card-body-inner">
+
+        <div class="table-topbar no-print">
+          <div class="table-title-badge">
+            <h5 class="tableheading">Stock Ledger</h5>
+            <span class="count-badge">{{ ledgerRows().length }}</span>
+          </div>
+        </div>
+
+        <div class="border-table">
+          <div class="v-table v-theme--BLUE_THEME v-table--density-default">
+            <div class="v-table__wrapper">
+              <table class="sv-table">
+                <thead>
+                  <tr class="sv-thead-row">
+                    <th>S.No</th>
+                    <th>Date</th>
+                    <th>Vendor</th>
+                    <th>Product</th>
+                    <th>Type</th>
+                    <th class="text-end">Old Stock</th>
+                    <th class="text-end sv-col-in">Received</th>
+                    <th class="text-end">Total</th>
+                    <th class="text-end sv-col-out">Issued</th>
+                    <th class="text-end">Closing</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  @if (paginatedLedger().length === 0) {
+                    <tr><td colspan="10" class="sv-empty">
+                      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                      </svg>
+                      <p>No transactions found</p>
+                    </td></tr>
+                  }
+
+                  @for (row of paginatedLedger(); track row.sNo; let i = $index) {
+                    <tr class="sv-row" [class.sv-row-in]="row.received > 0" [class.sv-row-out]="row.issued > 0">
+
+                      <td>
+                        <div class="sv-sno">
+                          <span class="sv-dot" [class.sv-dot-in]="row.received > 0" [class.sv-dot-out]="row.issued > 0"></span>
+                          {{ (currentPage() - 1) * pageSize() + i + 1 }}
+                        </div>
+                      </td>
+
+                      <td>
+                        <div class="sv-date">
+                          <span class="sv-date-d">{{ row.date | date:'dd MMM' }}</span>
+                          <span class="sv-date-y">{{ row.date | date:'yyyy' }}</span>
+                        </div>
+                      </td>
+
+                      <td class="text-no-wrap sv-muted">{{ row.vendorName || '—' }}</td>
+                      <td class="text-no-wrap">{{ row.productName }}</td>
+
+                      <td>
+                        @if (row.received > 0) {
+                          <span class="sv-badge sv-badge-in">↑ IN</span>
+                        } @else {
+                          <span class="sv-badge sv-badge-out">↓ OUT</span>
+                        }
+                      </td>
+
+                      <td class="text-end sv-muted">{{ row.oldStock }}</td>
+
+                      <td class="text-end">
+                        @if (row.received > 0) {
+                          <span class="sv-val-in">+{{ row.received }}</span>
+                        } @else { <span class="sv-muted">—</span> }
+                      </td>
+
+                      <td class="text-end"><strong>{{ row.total }}</strong></td>
+
+                      <td class="text-end">
+                        @if (row.issued > 0) {
+                          <span class="sv-val-out">{{ row.issued }}</span>
+                        } @else { <span class="sv-muted">—</span> }
+                      </td>
+
+                      <td class="text-end">
+                        <span class="sv-closing"
+                          [class.sv-closing-danger]="row.closing <= 0"
+                          [class.sv-closing-warn]="row.closing > 0 && row.closing <= 20"
+                          [class.sv-closing-ok]="row.closing > 20">
+                          {{ row.closing }}
+                        </span>
+                      </td>
+
+                    </tr>
+                  }
+                </tbody>
+
+                <!-- Print footer summary -->
+                @if (ledgerRows().length > 0) {
+                  <tfoot class="sv-tfoot">
+                    <tr>
+                      <td colspan="5" class="sv-foot-label">TOTALS</td>
+                      <td class="text-end sv-muted">—</td>
+                      <td class="text-end sv-val-in">+{{ totalIn() }}</td>
+                      <td class="text-end">—</td>
+                      <td class="text-end sv-val-out">{{ totalOut() }}</td>
+                      <td class="text-end">
+                        <span class="sv-closing"
+                          [class.sv-closing-danger]="closing() <= 0"
+                          [class.sv-closing-warn]="closing() > 0 && closing() <= 20"
+                          [class.sv-closing-ok]="closing() > 20">
+                          {{ closing() }}
+                        </span>
+                      </td>
+                    </tr>
+                  </tfoot>
+                }
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <hr class="v-divider v-theme--BLUE_THEME no-print" style="border-style:solid;">
+
+        <!-- Pagination -->
+        <div class="d-sm-flex justify-md-space-between align-center Pagination no-print">
+          <div class="d-flex align-items-center fs-13">
+            <span class="me-2" style="font-size:12px;">Rows Per Page</span>
+            <select class="form-select form-select-sm w-auto"
+              [value]="pageSize()" (change)="onPageSizeChange($event)">
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+            </select>
+            <span class="ms-2" style="font-size:12px;">Entries</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <nav class="v-pagination v-theme--BLUE_THEME text-subtitle-1" role="navigation">
+              <ul class="pagination-list">
+                <li>
+                  <button class="page-btn" [disabled]="currentPage() === 1" (click)="goToPage(currentPage() - 1)">
+                    <span class="mdi mdi-chevron-left" style="font-size:26px;"></span>
+                  </button>
+                </li>
+                @for (page of pageNumbers(); track page) {
+                  <li>
+                    <button class="page-btn" [class.active]="page === currentPage()" (click)="goToPage(page)">{{ page }}</button>
+                  </li>
+                }
+                <li>
+                  <button class="page-btn" [disabled]="currentPage() === totalPages()" (click)="goToPage(currentPage() + 1)">
+                    <span class="mdi mdi-chevron-right" style="font-size:26px;"
+                      [style.color]="currentPage() === totalPages() ? '#80808070' : ''"></span>
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <!-- /sv-content -->
+
+  <!-- Print signature line -->
+  <div class="sv-print-sig print-only">
+    <div>Authorised Signature: _______________________</div>
+    <div>Date: _______________</div>
+  </div>
+
+</div>

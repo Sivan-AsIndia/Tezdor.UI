@@ -1,15 +1,17 @@
 export interface StoreMaintain {
   id: number;
-  sNo?: number;       
-  date: string;         
+  sNo?: number;
+  date: string;
   vendorCode: string;
   vendorName: string;
   productCode: string;
   productName: string;
-  type: 'IN' | 'OUT';    
+  type: TransactionType; 
   quantity: number;
+  referenceType?: ReferenceType; 
+  referenceId?:   number | string; 
+  notes?:         string;
 }
-
 export interface StockLedgerRow {
   sNo: number;
   date: string;

@@ -48,35 +48,7 @@ export class PurchaseOrderDataClient {
       })
     );
 
-    const updatedOrder = this.orders().find(o => o.id === id)!;
-    if (
-      changes.status === 'received' &&
-      existingOrder?.status !== 'received'
-    ) {
-      this.store.addFromPO(updatedOrder);
-    }
-    if (
-      changes.status === 'partial' &&
-      existingOrder?.status !== 'received'
-    ) {
-      changes.lineItems?.forEach(updatedItem => {
-        const prevItem = existingOrder?.lineItems.find(x => x.id === updatedItem.id);
-        const prevReceived = prevItem?.receivedQuantity ?? 0;
-        const newReceived = updatedItem.receivedQuantity ?? 0;
-        const diff = newReceived - prevReceived;
-
-        if (diff > 0 && existingOrder) {
-          const po = { ...existingOrder, ...changes, id } as PurchaseOrder;
-          this.store.addPartialReceive(po, updatedItem, diff);
-        }
-      });
-    }
-    if (
-      changes.status === 'cancelled' &&
-      existingOrder?.status === 'received'
-    ) {
-      this.store.revertFromPO(existingOrder);
-    }
+  
   }
 
   deletePO(id: number): void {
@@ -172,48 +144,5 @@ export class PurchaseOrderDataClient {
     }
   }
 
-  receiveItem(poId: number, lineId: number, qty: number): void {
-
-    const existingOrder = this.orders().find(o => o.id === poId);
-    const existingLine = existingOrder?.lineItems.find(l => l.id === lineId);
-
-    this.orders.update(list =>
-      list.map(order => {
-        if (order.id !== poId) return order;
-
-        const updatedLines = order.lineItems.map(line => {
-          if (line.id !== lineId) return line;
-
-          const received = (line.receivedQuantity ?? 0) + qty;
-          return {
-            ...line,
-            receivedQuantity: received,
-            pendingQuantity: line.quantity - received,
-          };
-        });
-
-        const allReceived = updatedLines.every(
-          l => (l.receivedQuantity ?? 0) >= l.quantity
-        );
-        const anyReceived = updatedLines.some(
-          l => (l.receivedQuantity ?? 0) > 0
-        );
-
-        return {
-          ...order,
-          lineItems: updatedLines,
-          status: allReceived
-            ? ('received' as POStatus)
-            : anyReceived
-              ? ('partial' as POStatus)
-              : order.status,
-          updatedAt: new Date().toISOString(),
-        };
-      })
-    );
-
-    if (existingLine && existingOrder) {
-      this.store.addPartialReceive(existingOrder, existingLine, qty);
-    }
-  }
+  
 }

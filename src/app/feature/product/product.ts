@@ -93,6 +93,7 @@ export const TAX_OPTIONS: ISelectOption[] = [
   { value: '18', label: 'GST 18%' },
   { value: '28', label: 'GST 28%' },
 ];
+export const TAX_MAP: Record<number, number> = { 1: 18, 2: 12, 3: 5, 4: 0 };
 
 export const DISCOUNT_OPTIONS: IDiscountOption[] = [
   { value: 'none',       label: 'No Discount' },

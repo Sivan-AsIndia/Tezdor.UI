@@ -75,7 +75,7 @@ export const routes: Routes = [
           import('./feature/store/store-create/store-create').then(m => m.StoreCreateComponent),
       },
       {
-        path: 'store/:id',
+        path: 'store/:productCode',
         loadComponent: () =>
           import('./feature/store/store-view/store-view').then(m => m.StoreViewComponent),
       },

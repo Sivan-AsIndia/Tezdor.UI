@@ -14,7 +14,8 @@ import { UNIT_OPTIONS } from '../../purchase/purchase-invoice/purchase-invoice';
 import { CommonModule } from '@angular/common';
 import { SalesInvoiceDataClient } from '../sales-invoice-data-client';
 import { ToastNotifier } from '../../../core/services/toast';
-import { TAX_OPTIONS } from '../../product/product';
+import { TAX_MAP, TAX_OPTIONS } from '../../product/product';
+import { INITIAL_PRODUCTS } from '../../product/product.seed';
 
 export interface SILineItemEx extends SILineItem {
   errDiscount: boolean;
@@ -38,7 +39,15 @@ export class SalesInvoiceCreateComponent implements OnInit {
   get pageTitle() { return this.isEditMode() ? 'Edit Invoice' : 'New Invoice'; }
 
   customerOptions = CUSTOMER_OPTIONS;
-  productOptions = DEMO_PRODUCTS;
+productOptions = INITIAL_PRODUCTS.map(p => ({
+  value:  p.productCode,
+  label:  `${p.productCode} — ${p.productName}`,
+  price:  p.costPrice,
+  taxPct: TAX_MAP[p.taxId ?? 0] ?? 18,  
+  unitId: p.unitId,
+  hsn:    '',
+}));
+
   unitOptions = UNIT_OPTIONS;
   taxOptions = TAX_OPTIONS;
   statusOptions = INVOICE_STATUS_OPTIONS;
