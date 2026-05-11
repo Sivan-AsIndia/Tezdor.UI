@@ -4,6 +4,7 @@ import { ProductSummary } from '../../product/product';
 import { StockLedgerRow } from '../store';
 import { StoreDataClient } from '../store-data-client';
 import { CommonModule } from '@angular/common';
+import { PrintService } from '../../../core/print/print.service';
 
 @Component({
   selector: 'app-store-view',
@@ -16,6 +17,7 @@ export class StoreViewComponent implements OnInit {
 
   private route = inject(ActivatedRoute);
   private service = inject(StoreDataClient);
+  private printService = inject(PrintService);
   product = signal<ProductSummary | null>(null);
   ledgerRows = signal<StockLedgerRow[]>([]);
 
@@ -74,14 +76,20 @@ export class StoreViewComponent implements OnInit {
 
 
   printPage(): void {
-    const original = this.pageSize();
-    this.pageSize.set(9999);
-    this.currentPage.set(1);
+    const prod = this.product();
+    if (!prod) return;
 
-    setTimeout(() => {
-      window.print();
-      setTimeout(() => this.pageSize.set(original), 500);
-    }, 150);
+    this.printService.printStoreLedger(
+      {
+        productCode: prod.productCode,
+        productName: prod.productName,
+        vendorName: prod.vendorName,
+      },
+      this.ledgerRows(),
+      this.totalIn(),
+      this.totalOut(),
+      this.closing(),
+    );
   }
 
 

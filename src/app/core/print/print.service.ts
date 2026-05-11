@@ -26,6 +26,7 @@ import { buildProductPrintHtml } from './product-template';
 import { buildSalaryPrintHtml } from './salary-template';
 import { buildPettyCashPrintHtml } from './petty-cash-template';
 import { buildGeneralLedgerPrintHtml } from './general-ledger-template';
+import { buildStoreLedgerPrintHtml, StorePrintProduct, StorePrintLedgerRow } from './store-template';
 
 @Injectable({
   providedIn: 'root',
@@ -111,6 +112,26 @@ export class PrintService {
   printGeneralLedgerEntry(entry: GeneralLedgerEntry): void {
     const html = buildGeneralLedgerPrintHtml(entry);
     this.openPrintWindow(html, `GL_${entry.entryNo ?? entry.id}`);
+  }
+
+  /**
+   * Prints a Stock Ledger Report for a product.
+   *
+   * @param product  - Product summary (code, name, vendor).
+   * @param rows     - Stock ledger rows.
+   * @param totalIn  - Total received quantity.
+   * @param totalOut - Total issued quantity.
+   * @param closing  - Final closing stock.
+   */
+  printStoreLedger(
+    product: StorePrintProduct,
+    rows: StorePrintLedgerRow[],
+    totalIn: number,
+    totalOut: number,
+    closing: number,
+  ): void {
+    const html = buildStoreLedgerPrintHtml(product, rows, totalIn, totalOut, closing);
+    this.openPrintWindow(html, `STOCK_${product.productCode}`);
   }
 
   /**
