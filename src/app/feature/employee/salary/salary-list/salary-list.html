@@ -70,63 +70,61 @@
                                     </button>
                                 </div>
 
-                                                                    <!-- OVERLAY -->
-                                    @if(showFilter()){
-                                    <div class="filter-overlay" (click)="closeFilter()"></div>
-                                    }
+                                <!-- OVERLAY -->
+                                @if(showFilter()){
+                                <div class="filter-overlay" (click)="closeFilter()"></div>
+                                }
 
-                                    <!-- PANEL -->
-                                    @if(showFilter()){
-                                    <div class="filter-panel" [style.top.px]="filterTop"
-                    [style.right.px]="filterRight">
+                                <!-- PANEL -->
+                                @if(showFilter()){
+                                <div class="filter-panel" [style.top.px]="filterTop" [style.right.px]="filterRight">
 
-                                        <!-- HEADER -->
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <h5 class="fw-bold mb-0">Filter</h5>
-                                            <button class="btn btn-sm btn-cancel"
-                                                (click)="resetFilters()">Reset</button>
-                                        </div>
-
-                                        <!-- STATUS DROPDOWN -->
-                                        <div class="mb-3">
-                                            <label class="fw-semibold mb-2">Status</label>
-
-                                            <select class="form-select" [value]="filters().status ?? ''"
-                                                (change)="selectStatus($any($event.target).value)">
-
-                                                <option value="">All</option>
-
-                                                @for(s of statusOptions; track s.value){
-                                                <option [value]="s.value">{{ s.label }}</option>
-                                                }
-
-                                            </select>
-                                        </div>
-
-                                        <!-- PERIOD DROPDOWN -->
-                                        <div class="mb-3">
-                                            <label class="fw-semibold mb-2">Salary Period</label>
-
-                                            <select class="form-select" [value]="filters().period ?? ''"
-                                                (change)="selectPeriod($any($event.target).value)">
-
-                                                <option value="">All</option>
-
-                                                @for(p of periods(); track p){
-                                                <option [value]="p">{{ p }}</option>
-                                                }
-
-                                            </select>
-                                        </div>
-
-                                        <!-- FOOTER -->
-                                        <div class="d-flex gap-2 mt-4">
-                                            <button class="btn btn-cancel w-50" (click)="closeFilter()">Cancel</button>
-                                            <button class="btn btn-primary w-50" (click)="closeFilter()">Apply</button>
-                                        </div>
-
+                                    <!-- HEADER -->
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="fw-bold mb-0">Filter</h5>
+                                        <button class="btn btn-sm btn-cancel" (click)="resetFilters()">Reset</button>
                                     </div>
-                                    }
+
+                                    <!-- STATUS DROPDOWN -->
+                                    <div class="mb-3">
+                                        <label class="fw-semibold mb-2">Status</label>
+
+                                        <select class="form-select" [value]="filters().status ?? ''"
+                                            (change)="selectStatus($any($event.target).value)">
+
+                                            <option value="">All</option>
+
+                                            @for(s of statusOptions; track s.value){
+                                            <option [value]="s.value">{{ s.label }}</option>
+                                            }
+
+                                        </select>
+                                    </div>
+
+                                    <!-- PERIOD DROPDOWN -->
+                                    <div class="mb-3">
+                                        <label class="fw-semibold mb-2">Salary Period</label>
+
+                                        <select class="form-select" [value]="filters().period ?? ''"
+                                            (change)="selectPeriod($any($event.target).value)">
+
+                                            <option value="">All</option>
+
+                                            @for(p of periods(); track p){
+                                            <option [value]="p">{{ p }}</option>
+                                            }
+
+                                        </select>
+                                    </div>
+
+                                    <!-- FOOTER -->
+                                    <div class="d-flex gap-2 mt-4">
+                                        <button class="btn btn-cancel w-50" (click)="closeFilter()">Cancel</button>
+                                        <button class="btn btn-primary w-50" (click)="closeFilter()">Apply</button>
+                                    </div>
+
+                                </div>
+                                }
 
                                 <!-- ADD BUTTON -->
                                 <button (click)="onAddSalary()"
@@ -143,7 +141,7 @@
                                 <table>
                                     <thead>
                                         <tr style="background:#8080800d;">
-<th class="d-xl-none" style="width:40px"></th>
+                                            <th class="d-xl-none" style="width:40px"></th>
                                             <!-- <th (click)="sortBy('salaryNumber')" class="sortable">
                                                 Salary No
                                                 <i class="sort-icon"
@@ -152,7 +150,7 @@
                                                 </i>
                                             </th> -->
 
-                                            <th (click)="sortBy('salaryMonth')" >
+                                            <th (click)="sortBy('salaryMonth')">
                                                 Period
                                                 <i class="sort-icon"
                                                     [class.asc]="sortColumn() === 'salaryMonth' && sortDirection() === 'asc'"
@@ -176,7 +174,8 @@
                                                 </i>
                                             </th>
 
-                                            <th (click)="sortBy('totalEmployees')" class="sortable d-none d-xl-table-cell">
+                                            <th (click)="sortBy('totalEmployees')"
+                                                class="sortable d-none d-xl-table-cell">
                                                 Employees
                                                 <i class="sort-icon"
                                                     [class.asc]="sortColumn() === 'totalEmployees' && sortDirection() === 'asc'"
@@ -184,7 +183,8 @@
                                                 </i>
                                             </th>
 
-                                            <th (click)="sortBy('totalNetSalary')" class="sortable d-none d-xl-table-cell">
+                                            <th (click)="sortBy('totalNetSalary')"
+                                                class="sortable d-none d-xl-table-cell">
                                                 Net Salary
                                                 <i class="sort-icon"
                                                     [class.asc]="sortColumn() === 'totalNetSalary' && sortDirection() === 'asc'"
@@ -210,15 +210,13 @@
                                         @for(s of paginated(); track s.salaryId){
 
                                         <tr>
-                                                <!-- PLUS ICON -->
-                                                <td class="d-xl-none text-center"
-                                                    style="padding: 0;padding-left: 15px;">
-                                                    <a href="javascript:void(0);" class="TablePlus"
-                                                        data-bs-toggle="modal" data-bs-target="#rowDetailsModal"
-                                                        (click)="openRowDetails(s)">
-                                                        <i class="ti ti-plus"></i>
-                                                    </a>
-                                                </td>
+                                            <!-- PLUS ICON -->
+                                            <td class="d-xl-none text-center" style="padding: 0;padding-left: 15px;">
+                                                <a href="javascript:void(0);" class="TablePlus" data-bs-toggle="modal"
+                                                    data-bs-target="#rowDetailsModal" (click)="openRowDetails(s)">
+                                                    <i class="ti ti-plus"></i>
+                                                </a>
+                                            </td>
                                             <!-- <td class="fw-semibold">
                                                 {{ s.salaryNumber }}
                                             </td> -->
@@ -258,15 +256,21 @@
                                             <td>
                                                 <div class="action-icons">
 
+                                                    <button class="icon-btn view" (click)="onView(s)">
+                                                        <i class="ti ti-eye"></i>
+                                                    </button>
                                                     @if(canEdit(s.status)){
                                                     <button class="icon-btn edit" (click)="onEdit(s)">
                                                         <i class="ti ti-pencil"></i>
                                                     </button>
                                                     }
-
-                                                    <button class="icon-btn view" (click)="onView(s)">
-                                                        <i class="ti ti-eye"></i>
+                                                    @if(canDelete(s.status)){
+                                                    <button class="icon-btn delete" (click)="onDelete(s)">
+                                                        <i class="ti ti-trash"></i>
                                                     </button>
+                                                    }
+
+
 
                                                 </div>
                                             </td>
@@ -341,69 +345,68 @@
 
 <!-- 🔹 ROW DETAILS MODAL -->
 <div class="modal fade" id="rowDetailsModal" tabindex="-1">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
 
-      <!-- HEADER -->
-      <div class="modal-header">
-        <h5 class="modal-title">
-          Salary Details - {{ selectedRow()?.salaryNumber }}
-        </h5>
-        <button class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <!-- BODY -->
-      <div class="modal-body">
-
-        @if(selectedRow()){
-
-        <div class="row g-3 mb-3">
-
-          <div class="col-md-4">
-            <label class="text-muted small">Period</label>
-            <div class="fw-semibold">{{ selectedRow()?.salaryMonth }}</div>
-          </div>
-
-          <div class="col-md-4">
-            <label class="text-muted small">From</label>
-            <div>{{ selectedRow()?.fromDate | date:'dd/MM/yyyy' }}</div>
-          </div>
-
-          <div class="col-md-4">
-            <label class="text-muted small">To</label>
-            <div>{{ selectedRow()?.toDate | date:'dd/MM/yyyy' }}</div>
-          </div>
-
-          <div class="col-md-4">
-            <label class="text-muted small">Employees</label>
-            <div>{{ selectedRow()?.totalEmployees }}</div>
-          </div>
-
-          <div class="col-md-4">
-            <label class="text-muted small">Net Salary</label>
-            <div class="text-success fw-semibold">
-              ₹ {{ formatAmount(selectedRow()?.totalNetSalary) }}
+            <!-- HEADER -->
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Salary Details - {{ selectedRow()?.salaryNumber }}
+                </h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-          </div>
 
-          <div class="col-md-4">
-            <label class="text-muted small">Status</label>
-            <div>
-              <span class="badge"
-                [class.open]="selectedRow()?.status === 5"
-                [class.active]="selectedRow()?.status === 3"
-                [class.inactive]="selectedRow()?.status === 4"
-                [class.submitted]="selectedRow()?.status === 2"
-                [class.draft]="selectedRow()?.status === 1">
-                {{ getStatusLabel(selectedRow()?.status!) }}
-              </span>
-            </div>
-          </div>
+            <!-- BODY -->
+            <div class="modal-body">
 
-        </div>
+                @if(selectedRow()){
 
-        <!-- 🔸 LINES TABLE -->
-        <!-- <div class="border-table">
+                <div class="row g-3 mb-3">
+
+                    <div class="col-md-4">
+                        <label class="text-muted small">Period</label>
+                        <div class="fw-semibold">{{ selectedRow()?.salaryMonth }}</div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="text-muted small">From</label>
+                        <div>{{ selectedRow()?.fromDate | date:'dd/MM/yyyy' }}</div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="text-muted small">To</label>
+                        <div>{{ selectedRow()?.toDate | date:'dd/MM/yyyy' }}</div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="text-muted small">Employees</label>
+                        <div>{{ selectedRow()?.totalEmployees }}</div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="text-muted small">Net Salary</label>
+                        <div class="text-success fw-semibold">
+                            ₹ {{ formatAmount(selectedRow()?.totalNetSalary) }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="text-muted small">Status</label>
+                        <div>
+                            <span class="badge" [class.open]="selectedRow()?.status === 5"
+                                [class.active]="selectedRow()?.status === 3"
+                                [class.inactive]="selectedRow()?.status === 4"
+                                [class.submitted]="selectedRow()?.status === 2"
+                                [class.draft]="selectedRow()?.status === 1">
+                                {{ getStatusLabel(selectedRow()?.status!) }}
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 🔸 LINES TABLE -->
+                <!-- <div class="border-table">
           <table class="table">
             <thead>
               <tr>
@@ -445,10 +448,12 @@
           </table>
         </div> -->
 
-        }
+                }
 
-      </div>
+            </div>
 
+        </div>
     </div>
-  </div>
 </div>
+
+<app-confirm-modal #modal></app-confirm-modal>

@@ -1,13 +1,15 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, viewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { Salary, SalaryStatus } from '../salary';
 import { CommonModule } from '@angular/common';
 import { SalaryDataClient } from '../salary-data-client';
+import { ConfirmModalComponent } from "../../../../shared/components/confirm-modal/confirm-modal";
+import { ToastNotifier } from '../../../../core/services/toast';
 
 @Component({
   selector: 'app-salary-list',
   standalone: true,
-  imports: [CommonModule,RouterModule],
+  imports: [CommonModule, RouterModule, ConfirmModalComponent],
   templateUrl: './salary-list.html',
   styleUrl: './salary-list.css',
 })
@@ -15,8 +17,9 @@ export class SalaryListComponent {
 
   private readonly router = inject(Router);
   private readonly salaryService = inject(SalaryDataClient);
+    private readonly toast = inject(ToastNotifier);
 
-
+  modal = viewChild<ConfirmModalComponent>('modal');
   // ===== STATE =====
   salaryList = this.salaryService.salaryList;
 
@@ -247,4 +250,24 @@ resetFilters() {
     return status !== SalaryStatus.Posted &&
            status !== SalaryStatus.Paid;
   }
+
+    canDelete(status: SalaryStatus) {
+    return status === SalaryStatus.Draft;
+  }
+
+    onDelete(s: Salary) {
+      this.modal()?.open({
+        type: 'delete',
+        title: 'Delete',
+        message: `Are you sure you want to delete ${s.salaryId}?`,
+        onConfirm: () => {
+          this.delete(s);
+        }
+      });
+    }
+
+      delete(s: Salary) {
+        this.salaryService.delete(s.salaryId!);
+        this.toast.success('Employee deleted successfully');
+      }
 }

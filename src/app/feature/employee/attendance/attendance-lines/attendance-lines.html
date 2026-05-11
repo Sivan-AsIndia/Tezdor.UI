@@ -49,7 +49,7 @@
                         </div>
 
                         <div class="topbar-actions">
-                             @if(viewMode() === 'table'){
+                            @if(viewMode() === 'table'){
                             <!-- DATE FILTER -->
                             <div class="date-filter" (click)="openDatePicker(dateInput)">
 
@@ -80,10 +80,10 @@
                                 </button>
                                 }
                             </div>
-                        }
+                            }
                             <!-- VIEW TOGGLE -->
-                            <button class="d-none d-md-block icon-btn view-toggle bg-primary d-md-flex" (click)="toggleView()"
-                                [title]="viewMode() === 'table' ? 'Grid View' : 'Table View'">
+                            <button class="d-none d-md-block icon-btn view-toggle bg-primary d-md-flex"
+                                (click)="toggleView()" [title]="viewMode() === 'table' ? 'Grid View' : 'Table View'">
 
                                 <i class="ti" [class]="viewMode() === 'table' ? 'ti-layout-grid' : 'ti-table'">
                                 </i>
@@ -207,6 +207,10 @@
                                             <td>
                                                 <div class="action-icons">
 
+                                                    <button class="icon-btn view" (click)="onView(s)">
+                                                        <i class="ti ti-eye"></i>
+                                                    </button>
+
                                                     <!-- <button class="icon-btn edit" (click)="onEdit(s)" title="Edit">
                                                         <i class="ti ti-pencil"></i>
                                                     </button>
@@ -216,9 +220,7 @@
                                                         <i class="ti ti-trash"></i>
                                                     </button> -->
 
-                                                    <button class="icon-btn view" (click)="onView(s)">
-                                                        <i class="ti ti-eye"></i>
-                                                    </button>
+
 
                                                 </div>
                                             </td>
@@ -244,7 +246,7 @@
                             </div>
                         </div>
                     </div>
-                                        <!-- PAGINATION -->
+                    <!-- PAGINATION -->
                     <div class="pagination-bar">
 
                         <!-- Page Size -->
@@ -669,7 +671,27 @@
 
                                                 {{ getStatusLabel(row.attendanceType) }}
 
-                                            </span></td>
+                                            </span>
+                                            <!-- PERMISSION BADGE -->
+                                            @if(hasPermission(row.employeeId, row.attendanceDate)){
+
+                                            <span class="permission-mini-badge" (click)="openPermissionPopup(
+    getPermission(
+      row.employeeId,
+      row.attendanceDate
+    )!
+  )">
+
+                                                <i class="ti ti-clock-hour-4"></i>
+
+                                                <span>
+                                                    Perm
+                                                </span>
+
+                                            </span>
+
+                                            }
+                                        </td>
                                         <!-- ACTIONS -->
                                         <td>
                                             <div class="d-flex align-items-center gap-2">
@@ -699,7 +721,7 @@
                                                 <div class="leave-pop-wrapper">
 
                                                     <!-- INFO ICON -->
-                                                    <button class="icon-btn info"  (click)="openLeavePopup(
+                                                    <button class="icon-btn info" (click)="openLeavePopup(
           getLeaveByAttendance(row.attendanceId)
         )">
 
@@ -790,62 +812,6 @@
 
 }
 
-
-@if(hoveredPermission()){
-
-<div class="permission-popover-fixed" [style.left.px]="popoverX() + 20" [style.top.px]="popoverY() - 20">
-
-    <div class="popover-title">
-        Permission Details
-    </div>
-
-    <div class="popover-row">
-        <span>Type</span>
-        <strong>
-            {{ hoveredPermission()?.permissionType }}
-        </strong>
-    </div>
-
-    <div class="popover-row">
-        <span>From</span>
-        <strong>
-            {{ hoveredPermission()?.fromTime }}
-        </strong>
-    </div>
-
-    <div class="popover-row">
-        <span>To</span>
-        <strong>
-            {{ hoveredPermission()?.toTime }}
-        </strong>
-    </div>
-
-    <div class="popover-row">
-        <span>Hours</span>
-        <strong>
-            {{ hoveredPermission()?.totalHours }}
-        </strong>
-    </div>
-
-    <div class="popover-row">
-        <span>Status</span>
-
-        <span class="status-pill">
-            {{ hoveredPermission()?.status }}
-        </span>
-    </div>
-
-    @if(hoveredPermission()?.reason){
-
-    <div class="popover-reason">
-        {{ hoveredPermission()?.reason }}
-    </div>
-
-    }
-
-</div>
-
-}
 
 
 <!-- ADD PERMISSION MODAL -->
@@ -1246,13 +1212,9 @@
 
 @if(showLeaveDetailsPopup() && selectedLeave()){
 
-<div class="leave-view-overlay"
+<div class="leave-view-overlay" (click)="closeLeavePopup()">
 
-     (click)="closeLeavePopup()">
-
-    <div class="leave-view-modal"
-
-         (click)="$event.stopPropagation()">
+    <div class="leave-view-modal" (click)="$event.stopPropagation()">
 
         <!-- HEADER -->
         <div class="leave-view-header">
@@ -1283,9 +1245,7 @@
 
             </div>
 
-            <button class="leave-view-close"
-
-                    (click)="closeLeavePopup()">
+            <button class="leave-view-close" (click)="closeLeavePopup()">
 
                 <i class="ti ti-x"></i>
 
@@ -1313,13 +1273,9 @@
 
             </div>
 
-            <span class="leave-status-pill"
-
-                  [class.approved]="selectedLeave()?.status === 'Approved'"
-
-                  [class.pending]="selectedLeave()?.status === 'Pending'"
-
-                  [class.rejected]="selectedLeave()?.status === 'Rejected'">
+            <span class="leave-status-pill" [class.approved]="selectedLeave()?.status === 'Approved'"
+                [class.pending]="selectedLeave()?.status === 'Pending'"
+                [class.rejected]="selectedLeave()?.status === 'Rejected'">
 
                 {{ selectedLeave()?.status }}
 
@@ -1353,7 +1309,7 @@
                         <strong class="leave-info-value">
 
                             {{ getLeaveTypeName(
-                              selectedLeave()?.leaveTypeId
+                            selectedLeave()?.leaveTypeId
                             ) }}
 
                         </strong>
@@ -1475,9 +1431,203 @@
         <!-- FOOTER -->
         <div class="leave-view-footer">
 
-            <button class="leave-close-action"
+            <button class="leave-close-action" (click)="closeLeavePopup()">
 
-                    (click)="closeLeavePopup()">
+                Close
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+}
+
+<!-- =====================================================
+  PERMISSION DETAILS MODAL
+===================================================== -->
+
+@if(showPermissionDetailsPopup()){
+
+<div class="erp-modal-backdrop" (click)="closePermissionPopup()">
+
+    <!-- MODAL -->
+    <div class="permission-modal compact-modal" (click)="$event.stopPropagation()">
+
+        <!-- =====================================================
+      HEADER
+    ====================================================== -->
+
+        <div class="permission-modal-header">
+
+            <div class="permission-header-left">
+
+                <div class="permission-icon">
+
+                    <i class="ti ti-clock-hour-4"></i>
+
+                </div>
+
+                <div>
+
+                    <div class="permission-modal-title">
+
+                        Permission Details
+
+                    </div>
+
+                    <div class="permission-modal-subtitle">
+
+                        Employee permission information
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- CLOSE -->
+            <button class="permission-close-btn" (click)="closePermissionPopup()">
+
+                <i class="ti ti-x"></i>
+
+            </button>
+
+        </div>
+
+        <!-- =====================================================
+      BODY
+    ====================================================== -->
+
+        <div class="permission-modal-body">
+
+            <!-- STATUS -->
+            <div class="permission-status-row">
+
+                <span class="permission-status-pill">
+
+                    {{ selectedPermission()?.status }}
+
+                </span>
+
+            </div>
+
+            <!-- GRID -->
+            <div class="permission-grid">
+
+                <!-- TYPE -->
+                <div class="permission-info-item">
+
+                    <label>
+                        Type
+                    </label>
+
+                    <div>
+
+                        {{ selectedPermission()?.permissionType }}
+
+                    </div>
+
+                </div>
+
+                <!-- DATE -->
+                <div class="permission-info-item">
+
+                    <label>
+                        Date
+                    </label>
+
+                    <div>
+
+                        {{ selectedPermission()?.permissionDate | date:'dd MMM yyyy' }}
+
+                    </div>
+
+                </div>
+
+                <!-- FROM -->
+                <div class="permission-info-item">
+
+                    <label>
+                        From Time
+                    </label>
+
+                    <div>
+
+                        {{ selectedPermission()?.fromTime }}
+
+                    </div>
+
+                </div>
+
+                <!-- TO -->
+                <div class="permission-info-item">
+
+                    <label>
+                        To Time
+                    </label>
+
+                    <div>
+
+                        {{ selectedPermission()?.toTime }}
+
+                    </div>
+
+                </div>
+
+                <!-- HOURS -->
+                <div class="permission-info-item full-width">
+
+                    <label>
+                        Total Hours
+                    </label>
+
+                    <div class="hours-highlight">
+
+                        {{ selectedPermission()?.totalHours }}
+
+                        Hours
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- REASON -->
+            @if(selectedPermission()?.reason){
+
+            <div class="permission-reason-box">
+
+                <div class="reason-title">
+
+                    <i class="ti ti-message-circle"></i>
+
+                    Reason
+
+                </div>
+
+                <div class="reason-text">
+
+                    {{ selectedPermission()?.reason }}
+
+                </div>
+
+            </div>
+
+            }
+
+        </div>
+
+        <!-- =====================================================
+      FOOTER
+    ====================================================== -->
+
+        <div class="permission-modal-footer">
+
+            <button class="permission-close-action" (click)="closePermissionPopup()">
 
                 Close
 
