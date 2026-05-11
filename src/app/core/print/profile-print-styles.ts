@@ -177,6 +177,7 @@ export const PROFILE_PRINT_CSS = `
     color: #999;
     text-transform: uppercase;
     letter-spacing: 0.3px;
+    font-weight: 900;
   }
 
   .field-value {

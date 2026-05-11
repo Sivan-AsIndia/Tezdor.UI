@@ -9,9 +9,8 @@ export const SAMPLE_INVOICES: PurchaseInvoice[] = [
     poRef: 'PO-2026-001',
     lineItems: [
       { id: 1, productId: '1', productCode: 'PRD110', productName: '8x4x9mm Plywood', unitId: 1, unitName: 'Pcs', qty: 60, unitCost: 450, taxPercent: 18, lineTotal: 31860 },
-      { id: 2, productId: '2', productCode: 'PRD111', productName: 'Teak Wood Plank', unitId: 6, unitName: 'Mtr', qty: 20, unitCost: 800, taxPercent: 18, lineTotal: 18880 },
     ],
-    grandTotal: 50740, amountPaid: 50740, balanceDue: 0,
+    grandTotal: 31860, amountPaid: 31860, balanceDue: 0,
     paymentStatus: 'paid', invoiceStatus: 'posted', createdAt: '2026-01-10',
   },
   {
@@ -33,10 +32,9 @@ export const SAMPLE_INVOICES: PurchaseInvoice[] = [
     supplierId: '3', supplierCode: 'VEN003', supplierName: 'PipeMart Co',
     poRef: 'PO-2026-003',
     lineItems: [
-      { id: 1, productId: '4', productCode: 'PRD305', productName: 'PVC Pipe 25mm', unitId: 6, unitName: 'Mtr', qty: 200, unitCost: 55, taxPercent: 12, lineTotal: 12320 },
-      { id: 2, productId: '5', productCode: 'PRD306', productName: 'PVC Elbow 25mm', unitId: 1, unitName: 'Pcs', qty: 50, unitCost: 18, taxPercent: 12, lineTotal: 1008 },
+      { id: 1, productId: '4', productCode: 'PRD305', productName: 'PVC Pipe 25mm', unitId: 6, unitName: 'Mtr', qty: 100, unitCost: 55, taxPercent: 12, lineTotal: 6160 },
     ],
-    grandTotal: 13328, amountPaid: 0, balanceDue: 13328,
+    grandTotal: 6160, amountPaid: 0, balanceDue: 6160,
     paymentStatus: 'unpaid', invoiceStatus: 'posted', createdAt: '2026-01-20',
   },
   {
@@ -59,9 +57,92 @@ export const SAMPLE_INVOICES: PurchaseInvoice[] = [
     poRef: 'PO-2026-007',
     lineItems: [
       { id: 1, productId: '7', productCode: 'PRD500', productName: 'Safety Helmet', unitId: 1, unitName: 'Pcs', qty: 25, unitCost: 380, taxPercent: 12, lineTotal: 10640 },
-      { id: 2, productId: '8', productCode: 'PRD501', productName: 'Safety Gloves', unitId: 5, unitName: 'Dozen', qty: 10, unitCost: 280, taxPercent: 12, lineTotal: 3136 },
     ],
-    grandTotal: 13776, amountPaid: 13776, balanceDue: 0,
+    grandTotal: 10640, amountPaid: 10640, balanceDue: 0,
     paymentStatus: 'paid', invoiceStatus: 'posted', createdAt: '2026-02-05',
+  },
+  {
+    id: 6, invoiceNo: 'PINV-2026-006',
+    supplierInvoiceNo: 'KT-INV-4588',
+    invoiceDate: '2026-02-08', paymentDueDate: '2026-03-08',
+    supplierId: '1', supplierCode: 'VEN001', supplierName: 'Krishna Timber',
+    poRef: 'PO-2026-004',
+    lineItems: [
+      { id: 1, productId: '2', productCode: 'PRD111', productName: 'Teak Wood Plank', unitId: 6, unitName: 'Mtr', qty: 20, unitCost: 800, taxPercent: 18, lineTotal: 18880 },
+    ],
+    grandTotal: 18880, amountPaid: 0, balanceDue: 18880,
+    paymentStatus: 'unpaid', invoiceStatus: 'posted', createdAt: '2026-02-08',
+  },
+  {
+    id: 7, invoiceNo: 'PINV-2026-007',
+    supplierInvoiceNo: 'MS-2026-0145',
+    invoiceDate: '2026-02-12', paymentDueDate: '2026-04-12',
+    supplierId: '2', supplierCode: 'VEN002', supplierName: 'Metro Steel',
+    poRef: 'PO-2026-006',
+    lineItems: [
+      { id: 1, productId: '3', productCode: 'PRD201', productName: 'MS Flat Bar 40x6mm', unitId: 2, unitName: 'Kg', qty: 500, unitCost: 82, taxPercent: 18, lineTotal: 48380 },
+    ],
+    grandTotal: 48380, amountPaid: 20000, balanceDue: 28380,
+    paymentStatus: 'partial', invoiceStatus: 'posted', createdAt: '2026-02-12',
+  },
+  {
+    id: 8, invoiceNo: 'PINV-2026-008',
+    supplierInvoiceNo: '',
+    invoiceDate: '2026-02-15', paymentDueDate: '',
+    supplierId: '3', supplierCode: 'VEN003', supplierName: 'PipeMart Co',
+    poRef: '',
+    lineItems: [
+      { id: 1, productId: '5', productCode: 'PRD306', productName: 'PVC Elbow 25mm', unitId: 1, unitName: 'Pcs', qty: 20, unitCost: 18, taxPercent: 12, lineTotal: 403.2 },
+    ],
+    grandTotal: 403.2, amountPaid: 0, balanceDue: 403.2,
+    paymentStatus: 'unpaid', invoiceStatus: 'draft', createdAt: '2026-02-15',
+  },
+  {
+    id: 9, invoiceNo: 'PINV-2026-009',
+    supplierInvoiceNo: 'BM-2026-3301',
+    invoiceDate: '2026-02-18', paymentDueDate: '2026-03-18',
+    supplierId: '6', supplierCode: 'VEN006', supplierName: 'BuildMart',
+    poRef: 'PO-2026-009',
+    lineItems: [
+      { id: 1, productId: '9', productCode: 'PRD600', productName: 'Cement Bag 50kg', unitId: 1, unitName: 'Bag', qty: 50, unitCost: 420, taxPercent: 18, lineTotal: 24780 },
+    ],
+    grandTotal: 24780, amountPaid: 24780, balanceDue: 0,
+    paymentStatus: 'paid', invoiceStatus: 'posted', createdAt: '2026-02-18',
+  },
+  {
+    id: 10, invoiceNo: 'PINV-2026-010',
+    supplierInvoiceNo: 'GS-INV-7788',
+    invoiceDate: '2026-02-20', paymentDueDate: '2026-03-20',
+    supplierId: '5', supplierCode: 'VEN005', supplierName: 'Global Supplies',
+    poRef: 'PO-2026-012',
+    lineItems: [
+      { id: 1, productId: '8', productCode: 'PRD501', productName: 'Safety Gloves', unitId: 5, unitName: 'Dozen', qty: 10, unitCost: 280, taxPercent: 12, lineTotal: 3136 },
+    ],
+    grandTotal: 3136, amountPaid: 0, balanceDue: 3136,
+    paymentStatus: 'unpaid', invoiceStatus: 'posted', createdAt: '2026-02-20',
+  },
+  {
+    id: 11, invoiceNo: 'PINV-2026-011',
+    supplierInvoiceNo: '',
+    invoiceDate: '2026-02-22', paymentDueDate: '',
+    supplierId: '1', supplierCode: 'VEN001', supplierName: 'Krishna Timber',
+    poRef: '',
+    lineItems: [
+      { id: 1, productId: '10', productCode: 'PRD112', productName: 'Block Board 19mm', unitId: 1, unitName: 'Pcs', qty: 15, unitCost: 1200, taxPercent: 18, lineTotal: 21240 },
+    ],
+    grandTotal: 21240, amountPaid: 0, balanceDue: 21240,
+    paymentStatus: 'unpaid', invoiceStatus: 'draft', createdAt: '2026-02-22',
+  },
+  {
+    id: 12, invoiceNo: 'PINV-2026-012',
+    supplierInvoiceNo: 'PM-INV-2315',
+    invoiceDate: '2026-02-25', paymentDueDate: '2026-03-25',
+    supplierId: '3', supplierCode: 'VEN003', supplierName: 'PipeMart Co',
+    poRef: 'PO-2026-011',
+    lineItems: [
+      { id: 1, productId: '11', productCode: 'PRD308', productName: 'CPVC Pipe 20mm', unitId: 6, unitName: 'Mtr', qty: 100, unitCost: 72, taxPercent: 12, lineTotal: 8064 },
+    ],
+    grandTotal: 8064, amountPaid: 4000, balanceDue: 4064,
+    paymentStatus: 'partial', invoiceStatus: 'posted', createdAt: '2026-02-25',
   },
 ];
