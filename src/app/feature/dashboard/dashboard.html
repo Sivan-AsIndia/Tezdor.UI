@@ -1,1062 +1,1051 @@
 <div class="max-w-full">
-    <div class="full-container ">
+  <div class="full-container ">
 
-        <!-- ROW 1 — KPI WIDGETS  -->
-        <!-- ROW 1 — KPI WIDGETS -->
-        <div class="row g-3 kpi-widget-row">
+    <!-- ROW 1 — KPI WIDGETS  -->
+    <!-- ROW 1 — KPI WIDGETS -->
+    <div class="row g-3 kpi-widget-row">
 
-            <!-- WIDGET 1 -->
-            <div class="col-12 col-md-6 col-lg-3 col-xl-custom-5 col-xxxl-2">
+      <!-- WIDGET 1 -->
+      <div class="col-12 col-md-6 col-lg-3 col-xl-custom-5 col-xxxl-2">
 
-                <div class="card card--center h-100">
-                    <div class="radial-wrap">
-                        <svg class="radial-svg" viewBox="0 0 36 36">
-                            <path class="radial-track" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845
+        <div class="card card--center h-100">
+          <div class="radial-wrap">
+            <svg class="radial-svg" viewBox="0 0 36 36">
+              <path class="radial-track" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845
                  a 15.9155 15.9155 0 0 1 0 31.831
                  a 15.9155 15.9155 0 0 1 0 -31.831" />
-                            <path class="radial-fill" stroke-width="3" [attr.stroke-dasharray]="attendance().dashArray"
-                                stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845
+              <path class="radial-fill" stroke-width="3" [attr.stroke-dasharray]="attendance().dashArray"
+                stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845
                  a 15.9155 15.9155 0 0 1 0 31.831
                  a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        </svg>
-                        <div class="radial-label">
-                            <span class="radial-value">{{ attendance().percent }}%</span>
-                            <span class="radial-sub">Present</span>
-                        </div>
-                    </div>
-
-                    <h4 class="widget-title">Employee Attendance</h4>
-                    <p class="widget-meta">{{ attendance().present }} out of {{ attendance().total }} present today</p>
-                    <button class="btn btn--outline-primary w-full mt-auto">View Data</button>
-                </div>
+            </svg>
+            <div class="radial-label">
+              <span class="radial-value">{{ attendance().percent }}%</span>
+              <span class="radial-sub">Present</span>
             </div>
+          </div>
+
+          <h4 class="widget-title">Employee Attendance</h4>
+          <p class="widget-meta">{{ attendance().present }} out of {{ attendance().total }} present today</p>
+          <button class="btn btn--outline-primary w-full mt-auto">View Data</button>
+        </div>
+      </div>
 
 
-            <!-- WIDGET 2: REVENUE FLOW -->
-<!-- WIDGET 2: REVENUE FLOW -->
-<div class="col-12 col-md-6 col-lg-3 col-xl-custom-5 col-xxxl-2">
+      <!-- WIDGET 2: REVENUE FLOW -->
+      <div class="col-12 col-md-6 col-lg-3 col-xl-custom-5 col-xxxl-2">
 
-    <div class="card card--revenue-white h-100">
+        <div class="card card--revenue-white h-100">
 
-        <!-- BG ICON -->
-        <i class="fas fa-arrow-up-right-dots card-bg-icon-light"></i>
+          <!-- BG ICON -->
+          <i class="fas fa-arrow-up-right-dots card-bg-icon-light"></i>
 
-        <!-- TOP -->
-        <div>
+          <!-- TOP -->
+          <div>
 
             <p class="card-label-muted">
 
-                Total Sales Revenue
+              Total Sales Revenue
 
             </p>
 
             <h3 class="card-value-md">
 
-                {{ revenue.total }}
+              {{ revenue.total }}
 
             </h3>
 
-        </div>
+          </div>
 
-        <!-- BAR -->
-        <div class="bar-chart bar-chart--primary">
+          <!-- BAR -->
+          <div class="bar-chart bar-chart--primary">
 
             @for (bar of revenue.bars; track $index){
 
-            <div class="bar"
-
-                 [style.height.%]="bar.heightPct"
-
-                 [style.opacity]="bar.opacity">
+            <div class="bar" [style.height.%]="bar.heightPct" [style.opacity]="bar.opacity">
 
             </div>
 
             }
 
-        </div>
+          </div>
 
-        <!-- FOOTER -->
-        <div class="card-footer-row">
+          <!-- FOOTER -->
+          <div class="card-footer-row">
 
             <span class="card-footer-muted">
 
-                MTD Performance
+              MTD Performance
 
             </span>
 
             <span class="badge badge--primary-soft">
 
-                {{ revenue.growth }}
+              {{ revenue.growth }}
 
             </span>
 
+          </div>
+
         </div>
 
-    </div>
+      </div>
 
-</div>
+      <!-- WIDGET 3: PETTY CASH -->
+      <div class="d-none d-md-block col-6 col-md-6 col-lg-3 col-xl-custom-5 col-xxxl-2">
 
-            <!-- WIDGET 3: PETTY CASH -->
-            <div class="d-none d-md-block col-6 col-md-6 col-lg-3 col-xl-custom-5 col-xxxl-2">
+        <div class="card h-100">
+          <div class="card-header-row">
+            <div class="icon-badge icon-badge--primary">
+              <i class="fas fa-wallet"></i>
+            </div>
+            <span class="card-tag">Petty Cash</span>
+          </div>
 
-                <div class="card h-100">
-                    <div class="card-header-row">
-                        <div class="icon-badge icon-badge--primary">
-                            <i class="fas fa-wallet"></i>
-                        </div>
-                        <span class="card-tag">Petty Cash</span>
-                    </div>
+          <p class="card-sub">Remaining Balance</p>
+          <h3 class="card-value-md">{{ pettyCash.balance }}</h3>
 
-                    <p class="card-sub">Remaining Balance</p>
-                    <h3 class="card-value-md">{{ pettyCash.balance }}</h3>
+          <div class="ledger-mini">
+            <div class="ledger-mini__row">
+              <span class="ledger-mini__desc">Latest: {{ pettyCash.latestItem }}</span>
+              <span class="ledger-mini__amount ledger-mini__amount--neg">{{ pettyCash.latestAmount
+                }}</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-bar__fill progress-bar__fill--primary" [style.width.%]="pettyCash.budgetUsedPct">
+              </div>
+            </div>
+            <p class="card-footer-muted">Budget reset in {{ pettyCash.resetDays }} days</p>
+          </div>
+        </div>
+      </div>
 
-                    <div class="ledger-mini">
-                        <div class="ledger-mini__row">
-                            <span class="ledger-mini__desc">Latest: {{ pettyCash.latestItem }}</span>
-                            <span class="ledger-mini__amount ledger-mini__amount--neg">{{ pettyCash.latestAmount
-                                }}</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-bar__fill progress-bar__fill--primary"
-                                [style.width.%]="pettyCash.budgetUsedPct"></div>
-                        </div>
-                        <p class="card-footer-muted">Budget reset in {{ pettyCash.resetDays }} days</p>
-                    </div>
-                </div>
+
+      <!-- WIDGET 4: PRODUCT -->
+      <div class="d-none d-md-block col-6 col-md-6 col-lg-3 col-xl-custom-5 col-xxxl-2">
+
+        <div class="card h-100">
+          <div class="card-header-row mb-sm">
+            <div class="product-icon-wrap">
+              <i class="fas fa-box product-icon"></i>
+            </div>
+            <span class="card-tag">Product</span>
+
+          </div>
+
+          <h3 class="card-value-md">{{ product.totalSKUs }}</h3>
+          <p class="card-sub mb-divider">{{ product.subtitle }}</p>
+
+          <div class="stat-divider"></div>
+
+          <div class="stat-rows">
+            @for (stat of product.stats ; track $index;){
+            <div class="stat-row">
+              <span class="stat-row__label">{{ stat.label }}</span>
+              <span class="stat-row__value">{{ stat.value }}</span>
+            </div>
+            }
+          </div>
+
+          <div class="product-alert-badge">
+            <i class="fas fa-triangle-exclamation product-alert-icon"></i>
+            {{ product.alertCount }} items low
+          </div>
+        </div>
+      </div>
+
+
+      <!-- WIDGET 5: STOCK ALERTS -->
+      <div class=" d-none d-md-none d-lg-none d-xl-block col-6 col-md-3 col-lg-3 col-xl-custom-5 col-xxxl-2">
+
+        <div class="card card--inner-bg h-100">
+          <div class="inner-bg-card">
+            <div class="card-header-row">
+              <div class="stock-icon-wrap">
+                <i class="fas fa-box-open stock-icon"></i>
+                <span class="stock-dot"></span>
+              </div>
+              <span class="card-tag">Low Stock Alerts</span>
             </div>
 
-
-            <!-- WIDGET 4: PRODUCT -->
-            <div class="d-none d-md-block col-6 col-md-6 col-lg-3 col-xl-custom-5 col-xxxl-2">
-
-                <div class="card h-100">
-                    <div class="card-header-row mb-sm">
-                        <div class="product-icon-wrap">
-                            <i class="fas fa-box product-icon"></i>
-                        </div>
-                        <span class="card-tag">Product</span>
-
-                    </div>
-
-                    <h3 class="card-value-md">{{ product.totalSKUs }}</h3>
-                    <p class="card-sub mb-divider">{{ product.subtitle }}</p>
-
-                    <div class="stat-divider"></div>
-
-                    <div class="stat-rows">
-                        @for (stat of product.stats ; track $index;){
-                        <div class="stat-row">
-                            <span class="stat-row__label">{{ stat.label }}</span>
-                            <span class="stat-row__value">{{ stat.value }}</span>
-                        </div>
-                        }
-                    </div>
-
-                    <div class="product-alert-badge">
-                        <i class="fas fa-triangle-exclamation product-alert-icon"></i>
-                        {{ product.alertCount }} items low
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- WIDGET 5: STOCK ALERTS -->
-            <div class=" d-none d-md-none d-lg-none d-xl-block col-6 col-md-3 col-lg-3 col-xl-custom-5 col-xxxl-2">
-
-                <div class="card card--inner-bg h-100">
-                    <div class="inner-bg-card">
-                        <div class="card-header-row">
-                            <div class="stock-icon-wrap">
-                                <i class="fas fa-box-open stock-icon"></i>
-                                <span class="stock-dot"></span>
-                            </div>
-                            <span class="card-tag">Low Stock Alerts</span>
-                        </div>
-
-                        <div class="stock-list">
-                            @for (item of stockAlerts ; track $index;){
-                            <div class="stock-item">
-                                <span class="stock-item__name">{{ item.name }}</span>
-                                <span class="stock-item__qty" [ngClass]="{
+            <div class="stock-list">
+              @for (item of stockAlerts ; track $index;){
+              <div class="stock-item">
+                <span class="stock-item__name">{{ item.name }}</span>
+                <span class="stock-item__qty" [ngClass]="{
                   'stock-item__qty--red':    item.level === 'critical',
                   'stock-item__qty--orange': item.level === 'warning'
                 }">
-                                    Qty: {{ item.qty }}
-                                </span>
-                            </div>
-                            }
-                        </div>
-
-                        <button class="btn--dashed w-full mt-md">Create PO</button>
-                    </div>
-                </div>
-            </div>
-            <!-- WIDGET 6: STORE MAINTAIN -->
-            <div
-                class=" d-none d-md-none d-lg-none d-xl-block  col-6 col-md-3 col-lg-3 col-xl-custom-5 col-xxxl-2 large">
-
-                <div class="card h-100">
-                    <div class="card-header-row mb-sm">
-                        <div class="store-maintain-icon-wrap">
-                            <i class="fas fa-store store-maintain-icon"></i>
-                        </div>
-                        <span class="card-tag">Store Maintain</span>
-
-                    </div>
-
-                    <h3 class="card-value-md">{{ 10 }}%</h3>
-                    <p class="card-sub mb-sm">{{ 15}}</p>
-
-                    <div class="progress-bar mb-lg">
-                        <div class="progress-bar__fill progress-bar__fill--blue" [style.width.%]="10"></div>
-                    </div>
-
-                    <div class="stat-rows">
-                        @for(stat of storeMaintain.stats;track $index){
-                        <div class="stat-row">
-                            <span class="stat-row__label">{{ stat.label }}</span>
-                            <span class="stat-row__value">{{ stat.value }}</span>
-                        </div>
-                        }
-
-                    </div>
-                </div>
+                  Qty: {{ item.qty }}
+                </span>
+              </div>
+              }
             </div>
 
+            <button class="btn--dashed w-full mt-md">Create PO</button>
+          </div>
+        </div>
+      </div>
+      <!-- WIDGET 6: STORE MAINTAIN -->
+      <div class=" d-none d-md-none d-lg-none d-xl-block  col-6 col-md-3 col-lg-3 col-xl-custom-5 col-xxxl-2 large">
+
+        <div class="card h-100">
+          <div class="card-header-row mb-sm">
+            <div class="store-maintain-icon-wrap">
+              <i class="fas fa-store store-maintain-icon"></i>
+            </div>
+            <span class="card-tag">Store Maintain</span>
+
+          </div>
+
+          <h3 class="card-value-md">{{ 10 }}%</h3>
+          <p class="card-sub mb-sm">{{ 15}}</p>
+
+          <div class="progress-bar mb-lg">
+            <div class="progress-bar__fill progress-bar__fill--blue" [style.width.%]="10"></div>
+          </div>
+
+          <div class="stat-rows">
+            @for(stat of storeMaintain.stats;track $index){
+            <div class="stat-row">
+              <span class="stat-row__label">{{ stat.label }}</span>
+              <span class="stat-row__value">{{ stat.value }}</span>
+            </div>
+            }
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+
+    <!-- ROW 2 — FINANCIAL (3 Columns) -->
+    <div class="row g-3 row-top">
+
+      <!-- TOP SALES SUMMARY -->
+      <div class="col-12 col-xl-4 summary-height">
+
+        <div class="card top-sales-widget h-100">
+
+          <!-- HEADER -->
+          <div class="top-sales-header">
+
+            <div>
+
+              <span class="top-sales-tag">
+                TOP SALES
+              </span>
+
+              <h4 class="top-sales-title">
+                Sales Summary
+              </h4>
+
+            </div>
+
+            <div class="top-sales-icon">
+
+              <i class="ti ti-trending-up"></i>
+
+            </div>
+
+          </div>
+
+          <!-- TOTAL -->
+          <div class="top-sales-total">
+
+            ₹ {{ salesSummary.total | number }}
+
+          </div>
+
+          <div class="top-sales-sub">
+
+            Total sales this month
+
+          </div>
+
+          <!-- PROGRESS -->
+          <div class="sales-progress-wrap">
+
+            @for(item of salesSummary.categories; track $index){
+
+            <div class="sales-progress-item">
+
+              <div class="sales-progress-top">
+
+                <span>
+                  {{ item.label }}
+                </span>
+
+                <strong>
+                  {{ item.percent }}%
+                </strong>
+
+              </div>
+
+              <div class="sales-progress-bar">
+
+                <div class="sales-progress-fill" [style.width.%]="item.percent" [style.background]="item.color">
+
+                </div>
+
+              </div>
+
+            </div>
+
+            }
+
+          </div>
+
+          <!-- FOOTER -->
+          <div class="top-sales-stats">
+
+            <div class="sales-stat-card">
+
+              <span class="sales-stat-value">
+                {{ salesSummary.orders }}
+              </span>
+
+              <span class="sales-stat-label">
+                Orders
+              </span>
+
+            </div>
+
+            <div class="sales-stat-card">
+
+              <span class="sales-stat-value">
+                {{ salesSummary.customers }}
+              </span>
+
+              <span class="sales-stat-label">
+                Customers
+              </span>
+
+            </div>
+
+            <div class="sales-stat-card">
+
+              <span class="sales-stat-value">
+                {{ salesSummary.growth }}
+              </span>
+
+              <span class="sales-stat-label">
+                Growth
+              </span>
+
+            </div>
+
+          </div>
 
         </div>
 
+      </div>
 
+      <!-- LEDGER ENTRIES -->
+      <div class="d-none d-md-block col-12 col-xl-8">
 
-        <!-- ROW 2 — FINANCIAL (3 Columns) -->
-        <div class="row g-3 row-top">
+        <div class="card dashboard-widget h-100 ledger-entry-height">
 
-            <!-- TOP SALES SUMMARY -->
-            <div class="col-12 col-xl-4 summary-height">
+          <!-- HEADER -->
+          <div class="widget-header">
 
-                <div class="card top-sales-widget h-100">
+            <div class="header-left">
 
-                    <!-- HEADER -->
-                    <div class="top-sales-header">
+              <i class="ti ti-report-money widget-icon"></i>
 
-                        <div>
-
-                            <span class="top-sales-tag">
-                                TOP SALES
-                            </span>
-
-                            <h4 class="top-sales-title">
-                                Sales Summary
-                            </h4>
-
-                        </div>
-
-                        <div class="top-sales-icon">
-
-                            <i class="ti ti-trending-up"></i>
-
-                        </div>
-
-                    </div>
-
-                    <!-- TOTAL -->
-                    <div class="top-sales-total">
-
-                        ₹ {{ salesSummary.total | number }}
-
-                    </div>
-
-                    <div class="top-sales-sub">
-
-                        Total sales this month
-
-                    </div>
-
-                    <!-- PROGRESS -->
-                    <div class="sales-progress-wrap">
-
-                        @for(item of salesSummary.categories; track $index){
-
-                        <div class="sales-progress-item">
-
-                            <div class="sales-progress-top">
-
-                                <span>
-                                    {{ item.label }}
-                                </span>
-
-                                <strong>
-                                    {{ item.percent }}%
-                                </strong>
-
-                            </div>
-
-                            <div class="sales-progress-bar">
-
-                                <div class="sales-progress-fill" [style.width.%]="item.percent"
-                                    [style.background]="item.color">
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        }
-
-                    </div>
-
-                    <!-- FOOTER -->
-                    <div class="top-sales-stats">
-
-                        <div class="sales-stat-card">
-
-                            <span class="sales-stat-value">
-                                {{ salesSummary.orders }}
-                            </span>
-
-                            <span class="sales-stat-label">
-                                Orders
-                            </span>
-
-                        </div>
-
-                        <div class="sales-stat-card">
-
-                            <span class="sales-stat-value">
-                                {{ salesSummary.customers }}
-                            </span>
-
-                            <span class="sales-stat-label">
-                                Customers
-                            </span>
-
-                        </div>
-
-                        <div class="sales-stat-card">
-
-                            <span class="sales-stat-value">
-                                {{ salesSummary.growth }}
-                            </span>
-
-                            <span class="sales-stat-label">
-                                Growth
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </div>
+              <span style="color: black;">
+                Recent Ledger Entries
+              </span>
 
             </div>
 
-            <!-- LEDGER ENTRIES -->
-            <div class="d-none d-md-block col-12 col-xl-8">
 
-                <div class="card dashboard-widget h-100 ledger-entry-height">
+            <button class="widget-menu-btn">
 
-                    <!-- HEADER -->
-                    <div class="widget-header">
+              <i class="ti ti-dots-vertical"></i>
 
-                        <div class="header-left">
+            </button>
 
-                            <i class="ti ti-report-money widget-icon"></i>
+          </div>
 
-                            <span style="color: black;">
-                                Recent Ledger Entries
-                            </span>
+          <!-- TABLE -->
+          <div class="widget-table">
 
-                        </div>
+            <!-- TABLE HEADER -->
+            <div class="table-head ledger-grid">
 
+              <div>Account</div>
+              <div>Date</div>
+              <div>Debit</div>
+              <div>Credit</div>
+              <div>Source</div>
 
-                        <button class="widget-menu-btn">
+            </div>
 
-                            <i class="ti ti-dots-vertical"></i>
+            <!-- ROWS -->
+            @for(l of recentEntries(); track $index){
 
-                        </button>
+            <div class="table-row ledger-grid">
 
-                    </div>
+              <!-- ACCOUNT -->
+              <div class="employee-cell">
 
-                    <!-- TABLE -->
-                    <div class="widget-table">
+                <div class="avatar-sm green">
 
-                        <!-- TABLE HEADER -->
-                        <div class="table-head ledger-grid">
-
-                            <div>Account</div>
-                            <div>Date</div>
-                            <div>Debit</div>
-                            <div>Credit</div>
-                            <div>Source</div>
-
-                        </div>
-
-                        <!-- ROWS -->
-                        @for(l of recentEntries(); track $index){
-
-                        <div class="table-row ledger-grid">
-
-                            <!-- ACCOUNT -->
-                            <div class="employee-cell">
-
-                                <div class="avatar-sm green">
-
-                                    {{ l.accountName?.[0] }}
-
-                                </div>
-
-                                <div>
-
-                                    <div class="emp-name">
-
-                                        {{ l.accountName }}
-
-                                    </div>
-
-                                    <small class="text-muted">
-
-                                        {{ l.accountCode }}
-
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                            <!-- DATE -->
-                            <div style="color: black;">
-
-                                {{ l.postingDate | date:'dd/MM/yyyy' }}
-
-                            </div>
-
-                            <!-- DEBIT -->
-                            <div class="text-success fw-semibold text-end">
-
-                                @if(l.debitAmount > 0){
-
-                                ₹ {{ l.debitAmount | number:'1.2-2' }}
-
-                                } @else {
-
-                                -
-
-                                }
-
-                            </div>
-
-                            <!-- CREDIT -->
-                            <div class="text-danger fw-semibold text-end">
-
-                                @if(l.creditAmount > 0){
-
-                                ₹ {{ l.creditAmount | number:'1.2-2' }}
-
-                                } @else {
-
-                                -
-
-                                }
-
-                            </div>
-
-                            <!-- SOURCE -->
-                            <div class="d-flex justify-content-center">
-
-                                @if(l.sourceType === 'JournalEntry'){
-
-                                <div class="source-pill green">
-
-                                    <i class="ti ti-book"></i>
-
-                                    <span>Journal</span>
-
-                                </div>
-
-                                }
-
-                                @if(l.sourceType === 'PettyCash'){
-
-                                <div class="source-pill blue">
-
-                                    <i class="ti ti-wallet"></i>
-
-                                    <span>Petty</span>
-
-                                </div>
-
-                                }
-
-                                @if(!l.sourceType){
-
-                                <div class="source-pill gray">
-
-                                    <i class="ti ti-help"></i>
-
-                                    <span>Unknown</span>
-
-                                </div>
-
-                                }
-
-                            </div>
-
-                        </div>
-
-                        }
-
-                    </div>
+                  {{ l.accountName?.[0] }}
 
                 </div>
 
+                <div>
+
+                  <div class="emp-name">
+
+                    {{ l.accountName }}
+
+                  </div>
+
+                  <small class="text-muted">
+
+                    {{ l.accountCode }}
+
+                  </small>
+
+                </div>
+
+              </div>
+
+              <!-- DATE -->
+              <div style="color: black;">
+
+                {{ l.postingDate | date:'dd/MM/yyyy' }}
+
+              </div>
+
+              <!-- DEBIT -->
+              <div class="text-success fw-semibold text-end">
+
+                @if(l.debitAmount > 0){
+
+                ₹ {{ l.debitAmount | number:'1.2-2' }}
+
+                } @else {
+
+                -
+
+                }
+
+              </div>
+
+              <!-- CREDIT -->
+              <div class="text-danger fw-semibold text-end">
+
+                @if(l.creditAmount > 0){
+
+                ₹ {{ l.creditAmount | number:'1.2-2' }}
+
+                } @else {
+
+                -
+
+                }
+
+              </div>
+
+              <!-- SOURCE -->
+              <div class="d-flex justify-content-center">
+
+                @if(l.sourceType === 'JournalEntry'){
+
+                <div class="source-pill green">
+
+                  <i class="ti ti-book"></i>
+
+                  <span>Journal</span>
+
+                </div>
+
+                }
+
+                @if(l.sourceType === 'PettyCash'){
+
+                <div class="source-pill blue">
+
+                  <i class="ti ti-wallet"></i>
+
+                  <span>Petty</span>
+
+                </div>
+
+                }
+
+                @if(!l.sourceType){
+
+                <div class="source-pill gray">
+
+                  <i class="ti ti-help"></i>
+
+                  <span>Unknown</span>
+
+                </div>
+
+                }
+
+              </div>
+
             </div>
+
+            }
+
+          </div>
 
         </div>
-        <!-- /ROW 2 -->
 
-        <!-- ROW 3-->
-        <!-- ===================================================== -->
-        <!-- STORE + HR + TIMELINE -->
-        <!-- ===================================================== -->
+      </div>
 
-        <div class="row g-3 align-items-stretch">
+    </div>
+    <!-- /ROW 2 -->
 
-            <!-- LEFT SIDE -->
-            <div class="col-12 col-xl-5">
+    <!-- ROW 3-->
+    <!-- ===================================================== -->
+    <!-- STORE + HR + TIMELINE -->
+    <!-- ===================================================== -->
 
-                <div class="d-flex flex-column gap-3 h-100">
+    <div class="row g-3 align-items-stretch">
 
-                    <!-- TOP MINI CARDS -->
-                    <div class="row g-3">
+      <!-- LEFT SIDE -->
+      <div class="col-12 col-xl-5">
 
-                        <!-- STORE -->
-                        <div class="col-12 col-sm-6">
+        <div class="d-flex flex-column gap-3 h-100">
 
-                            <div class="card h-100">
+          <!-- TOP MINI CARDS -->
+          <div class="row g-3">
 
-                                <div class="card-header-row mb-sm">
+            <!-- STORE -->
+            <div class="col-12 col-sm-6">
 
-                                    <div class="store-maintain-icon-wrap">
+              <div class="card h-100">
 
-                                        <i class="fas fa-store store-maintain-icon"></i>
+                <div class="card-header-row mb-sm">
 
-                                    </div>
+                  <div class="store-maintain-icon-wrap">
 
-                                    <span class="card-tag">
-                                        Store Maintain
-                                    </span>
+                    <i class="fas fa-store store-maintain-icon"></i>
 
-                                </div>
+                  </div>
 
-                                <h3 class="card-value-md">
-
-                                    {{ storeMaintain.capacityPct }}%
-
-                                </h3>
-
-                                <p class="card-sub mb-sm">
-
-                                    {{ storeMaintain.subtitle }}
-
-                                </p>
-
-                                <div class="progress-bar mb-lg">
-
-                                    <div class="progress-bar__fill progress-bar__fill--blue"
-                                        [style.width.%]="storeMaintain.capacityPct">
-
-                                    </div>
-
-                                </div>
-
-                                <div class="stat-rows">
-
-                                    @for(stat of storeMaintain.stats; track $index){
-
-                                    <div class="stat-row">
-
-                                        <span class="stat-row__label">
-
-                                            {{ stat.label }}
-
-                                        </span>
-
-                                        <span class="stat-row__value">
-
-                                            {{ stat.value }}
-
-                                        </span>
-
-                                    </div>
-
-                                    }
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <!-- REVENUE -->
-                        <div class="col-12 col-sm-6">
-
-                            <div class="card h-100">
-
-                                <div class="card-header-row">
-
-                                    <div class="icon-badge icon-badge--emerald">
-
-                                        <i class="fas fa-chart-line"></i>
-
-                                    </div>
-
-                                    <span class="card-tag">
-                                        Revenue
-                                    </span>
-
-                                </div>
-
-                                <p class="card-sub">
-                                    Today's Sales
-                                </p>
-
-                                <h3 class="card-value-md">
-
-                                    {{ todaySales.amount }}
-
-                                </h3>
-
-                                <div class="bar-chart bar-chart--emerald mb-sm">
-
-                                    @for(bar of todaySales.bars; track $index){
-
-                                    <div class="bar" [class]="bar.colorClass" [style.height.%]="bar.heightPct">
-
-                                    </div>
-
-                                    }
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <!-- HR OVERVIEW -->
-                    <div class="dashboard-widget hr-mini-widget">
-
-                        <!-- HEADER -->
-                        <div class="widget-header mini-header">
-
-                            <div class="widget-title-wrap">
-
-                                <i class="ti ti-users widget-icon"></i>
-
-                                <h5 class="widget-title">
-                                    HR Overview
-                                </h5>
-
-                            </div>
-
-                        </div>
-
-                        <!-- BODY -->
-                        <div class="mini-stats-grid">
-
-                            <!-- LEAVES -->
-                            <div class="mini-stat-card orange">
-
-                                <div class="mini-icon">
-
-                                    <i class="ti ti-calendar-off"></i>
-
-                                </div>
-
-                                <div>
-
-                                    <div class="mini-value">
-
-                                        {{ 2 }}
-
-                                    </div>
-
-                                    <div class="mini-label">
-
-                                        Leaves
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            <!-- PERMISSIONS -->
-                            <div class="mini-stat-card purple">
-
-                                <div class="mini-icon">
-
-                                    <i class="ti ti-clock-hour-4"></i>
-
-                                </div>
-
-                                <div>
-
-                                    <div class="mini-value">
-
-                                        {{ 1 }}
-
-                                    </div>
-
-                                    <div class="mini-label">
-
-                                        Permissions
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
+                  <span class="card-tag">
+                    Store Maintain
+                  </span>
 
                 </div>
 
+                <h3 class="card-value-md">
+
+                  {{ storeMaintain.capacityPct }}%
+
+                </h3>
+
+                <p class="card-sub mb-sm">
+
+                  {{ storeMaintain.subtitle }}
+
+                </p>
+
+                <div class="progress-bar mb-lg">
+
+                  <div class="progress-bar__fill progress-bar__fill--blue" [style.width.%]="storeMaintain.capacityPct">
+
+                  </div>
+
+                </div>
+
+                <div class="stat-rows">
+
+                  @for(stat of storeMaintain.stats; track $index){
+
+                  <div class="stat-row">
+
+                    <span class="stat-row__label">
+
+                      {{ stat.label }}
+
+                    </span>
+
+                    <span class="stat-row__value">
+
+                      {{ stat.value }}
+
+                    </span>
+
+                  </div>
+
+                  }
+
+                </div>
+
+              </div>
+
             </div>
 
-            <!-- TIMELINE -->
-            <div class="col-12 col-xl-7">
+            <!-- REVENUE -->
+            <div class="col-12 col-sm-6">
 
-                <div class="dashboard-widget h-100">
+              <div class="card h-100">
 
-                    <div class="timeline-card h-100">
+                <div class="card-header-row">
 
-                        <!-- HEADER -->
-                        <div class="timeline-header">
+                  <div class="icon-badge icon-badge--emerald">
 
-                            <div class="header-left">
+                    <i class="fas fa-chart-line"></i>
 
-                                <i class="ti ti-layout-list"></i>
+                  </div>
 
-                                <span>
-                                    Activity Timeline
-                                </span>
+                  <span class="card-tag">
+                    Revenue
+                  </span>
 
-                            </div>
+                </div>
 
-                            <button class="more-btn">
+                <p class="card-sub">
+                  Today's Sales
+                </p>
 
-                                <i class="ti ti-dots-vertical"></i>
+                <h3 class="card-value-md">
 
-                            </button>
+                  {{ todaySales.amount }}
 
-                        </div>
+                </h3>
 
-                        <!-- LIST -->
-                        <div class="timeline-list">
+                <div class="bar-chart bar-chart--emerald mb-sm">
 
-                            @for(item of recentActivities(); track $index; let last = $last){
+                  @for(bar of todaySales.bars; track $index){
 
-                            <div class="timeline-item">
+                  <div class="bar" [class]="bar.colorClass" [style.height.%]="bar.heightPct">
 
-                                <!-- LEFT -->
-                                <div class="connector">
+                  </div>
 
-                                    <div class="dot" [style.background]="item.type === 'Leave'
+                  }
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- HR OVERVIEW -->
+          <div class="dashboard-widget hr-mini-widget">
+
+            <!-- HEADER -->
+            <div class="widget-header mini-header">
+
+              <div class="widget-title-wrap">
+
+                <i class="ti ti-users widget-icon"></i>
+
+                <h5 class="widget-title">
+                  HR Overview
+                </h5>
+
+              </div>
+
+            </div>
+
+            <!-- BODY -->
+            <div class="mini-stats-grid">
+
+              <!-- LEAVES -->
+              <div class="mini-stat-card orange">
+
+                <div class="mini-icon">
+
+                  <i class="ti ti-calendar-off"></i>
+
+                </div>
+
+                <div>
+
+                  <div class="mini-value">
+
+                    {{ 2 }}
+
+                  </div>
+
+                  <div class="mini-label">
+
+                    Leaves
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              <!-- PERMISSIONS -->
+              <div class="mini-stat-card purple">
+
+                <div class="mini-icon">
+
+                  <i class="ti ti-clock-hour-4"></i>
+
+                </div>
+
+                <div>
+
+                  <div class="mini-value">
+
+                    {{ 1 }}
+
+                  </div>
+
+                  <div class="mini-label">
+
+                    Permissions
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- TIMELINE -->
+      <div class="col-12 col-xl-7">
+
+        <div class="dashboard-widget h-100">
+
+          <div class="timeline-card h-100">
+
+            <!-- HEADER -->
+            <div class="timeline-header">
+
+              <div class="header-left">
+
+                <i class="ti ti-layout-list"></i>
+
+                <span>
+                  Activity Timeline
+                </span>
+
+              </div>
+
+              <button class="more-btn">
+
+                <i class="ti ti-dots-vertical"></i>
+
+              </button>
+
+            </div>
+
+            <!-- LIST -->
+            <div class="timeline-list">
+
+              @for(item of recentActivities(); track $index; let last = $last){
+
+              <div class="timeline-item">
+
+                <!-- LEFT -->
+                <div class="connector">
+
+                  <div class="dot" [style.background]="item.type === 'Leave'
                                    ? '#7c3aed'
                                    : '#2563eb'">
 
-                                    </div>
+                  </div>
 
-                                    @if(!last){
+                  @if(!last){
 
-                                    <div class="line"></div>
+                  <div class="line"></div>
 
-                                    }
-
-                                </div>
-
-                                <!-- CONTENT -->
-                                <div class="content">
-
-                                    <!-- TOP -->
-                                    <div class="item-header">
-
-                                        <div class="d-flex align-items-center gap-2">
-
-                                            <span class="title">
-
-                                                {{ item.employeeName }}
-
-                                            </span>
-
-                                            <span class="mini-badge" [class.leave-badge]="item.type === 'Leave'"
-                                                [class.permission-badge]="item.type === 'Permission'">
-
-                                                {{ item.type }}
-
-                                            </span>
-
-                                        </div>
-
-                                        <span class="time">
-
-                                            {{ item.date }}
-
-                                        </span>
-
-                                    </div>
-
-                                    <!-- DESCRIPTION -->
-                                    <div class="d-flex justify-content-between">
-                                        <p class="description">
-
-                                            {{ item.title }}
-
-                                        </p>
-
-                                        <!-- STATUS -->
-                                        <div class="d-flex align-items-center gap-2">
-
-                                            <span class="status-badge" [class.present]="item.status === 'Approved'"
-                                                [class.warning]="item.status === 'Pending'"
-                                                [class.absent]="item.status === 'Rejected'">
-
-                                                {{ item.status }}
-
-                                            </span>
-
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-                            </div>
-
-                            }
-
-                        </div>
-
-                    </div>
+                  }
 
                 </div>
 
+                <!-- CONTENT -->
+                <div class="content">
+
+                  <!-- TOP -->
+                  <div class="item-header">
+
+                    <div class="d-flex align-items-center gap-2">
+
+                      <span class="title">
+
+                        {{ item.employeeName }}
+
+                      </span>
+
+                      <span class="mini-badge" [class.leave-badge]="item.type === 'Leave'"
+                        [class.permission-badge]="item.type === 'Permission'">
+
+                        {{ item.type }}
+
+                      </span>
+
+                    </div>
+
+                    <span class="time">
+
+                      {{ item.date }}
+
+                    </span>
+
+                  </div>
+
+                  <!-- DESCRIPTION -->
+                  <div class="d-flex justify-content-between">
+                    <p class="description">
+
+                      {{ item.title }}
+
+                    </p>
+
+                    <!-- STATUS -->
+                    <div class="d-flex align-items-center gap-2">
+
+                      <span class="status-badge" [class.present]="item.status === 'Approved'"
+                        [class.warning]="item.status === 'Pending'" [class.absent]="item.status === 'Rejected'">
+
+                        {{ item.status }}
+
+                      </span>
+
+                    </div>
+                  </div>
+
+
+                </div>
+
+              </div>
+
+              }
+
             </div>
+
+          </div>
 
         </div>
-        <!-- /ROW 3-->
 
-
-
-
-
-        <div class="row g-4 mt-2">
-
-
-            <!-- RECENT LEAVES -->
-
-            <div class="d-none d-md-block col-md-12 col-lg-5">
-
-                <div class="dashboard-widget">
-
-                    <!-- HEADER -->
-                    <div class="widget-header">
-
-                        <div class="header-left">
-
-                            <i class="ti ti-calendar-event widget-icon"></i>
-
-                            <span>
-                                Recent Leave & Permission
-                            </span>
-
-                        </div>
-
-
-                        <button class="widget-menu-btn">
-
-                            <i class="ti ti-dots-vertical"></i>
-
-                        </button>
-
-                    </div>
-
-                    <!-- LIST -->
-                    <div class="leave-list">
-
-                        @for(item of recentLeaveandPerm(); track $index){
-
-                        <div class="leave-card">
-
-                            <!-- LEFT -->
-                            <div class="leave-left">
-
-                                <!-- AVATAR -->
-                                <div class="avatar-sm" [class.purple]="item.type === 'Leave'"
-                                    [class.blue]="item.type === 'Permission'">
-
-                                    {{ item.employeeName?.[0] }}
-
-                                </div>
-
-                                <!-- CONTENT -->
-                                <div>
-
-                                    <div class="fw-semibold d-flex align-items-center gap-2">
-
-                                        {{ item.employeeName }}
-
-                                        <!-- TYPE BADGE -->
-                                        <span class="mini-badge" [class.leave-badge]="item.type === 'Leave'"
-                                            [class.permission-badge]="item.type === 'Permission'">
-
-                                            {{ item.type }}
-
-                                        </span>
-
-                                    </div>
-
-                                    <!-- SUB -->
-                                    <small class="text-muted">
-
-                                        {{ item.title }}
-
-                                        •
-
-                                        {{ item.date }}
-
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                            <!-- STATUS -->
-                            <span class="status-badge" [class.present]="item.status === 'Approved'"
-                                [class.warning]="item.status === 'Pending'" [class.absent]="item.status === 'Rejected'">
-
-                                {{ item.status }}
-
-                            </span>
-
-                        </div>
-
-                        }
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="dashboard-widget d-none d-md-block col-md-12bj col-lg-7">
-
-                <!-- HEADER -->
-                <div class="widget-header">
-
-                    <div class="header-left">
-
-                        <i class="ti ti-file-invoice widget-icon"></i>
-
-                        <span>
-                            Recent Invoices
-                        </span>
-
-                    </div>
-
-
-                    <button class="widget-menu-btn">
-                        <i class="ti ti-dots-vertical"></i>
-                    </button>
-
-                </div>
-
-                <!-- TABLE -->
-                <div class="widget-table">
-
-                    <!-- HEADER -->
-                    <div class="table-head invoice-grid">
-
-                        <div>Invoice</div>
-                        <div>Customer</div>
-                        <div>Status</div>
-                        <div class="text-end">Amount</div>
-
-                    </div>
-
-                    <!-- ROWS -->
-                    @for(invoice of recentInvoices(); track invoice.invoiceNo){
-
-                    <div class="table-row invoice-grid">
-
-                        <!-- INVOICE -->
-                        <div>
-
-                            <div class="fw-semibold">
-                                {{ invoice.invoiceNo }}
-                            </div>
-
-                            <small class="text-muted">
-                                {{ invoice.date }}
-                            </small>
-
-                        </div>
-
-                        <!-- CUSTOMER -->
-                        <div class="employee-cell">
-
-                            <div class="avatar-sm blue">
-
-                                {{ invoice.customer[0] }}
-
-                            </div>
-
-                            <div>
-
-                                <div class="emp-name">
-
-                                    {{ invoice.customer }}
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <!-- STATUS -->
-                        <div>
-
-                            <span class="status-badge" [class.present]="invoice.status === 'Paid'"
-                                [class.warning]="invoice.status === 'Pending'"
-                                [class.absent]="invoice.status === 'Overdue'">
-
-                                {{ invoice.status }}
-
-                            </span>
-
-                        </div>
-
-                        <!-- AMOUNT -->
-                        <div class="fw-bold text-end">
-
-                            ₹ {{ invoice.amount | number }}
-
-                        </div>
-
-                    </div>
-
-                    }
-
-                </div>
-
-            </div>
-        </div>
+      </div>
 
     </div>
+    <!-- /ROW 3-->
+
+
+
+
+
+    <div class="row g-4 mt-2">
+
+
+      <!-- RECENT LEAVES -->
+
+      <div class="d-none d-md-block col-md-12 col-lg-5">
+
+        <div class="dashboard-widget">
+
+          <!-- HEADER -->
+          <div class="widget-header">
+
+            <div class="header-left">
+
+              <i class="ti ti-calendar-event widget-icon"></i>
+
+              <span>
+                Recent Leave & Permission
+              </span>
+
+            </div>
+
+
+            <button class="widget-menu-btn">
+
+              <i class="ti ti-dots-vertical"></i>
+
+            </button>
+
+          </div>
+
+          <!-- LIST -->
+          <div class="leave-list">
+
+            @for(item of recentLeaveandPerm(); track $index){
+
+            <div class="leave-card">
+
+              <!-- LEFT -->
+              <div class="leave-left">
+
+                <!-- AVATAR -->
+                <div class="avatar-sm" [class.purple]="item.type === 'Leave'" [class.blue]="item.type === 'Permission'">
+
+                  {{ item.employeeName?.[0] }}
+
+                </div>
+
+                <!-- CONTENT -->
+                <div>
+
+                  <div class="fw-semibold d-flex align-items-center gap-2">
+
+                    {{ item.employeeName }}
+
+                    <!-- TYPE BADGE -->
+                    <span class="mini-badge" [class.leave-badge]="item.type === 'Leave'"
+                      [class.permission-badge]="item.type === 'Permission'">
+
+                      {{ item.type }}
+
+                    </span>
+
+                  </div>
+
+                  <!-- SUB -->
+                  <small class="text-muted">
+
+                    {{ item.title }}
+
+                    •
+
+                    {{ item.date }}
+
+                  </small>
+
+                </div>
+
+              </div>
+
+              <!-- STATUS -->
+              <span class="status-badge" [class.present]="item.status === 'Approved'"
+                [class.warning]="item.status === 'Pending'" [class.absent]="item.status === 'Rejected'">
+
+                {{ item.status }}
+
+              </span>
+
+            </div>
+
+            }
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="dashboard-widget d-none d-md-block col-md-12bj col-lg-7">
+
+        <!-- HEADER -->
+        <div class="widget-header">
+
+          <div class="header-left">
+
+            <i class="ti ti-file-invoice widget-icon"></i>
+
+            <span>
+              Recent Invoices
+            </span>
+
+          </div>
+
+
+          <button class="widget-menu-btn">
+            <i class="ti ti-dots-vertical"></i>
+          </button>
+
+        </div>
+
+        <!-- TABLE -->
+        <div class="widget-table">
+
+          <!-- HEADER -->
+          <div class="table-head invoice-grid">
+
+            <div>Invoice</div>
+            <div>Customer</div>
+            <div>Status</div>
+            <div class="text-end">Amount</div>
+
+          </div>
+
+          <!-- ROWS -->
+          @for(invoice of recentInvoices(); track invoice.invoiceNo){
+
+          <div class="table-row invoice-grid">
+
+            <!-- INVOICE -->
+            <div>
+
+              <div class="fw-semibold">
+                {{ invoice.invoiceNo }}
+              </div>
+
+              <small class="text-muted">
+                {{ invoice.date }}
+              </small>
+
+            </div>
+
+            <!-- CUSTOMER -->
+            <div class="employee-cell">
+
+              <div class="avatar-sm blue">
+
+                {{ invoice.customer[0] }}
+
+              </div>
+
+              <div>
+
+                <div class="emp-name">
+
+                  {{ invoice.customer }}
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- STATUS -->
+            <div>
+
+              <span class="status-badge" [class.present]="invoice.status === 'Paid'"
+                [class.warning]="invoice.status === 'Pending'" [class.absent]="invoice.status === 'Overdue'">
+
+                {{ invoice.status }}
+
+              </span>
+
+            </div>
+
+            <!-- AMOUNT -->
+            <div class="fw-bold text-end">
+
+              ₹ {{ invoice.amount | number }}
+
+            </div>
+
+          </div>
+
+          }
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
 </div>

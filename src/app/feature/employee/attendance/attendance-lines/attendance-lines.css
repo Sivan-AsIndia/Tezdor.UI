@@ -2131,3 +2131,346 @@ input {
     grid-template-columns: 1fr;
   }
 }
+
+/* =====================================================
+   BACKDROP
+===================================================== */
+
+.erp-modal-backdrop {
+
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(15, 23, 42, .35);
+
+  backdrop-filter: blur(3px);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  z-index: 9999;
+
+  padding: 20px;
+}
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.compact-modal {
+
+  width: 100%;
+
+  max-width: 420px;
+
+  border-radius: 22px;
+
+  background: white;
+
+  overflow: hidden;
+
+  border: 1px solid #e5e7eb;
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.12);
+
+  animation: modalFade .18s ease;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.permission-modal-header {
+
+  height: 78px;
+
+  padding: 0 18px;
+
+  border-bottom: 1px solid #eef2f7;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+}
+
+.permission-header-left {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+/* ICON */
+.permission-icon {
+
+  width: 46px;
+
+  height: 46px;
+
+  border-radius: 14px;
+
+  background: #fff7ed;
+
+  color: #d97706;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 22px;
+}
+
+/* TITLE */
+.permission-modal-title {
+
+  font-size: 16px;
+
+  font-weight: 700;
+
+  color: #111827;
+
+  line-height: 1.1;
+}
+
+.permission-modal-subtitle {
+
+  font-size: 12px;
+
+  color: #94a3b8;
+
+  margin-top: 2px;
+}
+
+/* CLOSE */
+.permission-close-btn {
+
+  width: 36px;
+
+  height: 36px;
+
+  border-radius: 10px;
+
+  border: none;
+
+  background: #f8fafc;
+
+  color: #64748b;
+
+  transition: .15s ease;
+}
+
+.permission-close-btn:hover {
+
+  background: #eef2f7;
+}
+
+/* =====================================================
+   BODY
+===================================================== */
+
+.permission-modal-body {
+
+  padding: 18px;
+}
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.permission-status-row {
+
+  margin-bottom: 18px;
+}
+
+.permission-status-pill {
+
+  height: 28px;
+
+  padding: 0 12px;
+
+  border-radius: 999px;
+
+  background: #dcfce7;
+
+  color: #15803d;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  display: inline-flex;
+
+  align-items: center;
+}
+
+/* =====================================================
+   GRID
+===================================================== */
+
+.permission-grid {
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 14px;
+}
+
+.permission-info-item {
+
+  min-height: 60px;
+
+  padding: 12px 14px;
+
+  border-radius: 14px;
+
+  background: #f8fafc;
+
+  border: 1px solid #eef2f7;
+}
+
+.permission-info-item label {
+
+  display: block;
+
+  margin-bottom: 6px;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: .08em;
+
+  color: #94a3b8;
+}
+
+.permission-info-item div {
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.full-width {
+
+  grid-column: 1 / -1;
+}
+
+/* HOURS */
+.hours-highlight {
+
+  color: #d97706 !important;
+}
+
+/* =====================================================
+   REASON
+===================================================== */
+
+.permission-reason-box {
+
+  margin-top: 16px;
+
+  padding: 14px;
+
+  border-radius: 16px;
+
+  background: #fffaf5;
+
+  border: 1px solid #fde7c7;
+}
+
+.reason-title {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  color: #c2410c;
+
+  margin-bottom: 8px;
+}
+
+.reason-text {
+
+  font-size: 13px;
+
+  line-height: 1.6;
+
+  color: #475569;
+}
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.permission-modal-footer {
+
+  padding: 16px 18px;
+
+  border-top: 1px solid #eef2f7;
+
+  display: flex;
+
+  justify-content: flex-end;
+}
+
+.permission-close-action {
+
+  height: 40px;
+
+  padding: 0 18px;
+
+  border-radius: 12px;
+
+  border: none;
+
+  background: #111827;
+
+  color: white;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+@keyframes modalFade {
+
+  from {
+
+    opacity: 0;
+
+    transform: translateY(10px) scale(.98);
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform: translateY(0) scale(1);
+  }
+}

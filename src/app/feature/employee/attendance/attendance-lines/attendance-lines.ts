@@ -70,7 +70,6 @@ export class AttendanceLinesComponent {
   // use service signal
   employees = this.empService.employees;
   permissions = this.permissionService.permissions;
-  hoveredPermission = signal<Permission | null>(null);
   showModal = signal(false);
   popoverX = signal(0);
   popoverY = signal(0);
@@ -90,21 +89,10 @@ export class AttendanceLinesComponent {
     showLeaveDetailsPopup =
   signal(false);
 
+  showPermissionDetailsPopup =
+  signal(false);
 
-  showPermissionPopover(
-    event: MouseEvent,
-    permission: Permission
-  ) {
 
-    this.popoverX.set(event.clientX);
-    this.popoverY.set(event.clientY);
-
-    this.hoveredPermission.set(permission);
-  }
-
-  hidePermissionPopover() {
-    this.hoveredPermission.set(null);
-  }
 
 
   form = signal({
@@ -1069,6 +1057,25 @@ export class AttendanceLinesComponent {
       return;
     }
 
+      const alreadyExists =
+    this.permissionService
+      .permissions()
+      .some(p =>
+
+        p.employeeId === f.employeeId &&
+        p.permissionDate === f.permissionDate &&
+        p.status !== PermissionStatus.Cancelled
+      );
+
+  if (alreadyExists) {
+
+    this.toast.error(
+      'Only one permission is allowed per day'
+    );
+
+    return;
+  }
+
     const permission: Permission = {
 
       permissionId:
@@ -1376,6 +1383,36 @@ export class AttendanceLinesComponent {
       return;
     }
 
+const hasAttendance =
+  this.service.hasAttendance(
+
+    f.employeeId,
+
+    f.fromDate,
+
+    f.toDate,
+
+    this.selectedLeave()?.leaveId
+  );
+
+if (hasAttendance) {      
+  this.leaveErrors.update(e => ({
+        ...e,
+
+        fromDate:
+          'Attendance already exists for selected dates',
+
+        toDate:
+          'Attendance already exists for selected dates'
+      }));
+
+  this.toast.error(
+    'Attendance already exists for selected dates'
+  );
+
+  return;
+}
+
     const alreadyExists =
       this.leaveService.exists(
 
@@ -1614,6 +1651,26 @@ closeLeavePopup() {
   this.showLeaveDetailsPopup.set(false);
 
   this.selectedLeave.set(null);
+}
+
+openPermissionPopup(
+  permission?: Permission
+) {
+
+  if (!permission) {
+    return;
+  }
+
+  this.selectedPermission.set(permission);
+
+  this.showPermissionDetailsPopup.set(true);
+}
+
+closePermissionPopup() {
+
+  this.selectedPermission.set(null);
+
+  this.showPermissionDetailsPopup.set(false);
 }
 
 }

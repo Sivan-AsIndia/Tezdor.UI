@@ -351,4 +351,26 @@ removeByAttendanceId(
         )
   });
 }
+
+// ===== CHECK ATTENDANCE EXISTS =====
+
+hasAttendance(
+  employeeId: string,
+  fromDate: string,
+  toDate: string,
+  excludeAttendanceId?: string
+): boolean {
+
+  return this.lines().some(x =>
+
+    x.employeeId === employeeId &&
+
+    x.attendanceId !== excludeAttendanceId &&
+
+    (
+      fromDate <= x.attendanceDate &&
+      toDate >= x.attendanceDate
+    )
+  );
+}
 }
