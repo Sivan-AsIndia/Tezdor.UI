@@ -19,6 +19,7 @@ import {
 } from '@angular/router';
 
 import { ToastNotifier } from '../../../core/services/toast';
+import { PrintService } from '../../../core/print/print.service';
 
 import {
   SalesInvoice,
@@ -50,6 +51,9 @@ export class SalesInvoiceView {
 
   private toast =
     inject(ToastNotifier);
+
+  private printService =
+    inject(PrintService);
 
   invoice = signal<SalesInvoice | null>(null);
 
@@ -175,7 +179,11 @@ export class SalesInvoiceView {
 
   onPrint(): void {
 
-    window.print();
+    const inv = this.invoice();
+
+    if (inv) {
+      this.printService.printSalesInvoice(inv);
+    }
   }
 
   onDownloadPDF(): void {

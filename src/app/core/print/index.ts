@@ -14,5 +14,7 @@ export { buildProductPrintHtml } from './product-template';
 export { buildSalaryPrintHtml } from './salary-template';
 export { buildPettyCashPrintHtml } from './petty-cash-template';
 export { buildGeneralLedgerPrintHtml } from './general-ledger-template';
+export { buildStoreLedgerPrintHtml } from './store-template';
+export type { StorePrintProduct, StorePrintLedgerRow } from './store-template';
 export { amountToWords, formatIndianNumber, formatPrintDate } from './number-to-words';
 export { PROFILE_PRINT_CSS } from './profile-print-styles';
