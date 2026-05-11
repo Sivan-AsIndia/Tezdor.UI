@@ -1,6 +1,10 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit, inject, signal, computed } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
+import { FormsModule, ReactiveFormsModule, FormControl } from "@angular/forms";
+import { NgSelectModule } from "@ng-select/ng-select";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
 import { InvoiceStatus, LineItem, PaymentStatus, poOptions, SUPPLIER_OPTIONS } from "../purchase-invoice";
 import { ToastNotifier } from "../../../../core/services/toast";
 import { PurchaseInvoiceDataClient } from "../purchase-invoice-data-client";
@@ -10,7 +14,14 @@ import { TAX_OPTIONS } from "../../purchase-order/purchase-order";
 
 @Component({
   selector: 'app-purchase-invoice-create',
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+  ],
   templateUrl: './purchase-invoice-create.html',
   styleUrl: './purchase-invoice-create.css',
 })
@@ -33,8 +44,8 @@ export class PurchaseInvoiceCreateComponent implements OnInit {
   supplierInvNo = signal('');
   invoiceDate = signal(new Date().toISOString().slice(0, 10));
   invoiceStatus = signal<InvoiceStatus | ''>('draft');
-  supplierId = signal<string | number>('');
-  poRef = signal('');
+supplierId = signal<string | number | null>(null);
+poRef = signal<string | null>(null);
   notes = signal('');
 
   amountPaid = signal(0);
@@ -49,6 +60,36 @@ export class PurchaseInvoiceCreateComponent implements OnInit {
 
   lineItems = signal<LineItem[]>([this._blankRow()]);
 
+  // Datepicker FormControls
+  invoiceDateControl = new FormControl<Date | null>(new Date());
+  paymentDueDateControl = new FormControl<Date | null>(null);
+
+  // Row FormControls Maps
+  private productControls = new Map<number, FormControl>();
+  private unitControls = new Map<number, FormControl>();
+  private taxControls = new Map<number, FormControl>();
+
+  getProductControl(row: LineItem): FormControl {
+    if (!this.productControls.has(row.id)) {
+      this.productControls.set(row.id, new FormControl(row.productCode || null));
+    }
+    return this.productControls.get(row.id)!;
+  }
+
+  getUnitControl(row: LineItem): FormControl {
+    if (!this.unitControls.has(row.id)) {
+      this.unitControls.set(row.id, new FormControl(row.unitId));
+    }
+    return this.unitControls.get(row.id)!;
+  }
+
+getTaxControl(row: LineItem): FormControl {
+  if (!this.taxControls.has(row.id)) {
+    this.taxControls.set(row.id, new FormControl(row.taxPercent || null));
+  }
+  return this.taxControls.get(row.id)!;
+}
+
   readonly invoiceStatusOptions: DropdownOption[] = [
     { value: 'draft', label: 'Draft' },
     { value: 'pending', label: 'Pending Approval' },
@@ -56,16 +97,17 @@ export class PurchaseInvoiceCreateComponent implements OnInit {
     { value: 'cancelled', label: 'Cancelled' },
   ];
 
-  supplierOptions = SUPPLIER_OPTIONS
-  poOptions = poOptions
-  unitOptions = UNIT_OPTIONS
-  taxOptions = TAX_OPTIONS
+  supplierOptions = SUPPLIER_OPTIONS;
+  poOptions = poOptions;
+  unitOptions = UNIT_OPTIONS;
+  taxOptions = TAX_OPTIONS;
 
   cgst = computed(() => this.totalTax() / 2);
   sgst = computed(() => this.totalTax() / 2);
   igst = computed(() => this.totalTax());
 
   gstType = signal<'gst' | 'igst'>('gst');
+
   subTotal = computed(() =>
     this.lineItems().reduce((s, r) => s + r.qty * r.unitCost, 0)
   );
@@ -96,16 +138,20 @@ export class PurchaseInvoiceCreateComponent implements OnInit {
   private _rowTouched = new Map<number, Set<string>>();
 
   touch(field: string) { this._touched.add(field); }
+
   touchRow(id: number, f: string) {
     if (!this._rowTouched.has(id)) this._rowTouched.set(id, new Set());
     this._rowTouched.get(id)!.add(f);
   }
+
   isInvalid(field: string, val: any): boolean {
     return this._touched.has(field) && (!val || val === '');
   }
+
   isRowInvalid(id: number, field: string, val: any): boolean {
     return !!(this._rowTouched.get(id)?.has(field)) && (!val || +val <= 0);
   }
+
   rowHasError(id: number): boolean {
     const row = this.lineItems().find(r => r.id === id);
     if (!row) return false;
@@ -124,12 +170,20 @@ export class PurchaseInvoiceCreateComponent implements OnInit {
       unitId: 1,
       qty: 0,
       unitCost: 0,
-      taxPercent: 0.18,
+      taxPercent: 0,
     };
   }
 
-  addRow() { this.lineItems.update(list => [...list, this._blankRow()]); }
-  removeRow(id: number) { this.lineItems.update(list => list.filter(r => r.id !== id)); }
+  addRow() {
+    this.lineItems.update(list => [...list, this._blankRow()]);
+  }
+
+  removeRow(id: number) {
+    this.productControls.delete(id);
+    this.unitControls.delete(id);
+    this.taxControls.delete(id);
+    this.lineItems.update(list => list.filter(r => r.id !== id));
+  }
 
   updateRow(id: number, field: keyof LineItem, val: any) {
     this.lineItems.update(list =>
@@ -167,7 +221,6 @@ export class PurchaseInvoiceCreateComponent implements OnInit {
 
   calcTaxAmt(row: LineItem): number { return row.qty * row.unitCost * row.taxPercent; }
   calcLineTotal(row: LineItem): number { return row.qty * row.unitCost * (1 + row.taxPercent); }
-
   capitalize(s: string) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
 
   private toDateInput(raw: string | undefined): string {
@@ -175,6 +228,12 @@ export class PurchaseInvoiceCreateComponent implements OnInit {
     if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
     if (raw.includes('T')) return raw.split('T')[0];
     return raw;
+  }
+
+  private stringToDate(dateStr: string): Date | null {
+    if (!dateStr) return null;
+    const d = new Date(dateStr);
+    return isNaN(d.getTime()) ? null : d;
   }
 
   ngOnInit(): void {
@@ -193,12 +252,14 @@ export class PurchaseInvoiceCreateComponent implements OnInit {
       this.invoiceNo.set(inv.invoiceNo);
       this.supplierInvNo.set(inv.supplierInvoiceNo);
       this.invoiceDate.set(this.toDateInput(inv.invoiceDate));
+      this.invoiceDateControl.setValue(this.stringToDate(inv.invoiceDate));
       this.supplierId.set(inv.supplierId);
       this.poRef.set(inv.poRef ?? '');
       this.invoiceStatus.set(inv.invoiceStatus);
       this.notes.set(inv.notes ?? '');
       this.amountPaid.set(inv.amountPaid);
       this.paymentDueDate.set(this.toDateInput(inv.paymentDueDate));
+      this.paymentDueDateControl.setValue(this.stringToDate(inv.paymentDueDate));
 
       this.freightCharges.set(inv.freightCharges ?? 0);
       this.customDuty.set(inv.customDuty ?? 0);
@@ -212,7 +273,10 @@ export class PurchaseInvoiceCreateComponent implements OnInit {
         this.customDutyLabel.set(inv.customDutyLabel ?? 'Custom Duty');
       }
 
-      const reIdedItems = inv.lineItems.map((item: any) => ({ ...item, id: this.nextId++ }));
+      const reIdedItems = inv.lineItems.map((item: any) => ({
+        ...item,
+        id: this.nextId++
+      }));
       this.lineItems.set(reIdedItems);
 
     } else {
@@ -262,7 +326,6 @@ export class PurchaseInvoiceCreateComponent implements OnInit {
     };
 
     this.service.add(payload);
-    console.log('Save payload:', payload);
     this.router.navigate(['/purchase-invoice']);
   }
 

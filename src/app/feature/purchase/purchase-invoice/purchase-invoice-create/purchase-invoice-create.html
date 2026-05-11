@@ -2,7 +2,7 @@
   <div class="full-container">
     <div class="v-container v-container--fluid v-locale--is-ltr rounded-xl p-0">
 
-      <!-- ══ HEADER ══════════════════════════════════════════════ -->
+      <!-- HEADER -->
       <div class="d-flex justify-content-between align-items-center" id="TopHeading">
         <div>
           <h4 class="fw-bold mb-1 mainheading">{{ pageTitle }}</h4>
@@ -21,32 +21,31 @@
 
       <div class="pi-layout">
 
-        <!-- ── LEFT: MAIN INVOICE AREA ──────────────────────────── -->
+        <!-- LEFT: MAIN INVOICE AREA -->
         <div class="pi-main">
-
-          <!-- ┌─ INVOICE PAPER CARD ─────────────────────────────── -->
           <div class="pi-paper">
 
-            <!-- ── Paper Top: Brand + Invoice Identity ──────────── -->
+            <!-- Paper Top -->
             <div class="pi-paper-top">
               <div class="pi-addr-block pi-addr-block--to">
                 <div class="pi-addr-label">BILL TO (SUPPLIER)</div>
 
-                <!-- Supplier Dropdown -->
+                <!-- Supplier -->
                 <div class="pi-addr-field-group">
                   <label class="pi-addr-field-label">Supplier <span class="pi-req">*</span></label>
                   <div class="pi-select-wrap" [class.pi-input-error]="isInvalid('supplierId', supplierId())">
-                    <select
-                      class="pi-addr-select"
-                      [value]="supplierId()"
-                      (change)="supplierId.set($any($event.target).value); touch('supplierId')"
+                    <ng-select
+                      [items]="supplierOptions"
+                      bindValue="value"
+                      bindLabel="label"
+                      placeholder="-- Select Supplier --"
+                      [searchable]="true"
+                      [clearable]="false"
+                      [ngModel]="supplierId()"
+                      [ngModelOptions]="{standalone: true}"
+                      (ngModelChange)="supplierId.set($event); touch('supplierId')"
                       (blur)="touch('supplierId')">
-                      <option value="">-- Select Supplier --</option>
-                      @for (v of supplierOptions; track v.value) {
-                        <option [value]="v.value">{{ v.label }}</option>
-                      }
-                    </select>
-                    <svg class="pi-select-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </ng-select>
                   </div>
                   @if (isInvalid('supplierId', supplierId())) {
                     <div class="pi-error-msg">
@@ -56,20 +55,21 @@
                   }
                 </div>
 
-                <!-- Purchase Order Ref -->
+                <!-- PO Ref -->
                 <div class="pi-addr-field-group pi-mt-8">
                   <label class="pi-addr-field-label">Purchase Order Ref</label>
                   <div class="pi-select-wrap">
-                    <select
-                      class="pi-addr-select"
-                      [value]="poRef()"
-                      (change)="poRef.set($any($event.target).value)">
-                      <option value="">-- Link to PO (optional) --</option>
-                      @for (p of poOptions; track p.value) {
-                        <option [value]="p.value">{{ p.label }}</option>
-                      }
-                    </select>
-                    <svg class="pi-select-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    <ng-select
+                      [items]="poOptions"
+                      bindValue="value"
+                      bindLabel="label"
+                      placeholder="-- Link to PO (optional) --"
+                      [searchable]="true"
+                      [clearable]="true"
+                      [ngModel]="poRef()"
+                      [ngModelOptions]="{standalone: true}"
+                      (ngModelChange)="poRef.set($event ?? '')">
+                    </ng-select>
                   </div>
                 </div>
 
@@ -81,16 +81,16 @@
                     rows="2"
                     placeholder="Any additional remarks..."
                     [value]="notes()"
-                    (input)="notes.set($any($event.target).value)"></textarea>
+                    (input)="notes.set($any($event.target).value)">
+                  </textarea>
                 </div>
-
               </div>
 
-              <!-- RIGHT: Invoice identity block -->
+              <!-- RIGHT: Invoice Identity -->
               <div class="pi-identity-block">
                 <div class="pi-invoice-label">PURCHASE INVOICE</div>
 
-                <!-- P-Invoice No (AUTO) -->
+                <!-- Invoice No -->
                 <div class="pi-identity-row">
                   <span class="pi-identity-key">Invoice No</span>
                   <span class="pi-identity-val pi-identity-val--code">
@@ -103,16 +103,26 @@
                 <div class="pi-identity-row">
                   <span class="pi-identity-key">Invoice Date <span class="pi-req">*</span></span>
                   <div class="pi-identity-input-wrap" [class.pi-input-error]="isInvalid('invoiceDate', invoiceDate())">
-                    <input
-                      type="date"
-                      class="pi-identity-input"
-                      [value]="invoiceDate()"
-                      (change)="invoiceDate.set($any($event.target).value); touch('invoiceDate')"
-                      (blur)="touch('invoiceDate')">
+                    <div class="position-relative">
+                      <input
+                        class="pi-identity-input pe-4"
+                        [matDatepicker]="invoicePicker"
+                        [formControl]="invoiceDateControl"
+                        placeholder="Select date..."
+                        readonly
+                        (click)="invoicePicker.open()"
+                        (dateChange)="invoiceDate.set($event.value?.toISOString().slice(0,10) ?? ''); touch('invoiceDate')" />
+                      <i
+                        class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-2 text-muted"
+                        style="font-size:16px; cursor:pointer;"
+                        (click)="invoicePicker.open()">
+                      </i>
+                    </div>
+                    <mat-datepicker #invoicePicker></mat-datepicker>
                   </div>
                 </div>
 
-                <!-- Supplier Invoice No -->
+                <!-- Supplier Inv No -->
                 <div class="pi-identity-row">
                   <span class="pi-identity-key">Supplier Inv No <span class="pi-req">*</span></span>
                   <div class="pi-identity-input-wrap" [class.pi-input-error]="isInvalid('supplierInvNo', supplierInvNo())">
@@ -130,23 +140,24 @@
                 <div class="pi-identity-row">
                   <span class="pi-identity-key">Status <span class="pi-req">*</span></span>
                   <div class="pi-identity-select-wrap" [class.pi-input-error]="isInvalid('invoiceStatus', invoiceStatus())">
-                    <select
-                      class="pi-identity-select"
-                      [value]="invoiceStatus()"
-                      (change)="invoiceStatus.set($any($event.target).value); touch('invoiceStatus')"
+                    <ng-select
+                      [items]="invoiceStatusOptions"
+                      bindValue="value"
+                      bindLabel="label"
+                      placeholder="-- Select --"
+                      [searchable]="false"
+                      [clearable]="false"
+                      [ngModel]="invoiceStatus()"
+                      [ngModelOptions]="{standalone: true}"
+                      (ngModelChange)="invoiceStatus.set($event); touch('invoiceStatus')"
                       (blur)="touch('invoiceStatus')">
-                      <option value="">-- Select --</option>
-                      @for (s of invoiceStatusOptions; track s.value) {
-                        <option [value]="s.value">{{ s.label }}</option>
-                      }
-                    </select>
+                    </ng-select>
                   </div>
                 </div>
-
               </div>
             </div>
 
-            <!-- ── Paper Body: LINE ITEMS TABLE ────────────────── -->
+            <!-- Paper Body: LINE ITEMS -->
             <div class="pi-paper-body">
               <div class="pi-section-title">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
@@ -154,11 +165,8 @@
                 <span class="pi-section-badge">{{ lineItems().length }} item{{ lineItems().length !== 1 ? 's' : '' }}</span>
               </div>
 
-              <!-- Line Item Cards -->
               <div class="pi-lines-wrapper">
-
                 @for (row of lineItems(); track row.id; let idx = $index) {
-
                   <div class="pi-line-card" [class.pi-tr-invalid]="rowHasError(row.id)">
 
                     <!-- Header -->
@@ -173,22 +181,22 @@
                     <!-- GRID -->
                     <div class="pi-grid">
 
-                      <!-- Product Name -->
+                      <!-- Product -->
                       <div class="pi-field">
                         <label>Product Name</label>
                         <div class="pi-cell-wrap">
                           <div class="pi-select-wrap" [class.pi-cell-error]="isRowInvalid(row.id, 'productCode', row.productCode)">
-                            <select
-                              class="pi-cell-select"
-                              [value]="row.productCode"
-                              (change)="onProductSelect(row, $any($event.target).value)"
+                            <ng-select
+                              [items]="product.products()"
+                              bindValue="productCode"
+                              bindLabel="productName"
+                              placeholder="— Select Product —"
+                              [searchable]="true"
+                              [clearable]="false"
+                              [formControl]="getProductControl(row)"
+                              (change)="onProductSelect(row, $event?.productCode ?? '')"
                               (blur)="touchRow(row.id, 'productCode')">
-                              <option value="">— Select Product —</option>
-                              @for (p of product.products(); track p.productCode) {
-                                <option [value]="p.productCode">{{ p.productName }}</option>
-                              }
-                            </select>
-                            <svg class="pi-select-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            </ng-select>
                           </div>
                           @if (isRowInvalid(row.id, 'productCode', row.productCode)) {
                             <span class="pi-row-error-tip">Required</span>
@@ -200,15 +208,16 @@
                       <div class="pi-field span-3">
                         <label>Unit *</label>
                         <div class="pi-select-wrap">
-                          <select
-                            class="pi-cell-select"
-                            [value]="row.unitId"
-                            (change)="updateRow(row.id, 'unitId', +$any($event.target).value)">
-                            @for (u of unitOptions; track u.value) {
-                              <option [value]="u.value">{{ u.label }}</option>
-                            }
-                          </select>
-                          <svg class="pi-select-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                          <ng-select
+                            [items]="unitOptions"
+                            bindValue="value"
+                            bindLabel="label"
+                            placeholder="-- Unit --"
+                            [searchable]="false"
+                            [clearable]="false"
+                            [formControl]="getUnitControl(row)"
+                            (change)="updateRow(row.id, 'unitId', $event)">
+                          </ng-select>
                         </div>
                       </div>
 
@@ -220,7 +229,7 @@
                             type="number"
                             class="pi-cell-input pi-cell-input-r"
                             [class.pi-cell-error]="isRowInvalid(row.id, 'qty', row.qty)"
-                            min="0.001" step="0.001"
+                            min="0" step="1"
                             [value]="row.qty"
                             (input)="updateRow(row.id, 'qty', +$any($event.target).value)"
                             (blur)="touchRow(row.id, 'qty')">
@@ -238,7 +247,7 @@
                             <input
                               type="number"
                               class="pi-cell-input pi-cell-input-r pi-cell-input-rupee"
-                              min="0" step="0.01"
+                              min="0" step="1"
                               [value]="row.unitCost"
                               (input)="updateRow(row.id, 'unitCost', +$any($event.target).value)"
                               (blur)="touchRow(row.id, 'unitCost')">
@@ -253,15 +262,16 @@
                       <div class="pi-field">
                         <label>Tax</label>
                         <div class="pi-select-wrap">
-                          <select
-                            class="pi-cell-select"
-                            [value]="row.taxPercent"
-                            (change)="updateRow(row.id, 'taxPercent', +$any($event.target).value)">
-                            @for (t of taxOptions; track t.value) {
-                              <option [value]="t.value">{{ t.label }}</option>
-                            }
-                          </select>
-                          <svg class="pi-select-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                          <ng-select
+                            [items]="taxOptions"
+                            bindValue="value"
+                            bindLabel="label"
+                            placeholder="-- Tax --"
+                            [searchable]="false"
+                            [clearable]="false"
+                            [formControl]="getTaxControl(row)"
+                            (change)="updateRow(row.id, 'taxPercent', $event)">
+                          </ng-select>
                         </div>
                       </div>
 
@@ -286,9 +296,7 @@
 
                     </div>
                   </div>
-
                 }
-
               </div>
 
               <!-- Empty state -->
@@ -308,11 +316,9 @@
                   Add Item
                 </button>
               </div>
-
             </div>
-            <!-- /pi-paper-body -->
 
-            <!-- ── Paper Footer: Totals + Payment ────────────────── -->
+            <!-- Paper Footer -->
             <div class="pi-paper-footer">
 
               <!-- LEFT: Payment Details -->
@@ -324,8 +330,6 @@
 
                 <div class="pi-payment-grid">
 
-             
-
                   <!-- Amount Paid -->
                   <div class="pi-pay-field">
                     <label class="pi-pay-label">Amount Paid (₹)</label>
@@ -333,7 +337,7 @@
                       <input
                         type="number"
                         class="pi-pay-input"
-                        min="0" step="0.01"
+                        min="0" step="1"
                         placeholder="0.00"
                         [value]="amountPaid()"
                         (input)="amountPaid.set(+$any($event.target).value)">
@@ -344,17 +348,25 @@
                   <!-- Payment Due Date -->
                   <div class="pi-pay-field">
                     <label class="pi-pay-label">Payment Due Date</label>
-                    <div class="pi-pay-input-wrap">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    <div class="position-relative">
                       <input
-                        type="date"
-                        class="pi-pay-input pi-pay-input-date"
-                        [value]="paymentDueDate()"
-                        (change)="paymentDueDate.set($any($event.target).value)">
+                        class="pi-pay-input pi-pay-input-date pe-4"
+                        [matDatepicker]="duePicker"
+                        [formControl]="paymentDueDateControl"
+                        placeholder="Select date..."
+                        readonly
+                        (click)="duePicker.open()"
+                        (dateChange)="paymentDueDate.set($event.value?.toISOString().slice(0,10) ?? '')" />
+                      <i
+                        class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-2 text-muted"
+                        style="font-size:16px; cursor:pointer;"
+                        (click)="duePicker.open()">
+                      </i>
                     </div>
+                    <mat-datepicker #duePicker></mat-datepicker>
                   </div>
 
-                  <!-- Payment Status (auto) -->
+                  <!-- Payment Status -->
                   <div class="pi-pay-field">
                     <label class="pi-pay-label">Payment Status</label>
                     <div class="pi-pay-status-row">
@@ -380,80 +392,71 @@
 
                 </div>
 
-<div class="pi-toggle-section mt-3">
+                <!-- Toggle Section -->
+                <div class="pi-toggle-section mt-3">
 
-  <!-- Row 1: Freight -->
-  <div class="pi-toggle-row">
-    <label class="pi-toggle-label">
-      <input
-        type="checkbox"
-        class="pi-toggle-check"
-        [checked]="showFreight()"
-        (change)="toggleFreight($any($event.target).checked)">
-      <span class="pi-toggle-box">
-        @if (showFreight()) {
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-        }
-      </span>
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="1" y="3" width="15" height="13" rx="1"/>
-        <path d="M16 8h4l3 5v3h-7V8z"/>
-        <circle cx="5.5" cy="18.5" r="2.5"/>
-        <circle cx="18.5" cy="18.5" r="2.5"/>
-      </svg>
-      Add Freight / Shipping Charges
-    </label>
+                  <!-- Freight -->
+                  <div class="pi-toggle-row">
+                    <label class="pi-toggle-label">
+                      <input
+                        type="checkbox"
+                        class="pi-toggle-check"
+                        [checked]="showFreight()"
+                        (change)="toggleFreight($any($event.target).checked)">
+                      <span class="pi-toggle-box">
+                        @if (showFreight()) {
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        }
+                      </span>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                      Add Freight / Shipping Charges
+                    </label>
+                    <div class="pi-toggle-input-wrap">
+                      @if (showFreight()) {
+                        <input
+                          type="number"
+                          class="pi-toggle-amount"
+                          min="0" step="0.01"
+                          placeholder="0.00"
+                          [value]="freightCharges()"
+                          (input)="freightCharges.set(+$any($event.target).value)">
+                      }
+                    </div>
+                  </div>
 
-    <div class="pi-toggle-input-wrap">
-      @if (showFreight()) {
-        <input
-          type="number"
-          class="pi-toggle-amount"
-          min="0" step="0.01"
-          placeholder="0.00"
-          [value]="freightCharges()"
-          (input)="freightCharges.set(+$any($event.target).value)">
-      }
-    </div>
-  </div>
+                  <!-- Custom Duty -->
+                  <div class="pi-toggle-row">
+                    <label class="pi-toggle-label">
+                      <input
+                        type="checkbox"
+                        class="pi-toggle-check"
+                        [checked]="showCustomDuty()"
+                        (change)="toggleCustomDuty($any($event.target).checked)">
+                      <span class="pi-toggle-box">
+                        @if (showCustomDuty()) {
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        }
+                      </span>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                      Add Custom Duty
+                    </label>
+                    <div class="pi-toggle-input-wrap">
+                      @if (showCustomDuty()) {
+                        <input
+                          type="number"
+                          class="pi-toggle-amount"
+                          min="0" step="0.01"
+                          placeholder="0.00"
+                          [value]="customDuty()"
+                          (input)="customDuty.set(+$any($event.target).value)">
+                      }
+                    </div>
+                  </div>
 
-  <!-- Row 2: Custom Duty -->
-  <div class="pi-toggle-row">
-    <label class="pi-toggle-label">
-      <input
-        type="checkbox"
-        class="pi-toggle-check"
-        [checked]="showCustomDuty()"
-        (change)="toggleCustomDuty($any($event.target).checked)">
-      <span class="pi-toggle-box">
-        @if (showCustomDuty()) {
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-        }
-      </span>
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-      </svg>
-      Add Custom Duty
-    </label>
-
-    <div class="pi-toggle-input-wrap">
-      @if (showCustomDuty()) {
-        <input
-          type="number"
-          class="pi-toggle-amount"
-          min="0" step="0.01"
-          placeholder="0.00"
-          [value]="customDuty()"
-          (input)="customDuty.set(+$any($event.target).value)">
-      }
-    </div>
-  </div>
-
-</div>
-              
+                </div>
               </div>
 
-              <!-- RIGHT: Totals block -->
+              <!-- RIGHT: Totals -->
               <div class="pi-totals-block">
                 <table class="pi-totals-table">
                   <tr>
@@ -464,78 +467,42 @@
                     <td class="pi-tot-label">Tax Amount</td>
                     <td class="pi-tot-val">₹{{ totalTax() | number:'1.2-2' }}</td>
                   </tr>
- <tr>
-    <td colspan="2" class="pi-tot-gst-toggle">
-      <div class="pi-gst-switch">
-        <button
-          class="pi-gst-btn"
-          [class.active]="gstType() === 'gst'"
-          (click)="gstType.set('gst')">
-          CGST + SGST
-        </button>
-        <button
-          class="pi-gst-btn"
-          [class.active]="gstType() === 'igst'"
-          (click)="gstType.set('igst')">
-          IGST
-        </button>
-      </div>
-    </td>
-  </tr>
-
-  <!-- CGST + SGST rows -->
-  @if (gstType() === 'gst') {
-    <tr>
-      <td class="pi-tot-label">CGST (50%)</td>
-      <td class="pi-tot-val">₹{{ cgst() | number:'1.2-2' }}</td>
-    </tr>
-    <tr>
-      <td class="pi-tot-label">SGST (50%)</td>
-      <td class="pi-tot-val">₹{{ sgst() | number:'1.2-2' }}</td>
-    </tr>
-  }
-
-  <!-- IGST row -->
-  @if (gstType() === 'igst') {
-    <tr>
-      <td class="pi-tot-label">IGST</td>
-      <td class="pi-tot-val">₹{{ igst() | number:'1.2-2' }}</td>
-    </tr>
-  }
-
-                  <!-- Freight row — only show when enabled OR value > 0 -->
+                  <tr>
+                    <td colspan="2" class="pi-tot-gst-toggle">
+                      <div class="pi-gst-switch">
+                        <button class="pi-gst-btn" [class.active]="gstType() === 'gst'" (click)="gstType.set('gst')">CGST + SGST</button>
+                        <button class="pi-gst-btn" [class.active]="gstType() === 'igst'" (click)="gstType.set('igst')">IGST</button>
+                      </div>
+                    </td>
+                  </tr>
+                  @if (gstType() === 'gst') {
+                    <tr>
+                      <td class="pi-tot-label">CGST (50%)</td>
+                      <td class="pi-tot-val">₹{{ cgst() | number:'1.2-2' }}</td>
+                    </tr>
+                    <tr>
+                      <td class="pi-tot-label">SGST (50%)</td>
+                      <td class="pi-tot-val">₹{{ sgst() | number:'1.2-2' }}</td>
+                    </tr>
+                  }
+                  @if (gstType() === 'igst') {
+                    <tr>
+                      <td class="pi-tot-label">IGST</td>
+                      <td class="pi-tot-val">₹{{ igst() | number:'1.2-2' }}</td>
+                    </tr>
+                  }
                   @if (showFreight() || freightCharges() > 0) {
                     <tr>
-                      <td class="pi-tot-label">
-                        <span style="display:inline-flex;align-items:center;gap:4px">
-                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="1" y="3" width="15" height="13" rx="1"/>
-                            <path d="M16 8h4l3 5v3h-7V8z"/>
-                            <circle cx="5.5" cy="18.5" r="2.5"/>
-                            <circle cx="18.5" cy="18.5" r="2.5"/>
-                          </svg>
-                          {{ freightLabel() }}
-                        </span>
-                      </td>
+                      <td class="pi-tot-label">{{ freightLabel() }}</td>
                       <td class="pi-tot-val">₹{{ freightCharges() | number:'1.2-2' }}</td>
                     </tr>
                   }
-
-                  <!-- Custom Duty row — only show when enabled OR value > 0 -->
                   @if (showCustomDuty() || customDuty() > 0) {
                     <tr>
-                      <td class="pi-tot-label">
-                        <span style="display:inline-flex;align-items:center;gap:4px">
-                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                          </svg>
-                          {{ customDutyLabel() }}
-                        </span>
-                      </td>
+                      <td class="pi-tot-label">{{ customDutyLabel() }}</td>
                       <td class="pi-tot-val">₹{{ customDuty() | number:'1.2-2' }}</td>
                     </tr>
                   }
-
                   <tr class="pi-tot-divider"><td colspan="2"><hr></td></tr>
                   <tr class="pi-tot-grand">
                     <td class="pi-tot-label">Grand Total</td>
@@ -558,25 +525,19 @@
               </div>
 
             </div>
-            <!-- /pi-paper-footer -->
-
           </div>
-          <!-- /pi-paper -->
-
         </div>
-        <!-- /pi-main -->
 
-        <!-- ── RIGHT SIDEBAR ───────────────────────────────────────── -->
+        <!-- RIGHT SIDEBAR -->
         <div class="pi-sidebar">
 
-          <!-- Invoice Summary Card -->
+          <!-- Invoice Summary -->
           <div class="pi-scard">
             <div class="pi-scard-header">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg>
               Invoice Summary
             </div>
             <div class="pi-scard-body">
-
               <div class="pi-sum-row">
                 <span class="pi-sum-label">Sub Total</span>
                 <span class="pi-sum-val">₹{{ subTotal() | number:'1.2-2' }}</span>
@@ -585,37 +546,28 @@
                 <span class="pi-sum-label">Tax Amount</span>
                 <span class="pi-sum-val">₹{{ totalTax() | number:'1.2-2' }}</span>
               </div>
-
-              <!-- Freight in sidebar — only show when enabled OR value > 0 -->
               @if (showFreight() || freightCharges() > 0) {
                 <div class="pi-sum-row">
                   <span class="pi-sum-label">{{ freightLabel() }}</span>
                   <span class="pi-sum-val">₹{{ freightCharges() | number:'1.2-2' }}</span>
                 </div>
               }
-
-              <!-- Custom Duty in sidebar — only show when enabled OR value > 0 -->
               @if (showCustomDuty() || customDuty() > 0) {
                 <div class="pi-sum-row">
                   <span class="pi-sum-label">{{ customDutyLabel() }}</span>
                   <span class="pi-sum-val">₹{{ customDuty() | number:'1.2-2' }}</span>
                 </div>
               }
-
               <div class="pi-sum-divider"></div>
-
               <div class="pi-sum-row pi-sum-row-grand">
                 <span class="pi-sum-label-grand">Grand Total</span>
                 <span class="pi-sum-val-grand">₹{{ grandTotal() | number:'1.2-2' }}</span>
               </div>
-
               <div class="pi-sum-row">
                 <span class="pi-sum-label">Amount Paid</span>
                 <span class="pi-sum-val pi-sum-paid">₹{{ amountPaid() | number:'1.2-2' }}</span>
               </div>
-
               <div class="pi-sum-divider"></div>
-
               <div class="pi-sum-row">
                 <span class="pi-sum-label">Balance Due</span>
                 <span class="pi-sum-balance"
@@ -624,18 +576,16 @@
                   ₹{{ balanceDue() | number:'1.2-2' }}
                 </span>
               </div>
-
             </div>
           </div>
 
-          <!-- Quick Info Card -->
+          <!-- Quick Info -->
           <div class="pi-scard">
             <div class="pi-scard-header">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
               Quick Info
             </div>
             <div class="pi-scard-body">
-
               <div class="pi-info-chip">
                 <span class="pi-chip-label">Invoice No</span>
                 <span class="pi-chip-val pi-chip-code">{{ invoiceNo() }}</span>
@@ -650,8 +600,7 @@
               </div>
               <div class="pi-info-chip">
                 <span class="pi-chip-label">Payment Status</span>
-                <span
-                  class="pi-chip-badge"
+                <span class="pi-chip-badge"
                   [class.pi-badge-unpaid]="paymentStatus() === 'unpaid'"
                   [class.pi-badge-partial]="paymentStatus() === 'partial'"
                   [class.pi-badge-paid]="paymentStatus() === 'paid'">
@@ -666,11 +615,10 @@
                 <span class="pi-chip-label">PO Ref</span>
                 <span class="pi-chip-val">{{ poRef() || '—' }}</span>
               </div>
-
             </div>
           </div>
 
-          <!-- Business Rules Card -->
+          <!-- Business Rules -->
           <div class="pi-scard pi-scard-rules">
             <div class="pi-scard-header">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
@@ -687,24 +635,22 @@
           </div>
 
         </div>
-        <!-- /pi-sidebar -->
-    <!-- ══ ACTION BUTTONS ════════════════════════════════════════ -->
-      <div class="d-flex gap-2 mt-4 justify-content-end mb-5">
-        <button
-          class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated bg-secondary px-3"
-          (click)="cancel()">
-          Cancel
-        </button>
-        <button
-          class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
-          (click)="saveInvoice()">
-          {{ isEditMode ? 'Update' : 'Save' }}
-        </button>
-      </div>
-      </div>
 
-  
+        <!-- ACTION BUTTONS -->
+        <div class="d-flex gap-2 mt-4 justify-content-end mb-5">
+          <button
+            class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated bg-secondary px-3"
+            (click)="cancel()">
+            Cancel
+          </button>
+          <button
+            class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+            (click)="saveInvoice()">
+            {{ isEditMode ? 'Update' : 'Save' }}
+          </button>
+        </div>
 
+      </div>
     </div>
   </div>
 </div>

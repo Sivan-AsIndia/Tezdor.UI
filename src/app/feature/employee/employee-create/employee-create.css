@@ -115,10 +115,9 @@ input[type="date"] {
 /* FOCUS */
 .form-control:focus,
 .form-select:focus {
-  border-color: var(--bs-primary);
-  box-shadow: 0 0 0 3px rgba(93, 135, 255, 0.15);
+  border-color: var(--color-primary);
+  box-shadow: 0 3px 3px 3px color-mix(in srgb, var(--color-primary) 15%, transparent);
 }
-
 /* LABEL */
 label {
   font-size: 13px;

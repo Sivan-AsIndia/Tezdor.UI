@@ -49,36 +49,73 @@
               </div> -->
 
               <!-- Order Date -->
-              <div class="col-md-3">
-                <label class="form-label cardlabel required">Order Date</label>
-                <input type="date" class="form-control"
-                  formControlName="orderDate"
-                  [class.is-invalid]="hasError('orderDate')" />
-                @if (hasError('orderDate')) {
-                  <div class="invalid-feedback">Order Date is required.</div>
-                }
-              </div>
+            <div class="col-md-3">
+  <label class="form-label cardlabel required">Order Date</label>
+  <div class="position-relative">
+    <input
+      class="form-control pe-5"
+      [matDatepicker]="orderPicker"
+      formControlName="orderDate"
+      placeholder="Select date..."
+      [class.is-invalid]="hasError('orderDate')"
+      readonly
+      (click)="orderPicker.open()" />
+    <i
+      class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+      style="font-size:18px; cursor:pointer;"
+      (click)="orderPicker.open()">
+    </i>
+  </div>
+  <mat-datepicker #orderPicker></mat-datepicker>
+  @if (hasError('orderDate')) {
+    <div class="invalid-feedback" style="display:block">
+      Order Date is required.
+    </div>
+  }
+</div>
 
-              <!-- Expected Delivery Date -->
-              <div class="col-md-3">
-                <label class="form-label cardlabel required">Expected Delivery</label>
-                <input type="date" class="form-control"
-                  formControlName="expectedDate"
-                  [class.is-invalid]="hasError('expectedDate')" />
-                @if (hasError('expectedDate')) {
-                  <div class="invalid-feedback">Expected date is required.</div>
-                }
-              </div>
+ <div class="col-md-3">
+  <label class="form-label cardlabel required">Expected Delivery</label>
+  <div class="position-relative">
+    <input
+      class="form-control pe-5"
+      [matDatepicker]="expectedPicker"
+      formControlName="expectedDate"
+      placeholder="Select date..."
+      [class.is-invalid]="hasError('expectedDate')"
+      readonly
+      (click)="expectedPicker.open()" />
+    <i
+      class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+      style="font-size:18px; cursor:pointer;"
+      (click)="expectedPicker.open()">
+    </i>
+  </div>
+  <mat-datepicker #expectedPicker></mat-datepicker>
+  @if (hasError('expectedDate')) {
+    <div class="invalid-feedback" style="display:block">
+      Expected date is required.
+    </div>
+  }
+</div>
 
               <!-- Status -->
               <div class="col-md-3">
                 <label class="form-label cardlabel">Status</label>
-                <select class="form-select" formControlName="status"   [class.is-invalid]="hasError('status')" >
+                <!-- <select class="form-select" formControlName="status"   [class.is-invalid]="hasError('status')" >
                     <option  value="">--Select Status --</option>
                   @for (s of statusOptions; track s.value) {
                     <option [value]="s.value">{{ s.label }}</option>
                   }
-                </select>
+                </select> -->
+   <ng-select
+    formControlName="status"
+    [items]="statusOptions"
+    bindValue="value"
+    bindLabel="label"
+    placeholder="-- Select status --"   [searchable]="false"   [clearable]="false" [class.is-invalid]="hasError('status')">
+  </ng-select>
+                
                  @if (hasError('status')) {
                   <div class="invalid-feedback">status is required.</div>
                 }
@@ -100,45 +137,64 @@
             <div class="row g-3">
 
               <!-- Vendor -->
-              <div class="col-md-4">
-                <label class="form-label cardlabel required">Vendor</label>
-                <!--
-                  KEY FIX: [value]="v.value" sets the option value as a STRING.
-                  formControlName="vendorId" stores a STRING.
-                  When patchValue({ vendorId: '1' }), Angular matches '1' === '1' ✓
-                  Previously: vendorId was stored as number (1) → mismatch → blank select.
-                -->
-                <select class="form-select"
-                  formControlName="vendorId"
-                  [class.is-invalid]="hasError('vendorId')">
-                  <option value="">-- Select Vendor --</option>
-                  @for (v of vendorOptions; track v.code) {
-                    <option [value]="v.code">{{ v.name }}</option>
-                  }
-                </select>
-                @if (hasError('vendorId')) {
-                  <div class="invalid-feedback">Vendor is required.</div>
-                }
-              </div>
+          <div class="col-md-4">
+  <label class="form-label cardlabel required">Vendor</label>
+
+  <ng-select
+    formControlName="vendorId"
+    [items]="vendorOptions"
+    bindValue="code"
+    bindLabel="name"
+    placeholder="-- Select Vendor --"
+    [searchable]="true"
+    [clearable]="true"
+    [class.is-invalid]="hasError('vendorId')">
+  </ng-select>
+  
+  
+  @if (hasError('vendorId')) {
+    <div class="invalid-feedback" style="display:block">
+      Vendor is required.
+    </div>
+  }
+</div>
 
               <!-- Payment Terms -->
               <div class="col-md-4">
                 <label class="form-label cardlabel">Payment Terms</label>
-                <select class="form-select" formControlName="paymentTerms">
+                <!-- <select class="form-select" formControlName="paymentTerms">
                   @for (p of paymentTermsOptions; track p.value) {
                     <option [value]="p.value">{{ p.label }}</option>
                   }
                 </select>
+ -->
+
+                  <ng-select
+    formControlName="paymentTerms"
+    [items]="paymentTermsOptions"
+    bindValue="value"
+    bindLabel="label"
+    placeholder="-- Select paymentTerms --"   [searchable]="false"   [clearable]="false">
+  </ng-select>
               </div>
 
               <!-- Delivery Method -->
               <div class="col-md-4">
                 <label class="form-label cardlabel">Delivery Method</label>
-                <select class="form-select" formControlName="deliveryMethod">
+                <!-- <select class="form-select" formControlName="deliveryMethod">
                   @for (d of deliveryOptions; track d.value) {
                     <option [value]="d.value">{{ d.label }}</option>
                   }
-                </select>
+                </select> -->
+                   <ng-select
+    formControlName="deliveryMethod"
+    [items]="deliveryOptions"
+    bindValue="value"
+    bindLabel="label"
+    placeholder="-- Select deliveryMethod --"   [searchable]="false"   [clearable]="false">
+  </ng-select>
+
+
               </div>
 
               <!-- Shipping Address -->
@@ -200,27 +256,18 @@
               Product Name
               <span class="req">*</span>
             </label>
-
-            <select
-              class="form-select form-select-sm"
-              [class.is-invalid]="isInvalidProduct(row)"
-              [value]="row.productCode"
-              (change)="onProductSelect(row, $any($event.target).value)">
-
-              <option value="">
-                -- Select Product --
-              </option>
-
-              @for (p of product.products(); track p.productCode) {
-
-                <option [value]="p.productCode">
-                  {{ p.productName }}
-                </option>
-
-              }
-
-            </select>
-
+<ng-select
+  [items]="product.products()"
+  bindValue="productCode"
+  bindLabel="productName"
+  placeholder="-- Select Product --"
+  [searchable]="true"
+  [clearable]="true"
+  [formControl]="getProductControl(row)"
+  (change)="onProductSelect(row, $event)"
+  [class.is-invalid]="isInvalidProduct(row)">
+</ng-select>
+            
             @if (isInvalidProduct(row)) {
               <div class="invalid-feedback d-block">
                 Product is required.
@@ -236,20 +283,17 @@
             <div class="field">
               <label>Unit</label>
 
-              <select
-                class="form-select form-select-sm"
-                [value]="row.unitId"
-                (change)="updateRow(row.id, 'unitId', $any($event.target).value)">
-
-                @for (u of unitOptions; track u.value) {
-
-                  <option [value]="u.value">
-                    {{ u.label }}
-                  </option>
-
-                }
-
-              </select>
+            <ng-select
+  [items]="unitOptions"
+  bindValue="value"
+  bindLabel="label"
+  placeholder="-- Select Unit --"
+  [searchable]="false"
+  [clearable]="false"
+  [formControl]="getUnitControl(row)"
+  (change)="updateRow(row.id, 'unitId', $event)">
+</ng-select>
+              
             </div>
 
             <!-- QTY -->
@@ -292,20 +336,17 @@
             <div class="field">
               <label>Tax</label>
 
-              <select
-                class="form-select form-select-sm"
-                [value]="row.taxPercent"
-                (change)="updateRow(row.id, 'taxPercent', $any($event.target).value)">
+           <ng-select
+  [items]="taxOptions"
+  bindValue="value"
+  bindLabel="label"
+  placeholder="-- Select Tax --"
+  [searchable]="false"
+  [clearable]="false"
+  [formControl]="getTaxControl(row)"
+  (change)="updateRow(row.id, 'taxPercent', $event)">
+</ng-select>
 
-                @for (t of taxOptions; track t.value) {
-
-                  <option [value]="t.value">
-                    {{ t.label }}
-                  </option>
-
-                }
-
-              </select>
             </div>
 
           </div>
@@ -438,40 +479,28 @@
       </div>
 
       <!-- WAREHOUSE -->
-      <div class="col-md-3">
+    <div class="col-md-3">
+  <label class="form-label cardlabel required">
+    Warehouse
+  </label>
 
-        <label class="form-label cardlabel required">
-          Warehouse
-        </label>
+  <ng-select
+    formControlName="warehouseId"
+    [items]="warehouseOptions"
+    bindValue="value"
+    bindLabel="label"
+    placeholder="-- Select Warehouse --"
+    [searchable]="true"
+    [clearable]="true"
+    [class.is-invalid]="hasError('warehouseId')">
+  </ng-select>
 
-        <select
-          class="form-select"
-          formControlName="warehouseId"
-          [class.is-invalid]="hasError('warehouseId')">
-
-          <option value="">
-            -- Select Warehouse --
-          </option>
-
-          @for (w of warehouseOptions; track w.value) {
-
-            <option [value]="w.value">
-              {{ w.label }}
-            </option>
-
-          }
-
-        </select>
-
-        @if (hasError('warehouseId')) {
-
-          <div class="invalid-feedback">
-            Warehouse is required.
-          </div>
-
-        }
-
-      </div>
+  @if (hasError('warehouseId')) {
+    <div class="invalid-feedback" style="display:block">
+      Warehouse is required.
+    </div>
+  }
+</div>
 
       <!-- EXCHANGE RATE -->
       <div class="col-md-3">
@@ -550,33 +579,45 @@
 
       </div>
 
-      <!-- APPROVED ON -->
-      <div class="col-md-4">
+   <!-- APPROVED ON -->
+<div class="col-md-4">
+  <label class="form-label cardlabel">Approved On</label>
+  <div class="position-relative">
+    <input
+      class="form-control pe-5"
+      [matDatepicker]="approvedPicker"
+      formControlName="approvedOn"
+      placeholder="Select date..."
+      readonly
+      (click)="approvedPicker.open()" />
+    <i
+      class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+      style="font-size:18px; cursor:pointer;"
+      (click)="approvedPicker.open()">
+    </i>
+  </div>
+  <mat-datepicker #approvedPicker></mat-datepicker>
+</div>
 
-        <label class="form-label cardlabel">
-          Approved On
-        </label>
-
-        <input
-          type="datetime-local"
-          class="form-control"
-          formControlName="approvedOn" />
-
-      </div>
-
-      <!-- CANCELLED ON -->
-      <div class="col-md-4">
-
-        <label class="form-label cardlabel">
-          Cancelled On
-        </label>
-
-        <input
-          type="datetime-local"
-          class="form-control"
-          formControlName="cancelledOn" />
-
-      </div>
+<!-- CANCELLED ON -->
+<div class="col-md-4">
+  <label class="form-label cardlabel">Cancelled On</label>
+  <div class="position-relative">
+    <input
+      class="form-control pe-5"
+      [matDatepicker]="cancelledPicker"
+      formControlName="cancelledOn"
+      placeholder="Select date..."
+      readonly
+      (click)="cancelledPicker.open()" />
+    <i
+      class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+      style="font-size:18px; cursor:pointer;"
+      (click)="cancelledPicker.open()">
+    </i>
+  </div>
+  <mat-datepicker #cancelledPicker></mat-datepicker>
+</div>
 
       <!-- CANCELLATION REASON -->
       <div class="col-md-4">

@@ -4271,7 +4271,7 @@ h1:is(.dark *), h2:is(.dark *), h3:is(.dark *), h4:is(.dark *), h5:is(.dark *), 
 }
 
 .bg-lightwarning {
-  background-color: var(--color-lightwarning);
+  background-color: var(--color-lightwarning) !important;
 }
 
 .bg-link {
