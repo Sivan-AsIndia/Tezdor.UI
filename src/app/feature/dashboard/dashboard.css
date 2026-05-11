@@ -103,7 +103,7 @@
   position: relative;
   overflow: hidden;
   /* width: 95%; */
-    height: 82% !important;
+    height: 85% !important;
 }
 
 .card--center {
@@ -129,24 +129,127 @@
   flex-direction: column;
 }
 
-/* Gradient Blue Card */
-.card--gradient-blue {
-  background: linear-gradient(135deg, var(--color-indigo) 0%, var(--color-indigo-dark) 100%);
+/* =========================================================
+   WHITE REVENUE CARD
+========================================================= */
+
+.card--revenue-white {
+  background: #ffffff;
   border-radius: var(--radius-card);
   padding: 1.5rem;
-  box-shadow: 0 10px 40px rgba(99,102,241,0.25);
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  color: white;
-  border: none;
-  overflow: hidden;
+
+  border: 1px solid #eef2f7;
+
   position: relative;
+  overflow: hidden;
+
+  min-height: 220px;
+
+  transition: all .2s ease;
 }
 
-/* ════════════════════════════════════════════
-   CARD TYPOGRAPHY & COMMON ELEMENTS
-   ════════════════════════════════════════════ */
+.card--revenue-white:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 30px rgba(15, 23, 42, 0.06);
+}
+
+/* =========================================================
+   BG ICON
+========================================================= */
+
+.card-bg-icon-light {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+
+  font-size: 72px;
+
+  color: rgba(99, 102, 241, 0.06);
+
+  pointer-events: none;
+}
+
+/* =========================================================
+   TEXT
+========================================================= */
+
+.card-label-muted {
+  margin: 0 0 10px;
+
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+
+  color: #94a3b8;
+}
+
+.card-value-dark {
+  margin: 0;
+
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1.1;
+
+  color: #0f172a;
+}
+
+.card-footer-muted {
+  font-size: 10px;
+  font-weight: 600;
+
+  color: #64748b;
+}
+
+
+.bar-chart--primary {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+
+  height: 64px;
+
+  margin: 1.25rem 0 1rem;
+}
+
+.bar-chart--primary .bar {
+  flex: 1;
+
+  border-radius: 8px 8px 0 0;
+background: linear-gradient(
+  180deg,
+  color-mix(in srgb, var(--bs-primary) 75%, white) 0%,
+  var(--bs-primary) 100%
+);
+  min-height: 10px;
+
+  transition: all .25s ease;
+}
+
+.bar-chart--primary .bar:hover {
+  opacity: 1 !important;
+  transform: translateY(-2px);
+}
+
+
+.badge--primary-soft {
+  background: var(--bs-primary-bg-subtle);
+  color: var(--bs-primary);
+
+  border-radius: 999px;
+
+  padding: 6px 12px;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .card-header-row {
   display: flex;
   justify-content: space-between;
@@ -394,6 +497,7 @@
   border: 2px dashed rgb(177, 177, 177);
   color: rgb(177, 177, 177) !important;
   border-radius: 0.75rem;
+      padding: 0.6rem 1rem;
 }
 .btn--dashed:hover {
     border: 2px dashed var(--color-orange) !important;

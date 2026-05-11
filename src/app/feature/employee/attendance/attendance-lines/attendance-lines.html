@@ -82,7 +82,7 @@
                             </div>
                         }
                             <!-- VIEW TOGGLE -->
-                            <button class="icon-btn view-toggle bg-primary" (click)="toggleView()"
+                            <button class="d-none d-md-block icon-btn view-toggle bg-primary d-md-flex" (click)="toggleView()"
                                 [title]="viewMode() === 'table' ? 'Grid View' : 'Table View'">
 
                                 <i class="ti" [class]="viewMode() === 'table' ? 'ti-layout-grid' : 'ti-table'">

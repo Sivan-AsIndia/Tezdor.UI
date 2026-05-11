@@ -458,3 +458,58 @@
     flex-direction: column;
     gap: 0px;
 }
+
+/* =========================================================
+   FILE LIST
+========================================================= */
+
+.upload-file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.upload-file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 8px 12px;
+}
+
+.upload-file-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.upload-file-left i {
+  color: var(--bs-primary);
+  font-size: 16px;
+}
+
+.upload-file-left span {
+  font-size: 13px;
+  color: #334155;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.remove-file-btn {
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: #fee2e2;
+  color: #dc2626;
+  border-radius: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.file-count-group {
+  max-width: 180px;
+}

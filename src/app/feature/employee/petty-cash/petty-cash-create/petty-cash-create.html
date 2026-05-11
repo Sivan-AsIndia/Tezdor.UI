@@ -5,7 +5,7 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
       <div>
         <h4 class="fw-bold mb-1 mainheading">
-          {{ isEditMode() ? 'Edit Petty Cash' : 'Create Petty Cash' }}
+          {{ isEditMode() ? 'Petty Cash Entry' : 'Petty Cash Entry' }}
         </h4>
         <small class="text-muted">Manage petty cash transaction entry</small>
       </div>
@@ -817,20 +817,71 @@
           <!-- ATTACHMENT -->
           <div class="form-row">
 
+            <!-- FILE -->
             <div class="form-group flex-1">
-              <label class="form-label">Attachment</label>
 
-              <input type="file" class="form-control" (change)="onFileUpload($event)">
+              <label class="form-label">
+                Attachment
+              </label>
+
+              <input type="file" class="form-control" multiple accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
+                (change)="onFileUpload($event)">
+
+              <small class="text-muted mt-1 d-block">
+
+                Max 3 files • JPG, PNG, PDF, Word • 1 MB each
+
+              </small>
+
+              <!-- FILE LIST -->
+              @if(uploadedFiles().length){
+
+              <div class="upload-file-list mt-2">
+
+                @for(file of uploadedFiles(); track $index){
+
+                <div class="upload-file-item">
+
+                  <div class="upload-file-left">
+
+                    <i class="ti ti-paperclip"></i>
+
+                    <span>
+
+                      {{ file.fileName }}
+
+                    </span>
+
+                  </div>
+
+                  <button type="button" class="remove-file-btn" (click)="removeFile($index)">
+
+                    <i class="ti ti-x"></i>
+
+                  </button>
+
+                </div>
+
+                }
+
+              </div>
+
+              }
+
             </div>
 
-            <div class="form-group flex-1">
-              <label class="form-label">File Count</label>
+            <!-- COUNT -->
+            <div class="form-group file-count-group">
 
-              <input class="form-control" [value]="form().receiptFileCount" readonly>
+              <label class="form-label">
+                File Count
+              </label>
+
+              <input class="form-control" [value]="uploadedFiles().length" readonly>
+
             </div>
 
           </div>
-
           <!-- MISSING RECEIPT -->
           @if(!form().hasReceipt){
           <div class="form-group mt-2">
@@ -969,7 +1020,7 @@
     <!-- FOOTER -->
     <div class="text-end mt-3">
       <button class="btn btn-cancel me-2" (click)="onCancel()">Cancel</button>
-      <button class="btn btn-primary" (click)="onSave()">Create</button>
+      <button class="btn btn-primary" (click)="onSave()">{{ isEditMode() ? 'Update' : 'Create' }}</button>
     </div>
 
   </div>
