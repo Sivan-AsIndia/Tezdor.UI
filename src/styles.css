@@ -311,3 +311,14 @@ html, body {
     -ms-overflow-style: none;
 }
  */
+/* Hide spinner arrows — optional */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
+/* Force integer steps globally */
+/* Prevent decimal on integer number inputs */
+input[type='number']:not([step]) {
+  --step: 1;
+}

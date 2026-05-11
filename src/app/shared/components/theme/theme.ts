@@ -22,17 +22,12 @@ export class ThemeComponent implements OnInit {
   @Input() isOpen = false;
   @Output() closed = new EventEmitter<void>();
 
-  // ── Color State ─────────────────────────────────
   primaryColor   = '#0085db';
   secondaryColor = '#051a2c';
   iconColor      = '#64748b';
   headingColor   = '#000000';
-
-  // ── Theme / Layout ───────────────────────────────
   isDarkMode = false;
   layoutMode = 'box';
-
-  // ── Font State ───────────────────────────────────
   selectedMenuFont    = 'Plus Jakarta Sans';
   selectedHeadingFont = 'Plus Jakarta Sans';
   selectedNumberFont  = 'Plus Jakarta Sans';
@@ -40,17 +35,12 @@ export class ThemeComponent implements OnInit {
   selectedFontSize    = '22px';
   selectedFontWeight  = '600';
   selectedLineHeight  = 1.6;
-
-  // ── Shadow / Radius ──────────────────────────────
   shadowLevel       = 15;
   borderRadiusLevel = 8;
   buttonRadiusLevel = 8;
-
-  // ── Sidebar / Profile ────────────────────────────
   selectedBg: string | null           = null;
   selectedProfilePhoto: string | null = null;
-
-  // ── Accordion ────────────────────────────────────
+containerMode: 'fluid' | 'fixed' = 'fluid'; 
   openSections: Record<string, boolean> = {
     themeColors:     true,
     secondaryColors: true,
@@ -63,9 +53,9 @@ export class ThemeComponent implements OnInit {
     headingColors:   true,
     shadowRadius:    true,
     profileImage:    true,
+     container:       true, 
   };
 
-  // ── Color Presets ────────────────────────────────
   defaultPrimaryPresets   = ['#0085db', '#f97316', '#ef4444', '#8b5cf6', '#10b981', '#fb3cf9'];
   defaultSecondaryPresets = ['#fa896b', '#305faa', '#31f3c2', '#9ac500', '#bd0068', '#00bebe'];
   defaultIconPresets      = ['#64748b', '#f97316', '#ef4444', '#8b5cf6', '#10b981', '#fb3cf9'];
@@ -76,7 +66,6 @@ export class ThemeComponent implements OnInit {
   iconPresets:      string[] = [];
   headingPresets:   string[] = [];
 
-  // ── Fonts ─────────────────────────────────────────
   fonts: FontOption[] = [
     { name: 'Inter',       value: 'Inter, sans-serif' },
     { name: 'Roboto',      value: 'Roboto, sans-serif' },
@@ -103,7 +92,6 @@ export class ThemeComponent implements OnInit {
     { label: 'Bolder',  value: '700' },
   ];
 
-  // ── Sidebar Backgrounds ───────────────────────────
   backgrounds = [
     'https://dreamspos.dreamstechnologies.com/html/template/assets/img/theme/bg-01.jpg',
     'https://dreamspos.dreamstechnologies.com/html/template/assets/img/theme/bg-02.jpg',
@@ -119,6 +107,8 @@ export class ThemeComponent implements OnInit {
 
   public sidebarService = inject(SidebarManager);
   public themeService   = inject(ThemeService);
+
+
 
   ngOnInit(): void {
     this.loadSavedTheme();
@@ -149,10 +139,8 @@ export class ThemeComponent implements OnInit {
 
     const saved = this.themeService.loadTheme();
     this.applyFromSettings(saved);
-    // Panel open ஆகும்போது UI sync மட்டும் — applyTheme() app.component-ல் handle ஆகும்
   }
 
-  /** Sync component state from a ThemeSettings object */
   private applyFromSettings(s: ThemeSettings): void {
     this.primaryColor         = s.primaryColor;
     this.secondaryColor       = s.secondaryColor;
@@ -172,14 +160,13 @@ export class ThemeComponent implements OnInit {
     this.selectedOtherFont    = s.otherFont;
     this.selectedBg           = s.sidebarBg;
     this.selectedProfilePhoto = s.profilePhoto;
+      this.containerMode = s.containerMode ?? 'fluid'; 
   }
 
-  // ── Accordion ────────────────────────────────────
   toggleSection(key: string): void {
     this.openSections[key] = !this.openSections[key];
   }
 
-  // ── Primary Color ────────────────────────────────
   setPrimaryPreset(color: string): void {
     this.primaryColor = color.toLowerCase();
     document.documentElement.style.setProperty('--primary', this.primaryColor);
@@ -199,7 +186,11 @@ export class ThemeComponent implements OnInit {
       !this.primaryPresets.map(c => c.toLowerCase()).includes(this.primaryColor.toLowerCase());
   }
 
-  // ── Secondary Color ──────────────────────────────
+setContainerMode(mode: 'fluid' | 'fixed'): void {
+  this.containerMode = mode;
+  document.documentElement.setAttribute('data-container', mode);
+}
+
   setSecondaryPreset(color: string): void {
     this.secondaryColor = color.toLowerCase();
     document.documentElement.style.setProperty('--secondary', this.secondaryColor);
@@ -381,6 +372,7 @@ setThemeMode(dark: boolean): void {
       otherFont:      this.selectedOtherFont,
       sidebarBg:      this.selectedBg,
       profilePhoto:   this.selectedProfilePhoto,
+      containerMode :this.containerMode
     };
   }
 

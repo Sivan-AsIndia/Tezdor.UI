@@ -105,6 +105,38 @@
     </div>
 
 
+    <div class="accordion-item">
+  <button class="accordion-header" (click)="toggleSection('container')">
+    <span>Container Width</span>
+    <svg class="chevron" [class.rotated]="openSections['container']" 
+         width="16" height="16" viewBox="0 0 24 24" fill="none" 
+         stroke="currentColor" stroke-width="2">
+      <polyline points="6 9 12 15 18 9"/>
+    </svg>
+  </button>
+  <div class="accordion-body" [class.open]="openSections['container']">
+    <div class="theme-mode-group">
+
+      <label class="theme-mode-card" 
+             [class.active]="containerMode === 'fluid'" 
+             (click)="setContainerMode('fluid')">
+        <input type="radio" name="containerMode" [checked]="containerMode === 'fluid'" />
+        <i class="bi bi-arrows-expand"></i>
+        Full Width
+      </label>
+
+      <label class="theme-mode-card" 
+             [class.active]="containerMode === 'fixed'" 
+             (click)="setContainerMode('fixed')">
+        <input type="radio" name="containerMode" [checked]="containerMode === 'fixed'" />
+        <i class="bi bi-layout-text-window"></i>
+        Fixed Width
+      </label>
+
+    </div>
+  </div>
+</div>
+
     
     <!-- 3. Select Layouts -->
     <div class="accordion-item">
@@ -305,10 +337,7 @@
         </div>
       </div>
     </div>
-
-  </div>
-
-  <!-- ── Footer ───────────────────────────────────────── -->
+<!-- ── Footer ───────────────────────────────────────── -->
  
         </div>
         
@@ -321,5 +350,8 @@
     </button>
         
             </div>
+  </div>
+
+  
       </div>
       

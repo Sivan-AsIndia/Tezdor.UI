@@ -945,7 +945,7 @@ select:focus {
 
 .btn {
   border-radius: 9999px;
-  border-color: var(--color-primary) !important;
+  border-color: var(--color-primary);
   background-color: var(--color-primary) !important;
   padding-left: 1.25rem;
   padding-right: 1.25rem;

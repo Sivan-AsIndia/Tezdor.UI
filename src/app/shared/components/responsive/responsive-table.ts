@@ -80,9 +80,6 @@ export class ResponsiveTable implements AfterViewChecked, OnDestroy {
       .v-table__wrapper table tbody td:last-child {
         background: var(--color-background-primary, #fff);
       }
-      .v-table__wrapper table tbody tr:hover td:last-child {
-        background: var(--color-background-secondary, #f5f5f5);
-      }
     `;
     document.head.appendChild(style);
   }

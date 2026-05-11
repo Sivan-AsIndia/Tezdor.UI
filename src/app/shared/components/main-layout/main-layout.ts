@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, OnInit } from '@angular/core';
 import { VerticalSidebarComponent } from '../vertical-sidebar/vertical-sidebar';
 import { ThemeComponent } from '../theme/theme';
 import { HorizontalSidebarComponent } from '../horizontal-sidebar/horizontal-sidebar';
@@ -8,6 +8,7 @@ import { RouterOutlet } from '@angular/router';
 import { ToastComponent } from '../toast/toast';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { ThemeService } from '../../../core/services/theme';
 declare var window: any;
 @Component({
   selector: 'app-main-layout',
@@ -20,6 +21,12 @@ declare var window: any;
 export class MainLayoutComponent implements OnInit, AfterViewInit{
 
   constructor(private router: Router) {}
+  private themeService = inject(ThemeService);
+get containerMode(): 'fluid' | 'fixed' {
+  const mode = this.themeService.currentSettings()?.containerMode ?? 'fluid';
+  console.log('containerMode:', mode);  // ← என்ன வருதுன்னு பாருங்க
+  return mode;
+}
 
   ngOnInit() {
     this.router.events.pipe(
