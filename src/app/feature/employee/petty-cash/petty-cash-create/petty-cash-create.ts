@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { PettyCashDataClient } from '../petty-cash-data-client';
 import { ToastNotifier } from '../../../../core/services/toast';
-import { ApprovalStatus, FinanceVerificationStatus, PettyCash, PettyCashFundType, PettyCashSourceDocumentType, PettyCashStatus, PettyCashTransactionType, PostingStatus, ReceiptVerificationStatus, ReconciliationStatus, ReplenishmentStatus } from '../petty-cash';
+import { ApprovalStatus, FinanceVerificationStatus, PettyCash, PettyCashFundType, PettyCashSourceDocumentType, PettyCashStatus, PettyCashTransactionType, PostingStatus, ReceiptAttachment, ReceiptAttachmentFile, ReceiptVerificationStatus, ReconciliationStatus, ReplenishmentStatus } from '../petty-cash';
 import { EmployeeDataClient } from '../../employee-data-client';
 import { CommonModule } from '@angular/common';
 import { MasterDataClient } from '../../../../core/services/master-data';
@@ -38,6 +38,27 @@ export class PettyCashCreateComponent {
 
         const existingLines = this.service.getLines(this.id)();
         this.lines.set(existingLines);
+
+        // ===== LOAD ATTACHMENT =====
+const attachment =
+  this.service
+    .receiptAttachments()
+    .find(x =>
+
+      x.receiptAttachmentId ===
+      data.receiptAttachmentId
+    );
+
+if (attachment) {
+
+  this.receiptAttachment.set(
+    attachment
+  );
+
+  this.uploadedFiles.set(
+    attachment.files
+  );
+}
       }
     }
   }
@@ -50,6 +71,12 @@ export class PettyCashCreateComponent {
 
   // ================= LINES =================
   lines = signal<PettyCashLine[]>([]);
+
+  receiptAttachment =
+    signal<ReceiptAttachment | null>(null);
+
+  uploadedFiles =
+    signal<ReceiptAttachmentFile[]>([]);
 
 
   branches = this.master.branches;
@@ -295,7 +322,7 @@ export class PettyCashCreateComponent {
   onSave() {
     const isDraft = this.form().pettyCashStatus === 'Draft';
 
-    // 🔥 LINE VALIDATION
+    //  LINE VALIDATION
     if (!isDraft) {
 
       if (!this.lines() || this.lines().length === 0) {
@@ -326,17 +353,35 @@ export class PettyCashCreateComponent {
       lines: this.lines()
     };
 
-    if (this.isEditMode()) {
+  // ===== ATTACHMENT =====
+  const attachment =
+    this.receiptAttachment();
 
-      this.service.update(this.form(), this.lines());
-      this.toast.success('Updated successfully');
+  // ===== SAVE =====
+  if (this.isEditMode()) {
 
-    } else {
+    this.service.update(
+      data,
+      this.lines(),
+      attachment
+    );
 
-      this.service.add(this.form(), this.lines());
-      this.toast.success('Created successfully');
+    this.toast.success(
+      'Updated successfully'
+    );
 
-    }
+  } else {
+
+    this.service.add(
+      data,
+      this.lines(),
+      attachment
+    );
+
+    this.toast.success(
+      'Created successfully'
+    );
+  }
 
     this.router.navigate(['/petty-cash']);
   }
@@ -409,18 +454,246 @@ export class PettyCashCreateComponent {
   });
 
 
-  onFileUpload(event: any) {
 
-    const files = event.target.files;
 
-    if (!files || files.length === 0) return;
+// FILE UPLOAD
 
-    this.update('receiptFileCount', files.length);
+onFileUpload(event: any) {
 
-    // mock attachment id
-    this.update('receiptAttachmentId', crypto.randomUUID());
+  const files =
+    Array.from(
+      event.target.files || []
+    ) as File[];
 
+  if (!files.length) return;
+
+  // ===== VALID TYPES =====
+  const allowedTypes = [
+
+    'image/jpeg',
+    'image/png',
+
+    'application/pdf',
+
+    'application/msword',
+
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  ];
+
+  // ===== EXISTING =====
+  const existing =
+    [...this.uploadedFiles()];
+
+  // ===== LIMIT =====
+  if (
+    existing.length + files.length > 3
+  ) {
+
+    this.toast.error(
+      'Maximum 3 files allowed'
+    );
+
+    event.target.value = '';
+
+    return;
   }
+
+  // ===== VALIDATE =====
+  for (const file of files) {
+
+    // TYPE
+    if (
+      !allowedTypes.includes(file.type)
+    ) {
+
+      this.toast.error(
+        `${file.name} has invalid file type`
+      );
+
+      continue;
+    }
+
+    // SIZE
+    if (
+      file.size > 1024 * 1024
+    ) {
+
+      this.toast.error(
+        `${file.name} exceeds 1 MB`
+      );
+
+      continue;
+    }
+
+    // ===== MAP =====
+    const mapped: ReceiptAttachmentFile = {
+
+      fileId:
+        crypto.randomUUID(),
+
+      fileName:
+        file.name,
+
+      originalFileName:
+        file.name,
+
+      fileExtension:
+        '.' + file.name.split('.').pop(),
+
+      mimeType:
+        file.type,
+
+      fileSizeInBytes:
+        file.size,
+
+      fileSizeLabel:
+        this.formatFileSize(file.size),
+
+      file,
+
+      isDeleted: false
+    };
+
+    existing.push(mapped);
+  }
+
+  // ===== ATTACHMENT ID =====
+  let attachmentId =
+    this.form().receiptAttachmentId;
+
+  if (!attachmentId) {
+
+    attachmentId =
+      crypto.randomUUID();
+  }
+
+  // ===== CREATE BATCH =====
+  const attachment: ReceiptAttachment = {
+
+    receiptAttachmentId:
+      attachmentId,
+
+    pettyCashId:
+      this.form().pettyCashId ?? '',
+
+    files: existing,
+
+    fileCount:
+      existing.length,
+
+    totalSizeInBytes:
+      existing.reduce(
+        (sum, x) =>
+          sum + x.fileSizeInBytes,
+        0
+      ),
+
+    uploadedAt:
+      new Date().toISOString()
+  };
+
+  // ===== UPDATE SIGNAL =====
+  this.receiptAttachment.set(
+    attachment
+  );
+
+  this.uploadedFiles.set(
+    existing
+  );
+
+  // ===== UPDATE FORM =====
+  this.update(
+    'receiptAttachmentId',
+    attachment.receiptAttachmentId
+  );
+
+  this.update(
+    'receiptFileCount',
+    existing.length
+  );
+
+  // RESET
+  event.target.value = '';
+}
+
+// =========================================================
+// REMOVE FILE
+// =========================================================
+
+removeFile(index: number) {
+
+  const updated =
+    [...this.uploadedFiles()];
+
+  updated.splice(index, 1);
+
+  this.uploadedFiles.set(
+    updated
+  );
+
+  // ===== UPDATE ATTACHMENT =====
+  const current =
+    this.receiptAttachment();
+
+  if (current) {
+
+    this.receiptAttachment.set({
+
+      ...current,
+
+      files: updated,
+
+      fileCount:
+        updated.length,
+
+      totalSizeInBytes:
+        updated.reduce(
+          (sum, x) =>
+            sum + x.fileSizeInBytes,
+          0
+        )
+    });
+  }
+
+  // ===== UPDATE FORM =====
+  this.update(
+    'receiptFileCount',
+    updated.length
+  );
+
+  // ===== CLEAR =====
+  if (!updated.length) {
+
+    this.receiptAttachment.set(
+      null
+    );
+
+    this.update(
+      'receiptAttachmentId',
+      null
+    );
+  }
+}
+
+// =========================================================
+// FORMAT FILE SIZE
+// =========================================================
+
+formatFileSize(bytes: number) {
+
+  if (bytes < 1024) {
+
+    return `${bytes} B`;
+  }
+
+  if (bytes < 1024 * 1024) {
+
+    return `${(bytes / 1024).toFixed(1)} KB`;
+  }
+
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
   onTransactionDateChange(date: string) {
 
     this.update('transactionDate', date);

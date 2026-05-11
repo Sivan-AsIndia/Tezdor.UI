@@ -1,5 +1,5 @@
 import { Injectable, signal, computed } from '@angular/core';
-import { ApprovalStatus, FinanceVerificationStatus, PettyCash, ReconciliationStatus, ReplenishmentStatus } from './petty-cash';
+import { ApprovalStatus, FinanceVerificationStatus, PettyCash, ReceiptAttachment, ReconciliationStatus, ReplenishmentStatus } from './petty-cash';
 
 import {
   PettyCashStatus,
@@ -22,6 +22,14 @@ export class PettyCashDataClient {
   // ===== READ =====
   list = this._list.asReadonly();
   lines = this._lines.asReadonly();
+
+
+private readonly _receiptAttachments =
+  signal<ReceiptAttachment[]>([]);
+
+// READONLY
+receiptAttachments =
+  this._receiptAttachments.asReadonly();
 
   total = computed(() => this._list().length);
 
@@ -302,86 +310,277 @@ export class PettyCashDataClient {
     );
   }
 
-  add(header: PettyCash, lines: PettyCashLine[]) {
+// =========================================================
+// ADD
+// =========================================================
 
-    const now = new Date().toISOString();
+add(
+  header: PettyCash,
+  lines: PettyCashLine[],
+  attachment?: ReceiptAttachment | null
+) {
 
-    const newId = crypto.randomUUID();
+  const now =
+    new Date().toISOString();
 
-    // ===== CREATE HEADER =====
-    const newHeader: PettyCash = {
-      ...header,
+  const newId =
+    crypto.randomUUID();
 
-      pettyCashId: newId,
-      pettyCashCode: `PC-${Date.now()}`,
+  // HEADER
 
-      pettyCashStatus: PettyCashStatus.Draft,
-      postingStatus: PostingStatus.NotPosted,
+  const newHeader: PettyCash = {
 
-      createdAt: now,
-      createdByUserId: 'SYSTEM',
+    ...header,
 
-      updatedAt: now,
-      updatedByUserId: 'SYSTEM',
+    pettyCashId:
+      newId,
 
-      isDeleted: false,
-      rowVersion: '1'
-    };
+    pettyCashCode:
+      `PC-${Date.now()}`,
 
-    // ===== CREATE LINES =====
-    const newLines: PettyCashLine[] = lines.map(l => ({
+    pettyCashStatus:
+      PettyCashStatus.Draft,
+
+    postingStatus:
+      PostingStatus.NotPosted,
+
+    // RECEIPT
+    hasReceipt:
+      !!attachment,
+
+    receiptAttachmentId:
+      attachment?.receiptAttachmentId,
+
+    receiptFileCount:
+      attachment?.fileCount ?? 0,
+
+    // AUDIT
+    createdAt:
+      now,
+
+    createdByUserId:
+      'SYSTEM',
+
+    updatedAt:
+      now,
+
+    updatedByUserId:
+      'SYSTEM',
+
+    isDeleted:
+      false,
+
+    rowVersion:
+      '1'
+  };
+
+  // =====================================================
+  // LINES
+  // =====================================================
+
+  const newLines: PettyCashLine[] =
+
+    lines.map(l => ({
+
       ...l,
-      pettyCashLineId: crypto.randomUUID(),
-      pettyCashId: newId,
 
-      createdAt: now,
-      createdByUserId: 'SYSTEM',
-      isDeleted: false
+      pettyCashLineId:
+        crypto.randomUUID(),
+
+      pettyCashId:
+        newId,
+
+      createdAt:
+        now,
+
+      createdByUserId:
+        'SYSTEM',
+
+      updatedAt:
+        now,
+
+      updatedByUserId:
+        'SYSTEM',
+
+      isDeleted:
+        false
     }));
 
-    // ===== SAVE =====
-    this._list.update(list => [...list, newHeader]);
-    this._lines.update(existing => [...existing, ...newLines]);
+  // ATTACHMENT
 
+  if (attachment) {
+
+    const mappedAttachment:
+      ReceiptAttachment = {
+
+      ...attachment,
+
+      pettyCashId:
+        newId,
+
+      uploadedAt:
+        now,
+
+      updatedAt:
+        now
+    };
+
+    this._receiptAttachments.update(list => [
+
+      ...list,
+
+      mappedAttachment
+    ]);
   }
 
-  update(header: PettyCash, lines: PettyCashLine[]) {
+  // =====================================================
+  // SAVE
+  // =====================================================
 
-    const now = new Date().toISOString();
+  this._list.update(list => [
 
-    // ===== UPDATE HEADER =====
-    this._list.update(list =>
-      list.map(item =>
-        item.pettyCashId === header.pettyCashId
-          ? {
+    ...list,
+
+    newHeader
+  ]);
+
+  this._lines.update(existing => [
+
+    ...existing,
+
+    ...newLines
+  ]);
+}
+
+// UPDATE
+
+update(
+  header: PettyCash,
+  lines: PettyCashLine[],
+  attachment?: ReceiptAttachment | null
+) {
+
+  const now =
+    new Date().toISOString();
+
+  // HEADER
+
+  this._list.update(list =>
+
+    list.map(item =>
+
+      item.pettyCashId ===
+      header.pettyCashId
+
+        ? {
+
             ...item,
+
             ...header,
-            updatedAt: now,
-            updatedByUserId: 'SYSTEM'
+
+            // RECEIPT
+            hasReceipt:
+              !!attachment,
+
+            receiptAttachmentId:
+              attachment?.receiptAttachmentId,
+
+            receiptFileCount:
+              attachment?.fileCount ?? 0,
+
+            updatedAt:
+              now,
+
+            updatedByUserId:
+              'SYSTEM'
           }
-          : item
-      )
-    );
 
-    // ===== REPLACE LINES =====
-    this._lines.update(existing => {
-      const others = existing.filter(l => l.pettyCashId !== header.pettyCashId);
+        : item
+    )
+  );
 
-      const updatedLines = lines.map(l => ({
+  // =====================================================
+  // LINES
+  // =====================================================
+
+  this._lines.update(existing => {
+
+    // REMOVE OLD
+    const others =
+      existing.filter(l =>
+
+        l.pettyCashId !==
+        header.pettyCashId
+      );
+
+    // NEW LINES
+    const updatedLines =
+      lines.map(l => ({
+
         ...l,
-        pettyCashLineId: l.pettyCashLineId || crypto.randomUUID(),
-        pettyCashId: header.pettyCashId,
-        updatedAt: now,
-        updatedByUserId: 'SYSTEM',
-        isDeleted: false
+
+        pettyCashLineId:
+          l.pettyCashLineId ||
+          crypto.randomUUID(),
+
+        pettyCashId:
+          header.pettyCashId,
+
+        updatedAt:
+          now,
+
+        updatedByUserId:
+          'SYSTEM',
+
+        isDeleted:
+          false
       }));
 
-      return [...others, ...updatedLines];
-    });
+    return [
 
+      ...others,
 
+      ...updatedLines
+    ];
+  });
+
+  // =====================================================
+  // ATTACHMENT
+  // =====================================================
+
+  // REMOVE OLD ATTACHMENT
+  this._receiptAttachments.update(list =>
+
+    list.filter(x =>
+
+      x.pettyCashId !==
+      header.pettyCashId
+    )
+  );
+
+  // ADD NEW ATTACHMENT
+  if (attachment) {
+
+    const updatedAttachment:
+      ReceiptAttachment = {
+
+      ...attachment,
+
+      pettyCashId:
+        header.pettyCashId,
+
+      updatedAt:
+        now
+    };
+
+    this._receiptAttachments.update(list => [
+
+      ...list,
+
+      updatedAttachment
+    ]);
   }
-
+}
   delete(id: string) {
 
     // ===== DELETE HEADER =====

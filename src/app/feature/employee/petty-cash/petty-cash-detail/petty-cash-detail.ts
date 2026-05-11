@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { PettyCashDataClient } from '../petty-cash-data-client';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ReconciliationStatus } from '../petty-cash';
+import { ReceiptAttachmentFile, ReconciliationStatus } from '../petty-cash';
 import { ToastNotifier } from '../../../../core/services/toast';
 import { MasterDataClient } from '../../../../core/services/master-data';
 import { EmployeeDataClient } from '../../employee-data-client';
@@ -369,6 +369,61 @@ export class PettyCashDetailComponent {
   getEmployeeName(id: string): string {
     const emp = this.employeeMap()[id];
     return emp ? `${emp.firstName} ${emp.lastName}` : '—';
+  }
+
+
+  // RECEIPT ATTACHMENT
+
+  receiptAttachment = computed(() => {
+
+    const pc =
+      this.pettyCash();
+
+    if (
+      !pc?.receiptAttachmentId
+    ) {
+
+      return null;
+    }
+
+    return this.service
+      .receiptAttachments()
+      .find(x =>
+
+        x.receiptAttachmentId ===
+        pc.receiptAttachmentId
+      ) ?? null;
+  });
+
+  // DOWNLOAD
+
+  downloadFile(
+    file: ReceiptAttachmentFile
+  ) {
+
+    if (!file.file) {
+
+      this.toast.error(
+        'File not available'
+      );
+
+      return;
+    }
+
+    const url =
+      URL.createObjectURL(file.file);
+
+    const a =
+      document.createElement('a');
+
+    a.href = url;
+
+    a.download =
+      file.originalFileName;
+
+    a.click();
+
+    URL.revokeObjectURL(url);
   }
 
 }

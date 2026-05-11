@@ -368,107 +368,107 @@
     </div>
 
     <!-- RIGHT -->
-   <div class="col-lg-4 ">
-    <div class="sticky-summary">
-      <div class="card mb-3">
-        <div class="card-header  text-primary fw-semibold">
-          Actions
+    <div class="col-lg-4 ">
+      <div class="sticky-summary">
+        <div class="card mb-3">
+          <div class="card-header  text-primary fw-semibold">
+            Actions
+          </div>
+
+          <div class="card-body d-flex flex-column gap-2">
+
+            <!-- ===== SUBMIT ===== -->
+            @if (pc.pettyCashStatus === 'Draft') {
+            <button class="btn btn-primary w-100" (click)="submit(pc.pettyCashId)">
+              Submit
+            </button>
+            }
+
+            <!-- ===== APPROVAL ===== -->
+            @if (pc.approvalStatus === 'Submitted' || pc.approvalStatus === 'UnderReview') {
+
+            <button class="btn btn-success w-100" (click)="approve(pc.pettyCashId)">
+              Approve
+            </button>
+
+            <button class="btn btn-outline-danger w-100 btn-clr" (click)="openReasonPopup('reject', pc.pettyCashId)">>
+              Reject
+            </button>
+            }
+
+            <!-- ===== FINANCE VERIFICATION ===== -->
+            @if (
+            pc.approvalStatus === 'Approved' &&
+            pc.financeVerificationStatus !== 'Verified'
+            ) {
+            <button class="btn btn-info w-100" (click)="verifyReceipt(pc.pettyCashId)">
+              Verify Receipt
+            </button>
+            }
+
+            <!-- ===== POSTING ===== -->
+            @if (
+            pc.approvalStatus === 'Approved' &&
+            pc.financeVerificationStatus === 'Verified' &&
+            pc.postingStatus !== 'Posted'
+            ) {
+            <button class="btn btn-success w-100" (click)="post(pc.pettyCashId)">
+              Post Transaction
+            </button>
+            }
+
+            <!-- ===== REPLENISHMENT ===== -->
+            @if (
+            pc.postingStatus === 'Posted' &&
+            pc.replenishmentStatus === 'Required'
+            ) {
+            <button class="btn btn-warning w-100" (click)="requestReplenishment(pc.pettyCashId)">
+              Request Replenishment
+            </button>
+            }
+
+            <!-- ===== RECONCILIATION ===== -->
+            @if (
+            pc.postingStatus === 'Posted' &&
+            pc.reconciliationStatus !== reconciliationStatuses.Matched &&
+            pc.reconciliationStatus !== reconciliationStatuses.Closed
+            ) {
+            <button class="btn btn-dark w-100" (click)="reconcile(pc.pettyCashId)">
+              Reconcile Cash
+            </button>
+            }
+
+            <!-- ===== CLOSE ===== -->
+            @if (
+            pc.reconciliationStatus === reconciliationStatuses.Matched
+            ) {
+            <button class="btn btn-secondary w-100" (click)="openReasonPopup('close', pc.pettyCashId)">
+              Close Fund
+            </button>
+            }
+
+            <!-- ===== CANCEL ===== -->
+            @if (
+            pc.pettyCashStatus !== 'Closed' &&
+            pc.pettyCashStatus !== 'Posted'
+            ) {
+            <button class="btn btn-outline-danger w-100 btn-clr" (click)="openReasonPopup('cancel', pc.pettyCashId)">
+              Cancel
+            </button>
+            }
+
+            @if (
+            pc.postingStatus === 'Posted' &&
+            pc.pettyCashStatus === 'Posted'
+            ) {
+            <button class="btn btn-outline-warning w-100 btn-clr" (click)="openReasonPopup('reverse', pc.pettyCashId)">
+              Reverse
+            </button>
+            }
+
+          </div>
         </div>
-
-        <div class="card-body d-flex flex-column gap-2">
-
-          <!-- ===== SUBMIT ===== -->
-          @if (pc.pettyCashStatus === 'Draft') {
-          <button class="btn btn-primary w-100" (click)="submit(pc.pettyCashId)">
-            Submit
-          </button>
-          }
-
-          <!-- ===== APPROVAL ===== -->
-          @if (pc.approvalStatus === 'Submitted' || pc.approvalStatus === 'UnderReview') {
-
-          <button class="btn btn-success w-100" (click)="approve(pc.pettyCashId)">
-            Approve
-          </button>
-
-          <button class="btn btn-outline-danger w-100 btn-clr" (click)="openReasonPopup('reject', pc.pettyCashId)">>
-            Reject
-          </button>
-          }
-
-          <!-- ===== FINANCE VERIFICATION ===== -->
-          @if (
-          pc.approvalStatus === 'Approved' &&
-          pc.financeVerificationStatus !== 'Verified'
-          ) {
-          <button class="btn btn-info w-100" (click)="verifyReceipt(pc.pettyCashId)">
-            Verify Receipt
-          </button>
-          }
-
-          <!-- ===== POSTING ===== -->
-          @if (
-          pc.approvalStatus === 'Approved' &&
-          pc.financeVerificationStatus === 'Verified' &&
-          pc.postingStatus !== 'Posted'
-          ) {
-          <button class="btn btn-success w-100" (click)="post(pc.pettyCashId)">
-            Post Transaction
-          </button>
-          }
-
-          <!-- ===== REPLENISHMENT ===== -->
-          @if (
-          pc.postingStatus === 'Posted' &&
-          pc.replenishmentStatus === 'Required'
-          ) {
-          <button class="btn btn-warning w-100" (click)="requestReplenishment(pc.pettyCashId)">
-            Request Replenishment
-          </button>
-          }
-
-          <!-- ===== RECONCILIATION ===== -->
-          @if (
-          pc.postingStatus === 'Posted' &&
-          pc.reconciliationStatus !== reconciliationStatuses.Matched &&
-          pc.reconciliationStatus !== reconciliationStatuses.Closed
-          ) {
-          <button class="btn btn-dark w-100" (click)="reconcile(pc.pettyCashId)">
-            Reconcile Cash
-          </button>
-          }
-
-          <!-- ===== CLOSE ===== -->
-          @if (
-          pc.reconciliationStatus === reconciliationStatuses.Matched
-          ) {
-          <button class="btn btn-secondary w-100" (click)="openReasonPopup('close', pc.pettyCashId)">
-            Close Fund
-          </button>
-          }
-
-          <!-- ===== CANCEL ===== -->
-          @if (
-          pc.pettyCashStatus !== 'Closed' &&
-          pc.pettyCashStatus !== 'Posted'
-          ) {
-          <button class="btn btn-outline-danger w-100 btn-clr" (click)="openReasonPopup('cancel', pc.pettyCashId)">
-            Cancel
-          </button>
-          }
-
-          @if (
-          pc.postingStatus === 'Posted' &&
-          pc.pettyCashStatus === 'Posted'
-          ) {
-          <button class="btn btn-outline-warning w-100 btn-clr" (click)="openReasonPopup('reverse', pc.pettyCashId)">
-            Reverse
-          </button>
-          }
-
-        </div>
-      </div>
-      <!-- <div class="sticky-summary"> -->
+        <!-- <div class="sticky-summary"> -->
 
         <!-- CASH SUMMARY -->
         <div class="card mb-3">
@@ -493,101 +493,234 @@
           </div>
         </div>
 
-      <!-- </div> -->
+        <!-- </div> -->
 
-      <div class="card mb-3 audit-card">
-        <div class="card-header fw-semibold text-primary">
-          Audit Trail
+
+        <!-- ===================================================== -->
+        <!-- RECEIPT ATTACHMENTS -->
+        <!-- ===================================================== -->
+
+        @if(receiptAttachment()){
+
+        <div class="card mb-3 receipt-card">
+
+          <div class="card-header fw-semibold text-primary
+                d-flex justify-content-between align-items-center">
+
+            <div class="d-flex align-items-center gap-2">
+
+              <i class="ti ti-paperclip"></i>
+
+              <span>
+                Receipt Attachments
+              </span>
+
+            </div>
+
+            <span class="badge bg-primary-subtle text-primary">
+
+              {{ receiptAttachment()?.fileCount }} Files
+
+            </span>
+
+          </div>
+
+          <div class="card-body">
+
+            <div class="receipt-file-list">
+
+              @for(file of receiptAttachment()?.files ?? [];
+              track file.fileId){
+
+              <div class="receipt-file-item">
+
+                <!-- LEFT -->
+                <div class="receipt-file-left">
+
+                  <!-- ICON -->
+                  <div class="receipt-file-icon" [class.pdf]="file.fileExtension === '.pdf'" [class.image]="
+                           file.fileExtension === '.jpg' ||
+                           file.fileExtension === '.jpeg' ||
+                           file.fileExtension === '.png'
+                         " [class.word]="
+                           file.fileExtension === '.doc' ||
+                           file.fileExtension === '.docx'
+                         ">
+
+                    @if(file.fileExtension === '.pdf'){
+
+                    <i class="ti ti-file-invoice"></i>
+
+                    }
+
+                    @if(
+                    file.fileExtension === '.jpg' ||
+                    file.fileExtension === '.jpeg' ||
+                    file.fileExtension === '.png'
+                    ){
+
+                    <i class="ti ti-photo"></i>
+
+                    }
+
+                    @if(
+                    file.fileExtension === '.doc' ||
+                    file.fileExtension === '.docx'
+                    ){
+
+                    <i class="ti ti-file-description"></i>
+
+                    }
+
+                  </div>
+
+                  <!-- NAME -->
+                  <div>
+
+                    <div class="receipt-file-name">
+
+                      {{ file.originalFileName }}
+
+                    </div>
+
+                    <small class="text-muted">
+
+                      {{ file.fileSizeLabel }}
+
+                    </small>
+
+                  </div>
+
+                </div>
+
+                <!-- ACTION -->
+                <div class="d-flex align-items-center gap-2">
+
+                  <!-- PREVIEW -->
+                  @if(file.fileUrl){
+
+                  <a [href]="file.fileUrl" target="_blank" class="btn btn-sm btn-light">
+
+                    <i class="ti ti-eye"></i>
+
+                  </a>
+
+                  }
+
+                  <!-- DOWNLOAD -->
+                  <button class="btn btn-sm btn-light" (click)="downloadFile(file)">
+
+                    <i class="ti ti-download"></i>
+
+                  </button>
+
+                </div>
+
+              </div>
+
+              }
+
+            </div>
+
+          </div>
+
         </div>
 
-        <div class="card-body">
+        }
 
-          <div class="audit-timeline">
+        <div class="card mb-3 audit-card">
+          <div class="card-header fw-semibold text-primary">
+            Audit Trail
+          </div>
 
-            <!-- CREATED -->
-            <div class="audit-item">
-              <div class="dot created"></div>
-              <div class="content">
-                <div class="title">Created</div>
-                <div class="meta">
-                  {{ pc.createdAt | date:'dd/MM/yyyy HH:mm' }}
+          <div class="card-body">
+
+            <div class="audit-timeline">
+
+              <!-- CREATED -->
+              <div class="audit-item">
+                <div class="dot created"></div>
+                <div class="content">
+                  <div class="title">Created</div>
+                  <div class="meta">
+                    {{ pc.createdAt | date:'dd/MM/yyyy HH:mm' }}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <!-- SUBMITTED -->
-            @if(pc.submittedOn){
-            <div class="audit-item">
-              <div class="dot submitted"></div>
-              <div class="content">
-                <div class="title">Submitted</div>
-                <div class="meta">
-                  {{ pc.submittedOn | date:'dd/MM/yyyy HH:mm' }}
+              <!-- SUBMITTED -->
+              @if(pc.submittedOn){
+              <div class="audit-item">
+                <div class="dot submitted"></div>
+                <div class="content">
+                  <div class="title">Submitted</div>
+                  <div class="meta">
+                    {{ pc.submittedOn | date:'dd/MM/yyyy HH:mm' }}
+                  </div>
                 </div>
               </div>
-            </div>
-            }
+              }
 
-            <!-- APPROVED -->
-            @if(pc.approvedOn){
-            <div class="audit-item">
-              <div class="dot approved"></div>
-              <div class="content">
-                <div class="title">Approved</div>
-                <div class="meta">
-                  {{ pc.approvedOn | date:'dd/MM/yyyy HH:mm' }}
+              <!-- APPROVED -->
+              @if(pc.approvedOn){
+              <div class="audit-item">
+                <div class="dot approved"></div>
+                <div class="content">
+                  <div class="title">Approved</div>
+                  <div class="meta">
+                    {{ pc.approvedOn | date:'dd/MM/yyyy HH:mm' }}
+                  </div>
                 </div>
               </div>
-            </div>
-            }
+              }
 
-            <!-- REJECTED -->
-            @if(pc.rejectedOn){
-            <div class="audit-item">
-              <div class="dot rejected"></div>
-              <div class="content">
-                <div class="title text-danger">Rejected</div>
-                <div class="meta">
-                  {{ pc.rejectedOn | date:'dd/MM/yyyy HH:mm' }}
-                </div>
+              <!-- REJECTED -->
+              @if(pc.rejectedOn){
+              <div class="audit-item">
+                <div class="dot rejected"></div>
+                <div class="content">
+                  <div class="title text-danger">Rejected</div>
+                  <div class="meta">
+                    {{ pc.rejectedOn | date:'dd/MM/yyyy HH:mm' }}
+                  </div>
 
-                @if(pc.rejectionReason){
-                <div class="reason">
-                  {{ pc.rejectionReason }}
-                </div>
-                }
-              </div>
-            </div>
-            }
-
-            <!-- VERIFIED -->
-            @if(pc.receiptVerifiedOn){
-            <div class="audit-item">
-              <div class="dot verified"></div>
-              <div class="content">
-                <div class="title">Finance Verified</div>
-                <div class="meta">
-                  {{ pc.receiptVerifiedOn | date:'dd/MM/yyyy HH:mm' }}
+                  @if(pc.rejectionReason){
+                  <div class="reason">
+                    {{ pc.rejectionReason }}
+                  </div>
+                  }
                 </div>
               </div>
-            </div>
-            }
+              }
 
-            <!-- POSTED -->
-            @if(pc.postedOn){
-            <div class="audit-item">
-              <div class="dot posted"></div>
-              <div class="content">
-                <div class="title">Posted</div>
-                <div class="meta">
-                  {{ pc.postedOn | date:'dd/MM/yyyy HH:mm' }}
+              <!-- VERIFIED -->
+              @if(pc.receiptVerifiedOn){
+              <div class="audit-item">
+                <div class="dot verified"></div>
+                <div class="content">
+                  <div class="title">Finance Verified</div>
+                  <div class="meta">
+                    {{ pc.receiptVerifiedOn | date:'dd/MM/yyyy HH:mm' }}
+                  </div>
                 </div>
               </div>
-            </div>
-            }
+              }
 
-            <!-- CANCELLED -->
-            <!-- @if(pc.cancelledOn){
+              <!-- POSTED -->
+              @if(pc.postedOn){
+              <div class="audit-item">
+                <div class="dot posted"></div>
+                <div class="content">
+                  <div class="title">Posted</div>
+                  <div class="meta">
+                    {{ pc.postedOn | date:'dd/MM/yyyy HH:mm' }}
+                  </div>
+                </div>
+              </div>
+              }
+
+              <!-- CANCELLED -->
+              <!-- @if(pc.cancelledOn){
       <div class="audit-item">
         <div class="dot cancelled"></div>
         <div class="content">
@@ -605,42 +738,42 @@
       </div>
       } -->
 
-            <!-- REVERSED -->
-            @if(pc.pettyCashStatus === 'Reversed'){
-            <div class="audit-item">
-              <div class="dot reversed"></div>
-              <div class="content">
-                <div class="title text-warning">Reversed</div>
+              <!-- REVERSED -->
+              @if(pc.pettyCashStatus === 'Reversed'){
+              <div class="audit-item">
+                <div class="dot reversed"></div>
+                <div class="content">
+                  <div class="title text-warning">Reversed</div>
 
-                @if(pc.reversalReason){
-                <div class="reason">
-                  {{ pc.reversalReason }}
+                  @if(pc.reversalReason){
+                  <div class="reason">
+                    {{ pc.reversalReason }}
+                  </div>
+                  }
                 </div>
-                }
               </div>
-            </div>
-            }
+              }
 
-            <!-- CLOSED -->
-            @if(pc.pettyCashStatus === 'Closed'){
-            <div class="audit-item">
-              <div class="dot closed"></div>
-              <div class="content">
-                <div class="title">Closed</div>
+              <!-- CLOSED -->
+              @if(pc.pettyCashStatus === 'Closed'){
+              <div class="audit-item">
+                <div class="dot closed"></div>
+                <div class="content">
+                  <div class="title">Closed</div>
 
-                @if(pc.closureReason){
-                <div class="reason">
-                  {{ pc.closureReason }}
+                  @if(pc.closureReason){
+                  <div class="reason">
+                    {{ pc.closureReason }}
+                  </div>
+                  }
                 </div>
-                }
               </div>
+              }
+
             </div>
-            }
 
           </div>
-
         </div>
-      </div>
       </div>
 
     </div>

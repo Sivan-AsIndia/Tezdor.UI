@@ -10,12 +10,12 @@ export interface PettyCash {
   pettyCashCode: string;
   pettyCashName: string;
 
-pettyCashStatus: PettyCashStatus;
+  pettyCashStatus: PettyCashStatus;
 
   // ===== Fund Details =====
   pettyCashMode: 'Imprest' | 'NonImprest';
 
-fundType: PettyCashFundType;
+  fundType: PettyCashFundType;
 
   floatLimitAmount: number;
   minimumThresholdAmount?: number;
@@ -34,7 +34,7 @@ fundType: PettyCashFundType;
   financeOwnerUserId?: string;
 
   // ===== Transaction =====
-pettyCashTransactionType: PettyCashTransactionType;
+  pettyCashTransactionType: PettyCashTransactionType;
 
   transactionDate: string;
   fiscalYearId: string;
@@ -43,7 +43,7 @@ pettyCashTransactionType: PettyCashTransactionType;
   purposeTitle: string;
   purposeDescription?: string;
 
-sourceDocumentType?: PettyCashSourceDocumentType;
+  sourceDocumentType?: PettyCashSourceDocumentType;
 
   sourceDocumentId?: string;
   sourceDocumentNumber?: string;
@@ -75,7 +75,7 @@ sourceDocumentType?: PettyCashSourceDocumentType;
 
   missingReceiptReason?: string;
 
-  receiptVerificationStatus:ReceiptVerificationStatus;
+  receiptVerificationStatus: ReceiptVerificationStatus;
 
   receiptVerifiedByUserId?: string;
   receiptVerifiedOn?: string;
@@ -84,7 +84,7 @@ sourceDocumentType?: PettyCashSourceDocumentType;
   duplicateReceiptReferenceId?: string;
 
   // ===== Approval =====
-approvalStatus: ApprovalStatus;
+  approvalStatus: ApprovalStatus;
 
   approvalWorkflowId?: string;
   approvalInstanceId?: string;
@@ -100,14 +100,14 @@ approvalStatus: ApprovalStatus;
   rejectionReason?: string;
 
   // ===== Finance Verification =====
-financeVerificationStatus: FinanceVerificationStatus;
+  financeVerificationStatus: FinanceVerificationStatus;
 
   financeVerifiedByUserId?: string;
   financeVerifiedOn?: string;
   financeVerificationRemarks?: string;
 
   // ===== Posting =====
-postingStatus: PostingStatus;
+  postingStatus: PostingStatus;
 
   postingProfileId?: string;
   postingRuleId?: string;
@@ -123,13 +123,13 @@ postingStatus: PostingStatus;
   postingFailureReason?: string;
 
   // ===== Replenishment =====
-replenishmentStatus: ReplenishmentStatus;
+  replenishmentStatus: ReplenishmentStatus;
 
   lastReplenishmentDate?: string;
   lastReplenishmentAmount?: number;
 
   // ===== Reconciliation =====
-reconciliationStatus: ReconciliationStatus;
+  reconciliationStatus: ReconciliationStatus;
 
   systemCashBalance?: number;
   physicalCashCount?: number;
@@ -190,6 +190,62 @@ export enum PettyCashStatus {
   Cancelled = 'Cancelled',
   Reversed = 'Reversed',
   Closed = 'Closed'
+}
+
+export interface ReceiptAttachment {
+
+  // ===== BATCH / GROUP =====
+  receiptAttachmentId: string;
+
+  pettyCashId: string;
+
+  // ===== FILES =====
+  files: ReceiptAttachmentFile[];
+
+  // ===== SUMMARY =====
+  fileCount: number;
+
+  totalSizeInBytes?: number;
+
+  // ===== AUDIT =====
+  uploadedAt: string;
+
+  uploadedByUserId?: string;
+
+  updatedAt?: string;
+
+  updatedByUserId?: string;
+}
+
+//   FILE ITEM
+
+export interface ReceiptAttachmentFile {
+
+  fileId: string;
+
+  fileName: string;
+
+  originalFileName: string;
+
+  fileExtension: string;
+
+  mimeType: string;
+
+  fileSizeInBytes: number;
+
+  fileSizeLabel?: string;
+
+  // UI / TEMP
+  file?: File;
+
+  base64Data?: string;
+
+  fileUrl?: string;
+
+  // FLAGS
+  isPrimaryReceipt?: boolean;
+
+  isDeleted?: boolean;
 }
 
 
