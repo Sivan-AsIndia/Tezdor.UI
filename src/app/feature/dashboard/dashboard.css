@@ -691,7 +691,7 @@ background: linear-gradient(
   background: var(--color-slate-100);
   margin-bottom: 0.875rem;
 }
-.stat-rows { display: flex; flex-direction: column; gap: 0.625rem; margin-bottom: 0.5rem; }
+.stat-rows { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 0.5rem; }
 .stat-row  { display: flex; justify-content: space-between; align-items: center; }
 .stat-row__label { font-size: 0.8125rem; color: var(--color-slate-500); }
 .stat-row__value { font-size: 0.8125rem; font-weight: 700; color: var(--color-slate-800); }
