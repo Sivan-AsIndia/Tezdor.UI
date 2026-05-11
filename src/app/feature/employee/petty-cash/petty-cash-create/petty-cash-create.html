@@ -5,7 +5,7 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
       <div>
         <h4 class="fw-bold mb-1 mainheading">
-          {{ isEditMode() ? 'Edit Petty Cash' : 'Create Petty Cash' }}
+          {{ isEditMode() ? 'Petty Cash Entry' : 'Petty Cash Entry' }}
         </h4>
         <small class="text-muted">Manage petty cash transaction entry</small>
       </div>
@@ -1020,7 +1020,7 @@
     <!-- FOOTER -->
     <div class="text-end mt-3">
       <button class="btn btn-cancel me-2" (click)="onCancel()">Cancel</button>
-      <button class="btn btn-primary" (click)="onSave()">Create</button>
+      <button class="btn btn-primary" (click)="onSave()">{{ isEditMode() ? 'Update' : 'Create' }}</button>
     </div>
 
   </div>

@@ -27,35 +27,74 @@
 
                     <h4 class="widget-title">Employee Attendance</h4>
                     <p class="widget-meta">{{ attendance().present }} out of {{ attendance().total }} present today</p>
-                    <button class="btn btn--outline-primary w-full mt-auto text-primary">View Data</button>
+                    <button class="btn btn--outline-primary w-full mt-auto">View Data</button>
                 </div>
             </div>
 
 
             <!-- WIDGET 2: REVENUE FLOW -->
-            <div class="col-12 col-md-6 col-lg-3 col-xl-custom-5 col-xxxl-2">
+<!-- WIDGET 2: REVENUE FLOW -->
+<div class="col-12 col-md-6 col-lg-3 col-xl-custom-5 col-xxxl-2">
 
-                <div class="card card--gradient-blue h-100">
+    <div class="card card--revenue-white h-100">
 
-                    <i class="fas fa-arrow-up-right-dots card-bg-icon"></i>
-                    <div>
-                        <p class="card-label-light">Total Sales Revenue</p>
-                        <h3 class="card-value-large">{{ revenue.total }}</h3>
-                    </div>
+        <!-- BG ICON -->
+        <i class="fas fa-arrow-up-right-dots card-bg-icon-light"></i>
 
-                    <div class="bar-chart bar-chart--white">
-                        @for (bar of revenue.bars ; track $index;){
-                        <div class="bar" [style.height.%]="bar.heightPct" [style.opacity]="bar.opacity"></div>
-                        }
+        <!-- TOP -->
+        <div>
 
-                    </div>
+            <p class="card-label-muted">
 
-                    <div class="card-footer-row">
-                        <span class="card-footer-label">MTD Performance</span>
-                        <span class="badge badge--emerald">{{ revenue.growth }}</span>
-                    </div>
-                </div>
+                Total Sales Revenue
+
+            </p>
+
+            <h3 class="card-value-md">
+
+                {{ revenue.total }}
+
+            </h3>
+
+        </div>
+
+        <!-- BAR -->
+        <div class="bar-chart bar-chart--primary">
+
+            @for (bar of revenue.bars; track $index){
+
+            <div class="bar"
+
+                 [style.height.%]="bar.heightPct"
+
+                 [style.opacity]="bar.opacity">
+
             </div>
+
+            }
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="card-footer-row">
+
+            <span class="card-footer-muted">
+
+                MTD Performance
+
+            </span>
+
+            <span class="badge badge--primary-soft">
+
+                {{ revenue.growth }}
+
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
 
             <!-- WIDGET 3: PETTY CASH -->
             <div class="d-none d-md-block col-6 col-md-6 col-lg-3 col-xl-custom-5 col-xxxl-2">
@@ -81,7 +120,7 @@
                             <div class="progress-bar__fill progress-bar__fill--primary"
                                 [style.width.%]="pettyCash.budgetUsedPct"></div>
                         </div>
-                        <p class="hint-text">Budget reset in {{ pettyCash.resetDays }} days</p>
+                        <p class="card-footer-muted">Budget reset in {{ pettyCash.resetDays }} days</p>
                     </div>
                 </div>
             </div>
@@ -148,7 +187,7 @@
                             }
                         </div>
 
-                        <button class="btn btn--dashed w-full mt-md">Create PO</button>
+                        <button class="btn--dashed w-full mt-md">Create PO</button>
                     </div>
                 </div>
             </div>
