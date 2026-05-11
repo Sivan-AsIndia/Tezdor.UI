@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 export interface ThemeSettings {
   primaryColor: string;
@@ -20,6 +20,7 @@ export interface ThemeSettings {
   otherFont: string;
   sidebarBg: string | null;
   profilePhoto: string | null;
+   containerMode: 'fluid' | 'fixed'; 
 }
 
 const DEFAULT_SETTINGS: ThemeSettings = {
@@ -42,6 +43,7 @@ const DEFAULT_SETTINGS: ThemeSettings = {
   otherFont: 'Plus Jakarta Sans',
   sidebarBg: null,
   profilePhoto: null,
+  containerMode: 'fluid',
 };
 
 @Injectable({ providedIn: 'root' })
@@ -51,6 +53,11 @@ export class ThemeService {
   private SIDEBAR_BG_KEY = 'sidebar-bg';
   private LAYOUT_KEY = 'layoutMode';
 
+
+  currentSettings = signal<ThemeSettings>(this.loadTheme());
+
+
+  
   loadTheme(): ThemeSettings {
     try {
       const raw = localStorage.getItem(this.STORAGE_KEY);
@@ -63,6 +70,8 @@ export class ThemeService {
   saveTheme(settings: ThemeSettings): void {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(settings));
     localStorage.setItem(this.LAYOUT_KEY, settings.layoutMode);
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(settings));
+    this.currentSettings.set(settings);  
     if (settings.sidebarBg) {
       localStorage.setItem(this.SIDEBAR_BG_KEY, settings.sidebarBg);
     } else {
@@ -128,6 +137,7 @@ export class ThemeService {
 
     // Dark / light mode
     document.body.classList.toggle('dark-theme', settings.isDarkMode);
+  document.documentElement.setAttribute('data-container', settings.containerMode);
 
     // Layout
     document.documentElement.setAttribute('data-layout', settings.layoutMode);

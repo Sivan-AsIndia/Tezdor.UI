@@ -5,7 +5,7 @@
     <app-horizontal-sidebar></app-horizontal-sidebar>
 
     <div class="body-wrapper">
-      <div class="container-fluid">
+      <div  [class]="containerMode === 'fluid' ? 'container-fluid' : 'container'">
 
         <app-top-header></app-top-header>
 <app-toast></app-toast>
