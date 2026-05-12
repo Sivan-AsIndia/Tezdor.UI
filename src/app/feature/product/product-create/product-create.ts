@@ -28,16 +28,10 @@ export class ProductCreateComponent {
   private router = inject(Router);
   service        = inject(ProductDataClient);
 
-  /**
-   * ✅ Angular 21 input() signal — binds ':id' from the route
-   *    automatically via withComponentInputBinding() in app.config.
-   */
   id = input<string>();
 
-  /** Computed: are we in edit mode? Derived from the route param. */
   editMode = computed(() => !!this.id());
 
-  /** The numeric ID being edited (0 if creating). */
   editId = computed(() => {
     const raw = this.id();
     return raw ? +raw : 0;
@@ -89,7 +83,7 @@ export class ProductCreateComponent {
     mediaFiles:         [[]],
   });
 
-  pageTitle = computed(() => this.editMode() ? 'Edit Product' : 'Create Product');
+  pageTitle = computed(() => this.editMode() ? 'Product Inventory' : 'Product Inventory');
   pageSubtitle = computed(() =>
     this.editMode()
       ? 'Update existing product details and manage your inventory.'

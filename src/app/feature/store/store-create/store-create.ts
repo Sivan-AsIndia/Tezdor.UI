@@ -20,7 +20,7 @@ export class StoreCreateComponent {
 
   editId: number | null = null;
   get isEditMode() { return this.editId !== null; }
-  get pageTitle()  { return this.isEditMode ? 'Stock Transaction' : 'Stock Transaction'; }
+  get pageTitle()  { return this.isEditMode ? 'Store Maintenance' : 'Store Maintenance'; }
 
   currentStep = signal<StepId>(1);
   steps = [

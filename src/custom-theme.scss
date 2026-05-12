@@ -7,7 +7,6 @@
 @use '@angular/material' as mat;
 
 @import "@ng-select/ng-select/themes/default.theme.css";
-
 .ng-select {
   .ng-select-container {
     border: 1px solid #ced4da;
@@ -17,11 +16,11 @@
 
   .ng-dropdown-panel {
     border: 1px solid #ced4da;
-    
+
     .ng-dropdown-header {
       padding: 4px 8px;
       border-bottom: 1px solid #ced4da;
-      
+
       input {
         width: calc(100% - 60px);
         border: 1px solid #ced4da;
@@ -30,25 +29,26 @@
       }
     }
 
-  .ng-option {
-  padding: 8px 12px;
-  color: #333;
+    .ng-option {
+      padding: 8px 12px;
+      color: #333;
 
-  &.ng-option-selected {
-    background-color: #fff;
-    color: #333;
-  }
+      &.ng-option-selected {
+        background-color: color-mix(in srgb, var(--color-primary) 10%, white) !important;
+        color: var(--color-primary) !important;
+        font-weight: 600;
+      }
 
-  &.ng-option-marked {
-    background-color: var(--color-primary);
-    color: #fff;
-  }
+      &.ng-option-marked {
+        background-color: var(--color-primary) !important;
+        color: #fff !important;
+      }
 
-  &.ng-option-selected.ng-option-marked {
-    background-color: var(--color-primary);
-    color: #fff;
-  }
-}
+      &.ng-option-selected.ng-option-marked {
+        background-color: var(--color-primary) !important;
+        color: #fff !important;
+      }
+    }
   }
 
   &.is-invalid .ng-select-container {
@@ -57,16 +57,11 @@
 
   &.ng-select-focused .ng-select-container {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 0.25rem rgba(var(--color-primary-rgb), 0.25);
+    box-shadow: 0 0 0 0.25rem color-mix(in srgb, var(--color-primary) 25%, transparent);
   }
 }
 
 
-
-.ng-select.ng-select-focused .ng-select-container {
-  border-color: var(--color-primary) !important;
-  box-shadow: 0 3px 3px 3px color-mix(in srgb, var(--color-primary) 15%, transparent) !important;
-}
 
 html {
   @include mat.theme((

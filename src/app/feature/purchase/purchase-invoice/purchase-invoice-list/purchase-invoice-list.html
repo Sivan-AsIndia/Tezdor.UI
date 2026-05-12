@@ -229,6 +229,22 @@
                           <!-- Actions -->
                           <td>
                             <div class="d-flex align-center">
+         <!-- VIEW -->
+                              <a
+                                [routerLink]="['/purchase-invoice', inv.id]"
+                                class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default">
+                                <span class="v-btn__content">
+                                  <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="icon-tabler icon-tabler-eye text-info"
+                                    width="20px" height="20px" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/>
+                                    <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/>
+                                  </svg>
+                                </span>
+                              </a>
 
                               <!-- EDIT (draft only) -->
                               @if (inv.invoiceStatus === 'draft') {
@@ -284,23 +300,7 @@
                                 </span>
                               </button>
 
-                              <!-- VIEW -->
-                              <a
-                                [routerLink]="['/purchase-invoice', inv.id]"
-                                class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default">
-                                <span class="v-btn__content">
-                                  <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="icon-tabler icon-tabler-eye text-info"
-                                    width="20px" height="20px" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/>
-                                    <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/>
-                                  </svg>
-                                </span>
-                              </a>
-
+                     
                             </div>
                           </td>
                         </tr>

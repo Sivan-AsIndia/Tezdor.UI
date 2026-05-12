@@ -38,7 +38,7 @@ export class PurchaseInvoiceCreateComponent implements OnInit {
   editId: number | null = null;
 
   get isEditMode(): boolean { return this.editId !== null; }
-  get pageTitle(): string { return this.isEditMode ? 'Edit Purchase Invoice' : 'Create Purchase Invoice'; }
+  get pageTitle(): string { return this.isEditMode ? 'Purchase Invoice' : 'Purchase Invoice'; }
 
   invoiceNo = signal('PINV-2026-00045');
   supplierInvNo = signal('');

@@ -101,7 +101,7 @@ export class PurchaseOrderCreateComponent {
 
 
   pageTitle = computed(() =>
-    this.editMode ? 'Edit Purchase Order' : 'Create Purchase Order'
+    this.editMode ? 'Purchase Order' : 'Purchase Order'
   );
 
   pageSubtitle = computed(() =>

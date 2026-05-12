@@ -333,7 +333,10 @@ input[type='number']:not([step]) {
 .form-select,.form-control{
   background-color: white;
 }
-
+.ng-select.ng-select-focused .ng-select-container {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 3px 3px 3px color-mix(in srgb, var(--color-primary) 15%, transparent) !important;
+}
 
 /* Date Picker */.mat-datepicker-content {
   background-color: #ffffff !important;
