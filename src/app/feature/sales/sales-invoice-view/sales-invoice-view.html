@@ -571,22 +571,23 @@
 
         <div class="siv-meta-body siv-action-list">
 
-          <button class="siv-action-btn" (click)="onPrint()">
-            <i class="ti ti-printer"></i>
-            Print Invoice
+          <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="onPrint()">
+            <!-- <i class="ti ti-printer"></i> -->
+            Print
           </button>
 
           @if (canEdit()) {
-            <button class="siv-action-btn siv-action-btn--edit" (click)="onEdit()">
-              <i class="ti ti-edit"></i>
-              Edit Invoice
+            <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
+" (click)="onEdit()">
+              <!-- <i class="ti ti-edit"></i> -->
+              Edit
             </button>
           }
 
           @if (canCancel()) {
-            <button class="siv-action-btn siv-action-btn--danger" (click)="onCancel()">
-              <i class="ti ti-ban"></i>
-              Cancel Invoice
+            <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="onCancel()">
+              <!-- <i class="ti ti-ban"></i> -->
+              Cancel 
             </button>
           }
 
@@ -607,7 +608,7 @@
           <div class="siv-status-item">
             <span class="siv-status-label">Payment Status</span>
             <span
-              class="siv-pay-badge"
+              class="siv-pay-badge rounded-2"
               [class.siv-badge--unpaid]="inv.payment.paymentStatus === 'unpaid'"
               [class.siv-badge--partial]="inv.payment.paymentStatus === 'partial'"
               [class.siv-badge--paid]="inv.payment.paymentStatus === 'paid'">
@@ -618,25 +619,25 @@
 
           <div class="siv-status-item">
             <span class="siv-status-label">Grand Total</span>
-            <span class="siv-grand-pill">₹{{ inv.taxSummary.grandTotal | number:'1.2-2' }}</span>
+            <span class="siv-grand-pill rounded-2">₹{{ inv.taxSummary.grandTotal | number:'1.2-2' }}</span>
           </div>
 
           @if (inv.taxSummary.totalTaxAmount > 0) {
             <div class="siv-status-item">
               <span class="siv-status-label">Total Tax</span>
-              <span class="siv-grand-pill">₹{{ inv.taxSummary.totalTaxAmount | number:'1.2-2' }}</span>
+              <span class="siv-grand-pill rounded-2">₹{{ inv.taxSummary.totalTaxAmount | number:'1.2-2' }}</span>
             </div>
           }
 
           <div class="siv-status-item">
             <span class="siv-status-label">Amount Paid</span>
-            <span class="siv-grand-pill">₹{{ inv.payment.amountPaid | number:'1.2-2' }}</span>
+            <span class="siv-grand-pill rounded-2">₹{{ inv.payment.amountPaid | number:'1.2-2' }}</span>
           </div>
 
           <div class="siv-status-item">
             <span class="siv-status-label">Balance Due</span>
             <span
-              class="siv-balance-pill"
+              class="siv-balance-pill rounded-2"
               [class.siv-balance-pill--danger]="inv.payment.balanceDue > 0"
               [class.siv-balance-pill--safe]="inv.payment.balanceDue <= 0">
               ₹{{ inv.payment.balanceDue | number:'1.2-2' }}
@@ -646,7 +647,7 @@
           @if (inv.payment.overdueDays > 0) {
             <div class="siv-status-item">
               <span class="siv-status-label">Overdue By</span>
-              <span class="siv-balance-pill siv-balance-pill--danger">
+              <span class="siv-balance-pill siv-balance-pill--danger rounded-2">
                 {{ inv.payment.overdueDays }} days
               </span>
             </div>
@@ -654,7 +655,7 @@
 
           <div class="siv-status-item">
             <span class="siv-status-label">Invoice Status</span>
-            <span class="siv-status-badge siv-status-badge--{{ inv.status }}">
+            <span class="siv-status-badge siv-status-badge--{{ inv.status }} rounded-2">
               <i class="ti ti-{{ statusIcon(inv.status) }}"></i>
               {{ inv.status | titlecase }}
             </span>

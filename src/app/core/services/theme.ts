@@ -20,7 +20,9 @@ export interface ThemeSettings {
   otherFont: string;
   sidebarBg: string | null;
   profilePhoto: string | null;
-   containerMode: 'fluid' | 'fixed'; 
+  containerMode: 'fluid' | 'fixed';
+   headingFontSize: string;   // add
+  otherFontSize: string;  
 }
 
 const DEFAULT_SETTINGS: ThemeSettings = {
@@ -30,7 +32,7 @@ const DEFAULT_SETTINGS: ThemeSettings = {
   headingColor: '#000000',
   isDarkMode: false,
   fontFamily: 'Plus Jakarta Sans',
-  fontSize: '22',
+  fontSize: '14',
   fontWeight: '600',
   lineHeight: 1.6,
   shadowStrength: 15,
@@ -44,6 +46,8 @@ const DEFAULT_SETTINGS: ThemeSettings = {
   sidebarBg: null,
   profilePhoto: null,
   containerMode: 'fluid',
+    headingFontSize: '22',
+  otherFontSize: '14'
 };
 
 @Injectable({ providedIn: 'root' })
@@ -53,11 +57,8 @@ export class ThemeService {
   private SIDEBAR_BG_KEY = 'sidebar-bg';
   private LAYOUT_KEY = 'layoutMode';
 
-
   currentSettings = signal<ThemeSettings>(this.loadTheme());
 
-
-  
   loadTheme(): ThemeSettings {
     try {
       const raw = localStorage.getItem(this.STORAGE_KEY);
@@ -70,8 +71,7 @@ export class ThemeService {
   saveTheme(settings: ThemeSettings): void {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(settings));
     localStorage.setItem(this.LAYOUT_KEY, settings.layoutMode);
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(settings));
-    this.currentSettings.set(settings);  
+    this.currentSettings.set(settings);
     if (settings.sidebarBg) {
       localStorage.setItem(this.SIDEBAR_BG_KEY, settings.sidebarBg);
     } else {
@@ -87,6 +87,8 @@ export class ThemeService {
     localStorage.setItem('font-size-base', settings.fontSize);
     localStorage.setItem('font-weight-base', settings.fontWeight);
     localStorage.setItem('line-height-base', settings.lineHeight.toString());
+    localStorage.setItem('font-size-heading', settings.headingFontSize);  // add
+  localStorage.setItem('font-size-other', settings.otherFontSize);
   }
 
   resetTheme(): void {
@@ -102,6 +104,8 @@ export class ThemeService {
       'font-size-base',
       'font-weight-base',
       'line-height-base',
+          'font-size-heading',   // add
+    'font-size-other',  
     ].forEach(k => localStorage.removeItem(k));
   }
 
@@ -124,20 +128,32 @@ export class ThemeService {
     root.style.setProperty('--icon-color', settings.iconColor);
     root.style.setProperty('--heading-color', settings.headingColor);
     root.style.setProperty('--font-family', settings.fontFamily);
+
+    // Font sizes — base, heading, other தனியா
     root.style.setProperty('--font-size-base', `${settings.fontSize}px`);
+    // root.style.setProperty('--font-size-heading', `${settings.fontSize}px`);
+    root.style.setProperty('--font-size-other', `${settings.fontSize}px`);
+const headingFontSize = settings.headingFontSize ?? localStorage.getItem('font-size-heading') ?? '24';
+const otherFontSize   = settings.otherFontSize   ?? localStorage.getItem('font-size-other')   ?? '14';
+
+root.style.setProperty('--font-size-heading', `${headingFontSize}px`);
+root.style.setProperty('--font-size-other',   `${otherFontSize}px`);
     root.style.setProperty('--font-weight-base', settings.fontWeight);
     root.style.setProperty('--line-height-base', settings.lineHeight.toString());
     root.style.setProperty('--shadow-strength', (settings.shadowStrength / 100).toFixed(2));
     root.style.setProperty('--radius', `${settings.borderRadius}px`);
     root.style.setProperty('--btn-radius', `${settings.buttonRadius}px`);
+
+    // Font families
     root.style.setProperty('--font-menu', settings.menuFont);
     root.style.setProperty('--font-heading', settings.headingFont);
     root.style.setProperty('--font-number', settings.numberFont);
     root.style.setProperty('--font-other', settings.otherFont);
 
     // Dark / light mode
-    document.body.classList.toggle('dark-theme', settings.isDarkMode);
-  document.documentElement.setAttribute('data-container', settings.containerMode);
+    document.documentElement.classList.toggle('dark-theme', settings.isDarkMode);
+    document.documentElement.setAttribute('data-bs-theme', settings.isDarkMode ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-container', settings.containerMode);
 
     // Layout
     document.documentElement.setAttribute('data-layout', settings.layoutMode);

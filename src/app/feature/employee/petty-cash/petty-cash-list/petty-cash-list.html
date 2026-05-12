@@ -96,8 +96,9 @@
                                 </div>
 
                                 <div class="d-flex gap-2 mt-4">
-                                    <button class="btn btn-cancel w-50" (click)="closeFilter()">Cancel</button>
-                                    <button class="btn btn-primary w-50" (click)="closeFilter()">Apply</button>
+                                    <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="closeFilter()">Cancel</button>
+                                    <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
+" (click)="closeFilter()">Apply</button>
                                 </div>
 
                             </div>
@@ -184,7 +185,7 @@
                                         </td>
 
                                         <td class="d-none d-xl-table-cell">
-                                            <span class="badge" [class]="getStatusClass(pc.pettyCashStatus)">
+                                            <span class="badge rounded-2" [class]="getStatusClass(pc.pettyCashStatus)">
                                                 {{ pc.pettyCashStatus }}
                                             </span>
                                         </td>
@@ -192,15 +193,63 @@
                                         <td>
                                             <div class="action-icons">
 
-                                                <button class="icon-btn view" (click)="onView(pc)">
+                                                <!-- <button class="icon-btn view"  title="View" (click)="onView(pc)">
                                                     <i class="ti ti-eye"></i>
-                                                </button>
-                                                <button class="icon-btn edit" (click)="onEdit(pc)">
+                                                </button> -->
+
+                                                  <a (click)="onView(pc)" style="cursor: pointer;"
+                              class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                              title="View">
+                              <span class="v-btn__content">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-eye text-info"
+                                  width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5"
+                                  stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/>
+                                  <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/>
+                                </svg>
+                              </span>
+                            </a>
+                                                <!-- <button class="icon-btn edit"  title="Edit" (click)="onEdit(pc)">
                                                     <i class="ti ti-pencil"></i>
-                                                </button>
-                                                <button class="icon-btn delete" (click)="onDelete(pc)">
+                                                </button> -->
+
+                                                  <a  (click)="onEdit(pc)" style="cursor: pointer;"
+                              class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                              title="Edit">
+                              <span class="v-btn__content">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-pencil text-primary"
+                                  width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5"
+                                  stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"/>
+                                  <path d="M13.5 6.5l4 4"/>
+                                </svg>
+                              </span>
+                            </a>
+
+
+                                                <!-- <button class="icon-btn delete"  title="Delete" (click)="onDelete(pc)">
                                                     <i class="ti ti-trash"></i>
-                                                </button>
+                                                </button> -->
+ 
+                                                <button type="button" title="Delete" (click)="onDelete(pc)" style="cursor: pointer;"
+                              class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                          >
+                              <span class="v-btn__content">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-trash text-error"
+                                  width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5"
+                                  stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M4 7l16 0"/><path d="M10 11l0 6"/><path d="M14 11l0 6"/>
+                                  <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/>
+                                  <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/>
+                                </svg>
+                              </span>
+                            </button>
+
+
+
                                             </div>
                                         </td>
                                     </tr>

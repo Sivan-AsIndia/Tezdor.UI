@@ -72,10 +72,10 @@ export class PettyCashDetailComponent {
     if (!status) return 'bg-light text-dark';
 
     switch (status) {
-      case 'Draft': return 'bg-light text-secondary';
-      case 'Approved': return 'bg-light text-info';
-      case 'Posted': return 'bg-light text-success';
-      case 'Cancelled': return 'bg-light text-danger';
+      case 'Draft': return 'bg-lightsuccess text-secondary';
+      case 'Approved': return 'bg-lightinfo text-info';
+      case 'Posted': return 'bg-lightsuccess text-success';
+      case 'Cancelled': return 'bg-lighterror text-error';
       default: return 'bg-light text-dark';
     }
   }

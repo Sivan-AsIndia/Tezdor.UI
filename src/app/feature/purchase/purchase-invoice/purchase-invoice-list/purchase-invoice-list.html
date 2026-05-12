@@ -230,7 +230,7 @@
                           <td>
                             <div class="d-flex align-center">
          <!-- VIEW -->
-                              <a
+                              <a title="View"
                                 [routerLink]="['/purchase-invoice', inv.id]"
                                 class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default">
                                 <span class="v-btn__content">
@@ -248,7 +248,7 @@
 
                               <!-- EDIT (draft only) -->
                               @if (inv.invoiceStatus === 'draft') {
-                                <button
+                                <button title="Edit"
                                   type="button"
                                   class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default"
                                   [routerLink]="['/purchase-invoice/edit', inv.id]">
@@ -278,7 +278,7 @@
                               }
 
                               <!-- DELETE -->
-                              <button
+                              <button  title="Delete"
                                 type="button"
                                 data-bs-toggle="modal"
                                 data-bs-target="#deleteModal"

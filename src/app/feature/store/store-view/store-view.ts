@@ -5,10 +5,11 @@ import { StockLedgerRow } from '../store';
 import { StoreDataClient } from '../store-data-client';
 import { CommonModule } from '@angular/common';
 import { PrintService } from '../../../core/print/print.service';
+import { ResponsiveTable } from '../../../shared/components/responsive/responsive-table';
 
 @Component({
   selector: 'app-store-view',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink,ResponsiveTable],
   templateUrl: './store-view.html',
   styleUrl: './store-view.css',
 })

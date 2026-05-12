@@ -418,7 +418,7 @@
               </div>
 
               <!-- DATE -->
-              <div style="color: black;">
+              <div>
 
                 {{ l.postingDate | date:'dd/MM/yyyy' }}
 
@@ -897,7 +897,7 @@
                 <!-- CONTENT -->
                 <div>
 
-                  <div class="fw-semibold d-flex align-items-center gap-2">
+                  <div class="fw-semibold d-flex align-items-center gap-2" id="leavetext">
 
                     {{ item.employeeName }}
 
@@ -988,7 +988,7 @@
             <!-- INVOICE -->
             <div>
 
-              <div class="fw-semibold">
+              <div class="fw-semibold invoice_no">
                 {{ invoice.invoiceNo }}
               </div>
 
@@ -1032,7 +1032,7 @@
             </div>
 
             <!-- AMOUNT -->
-            <div class="fw-bold text-end">
+            <div class="fw-bold text-end invoice_date">
 
               ₹ {{ invoice.amount | number }}
 

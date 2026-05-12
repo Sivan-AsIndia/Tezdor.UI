@@ -99,7 +99,8 @@ input::placeholder {
 
 .mainheading {
     font-size: 22px !important; 
-    color: var(	--heading-color);
+  font-size: var(--font-size-heading) !important;
+      color: var(--heading-color);
 }
 
 .subdescription {
@@ -205,10 +206,12 @@ color: #fff;
 
 .tableheading {
     font-size: 16px;
-    font-weight: 700;
+    /* font-weight: 700; */
     padding-left: 15px;
     margin: 0;
       position: relative;
+   font-size: var(--font-size-heading) !important;
+  font-family: var(--font-other) !important;
 
 }
 

@@ -225,11 +225,11 @@
                 </div>
 
                 <!-- SAME AS -->
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" formControlName="sameAsPresentAddress"
+                <div class="form-check gap-2 d-flex align-items-center mb-0">
+                    <input class="form-check-input" id="addresscheckbox" type="checkbox" formControlName="sameAsPresentAddress"
                         (change)="copyAddress()">
 
-                    <label class="form-check-label small">
+                    <label class="form-check-label small mb-0" for="addresscheckbox" style="cursor: pointer;">
                         Use residential address as permanent address
                     </label>
                 </div>
@@ -629,7 +629,8 @@
                         <label class="form-label">UPI IDs</label>
 
                         <!-- ADD BUTTON -->
-                        <button type="button" class="btn outline-btn btn-sm" style="font-size:10px ;"
+                        <button type="button" class="btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
+ btn-sm" style="font-size:10px ;"
                             (click)="addUpi()">
                             + Add UPI ID
                         </button>
@@ -746,7 +747,7 @@
                                     <span>Education</span>
                                 </div>
 
-                                <button type="button" class="btn outline-btn btn-sm" (click)="addEducation()">
+                                <button type="button" class="btn bg-primary btn-sm" (click)="addEducation()">
                                     + Add Education
                                 </button>
                             </div>
@@ -821,7 +822,7 @@
                                     <span>Work Experience</span>
                                 </div>
 
-                                <button type="button" class="btn outline-btn btn-sm" (click)="addWork()">
+                                <button type="button" class="btn bg-primary btn-sm" (click)="addWork()">
                                     + Add Work Experience
                                 </button>
                             </div>
@@ -902,8 +903,8 @@
 
     <!-- ================= ACTION ================= -->
     <div class="text-end mb-5 gap-2 action-btn">
-        <button class="btn btn-cancel" (click)="reset()">Cancel</button>
-        <button class="btn btn-primary" type="submit" (click)="save()">
+        <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="reset()">Cancel</button>
+        <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated" type="submit" (click)="save()">
             {{ mode() === 'create' ? 'Save' : 'Update' }}
         </button>
     </div>

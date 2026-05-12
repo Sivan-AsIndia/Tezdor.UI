@@ -540,10 +540,8 @@ td {
   width: 40px;
   height: 40px;
   border-radius: 8px;
-
-  background: rgba(var(--bs-primary-rgb), 0.1);
-  color: var(--bs-primary);
-
+  background: color-mix(in srgb, var(--color-primary) 12%, white);
+  color: var(--color-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -762,10 +760,8 @@ td {
   display: flex;
   align-items: center;
   justify-content: center;
-
-  background: rgba(var(--bs-primary-rgb), 0.1);
-  color: var(--bs-primary);
-
+  background: color-mix(in srgb, var(--color-primary) 12%, white);
+  color: var(--color-primary);
   font-size: 16px;
 }
 

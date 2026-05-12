@@ -36,7 +36,7 @@ export class SalesInvoiceCreateComponent implements OnInit {
 
   editId = signal<number | null>(null);
   isEditMode = computed(() => this.editId() !== null);
-  get pageTitle() { return this.isEditMode() ? 'Edit Invoice' : 'New Invoice'; }
+  get pageTitle() { return this.isEditMode() ? 'Invoice' : 'New Invoice'; }
 
   customerOptions = CUSTOMER_OPTIONS;
 productOptions = INITIAL_PRODUCTS.map(p => ({
