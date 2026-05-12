@@ -1078,3 +1078,487 @@
 		width: 100%;
 	}
  }
+
+ /* =====================================================
+   INVOICE DARK THEME DROPDOWN
+===================================================== */
+
+.invoice-search-dropdown {
+  display: block;
+  width: 100%;
+}
+
+/* CONTROL */
+.invoice-search-dropdown .search-dropdown-control {
+  height: 42px;
+  min-height: 42px;
+
+  background: #28456f;
+  border: 1px solid rgba(255,255,255,0.15);
+
+  border-radius: 10px;
+
+  padding: 0 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  color: #fff;
+
+  box-shadow: none;
+
+  transition: 0.2s ease;
+}
+
+/* FOCUS */
+.invoice-search-dropdown .search-dropdown-control:hover,
+.invoice-search-dropdown .search-dropdown-control.active {
+  border-color: rgba(255,255,255,0.25);
+}
+
+/* TEXT */
+.invoice-search-dropdown .selected-text {
+  font-size: 15px;
+  font-weight: 500;
+  color: #fff;
+}
+
+/* PLACEHOLDER */
+.invoice-search-dropdown .placeholder {
+  color: rgba(255,255,255,0.55);
+  font-weight: 400;
+}
+
+/* ICON */
+.invoice-search-dropdown .search-dropdown-control i {
+  color: rgba(255,255,255,0.7);
+  font-size: 16px;
+}
+
+/* DROPDOWN */
+.invoice-search-dropdown .search-dropdown-menu {
+  margin-top: 6px;
+
+  background: #1d3557;
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.25);
+}
+
+/* SEARCH */
+.invoice-search-dropdown .search-box {
+  background: #28456f;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.invoice-search-dropdown .search-box input {
+  background: transparent;
+  color: #fff;
+}
+
+.invoice-search-dropdown .search-box input::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+/* ITEM */
+.invoice-search-dropdown .dropdown-item {
+  color: #fff;
+  padding: 11px 14px;
+}
+
+.invoice-search-dropdown .dropdown-item:hover,
+.invoice-search-dropdown .dropdown-item.active {
+  background: rgba(255,255,255,0.08);
+}
+
+
+/* =====================================================
+   PREMIUM RICH EDITOR
+===================================================== */
+
+.rich-editor-wrapper {
+
+  width: 100%;
+
+  max-width: 100%;
+
+  overflow: hidden;
+
+  border: 1px solid #d9e2ec;
+
+  border-radius: 6px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 2px 8px rgba(15, 23, 42, 0.04);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* =====================================================
+   HOVER / FOCUS
+===================================================== */
+
+.rich-editor-wrapper:hover {
+
+  border-color: #cbd5e1;
+}
+
+.rich-editor-wrapper:focus-within {
+
+  border-color: #6366f1;
+
+  box-shadow:
+    0 0 0 4px rgba(99, 102, 241, 0.08);
+}
+
+/* =====================================================
+   TOOLBAR
+===================================================== */
+
+.NgxEditor__MenuBar {
+
+  display: flex !important;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  gap: 4px;
+
+  width: 100%;
+
+  max-width: 100%;
+
+  overflow-x: auto;
+
+  padding: 10px 12px !important;
+
+  border: 0 !important;
+
+  border-bottom:
+    1px solid #eef2f7 !important;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #f8fafc 100%
+    ) !important;
+}
+
+/* =====================================================
+   TOOLBAR BUTTONS
+===================================================== */
+
+.NgxEditor__MenuItem {
+
+  flex-shrink: 0;
+
+  width: 34px;
+
+  height: 34px;
+
+  border-radius: 10px;
+
+  display: inline-flex !important;
+
+  align-items: center;
+
+  justify-content: center;
+
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    transform 0.15s ease;
+}
+
+/* HOVER */
+.NgxEditor__MenuItem:hover {
+
+  background: #eef2ff !important;
+
+  color: #4f46e5 !important;
+
+  transform: translateY(-1px);
+}
+
+/* ACTIVE */
+.NgxEditor__MenuItem--Active {
+
+  background: #4f46e5 !important;
+
+  color: #ffffff !important;
+}
+
+/* =====================================================
+   DROPDOWNS
+===================================================== */
+
+.NgxEditor__Dropdown {
+
+  flex-shrink: 0;
+
+  min-width: 120px;
+
+  max-width: 140px;
+
+  height: 36px;
+
+  border-radius: 10px;
+
+  border: 1px solid #e2e8f0;
+
+  background: #ffffff;
+
+  padding: 0 10px;
+
+  font-size: 13px;
+
+  font-weight: 500;
+}
+
+/* =====================================================
+   EDITOR CONTAINER
+===================================================== */
+
+.NgxEditor {
+
+  width: 100% !important;
+
+  max-width: 100% !important;
+
+  overflow: hidden;
+
+  border: 0 !important;
+
+  background: #ffffff;
+}
+
+/* =====================================================
+   CONTENT
+===================================================== */
+
+.NgxEditor__Content {
+
+  width: 100%;
+
+  max-width: 100%;
+
+  overflow-x: hidden;
+
+  overflow-y: auto;
+
+  word-break: break-word;
+
+  overflow-wrap: break-word;
+
+  white-space: pre-wrap;
+
+  min-height: 220px;
+
+  max-height: 320px;
+
+  padding: 18px 20px;
+
+  font-size: 15px;
+
+  line-height: 1.8;
+
+  color: #1e293b;
+
+  font-family:
+    Inter,
+    system-ui,
+    sans-serif;
+}
+
+/* =====================================================
+   IMAGES
+===================================================== */
+
+.NgxEditor__Content img {
+
+  max-width: 100% !important;
+
+  height: auto !important;
+
+  border-radius: 10px;
+}
+
+/* =====================================================
+   TABLES
+===================================================== */
+
+.NgxEditor__Content table {
+
+  width: 100% !important;
+
+  table-layout: fixed;
+}
+
+/* =====================================================
+   PARAGRAPH
+===================================================== */
+
+.NgxEditor__Content p {
+
+  margin-bottom: 12px;
+}
+
+/* =====================================================
+   PLACEHOLDER
+===================================================== */
+
+.NgxEditor__Placeholder {
+
+  color: #94a3b8;
+
+  font-size: 15px;
+
+  font-weight: 400;
+}
+
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+
+.NgxEditor__Content::-webkit-scrollbar {
+
+  width: 8px;
+}
+
+.NgxEditor__Content::-webkit-scrollbar-thumb {
+
+  background: #dbe3ef;
+
+  border-radius: 10px;
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+
+  .NgxEditor__Content {
+
+    padding: 14px;
+
+    font-size: 14px;
+
+    min-height: 180px;
+
+    max-height: 260px;
+  }
+
+}
+
+
+/* =====================================================
+   CRITICAL WIDTH FIX
+===================================================== */
+
+.rich-editor-wrapper,
+.NgxEditor,
+.NgxEditor__Wrapper,
+.NgxEditor__Content,
+.ProseMirror {
+
+  width: 100% !important;
+
+  max-width: 100% !important;
+
+  min-width: 0 !important;
+
+  box-sizing: border-box;
+}
+
+/* =====================================================
+   STOP HORIZONTAL EXPANSION
+===================================================== */
+
+.ProseMirror {
+
+  overflow-x: auto !important;
+
+  overflow-y: auto !important;
+
+  word-break: break-word !important;
+
+  overflow-wrap: anywhere !important;
+
+  white-space: pre-wrap !important;
+}
+
+/* =====================================================
+   FIX LONG TEXT / URLS
+===================================================== */
+
+.ProseMirror p,
+.ProseMirror span,
+.ProseMirror div,
+.ProseMirror li,
+.ProseMirror a {
+
+  word-break: break-word !important;
+
+  overflow-wrap: anywhere !important;
+}
+
+/* =====================================================
+   FIX IMAGES
+===================================================== */
+
+.ProseMirror img {
+
+  max-width: 100% !important;
+
+  height: auto !important;
+}
+
+/* =====================================================
+   FIX TABLES
+===================================================== */
+
+.ProseMirror table {
+
+  display: block;
+
+  width: 100% !important;
+
+  overflow-x: auto;
+
+  table-layout: fixed;
+}
+
+/* =====================================================
+   FIX FLEX PARENT ISSUE
+===================================================== */
+
+.rich-editor-wrapper {
+
+  flex: 1 1 auto;
+
+  min-width: 0;
+}
+
+/* =====================================================
+   FIX GRID PARENT ISSUE
+===================================================== */
+
+.col,
+[class*='col-'] {
+
+  min-width: 0 !important;
+}

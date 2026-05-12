@@ -9,10 +9,11 @@ import { AttendanceType } from '../../attendance/attendance-line';
 import { ToastNotifier } from '../../../../core/services/toast';
 import { SalaryComponentType } from '../salary-component';
 import { CommonModule } from '@angular/common';
+import { SearchDropdownComponent } from "../../../../shared/components/search-dropdown/search-dropdown";
 
 @Component({
   selector: 'app-salary-create',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, SearchDropdownComponent],
   templateUrl: './salary-create.html',
   styleUrl: './salary-create.css',
 })
@@ -450,5 +451,20 @@ export class SalaryCreateComponent {
       deduction: d[i]
     }));
   });
+
+  payrollPeriodDropdownItems = computed(() =>
+
+  this.periods()
+
+    .filter(x => !!x.id)
+
+    .map(x => ({
+
+      id: x.id!,
+
+      name: x.name
+
+    }))
+);
 
 }

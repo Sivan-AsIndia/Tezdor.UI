@@ -284,14 +284,21 @@
 
                 <div class="col-md-3">
                     <label>State<span class="text-danger ms-1">*</span></label>
-                    <select class="form-select" formControlName="stateId"
-                        [class.is-invalid]="hasErrorPath('permanentAddress.stateId')">
 
-                        <option value="">-- Select State --</option>
-                        @for (s of states(); track s.id) {
-                        <option [value]="s.id">{{ s.name }}</option>
-                        }
-                    </select>
+                    <app-search-dropdown [items]="stateDropdownItems()" [selectedId]="
+                        form.controls
+                        .permanentAddress
+                        .controls
+                        .stateId
+                        .value" [invalid]="hasErrorPath('permanentAddress.stateId' )
+                    " placeholder="-- Select State --" (selectedIdChange)="
+                        form.controls
+                        .permanentAddress
+                        .controls
+                        .stateId
+                        .setValue($event)">
+
+                    </app-search-dropdown>
                     @if(hasErrorPath('permanentAddress.stateId')){
                     <div class="text-danger mt-1">
                         State is required
@@ -301,13 +308,20 @@
 
                 <div class="col-md-3">
                     <label>Country<span class="text-danger ms-1">*</span></label>
-                    <select class="form-select" formControlName="countryId"
-                        [class.is-invalid]="hasErrorPath('permanentAddress.countryId')">
-                        <option value="">-- Select Country --</option>
-                        @for (c of countries(); track c.id) {
-                        <option [value]="c.id">{{ c.name }}</option>
-                        }
-                    </select>
+                    <app-search-dropdown [items]="countryDropdownItems()" [selectedId]="
+                        form.controls
+                        .permanentAddress
+                        .controls
+                        .countryId
+                        .value" [invalid]="hasErrorPath('permanentAddress.countryId')"
+                        placeholder="-- Select Country --" (selectedIdChange)="
+                        form.controls
+                        .permanentAddress
+                        .controls
+                        .countryId
+                        .setValue($event)">
+
+                    </app-search-dropdown>
                     @if(hasErrorPath('permanentAddress.countryId')){
                     <div class="text-danger mt-1">
                         Country is required
@@ -360,14 +374,21 @@
 
                 <div class="col-md-3">
                     <label>State<span class="text-danger ms-1">*</span></label>
-                    <select class="form-select" formControlName="stateId"
-                        [class.is-invalid]="hasErrorPath('currentAddress.stateId')">
 
-                        <option value="">-- Select State --</option>
-                        @for (s of states(); track s.id) {
-                        <option [value]="s.id">{{ s.name }}</option>
-                        }
-                    </select>
+                    <app-search-dropdown [items]="stateDropdownItems()" [selectedId]="
+                        form.controls
+                        .currentAddress
+                        .controls
+                        .stateId
+                        .value" [invalid]="hasErrorPath('currentAddress.stateId' )
+                    " placeholder="-- Select State --" (selectedIdChange)="
+                        form.controls
+                        .currentAddress
+                        .controls
+                        .stateId
+                        .setValue($event)">
+
+                    </app-search-dropdown>
                     @if(hasErrorPath('currentAddress.stateId')){
                     <div class="text-danger mt-1">
                         State is required
@@ -377,13 +398,21 @@
 
                 <div class="col-md-3">
                     <label>Country<span class="text-danger ms-1">*</span></label>
-                    <select class="form-select" formControlName="countryId"
-                        [class.is-invalid]="hasErrorPath('currentAddress.countryId')">
-                        <option value="">-- Select Country --</option>
-                        @for (c of countries(); track c.id) {
-                        <option [value]="c.id">{{ c.name }}</option>
-                        }
-                    </select>
+
+                    <app-search-dropdown [items]="countryDropdownItems()" [selectedId]="
+                        form.controls
+                        .currentAddress
+                        .controls
+                        .countryId
+                        .value" [invalid]="hasErrorPath('currentAddress.countryId')" placeholder="-- Select Country --"
+                        (selectedIdChange)="
+                        form.controls
+                        .currentAddress
+                        .controls
+                        .countryId
+                        .setValue($event)">
+
+                    </app-search-dropdown>
                     @if(hasErrorPath('currentAddress.countryId')){
                     <div class="text-danger mt-1">
                         Country is required
@@ -426,15 +455,13 @@
                 <div class="col-md-3">
                     <label>Department</label>
 
-                    <select class="form-select" formControlName="departmentId"
-                        [class.is-invalid]="hasError('departmentId')">
-                        <option value="">-- Select Department --</option>
+                    <app-search-dropdown [items]="departmentDropdownItems()"
+                        [selectedId]="form.controls.departmentId.value" [invalid]="hasError('departmentId')"
+                        placeholder="-- Select Department --" (selectedIdChange)="
+                            form.controls.departmentId.setValue($event)">
 
-                        @for (dept of departments(); track dept.id) {
-                        <option [value]="dept.id">{{ dept.name }}</option>
-                        }
 
-                    </select>
+                    </app-search-dropdown>
                     @if(hasError('departmentId')){
                     <div class="text-danger mt-1">
                         Department is required
@@ -445,15 +472,13 @@
                 <div class="col-md-3">
                     <label>Designation</label>
 
-                    <select class="form-select" formControlName="designationId"
-                        [class.is-invalid]="hasError('designationId')">
-                        <option value="">-- Select Designation --</option>
 
-                        @for (des of designations(); track des.id) {
-                        <option [value]="des.id">{{ des.name }}</option>
-                        }
+                    <app-search-dropdown [items]="designationDropdownItems()"
+                        [selectedId]="form.controls.designationId.value" [invalid]="hasError('designationId')"
+                        placeholder="-- Select Designation --" (selectedIdChange)="
+                             form.controls.designationId.setValue($event)">
 
-                    </select>
+                    </app-search-dropdown>
                     @if(hasError('designationId')){
                     <div class="text-danger mt-1">
                         Designation is required
@@ -527,14 +552,11 @@
 
                 <div class="col-md-3">
                     <label>Bank Name</label>
-                    <select class="form-select" formControlName="bankName" [class.is-invalid]="hasError('bankName')">
-                        <option value="">-- Select Bank -- </option>
+                    <app-search-dropdown [items]="bankDropdownItems()" [selectedId]="form.controls.bankName.value"
+                        [invalid]="hasError('bankName')" placeholder="-- Select Bank --" (selectedIdChange)="
+                        form.controls.bankName.setValue($event)">
 
-                        @for (b of bankNames(); track b.id) {
-                        <option [value]="b.id">{{ b.name }}</option>
-                        }
-
-                    </select>
+                    </app-search-dropdown>
                     @if(hasError('bankName')){
                     <div class="text-danger mt-1">
                         Bank Name is required
@@ -769,14 +791,12 @@
 
                                     <div class="col-md-3">
                                         <label>Degree</label>
-                                        <select class="form-select" [formControl]="edu.controls.degree">
-                                            <option value="">-- Select Degree --</option>
+                                        <app-search-dropdown [items]="degreeDropdownItems()"
+                                            [selectedId]="edu.controls.degree.value" placeholder="-- Select Degree --"
+                                            (selectedIdChange)="
+                                          edu.controls.degree.setValue($event)">
 
-                                            @for (d of degrees(); track d.id) {
-                                            <option [value]="d.id">{{ d.name }}</option>
-                                            }
-
-                                        </select>
+                                        </app-search-dropdown>
                                     </div>
 
                                     <div class="col-md-3">
@@ -850,14 +870,12 @@
 
                                     <div class="col-md-3">
                                         <label>Role</label>
-                                        <select class="form-select" [formControl]="work.controls.jobTitle">
-                                            <option value="">-- Select Role --</option>
+                                        <app-search-dropdown [items]="roleDropdownItems()"
+                                            [selectedId]="work.controls.jobTitle.value" placeholder="-- Select Role --"
+                                            (selectedIdChange)="
+                                         work.controls.jobTitle.setValue($event)">
 
-                                            @for (r of roles(); track r.id) {
-                                            <option [value]="r.id">{{ r.name }}</option>
-                                            }
-
-                                        </select>
+                                        </app-search-dropdown>
                                     </div>
 
                                     <div class="col-md-2">

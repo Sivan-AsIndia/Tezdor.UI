@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { afterNextRender, ChangeDetectorRef, Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -31,16 +31,18 @@ import { ToastNotifier } from '../../../../core/services/toast';
 import { PurchaseOrderDataClient } from '../purchase-order-data-client';
 import { ProductDataClient } from '../../../product/product-data-client';
 import { StoreDataClient } from '../../../store/store-data-client';
-import { NgSelectModule } from '@ng-select/ng-select';
-  import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { SearchDropdownComponent } from "../../../../shared/components/search-dropdown/search-dropdown";
+import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 
 @Component({
   selector: 'app-purchaseordercreate',
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule,FormsModule,
-    ReactiveFormsModule,NgSelectModule,MatDatepickerModule
+    RouterModule, FormsModule,
+    ReactiveFormsModule, MatDatepickerModule,
+    SearchDropdownComponent,NgxEditorModule
   ],
   templateUrl: './purchase-order-create.html',
   styleUrl: './purchase-order-create.css',
@@ -99,7 +101,74 @@ export class PurchaseOrderCreateComponent {
     remarks: ['', Validators.maxLength(500)],
   });
 
+  private readonly cdr =
+  inject(ChangeDetectorRef);
 
+
+notesEditor!: Editor;
+
+remarksEditor!: Editor;
+
+showEditors =
+  signal(false);
+
+  readonly toolbar: Toolbar = [
+  
+    ['bold', 'italic', 'underline'],
+  
+    ['strike'],
+  
+    ['code', 'blockquote'],
+  
+    [
+      {
+        heading: [
+          'h1',
+          'h2',
+          'h3',
+          'h4',
+          'h5',
+          'h6'
+        ]
+      }
+    ],
+  
+    ['ordered_list', 'bullet_list'],
+  
+    ['link', 'image'],
+  
+    ['text_color', 'background_color'],
+  
+    ['horizontal_rule'],
+  
+    ['undo', 'redo']
+  
+  ];
+
+constructor() {
+
+  afterNextRender(() => {
+
+    requestAnimationFrame(() => {
+
+      /* NOTES */
+      this.notesEditor =
+        new Editor();
+
+      /* REMARKS */
+      this.remarksEditor =
+        new Editor();
+
+      /* SHOW */
+      this.showEditors.set(true);
+
+      this.cdr.detectChanges();
+
+    });
+
+  });
+
+}
   pageTitle = computed(() =>
     this.editMode ? 'Purchase Order' : 'Purchase Order'
   );
@@ -129,29 +198,29 @@ export class PurchaseOrderCreateComponent {
   private productControls = new Map<number, FormControl>();
 
 
-getProductControl(row: POLineItem): FormControl {
-  if (!this.productControls.has(row.id)) {
-    this.productControls.set(row.id, new FormControl(row.productCode||null));
+  getProductControl(row: POLineItem): FormControl {
+    if (!this.productControls.has(row.id)) {
+      this.productControls.set(row.id, new FormControl(row.productCode || null));
+    }
+    return this.productControls.get(row.id)!;
   }
-  return this.productControls.get(row.id)!;
-}
-private unitControls = new Map<number, FormControl>();
+  private unitControls = new Map<number, FormControl>();
 
-getUnitControl(row: POLineItem): FormControl {
-  if (!this.unitControls.has(row.id)) {
-    this.unitControls.set(row.id, new FormControl(row.unitId));
+  getUnitControl(row: POLineItem): FormControl {
+    if (!this.unitControls.has(row.id)) {
+      this.unitControls.set(row.id, new FormControl(row.unitId));
+    }
+    return this.unitControls.get(row.id)!;
   }
-  return this.unitControls.get(row.id)!;
-}
 
-private taxControls = new Map<number, FormControl>();
+  private taxControls = new Map<number, FormControl>();
 
-getTaxControl(row: POLineItem): FormControl {
-  if (!this.taxControls.has(row.id)) {
-    this.taxControls.set(row.id, new FormControl(row.taxPercent||null));
+  getTaxControl(row: POLineItem): FormControl {
+    if (!this.taxControls.has(row.id)) {
+      this.taxControls.set(row.id, new FormControl(row.taxPercent || null));
+    }
+    return this.taxControls.get(row.id)!;
   }
-  return this.taxControls.get(row.id)!;
-}
 
 
   grandTotal = computed(() =>
@@ -181,7 +250,7 @@ getTaxControl(row: POLineItem): FormControl {
 
       this.poForm.patchValue({
         poNumber: po.poNumber,
-        vendorId: po.vendorId ||null,
+        vendorId: po.vendorId || null,
         orderDate: po.orderDate,
         expectedDate: po.expectedDate,
         paymentTerms: po.paymentTerms,
@@ -190,7 +259,7 @@ getTaxControl(row: POLineItem): FormControl {
         notes: po.notes,
         shippingCharge: po.shippingCharge,
         status: po.status,
-        warehouseId: po.warehouseId||null,
+        warehouseId: po.warehouseId || null,
         exchangeRate: po.exchangeRate,
         referenceNumber: po.referenceNumber,
         incoterms: po.incoterms,
@@ -256,16 +325,16 @@ getTaxControl(row: POLineItem): FormControl {
     this.lineItems.update(rows => [...rows, this.newRow()]);
   }
 
-removeRow(rowId: number): void {
-  if (this.lineItems().length === 1) {
-    this.toast.error('At least one line item required');
-    return;
+  removeRow(rowId: number): void {
+    if (this.lineItems().length === 1) {
+      this.toast.error('At least one line item required');
+      return;
+    }
+    this.productControls.delete(rowId);
+    this.unitControls.delete(rowId);
+    this.taxControls.delete(rowId);
+    this.lineItems.update(rows => rows.filter(x => x.id !== rowId));
   }
-  this.productControls.delete(rowId); 
-  this.unitControls.delete(rowId);  
-  this.taxControls.delete(rowId); 
-  this.lineItems.update(rows => rows.filter(x => x.id !== rowId));
-}
   updateRow(rowId: number, field: keyof POLineItem, rawValue: any): void {
 
     const numericFields: (keyof POLineItem)[] = [
@@ -301,23 +370,23 @@ removeRow(rowId: number): void {
     );
   }
 
-onProductSelect(row: POLineItem, event: any): void {
-  const code = event?.productCode ?? event;
-  const product = this.product.products().find(x => x.productCode === code);
+  onProductSelect(row: POLineItem, event: any): void {
+    const code = event?.productCode ?? event;
+    const product = this.product.products().find(x => x.productCode === code);
 
-  this.lineItems.update(rows =>
-    rows.map(r => {
-      if (r.id !== row.id) return r;
-      return {
-        ...r,
-        productCode: code,
-        productName: product?.productName || '',
-        itemId: product?.id || 0,
-        unitPrice: product?.sellingPrice || product?.costPrice || r.unitPrice,
-      };
-    })
-  );
-}
+    this.lineItems.update(rows =>
+      rows.map(r => {
+        if (r.id !== row.id) return r;
+        return {
+          ...r,
+          productCode: code,
+          productName: product?.productName || '',
+          itemId: product?.id || 0,
+          unitPrice: product?.sellingPrice || product?.costPrice || r.unitPrice,
+        };
+      })
+    );
+  }
 
   calcRowTotal(row: POLineItem): number {
     const base = row.quantity * row.unitPrice;
@@ -453,7 +522,27 @@ onProductSelect(row: POLineItem, event: any): void {
   }
 
 
+  vendorDropdownItems = computed(() =>
+
+    this.vendorOptions.map(x => ({
+
+      id: String(x.code),
+
+      name: x.name
+
+    }))
+  );
+
+  productDropdownItems = computed(() =>
+
+    this.product.products().map(x => ({
+
+      id: x.productCode,
+
+      name: x.productName
+
+    }))
+  );
 
 
-  
 }

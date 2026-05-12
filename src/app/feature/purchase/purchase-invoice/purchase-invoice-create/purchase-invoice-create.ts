@@ -1,8 +1,7 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnInit, inject, signal, computed } from "@angular/core";
+import { Component, OnInit, inject, signal, computed, ChangeDetectorRef, afterNextRender } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { FormsModule, ReactiveFormsModule, FormControl } from "@angular/forms";
-import { NgSelectModule } from "@ng-select/ng-select";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import { InvoiceStatus, LineItem, PaymentStatus, poOptions, SUPPLIER_OPTIONS } from "../purchase-invoice";
@@ -11,6 +10,8 @@ import { PurchaseInvoiceDataClient } from "../purchase-invoice-data-client";
 import { ProductDataClient } from "../../../product/product-data-client";
 import { DropdownOption, UNIT_OPTIONS } from "../../../product/product";
 import { TAX_OPTIONS } from "../../purchase-order/purchase-order";
+import { SearchDropdownComponent } from "../../../../shared/components/search-dropdown/search-dropdown";
+import { Editor, NgxEditorModule, Toolbar } from "ngx-editor";
 
 @Component({
   selector: 'app-purchase-invoice-create',
@@ -18,9 +19,10 @@ import { TAX_OPTIONS } from "../../purchase-order/purchase-order";
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    NgSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    SearchDropdownComponent,
+    NgxEditorModule
   ],
   templateUrl: './purchase-invoice-create.html',
   styleUrl: './purchase-invoice-create.css',
@@ -44,8 +46,8 @@ export class PurchaseInvoiceCreateComponent implements OnInit {
   supplierInvNo = signal('');
   invoiceDate = signal(new Date().toISOString().slice(0, 10));
   invoiceStatus = signal<InvoiceStatus | ''>('draft');
-supplierId = signal<string | number | null>(null);
-poRef = signal<string | null>(null);
+  supplierId = signal<string | number | null>(null);
+  poRef = signal<string | null>(null);
   notes = signal('');
 
   amountPaid = signal(0);
@@ -59,6 +61,94 @@ poRef = signal<string | null>(null);
   customDutyLabel = signal('Custom Duty');
 
   lineItems = signal<LineItem[]>([this._blankRow()]);
+
+  private readonly cdr =
+  inject(ChangeDetectorRef);
+
+
+notesEditor!: Editor;
+
+
+showNotesEditor =
+  signal(false);
+
+
+readonly notesControl =
+  new FormControl('');
+
+  readonly toolbar: Toolbar = [
+  
+    ['bold', 'italic', 'underline'],
+  
+    ['strike'],
+  
+    ['code', 'blockquote'],
+  
+    [
+      {
+        heading: [
+          'h1',
+          'h2',
+          'h3',
+          'h4',
+          'h5',
+          'h6'
+        ]
+      }
+    ],
+  
+    ['ordered_list', 'bullet_list'],
+  
+    ['link', 'image'],
+  
+    ['text_color', 'background_color'],
+  
+    ['horizontal_rule'],
+  
+    ['undo', 'redo']
+  
+  ];
+
+  constructor() {
+
+  afterNextRender(() => {
+
+    requestAnimationFrame(() => {
+
+      /* INIT */
+      this.notesEditor =
+        new Editor();
+
+      /* INITIAL */
+      this.notesControl.setValue(
+        this.notes() || '',
+        {
+          emitEvent: false
+        }
+      );
+
+      /* VALUE CHANGES */
+      this.notesControl
+        .valueChanges
+        .subscribe(value => {
+
+          this.notes.set(
+            value || ''
+          );
+
+        });
+
+      /* SHOW */
+      this.showNotesEditor
+        .set(true);
+
+      this.cdr.detectChanges();
+
+    });
+
+  });
+
+}
 
   // Datepicker FormControls
   invoiceDateControl = new FormControl<Date | null>(new Date());
@@ -83,11 +173,18 @@ poRef = signal<string | null>(null);
     return this.unitControls.get(row.id)!;
   }
 
-getTaxControl(row: LineItem): FormControl {
-  if (!this.taxControls.has(row.id)) {
-    this.taxControls.set(row.id, new FormControl(row.taxPercent || null));
+  getTaxControl(row: LineItem): FormControl {
+    if (!this.taxControls.has(row.id)) {
+      this.taxControls.set(row.id, new FormControl(row.taxPercent || null));
+    }
+    return this.taxControls.get(row.id)!;
   }
-  return this.taxControls.get(row.id)!;
+
+  setInvoiceStatus(value: string) {
+
+  this.invoiceStatus.set(value as InvoiceStatus);
+
+  this.touch('invoiceStatus');
 }
 
   readonly invoiceStatusOptions: DropdownOption[] = [
@@ -330,4 +427,73 @@ getTaxControl(row: LineItem): FormControl {
   }
 
   cancel() { this.router.navigate(['/purchase-invoice']); }
+
+
+
+  // --------- Dropdown Items --------------
+  supplierDropdownItems = computed(() =>
+
+    this.supplierOptions.map(x => ({
+
+      id: String(x.value),
+
+      name: x.label
+
+    }))
+  );
+
+  poDropdownItems = computed(() =>
+
+    this.poOptions.map(x => ({
+
+      id: String(x.value),
+
+      name: x.label
+
+    }))
+  );
+
+  productDropdownItems = computed(() =>
+
+    this.product.products().map(x => ({
+
+      id: x.productCode,
+
+      name: x.productName
+
+    }))
+  );
+
+  unitDropdownItems = computed(() =>
+
+    this.unitOptions.map(x => ({
+
+      id: String(x.value),
+
+      name: x.label
+
+    }))
+  );
+
+  taxDropdownItems = computed(() =>
+
+    this.taxOptions.map(x => ({
+
+      id: String(x.value),
+
+      name: x.label
+
+    }))
+  );
+
+  invoiceStatusDropdownItems = computed(() =>
+
+    this.invoiceStatusOptions.map(x => ({
+
+      id: String(x.value),
+
+      name: x.label
+
+    }))
+  );
 }

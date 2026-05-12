@@ -1,42 +1,45 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { afterNextRender, ChangeDetectorRef, Component, computed, inject, signal } from '@angular/core';
 import { StoreDataClient } from '../store-data-client';
 import { Router, RouterLink } from '@angular/router';
 import { UNIT_OPTIONS } from '../../product/product';
 import { VENDOR_OPTIONS } from '../../purchase/purchase-order/purchase-order';
 import { ADJUSTMENT_REASONS, REFERENCE_TYPES, ReferenceType, StepId, StockLineItem, StoreProduct, StoreWarehouse, TRANSACTION_TYPES, TransactionType, TYPE_FIELD_CONFIG, TypeFieldConfig, VALUATION_METHODS, WAREHOUSE_OPTIONS } from '../store';
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
+import { SearchDropdownComponent } from "../../../shared/components/search-dropdown/search-dropdown";
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 
 @Component({
   selector: 'app-store-create',
-  imports:     [CommonModule, RouterLink, DatePipe, DecimalPipe],
+  imports: [CommonModule, RouterLink, DatePipe, DecimalPipe, SearchDropdownComponent,NgxEditorModule,ReactiveFormsModule],
   templateUrl: './store-create.html',
   styleUrl: './store-create.css',
 })
 export class StoreCreateComponent {
-  
-  service    = inject(StoreDataClient);
-  router     = inject(Router);
+
+  service = inject(StoreDataClient);
+  router = inject(Router);
   unitOptions = UNIT_OPTIONS;
 
   editId: number | null = null;
   get isEditMode() { return this.editId !== null; }
-  get pageTitle()  { return this.isEditMode ? 'Store Maintenance' : 'Store Maintenance'; }
+  get pageTitle() { return this.isEditMode ? 'Store Maintenance' : 'Store Maintenance'; }
 
   currentStep = signal<StepId>(1);
   steps = [
-    { id: 1 as StepId, label: 'Transaction Type',    sub: 'Select movement type'  },
-    { id: 2 as StepId, label: 'Transaction Details', sub: 'Header & line items'   },
-    { id: 3 as StepId, label: 'Review & Submit',     sub: 'Confirm & post'        },
+    { id: 1 as StepId, label: 'Transaction Type', sub: 'Select movement type' },
+    { id: 2 as StepId, label: 'Transaction Details', sub: 'Header & line items' },
+    { id: 3 as StepId, label: 'Review & Submit', sub: 'Confirm & post' },
   ];
 
-  tnDate          = signal(new Date().toISOString().substring(0, 10));
-  selectedType    = signal<TransactionType | ''>('IN');
-  warehouseId     = signal('');
-  toWarehouseId   = signal('');    // TRANSFER destination
-  referenceType   = signal<ReferenceType>(null);
-  referenceDoc    = signal('');
+  tnDate = signal(new Date().toISOString().substring(0, 10));
+  selectedType = signal<TransactionType | ''>('IN');
+  warehouseId = signal('');
+  toWarehouseId = signal('');    // TRANSFER destination
+  referenceType = signal<ReferenceType>(null);
+  referenceDoc = signal('');
   valuationMethod = signal('weighted_avg');
-  remarks         = signal('');
+  remarks = signal('');
 
   autoTnCode = computed(() => this.service.generateTnCode());
 
@@ -45,46 +48,131 @@ export class StoreCreateComponent {
     return t ? TYPE_FIELD_CONFIG[t] ?? null : null;
   });
 
-  transactionTypes  = TRANSACTION_TYPES;
-  valuationMethods  = VALUATION_METHODS;
-  referenceTypes    = REFERENCE_TYPES;
+  transactionTypes = TRANSACTION_TYPES;
+  valuationMethods = VALUATION_METHODS;
+  referenceTypes = REFERENCE_TYPES;
   adjustmentReasons = ADJUSTMENT_REASONS;
-  vendorOptions     = VENDOR_OPTIONS;
-  products:   StoreProduct[]   = [];
+  vendorOptions = VENDOR_OPTIONS;
+  products: StoreProduct[] = [];
   warehouses: StoreWarehouse[] = [];
 
   private rowCounter = 1;
   lineItems = signal<StockLineItem[]>([this.blankRow()]);
 
+  private readonly cdr =
+  inject(ChangeDetectorRef);
+
+remarksEditor!: Editor;
+showRemarksEditor =
+  signal(false);
+
+  readonly toolbar: Toolbar = [
+  
+    ['bold', 'italic', 'underline'],
+  
+    ['strike'],
+  
+    ['code', 'blockquote'],
+  
+    [
+      {
+        heading: [
+          'h1',
+          'h2',
+          'h3',
+          'h4',
+          'h5',
+          'h6'
+        ]
+      }
+    ],
+  
+    ['ordered_list', 'bullet_list'],
+  
+    ['link', 'image'],
+  
+    ['text_color', 'background_color'],
+  
+    ['horizontal_rule'],
+  
+    ['undo', 'redo']
+  
+  ];
+
+  constructor() {
+
+  afterNextRender(() => {
+
+    requestAnimationFrame(() => {
+
+      /* INIT EDITOR */
+      this.remarksEditor =
+        new Editor();
+
+      /* INITIAL VALUE */
+      this.remarksControl.setValue(
+        this.remarks() || '',
+        {
+          emitEvent: false
+        }
+      );
+
+      /* VALUE CHANGES */
+      this.remarksControl
+        .valueChanges
+        .subscribe(value => {
+
+          this.remarks.set(
+            value || ''
+          );
+
+        });
+
+      /* SHOW */
+      this.showRemarksEditor
+        .set(true);
+
+      this.cdr.detectChanges();
+
+    });
+
+  });
+
+}
+
+
+readonly remarksControl =
+  new FormControl('');
+
   blankRow(): StockLineItem {
     return {
-      rowId:        this.rowCounter++,
-      productCode:  '',
-      productName:  '',
-      warehouseId:  '',
-      unitName:     '',
-      unitId:       null,
-      qty:          null,
-      unitCost:     null,
-      batchNo:      '',
-      expiry:       '',
+      rowId: this.rowCounter++,
+      productCode: '',
+      productName: '',
+      warehouseId: '',
+      unitName: '',
+      unitId: null,
+      qty: null,
+      unitCost: null,
+      batchNo: '',
+      expiry: '',
       balanceAfter: null,
-      errProduct:   false,
-      errQty:       false,
-      adjustReason :'',
-      vendorCode :'',
-      errCost:      false,
+      errProduct: false,
+      errQty: false,
+      adjustReason: '',
+      vendorCode: '',
+      errCost: false,
     };
-  
+
   }
 
-  addRow()    { this.lineItems.update(r => [...r, this.blankRow()]); }
+  addRow() { this.lineItems.update(r => [...r, this.blankRow()]); }
   removeRow(rowId: number) {
     if (this.lineItems().length === 1) return;
     this.lineItems.update(r => r.filter(x => x.rowId !== rowId));
   }
 
- onProductSelect(rowId: number, productCode: string) {
+  onProductSelect(rowId: number, productCode: string) {
     const prod = this.service.getProductUnit(productCode);
 
     const matchedUnit = this.unitOptions.find(
@@ -150,8 +238,8 @@ export class StoreCreateComponent {
     this.lineItems().filter(r => r.productCode && r.qty && r.qty > 0)
   );
   totalLines = computed(() => this.filledLines().length);
-  totalQty   = computed(() => this.filledLines().reduce((s, r) => s + (r.qty ?? 0), 0));
-  totalCost  = computed(() => this.filledLines().reduce((s, r) => s + (r.qty ?? 0) * (r.unitCost ?? 0), 0));
+  totalQty = computed(() => this.filledLines().reduce((s, r) => s + (r.qty ?? 0), 0));
+  totalCost = computed(() => this.filledLines().reduce((s, r) => s + (r.qty ?? 0) * (r.unitCost ?? 0), 0));
 
   negativeBalanceRows = computed(() =>
     this.filledLines().filter(r => r.balanceAfter !== null && r.balanceAfter < 0)
@@ -159,7 +247,7 @@ export class StoreCreateComponent {
 
   getTypeMeta(v: string) { return this.transactionTypes.find(t => t.value === v); }
   get selectedTypeMeta() { return this.getTypeMeta(this.selectedType()); }
-  get costRequired()     {
+  get costRequired() {
     const cfg = this.typeConfig();
     return cfg?.showCostPrice ?? false;
   }
@@ -168,30 +256,30 @@ export class StoreCreateComponent {
     return this.warehouses.find(w => w.id === id)?.name ?? id;
   }
 
-  submitted      = false;
+  submitted = false;
   step2Submitted = false;
-  saveSuccess    = false;
+  saveSuccess = false;
 
   get step1Valid(): boolean { return !!this.selectedType(); }
   get step2Valid(): boolean {
-    const dateOk  = !!this.tnDate() && this.tnDate() <= this.todayStr();
-    const whOk    = !!this.warehouseId();
+    const dateOk = !!this.tnDate() && this.tnDate() <= this.todayStr();
+    const whOk = !!this.warehouseId();
     const linesOk = this.filledLines().length > 0;
-    const costOk  = !this.costRequired ||
+    const costOk = !this.costRequired ||
       this.filledLines().every(r => r.unitCost != null && r.unitCost > 0);
     return dateOk && whOk && linesOk && costOk;
   }
 
-  get errDate():      boolean { return this.step2Submitted && (!this.tnDate() || this.tnDate() > this.todayStr()); }
+  get errDate(): boolean { return this.step2Submitted && (!this.tnDate() || this.tnDate() > this.todayStr()); }
   get errWarehouse(): boolean { return this.step2Submitted && !this.warehouseId(); }
-  get errNoLines():   boolean { return this.step2Submitted && this.filledLines().length === 0; }
+  get errNoLines(): boolean { return this.step2Submitted && this.filledLines().length === 0; }
 
   private markLineErrors() {
     this.lineItems.update(rows => rows.map(r => ({
       ...r,
       errProduct: !r.productCode,
-      errQty:     !r.qty || r.qty <= 0,
-      errCost:    this.costRequired && (!r.unitCost || r.unitCost <= 0),
+      errQty: !r.qty || r.qty <= 0,
+      errCost: this.costRequired && (!r.unitCost || r.unitCost <= 0),
     })));
   }
 
@@ -213,30 +301,30 @@ export class StoreCreateComponent {
   }
 
   ngOnInit() {
- this.warehouses = WAREHOUSE_OPTIONS;
-     this.products   = this.service.getProducts();
+    this.warehouses = WAREHOUSE_OPTIONS;
+    this.products = this.service.getProducts();
     if (this.warehouses.length) this.warehouseId.set(this.warehouses[0].id);
   }
   onSubmit() {
-    this.submitted      = true;
+    this.submitted = true;
     this.step2Submitted = true;
     this.markLineErrors();
     if (!this.step1Valid || !this.step2Valid) return;
 
     this.filledLines().forEach(row => {
       this.service.addTransaction({
-        date:          this.tnDate(),
-        type:          this.selectedType() as TransactionType,
-        vendorCode:    '',
-        vendorName:    '',
-        productCode:   row.productCode,
-        productName:   row.productName,
-        warehouseId:   row.warehouseId || this.warehouseId(),
-        quantity:      row.qty ?? 0,
-        costPrice:     row.unitCost,
+        date: this.tnDate(),
+        type: this.selectedType() as TransactionType,
+        vendorCode: '',
+        vendorName: '',
+        productCode: row.productCode,
+        productName: row.productName,
+        warehouseId: row.warehouseId || this.warehouseId(),
+        quantity: row.qty ?? 0,
+        costPrice: row.unitCost,
         referenceType: this.referenceType(),
-        referenceId:   this.referenceDoc(),
-        remarks:       this.remarks(),
+        referenceId: this.referenceDoc(),
+        remarks: this.remarks(),
       } as any);
     });
 
@@ -255,8 +343,31 @@ export class StoreCreateComponent {
 
   balanceColor(val: number | null): string {
     if (val === null) return '';
-    if (val < 0)      return '#c62828';
-    if (val <= 10)    return '#e65100';
+    if (val < 0) return '#c62828';
+    if (val <= 10) return '#e65100';
     return '#2e7d32';
   }
+
+  // -------  Dropdown Items ----------
+  productDropdownItems = computed(() =>
+
+    this.products.map(x => ({
+
+      id: x.code,
+
+      name: x.name
+
+    }))
+  );
+
+  vendorDropdownItems = computed(() =>
+
+    this.vendorOptions.map(x => ({
+
+      id: x.code,
+
+      name: x.name
+
+    }))
+  );
 }

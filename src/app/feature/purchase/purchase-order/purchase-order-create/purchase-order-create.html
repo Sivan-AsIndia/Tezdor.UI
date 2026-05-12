@@ -13,8 +13,9 @@
             <div class="arrow-steps d-none d-md-flex">
               <ul id="breadcrumb">
                 <li><a href="#"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a></li>
-                <li><a routerLink="/purchase-order"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;Purchase</a></li>
-                
+                <li><a routerLink="/purchase-order"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;Purchase</a>
+                </li>
+
                 <li><a><span class="fa fa-plus-circle"></span>&nbsp;&nbsp;{{ pageCrumb() }}</a></li>
               </ul>
             </div>
@@ -49,75 +50,54 @@
               </div> -->
 
               <!-- Order Date -->
-            <div class="col-md-3">
-  <label class="form-label cardlabel required">Order Date</label>
-  <div class="position-relative">
-    <input
-      class="form-control pe-5"
-      [matDatepicker]="orderPicker"
-      formControlName="orderDate"
-      placeholder="Select date..."
-      [class.is-invalid]="hasError('orderDate')"
-      readonly
-      (click)="orderPicker.open()" />
-    <i
-      class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
-      style="font-size:18px; cursor:pointer;"
-      (click)="orderPicker.open()">
-    </i>
-  </div>
-  <mat-datepicker #orderPicker></mat-datepicker>
-  @if (hasError('orderDate')) {
-    <div class="invalid-feedback" style="display:block">
-      Order Date is required.
-    </div>
-  }
-</div>
+              <div class="col-md-3">
+                <label class="form-label cardlabel required">Order Date</label>
+                <div class="position-relative">
+                  <input class="form-control pe-5" [matDatepicker]="orderPicker" formControlName="orderDate"
+                    placeholder="Select date..." [class.is-invalid]="hasError('orderDate')" readonly
+                    (click)="orderPicker.open()" />
+                  <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                    style="font-size:18px; cursor:pointer;" (click)="orderPicker.open()">
+                  </i>
+                </div>
+                <mat-datepicker #orderPicker></mat-datepicker>
+                @if (hasError('orderDate')) {
+                <div class="invalid-feedback" style="display:block">
+                  Order Date is required.
+                </div>
+                }
+              </div>
 
- <div class="col-md-3">
-  <label class="form-label cardlabel required">Expected Delivery</label>
-  <div class="position-relative">
-    <input
-      class="form-control pe-5"
-      [matDatepicker]="expectedPicker"
-      formControlName="expectedDate"
-      placeholder="Select date..."
-      [class.is-invalid]="hasError('expectedDate')"
-      readonly
-      (click)="expectedPicker.open()" />
-    <i
-      class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
-      style="font-size:18px; cursor:pointer;"
-      (click)="expectedPicker.open()">
-    </i>
-  </div>
-  <mat-datepicker #expectedPicker></mat-datepicker>
-  @if (hasError('expectedDate')) {
-    <div class="invalid-feedback" style="display:block">
-      Expected date is required.
-    </div>
-  }
-</div>
+              <div class="col-md-3">
+                <label class="form-label cardlabel required">Expected Delivery</label>
+                <div class="position-relative">
+                  <input class="form-control pe-5" [matDatepicker]="expectedPicker" formControlName="expectedDate"
+                    placeholder="Select date..." [class.is-invalid]="hasError('expectedDate')" readonly
+                    (click)="expectedPicker.open()" />
+                  <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                    style="font-size:18px; cursor:pointer;" (click)="expectedPicker.open()">
+                  </i>
+                </div>
+                <mat-datepicker #expectedPicker></mat-datepicker>
+                @if (hasError('expectedDate')) {
+                <div class="invalid-feedback" style="display:block">
+                  Expected date is required.
+                </div>
+                }
+              </div>
 
               <!-- Status -->
               <div class="col-md-3">
                 <label class="form-label cardlabel">Status</label>
-                <!-- <select class="form-select" formControlName="status"   [class.is-invalid]="hasError('status')" >
-                    <option  value="">--Select Status --</option>
+                <select class="form-select" formControlName="status" [class.is-invalid]="hasError('status')">
+                  <option value="">--Select Status --</option>
                   @for (s of statusOptions; track s.value) {
-                    <option [value]="s.value">{{ s.label }}</option>
+                  <option [value]="s.value">{{ s.label }}</option>
                   }
-                </select> -->
-   <ng-select
-    formControlName="status"
-    [items]="statusOptions"
-    bindValue="value"
-    bindLabel="label"
-    placeholder="-- Select status --"   [searchable]="false"   [clearable]="false" [class.is-invalid]="hasError('status')">
-  </ng-select>
-                
-                 @if (hasError('status')) {
-                  <div class="invalid-feedback">status is required.</div>
+                </select>
+
+                @if (hasError('status')) {
+                <div class="invalid-feedback">status is required.</div>
                 }
               </div>
 
@@ -137,63 +117,49 @@
             <div class="row g-3">
 
               <!-- Vendor -->
-          <div class="col-md-4">
-  <label class="form-label cardlabel required">Vendor</label>
+              <div class="col-md-4">
+                <label class="form-label cardlabel required">Vendor</label>
 
-  <ng-select
-    formControlName="vendorId"
-    [items]="vendorOptions"
-    bindValue="code"
-    bindLabel="name"
-    placeholder="-- Select Vendor --"
-    [searchable]="true"
-    [clearable]="true"
-    [class.is-invalid]="hasError('vendorId')">
-  </ng-select>
-  
-  
-  @if (hasError('vendorId')) {
-    <div class="invalid-feedback" style="display:block">
-      Vendor is required.
-    </div>
-  }
-</div>
+
+                <app-search-dropdown [items]="vendorDropdownItems()" [selectedId]="
+                      poForm.controls['vendorId'].value !== null
+                        ? poForm.controls['vendorId'].value.toString()
+                        : null
+                    " [invalid]="hasError('vendorId')" placeholder="-- Select Vendor --" (selectedIdChange)="
+                      poForm.controls['vendorId']
+                        .setValue(+$event)
+                    ">
+
+                </app-search-dropdown>
+
+
+                @if (hasError('vendorId')) {
+                <div class="invalid-feedback" style="display:block">
+                  Vendor is required.
+                </div>
+                }
+              </div>
 
               <!-- Payment Terms -->
               <div class="col-md-4">
                 <label class="form-label cardlabel">Payment Terms</label>
-                <!-- <select class="form-select" formControlName="paymentTerms">
+                <select class="form-select" formControlName="paymentTerms">
                   @for (p of paymentTermsOptions; track p.value) {
-                    <option [value]="p.value">{{ p.label }}</option>
+                  <option [value]="p.value">{{ p.label }}</option>
                   }
                 </select>
- -->
 
-                  <ng-select
-    formControlName="paymentTerms"
-    [items]="paymentTermsOptions"
-    bindValue="value"
-    bindLabel="label"
-    placeholder="-- Select paymentTerms --"   [searchable]="false"   [clearable]="false">
-  </ng-select>
+
               </div>
 
               <!-- Delivery Method -->
               <div class="col-md-4">
                 <label class="form-label cardlabel">Delivery Method</label>
-                <!-- <select class="form-select" formControlName="deliveryMethod">
+                <select class="form-select" formControlName="deliveryMethod">
                   @for (d of deliveryOptions; track d.value) {
-                    <option [value]="d.value">{{ d.label }}</option>
+                  <option [value]="d.value">{{ d.label }}</option>
                   }
-                </select> -->
-                   <ng-select
-    formControlName="deliveryMethod"
-    [items]="deliveryOptions"
-    bindValue="value"
-    bindLabel="label"
-    placeholder="-- Select deliveryMethod --"   [searchable]="false"   [clearable]="false">
-  </ng-select>
-
+                </select>
 
               </div>
 
@@ -201,16 +167,35 @@
               <div class="col-md-6">
                 <label class="form-label cardlabel">Shipping / Delivery Address</label>
                 <textarea class="form-control" rows="5" cols="5"
-                  placeholder="Address where goods should be delivered..."
-                  formControlName="shippingAddress"></textarea>
+                  placeholder="Address where goods should be delivered..." formControlName="shippingAddress"></textarea>
               </div>
 
               <!-- Notes -->
               <div class="col-md-6">
                 <label class="form-label cardlabel">Notes / Remarks</label>
-                <textarea class="form-control" rows="5" cols="5"
-                  placeholder="Any special instructions..."
-                  formControlName="notes"></textarea>
+                <div class="rich-editor-wrapper mb-3">
+
+                  @if(showEditors()){
+
+                  <!-- TOOLBAR -->
+                  <ngx-editor-menu [editor]="notesEditor" [toolbar]="toolbar">
+
+                  </ngx-editor-menu>
+
+                  <!-- EDITOR -->
+                  <ngx-editor [editor]="notesEditor" [formControl]="
+    $any(
+      poForm.controls['notes']
+    )
+  " placeholder="
+      Any special instructions...
+    ">
+
+                  </ngx-editor>
+
+                  }
+
+                </div>
               </div>
 
             </div>
@@ -218,172 +203,157 @@
         </div>
 
         <!-- ══ SECTION 3 · LINE ITEMS ══════════════════════════════════════ -->
-    <div class="card mb-3 section-card section-warning">
-  <div class="card-body">
+        <div class="card mb-3 section-card section-warning">
+          <div class="card-body">
 
-    <div class="section-header">
-      <div class="section-icon">
-        <i class="ti ti-list-details"></i>
-      </div>
-
-      <h6 class="cardheader">Line Items</h6>
-    </div>
-
-    <!-- FLEX LINE ITEMS -->
-    <div class="line-items-wrap">
-
-      @for (row of lineItems(); track row.id) {
-
-        <div class="line-card mb-3">
-          <div class="line-card-top">
-
-            <div class="line-no">
-              #{{ $index + 1 }}
-            </div>
-
-            <button
-              type="button"
-              class="delete-btn"
-              (click)="removeRow(row.id)">
-
-              <i class="ti ti-trash"></i>
-
-            </button>
-
-          </div>
-          <div class="field">
-            <label>
-              Product Name
-              <span class="req">*</span>
-            </label>
-<ng-select
-  [items]="product.products()"
-  bindValue="productCode"
-  bindLabel="productName"
-  placeholder="-- Select Product --"
-  [searchable]="true"
-  [clearable]="true"
-  [formControl]="getProductControl(row)"
-  (change)="onProductSelect(row, $event)"
-  [class.is-invalid]="isInvalidProduct(row)">
-</ng-select>
-            
-            @if (isInvalidProduct(row)) {
-              <div class="invalid-feedback d-block">
-                Product is required.
+            <div class="section-header">
+              <div class="section-icon">
+                <i class="ti ti-list-details"></i>
               </div>
-            }
 
+              <h6 class="cardheader">Line Items</h6>
+            </div>
+
+            <!-- FLEX LINE ITEMS -->
+            <div class="line-items-wrap">
+
+              @for (row of lineItems(); track row.id) {
+
+              <div class="line-card mb-3">
+                <div class="line-card-top">
+
+                  <div class="line-no">
+                    #{{ $index + 1 }}
+                  </div>
+
+                  <button type="button" class="delete-btn" (click)="removeRow(row.id)">
+
+                    <i class="ti ti-trash"></i>
+
+                  </button>
+
+                </div>
+                <div class="field">
+                  <label>
+                    Product Name
+                    <span class="req">*</span>
+                  </label>
+                  <app-search-dropdown [items]="productDropdownItems()" [selectedId]="
+                    getProductControl(row).value
+                  " [invalid]="isInvalidProduct(row)" placeholder="-- Select Product --" (selectedIdChange)="
+                    getProductControl(row)
+                      .setValue($event);
+
+                    onProductSelect(
+                      row,
+                      $event
+                    )
+                  ">
+
+                  </app-search-dropdown>
+
+                  @if (isInvalidProduct(row)) {
+                  <div class="invalid-feedback d-block">
+                    Product is required.
+                  </div>
+                  }
+
+                </div>
+
+                <!-- ROW -->
+                <div class="line-grid">
+
+                  <!-- UNIT -->
+                  <div class="field">
+                    <label>Unit</label>
+                    <select class="form-select form-select-sm" [value]="row.unitId"
+                      (change)="updateRow(row.id, 'unitId', $any($event.target).value)">
+
+                      @for (u of unitOptions; track u.value) {
+
+                      <option [value]="u.value">
+                        {{ u.label }}
+                      </option>
+
+                      }
+
+                    </select>
+
+                  </div>
+
+                  <!-- QTY -->
+                  <div class="field">
+                    <label>Qty</label>
+
+                    <input type="number" class="form-control form-control-sm" min="1" [value]="row.quantity"
+                      (input)="updateRow(row.id, 'quantity', $any($event.target).value)">
+                  </div>
+
+                  <!-- PRICE -->
+                  <div class="field">
+                    <label>Unit Price</label>
+
+                    <input type="number" class="form-control form-control-sm" min="0" [value]="row.unitPrice"
+                      (input)="updateRow(row.id, 'unitPrice', $any($event.target).value)">
+                  </div>
+
+                  <!-- DISCOUNT -->
+                  <div class="field">
+                    <label>Discount</label>
+
+                    <input type="number" class="form-control form-control-sm" min="0" [value]="row.discount"
+                      (input)="updateRow(row.id, 'discount', $any($event.target).value)">
+                  </div>
+
+                  <!-- TAX -->
+                  <div class="field">
+                    <label>Tax</label>
+                    <select class="form-select form-select-sm" [value]="row.taxPercent"
+                      (change)="updateRow(row.id, 'taxPercent', $any($event.target).value)">
+
+                      @for (t of taxOptions; track t.value) {
+
+                      <option [value]="t.value">
+                        {{ t.label }}
+                      </option>
+
+                      }
+
+                    </select>
+                  </div>
+
+                </div>
+
+                <!-- TOTAL -->
+                <div class="line-total">
+
+                  <span>Total</span>
+
+                  <strong>
+                    ₹{{ calcRowTotal(row) | number:'1.2-2' }}
+                  </strong>
+
+                </div>
+
+              </div>
+
+              }
+
+            </div>
+
+            <div style="justify-content: end;display: flex;">
+              <!-- ADD -->
+              <button type="button" class="btn bg-primary btn-sm" (click)="addRow()">
+
+                <i class="ti ti-plus me-1"></i>
+
+                Add Row
+
+              </button>
+
+            </div>
           </div>
-
-          <!-- ROW -->
-          <div class="line-grid">
-
-            <!-- UNIT -->
-            <div class="field">
-              <label>Unit</label>
-
-            <ng-select
-  [items]="unitOptions"
-  bindValue="value"
-  bindLabel="label"
-  placeholder="-- Select Unit --"
-  [searchable]="false"
-  [clearable]="false"
-  [formControl]="getUnitControl(row)"
-  (change)="updateRow(row.id, 'unitId', $event)">
-</ng-select>
-              
-            </div>
-
-            <!-- QTY -->
-            <div class="field">
-              <label>Qty</label>
-
-              <input
-                type="number"
-                class="form-control form-control-sm"
-                min="1"
-                [value]="row.quantity"
-                (input)="updateRow(row.id, 'quantity', $any($event.target).value)">
-            </div>
-
-            <!-- PRICE -->
-            <div class="field">
-              <label>Unit Price</label>
-
-              <input
-                type="number"
-                class="form-control form-control-sm"
-                min="0"
-                [value]="row.unitPrice"
-                (input)="updateRow(row.id, 'unitPrice', $any($event.target).value)">
-            </div>
-
-            <!-- DISCOUNT -->
-            <div class="field">
-              <label>Discount</label>
-
-              <input
-                type="number"
-                class="form-control form-control-sm"
-                min="0"
-                [value]="row.discount"
-                (input)="updateRow(row.id, 'discount', $any($event.target).value)">
-            </div>
-
-            <!-- TAX -->
-            <div class="field">
-              <label>Tax</label>
-
-           <ng-select
-  [items]="taxOptions"
-  bindValue="value"
-  bindLabel="label"
-  placeholder="-- Select Tax --"
-  [searchable]="false"
-  [clearable]="false"
-  [formControl]="getTaxControl(row)"
-  (change)="updateRow(row.id, 'taxPercent', $event)">
-</ng-select>
-
-            </div>
-
-          </div>
-
-          <!-- TOTAL -->
-          <div class="line-total">
-
-            <span>Total</span>
-
-            <strong>
-              ₹{{ calcRowTotal(row) | number:'1.2-2' }}
-            </strong>
-
-          </div>
-
         </div>
-
-      }
-
-    </div>
-
- <div  style="justify-content: end;display: flex;">
-     <!-- ADD -->
-    <button
-      type="button"
-      class="btn bg-primary btn-sm"
-      (click)="addRow()">
-
-      <i class="ti ti-plus me-1"></i>
-
-      Add Row
-
-    </button>
-
- </div>
-  </div>
-</div>
 
         <!-- ══ SECTION 4 · ORDER SUMMARY ══════════════════════════════════ -->
         <div class="card mb-3 section-card section-success">
@@ -399,9 +369,7 @@
               <!-- Shipping charge -->
               <div class="col-md-6">
                 <label class="form-label cardlabel">Shipping / Freight Charge (₹)</label>
-                <input type="number" class="form-control" min="0"
-                  formControlName="shippingCharge"
-                  placeholder="0.00">
+                <input type="number" class="form-control" min="0" formControlName="shippingCharge" placeholder="0.00">
                 <small class="form-text text-muted">Freight or courier cost added to grand total.</small>
               </div>
 
@@ -436,55 +404,51 @@
         </div>
 
         <!-- ═════════ SECTION · ADDITIONAL DETAILS ═════════ -->
-<div class="card mb-3 section-card section-info">
+        <div class="card mb-3 section-card section-info">
 
-  <div class="card-body">
+          <div class="card-body">
 
-    <div class="section-header">
+            <div class="section-header">
 
-      <div class="section-icon">
-        <i class="ti ti-settings"></i>
-      </div>
+              <div class="section-icon">
+                <i class="ti ti-settings"></i>
+              </div>
 
-      <h6 class="cardheader">
-        Additional Details
-      </h6>
+              <h6 class="cardheader">
+                Additional Details
+              </h6>
 
-    </div>
+            </div>
 
-    <div class="row g-3">
+            <div class="row g-3">
 
-      <!-- PO NUMBER -->
-      <div class="col-md-3">
+              <!-- PO NUMBER -->
+              <div class="col-md-3">
 
-        <label class="form-label cardlabel required">
-          PO Number
-        </label>
+                <label class="form-label cardlabel required">
+                  PO Number
+                </label>
 
-        <input
-          type="text"
-          class="form-control text-uppercase"
-          formControlName="poNumber"
-          placeholder="PO-2026-001"
-          [class.is-invalid]="hasError('poNumber')" />
+                <input type="text" class="form-control text-uppercase" formControlName="poNumber"
+                  placeholder="PO-2026-001" [class.is-invalid]="hasError('poNumber')" />
 
-        @if (hasError('poNumber')) {
+                @if (hasError('poNumber')) {
 
-          <div class="invalid-feedback">
-            PO Number is required.
-          </div>
+                <div class="invalid-feedback">
+                  PO Number is required.
+                </div>
 
-        }
+                }
 
-      </div>
+              </div>
 
-      <!-- WAREHOUSE -->
-    <div class="col-md-3">
-  <label class="form-label cardlabel required">
-    Warehouse
-  </label>
+              <!-- WAREHOUSE -->
+              <div class="col-md-3">
+                <label class="form-label cardlabel required">
+                  Warehouse
+                </label>
 
-  <ng-select
+                <!-- <ng-select
     formControlName="warehouseId"
     [items]="warehouseOptions"
     bindValue="value"
@@ -493,174 +457,152 @@
     [searchable]="true"
     [clearable]="true"
     [class.is-invalid]="hasError('warehouseId')">
-  </ng-select>
+  </ng-select> -->
 
-  @if (hasError('warehouseId')) {
-    <div class="invalid-feedback" style="display:block">
-      Warehouse is required.
-    </div>
-  }
-</div>
+                @if (hasError('warehouseId')) {
+                <div class="invalid-feedback" style="display:block">
+                  Warehouse is required.
+                </div>
+                }
+              </div>
 
-      <!-- EXCHANGE RATE -->
-      <div class="col-md-3">
+              <!-- EXCHANGE RATE -->
+              <div class="col-md-3">
 
-        <label class="form-label cardlabel">
-          Exchange Rate
-        </label>
+                <label class="form-label cardlabel">
+                  Exchange Rate
+                </label>
 
-        <input
-          type="number"
-          class="form-control"
-          min="0"
-          step="0.01"
-          formControlName="exchangeRate"
-          placeholder="1.00" />
+                <input type="number" class="form-control" min="0" step="0.01" formControlName="exchangeRate"
+                  placeholder="1.00" />
 
-      </div>
+              </div>
 
-      <!-- REFERENCE NUMBER -->
-      <div class="col-md-3">
+              <!-- REFERENCE NUMBER -->
+              <div class="col-md-3">
 
-        <label class="form-label cardlabel">
-          Reference Number
-        </label>
+                <label class="form-label cardlabel">
+                  Reference Number
+                </label>
 
-        <input
-          type="text"
-          class="form-control"
-          formControlName="referenceNumber"
-          placeholder="REF-001" />
+                <input type="text" class="form-control" formControlName="referenceNumber" placeholder="REF-001" />
 
-      </div>
+              </div>
 
-      <!-- INCOTERMS -->
-      <div class="col-md-4">
+              <!-- INCOTERMS -->
+              <div class="col-md-4">
 
-        <label class="form-label cardlabel">
-          Incoterms
-        </label>
+                <label class="form-label cardlabel">
+                  Incoterms
+                </label>
 
-        <input
-          type="text"
-          class="form-control"
-          formControlName="incoterms"
-          placeholder="FOB / CIF / EXW" />
+                <input type="text" class="form-control" formControlName="incoterms" placeholder="FOB / CIF / EXW" />
 
-      </div>
+              </div>
 
-      <!-- ROUNDING -->
-      <div class="col-md-4">
+              <!-- ROUNDING -->
+              <div class="col-md-4">
 
-        <label class="form-label cardlabel">
-          Round Off Amount
-        </label>
+                <label class="form-label cardlabel">
+                  Round Off Amount
+                </label>
 
-        <input
-          type="number"
-          class="form-control"
-          formControlName="roundingAmount"
-          placeholder="0.00" />
+                <input type="number" class="form-control" formControlName="roundingAmount" placeholder="0.00" />
 
-      </div>
+              </div>
 
-      <!-- APPROVED BY -->
-      <div class="col-md-4">
+              <!-- APPROVED BY -->
+              <div class="col-md-4">
 
-        <label class="form-label cardlabel">
-          Approved By
-        </label>
+                <label class="form-label cardlabel">
+                  Approved By
+                </label>
 
-        <input
-          type="text"
-          class="form-control"
-          formControlName="approvedBy"
-          placeholder="Approver Name" />
+                <input type="text" class="form-control" formControlName="approvedBy" placeholder="Approver Name" />
 
-      </div>
+              </div>
 
-   <!-- APPROVED ON -->
-<div class="col-md-4">
-  <label class="form-label cardlabel">Approved On</label>
-  <div class="position-relative">
-    <input
-      class="form-control pe-5"
-      [matDatepicker]="approvedPicker"
-      formControlName="approvedOn"
-      placeholder="Select date..."
-      readonly
-      (click)="approvedPicker.open()" />
-    <i
-      class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
-      style="font-size:18px; cursor:pointer;"
-      (click)="approvedPicker.open()">
-    </i>
-  </div>
-  <mat-datepicker #approvedPicker></mat-datepicker>
-</div>
+              <!-- APPROVED ON -->
+              <div class="col-md-4">
+                <label class="form-label cardlabel">Approved On</label>
+                <div class="position-relative">
+                  <input class="form-control pe-5" [matDatepicker]="approvedPicker" formControlName="approvedOn"
+                    placeholder="Select date..." readonly (click)="approvedPicker.open()" />
+                  <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                    style="font-size:18px; cursor:pointer;" (click)="approvedPicker.open()">
+                  </i>
+                </div>
+                <mat-datepicker #approvedPicker></mat-datepicker>
+              </div>
 
-<!-- CANCELLED ON -->
-<div class="col-md-4">
-  <label class="form-label cardlabel">Cancelled On</label>
-  <div class="position-relative">
-    <input
-      class="form-control pe-5"
-      [matDatepicker]="cancelledPicker"
-      formControlName="cancelledOn"
-      placeholder="Select date..."
-      readonly
-      (click)="cancelledPicker.open()" />
-    <i
-      class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
-      style="font-size:18px; cursor:pointer;"
-      (click)="cancelledPicker.open()">
-    </i>
-  </div>
-  <mat-datepicker #cancelledPicker></mat-datepicker>
-</div>
+              <!-- CANCELLED ON -->
+              <div class="col-md-4">
+                <label class="form-label cardlabel">Cancelled On</label>
+                <div class="position-relative">
+                  <input class="form-control pe-5" [matDatepicker]="cancelledPicker" formControlName="cancelledOn"
+                    placeholder="Select date..." readonly (click)="cancelledPicker.open()" />
+                  <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                    style="font-size:18px; cursor:pointer;" (click)="cancelledPicker.open()">
+                  </i>
+                </div>
+                <mat-datepicker #cancelledPicker></mat-datepicker>
+              </div>
 
-      <!-- CANCELLATION REASON -->
-      <div class="col-md-4">
+              <!-- CANCELLATION REASON -->
+              <div class="col-md-4">
 
-        <label class="form-label cardlabel">
-          Cancellation Reason
-        </label>
+                <label class="form-label cardlabel">
+                  Cancellation Reason
+                </label>
 
-        <textarea
-          rows="3"
-          class="form-control"
-          formControlName="cancellationReason"
-          placeholder="Reason for cancellation">
+                <textarea rows="3" class="form-control" formControlName="cancellationReason"
+                  placeholder="Reason for cancellation">
         </textarea>
 
-      </div>
+              </div>
 
-      <!-- REMARKS -->
-      <div class="col-md-12">
+              <!-- REMARKS -->
+              <div class="col-md-12">
 
-        <label class="form-label cardlabel">
-          Remarks
-        </label>
+                <label class="form-label cardlabel">
+                  Remarks
+                </label>
 
-        <textarea
-          rows="4"
-          class="form-control"
-          formControlName="remarks"
-          maxlength="500"
-          placeholder="Additional notes...">
-        </textarea>
+                <div class="rich-editor-wrapper">
 
-        <small class="text-muted">
-          Maximum 500 characters
-        </small>
+                  @if(showEditors()){
 
-      </div>
+                  <!-- TOOLBAR -->
+                  <ngx-editor-menu [editor]="remarksEditor" [toolbar]="toolbar">
 
-    </div>
+                  </ngx-editor-menu>
 
-  </div>
+                  <!-- EDITOR -->
+                  <ngx-editor [editor]="remarksEditor" [formControl]="
+    $any(
+      poForm.controls['remarks']
+    )
+  " placeholder="
+      Additional notes...
+    ">
 
-</div>
+                  </ngx-editor>
+
+                  }
+
+                </div>
+
+                <small class="text-muted">
+                  Maximum 500 characters
+                </small>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
 
         <!-- ══ FOOTER ACTIONS ═════════════════════════════════════════════ -->
         <div class="d-flex mb-md-0 mb-3 gap-3" style="justify-content:flex-end;">
@@ -684,5 +626,3 @@
     </div>
   </div>
 </div>
-
-

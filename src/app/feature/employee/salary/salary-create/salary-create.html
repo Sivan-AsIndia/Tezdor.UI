@@ -95,18 +95,11 @@
 
                             <div class="form-group flex-1">
                                 <label class="form-label required">Payroll Period</label>
-                                <select class="form-select" [value]="form().payrollPeriodId || ''"
-                                    (change)="setPeriod($any($event.target).value)"
-                                    [class.is-invalid]="hasError('payrollPeriodId')">
+                                <app-search-dropdown [items]="payrollPeriodDropdownItems()"
+                                    [selectedId]="form().payrollPeriodId || ''" [invalid]="hasError('payrollPeriodId')"
+                                    placeholder="-- Select Period --" (selectedIdChange)="setPeriod($event)">
 
-                                    <option value="">-- Select Period --</option>
-
-                                    @for (p of periods(); track p.id) {
-                                    <option [value]="p.id" [selected]="p.id === form().payrollPeriodId">{{ p.name }}
-                                    </option>
-                                    }
-
-                                </select>
+                                </app-search-dropdown>
 
                                 @if(hasError('payrollPeriodId')){
                                 <div class="text-danger mt-1">

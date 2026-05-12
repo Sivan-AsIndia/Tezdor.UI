@@ -1,0 +1,106 @@
+<!-- =====================================================
+  SEARCH DROPDOWN
+===================================================== -->
+
+<div class="search-dropdown">
+
+  <!-- CONTROL -->
+  <div class="search-dropdown-control"
+
+    [class.invalid]="invalid()"
+
+    [class.disabled]="disabled()"
+
+    (click)="toggleDropdown()">
+
+    <span class="selected-text">
+
+      {{ selectedLabel() }}
+
+    </span>
+
+    <i class="ti"
+      [class.ti-chevron-down]="!isOpen()"
+      [class.ti-chevron-up]="isOpen()"></i>
+
+  </div>
+
+  <!-- MENU -->
+  @if(isOpen()){
+
+  <div class="search-dropdown-menu">
+
+    <!-- SEARCH -->
+    <div class="search-box">
+
+      <!-- SEARCH ICON -->
+      <i class="ti ti-search search-icon"></i>
+
+      <!-- INPUT -->
+      <input type="text"
+
+        placeholder="Search..."
+
+        [value]="search()"
+
+        (input)="search.set(
+          $any($event.target).value
+        )"
+
+        (blur)="closeDropdown()">
+
+      <!-- CLEAR -->
+      @if(search()){
+
+      <button type="button"
+
+        class="clear-search-btn"
+
+        (mousedown)="$event.preventDefault()"
+
+        (click)="search.set('')">
+
+        <i class="ti ti-x"></i>
+
+      </button>
+
+      }
+
+    </div>
+
+    <!-- ITEMS -->
+    <div class="dropdown-items">
+
+      @if(filteredItems().length === 0){
+
+      <div class="empty-item">
+
+        No records found
+
+      </div>
+
+      }
+
+      @for(item of filteredItems(); track item.id){
+
+      <div class="dropdown-item"
+
+        [class.active]="
+          item.id === selectedId()
+        "
+
+        (mousedown)="selectItem(item)">
+
+        {{ item.name }}
+
+      </div>
+
+      }
+
+    </div>
+
+  </div>
+
+  }
+
+</div>

@@ -860,21 +860,13 @@
             <div class="field">
                 <label>Employee</label>
 
-                <select [value]="permissionForm().employeeId"
-                    (change)="setPermissionEmployee($any($event.target).value)"
-                    [class.is-invalid]="hasError('employeeId')">
 
-                    <option value="">Select Employee</option>
 
-                    @for(emp of employees(); track emp.employeeId){
+                <app-search-dropdown [items]="employeeDropdownItems()" [selectedId]="permissionForm().employeeId"
+                    [invalid]="hasLeaveError('employeeId')" placeholder="--Select Employee--"
+                    (selectedIdChange)="setPermissionEmployee($event)">
 
-                    <option [value]="emp.employeeId">
-                        {{ emp.firstName }} {{ emp.lastName }}
-                    </option>
-
-                    }
-
-                </select>
+                </app-search-dropdown>
 
                 @if(hasError('employeeId')){
                 <div class="field-error">
@@ -1038,29 +1030,13 @@
                         Employee
                     </label>
 
-                    <select class="leave-input" [class.is-invalid]="hasLeaveError('employeeId')"
-                        [value]="leaveForm().employeeId" (change)="leaveForm.update(f => ({
-                              ...f,
-                              employeeId: $any($event.target).value
-                            }))">
+                    <app-search-dropdown [items]="employeeDropdownItems()" [selectedId]="leaveForm().employeeId"
+                        [invalid]="hasLeaveError('employeeId')" placeholder="--Select Employee--" (selectedIdChange)="leaveForm.update(f => ({
+                        ...f,
+                        employeeId: $event
+                    }))">
 
-                        <option value="">
-                            Select Employee
-                        </option>
-
-                        @for(emp of employees(); track emp.employeeId){
-
-                        <option [value]="emp.employeeId">
-
-                            {{ emp.firstName }}
-                            {{ emp.lastName }}
-
-                        </option>
-
-                        }
-
-                    </select>
-
+                    </app-search-dropdown>
                     @if(hasLeaveError('employeeId')){
 
                     <div class="field-error">
@@ -1085,7 +1061,7 @@
                             }))">
 
                         <option value="">
-                            Select Leave Type
+                            -- Select Leave Type --
                         </option>
 
                         @for(type of leaveTypes(); track type.leaveTypeId){

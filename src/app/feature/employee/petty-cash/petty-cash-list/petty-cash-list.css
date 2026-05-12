@@ -244,12 +244,12 @@ th, td {
 }
 
 .btn-cancel {
-    background-color: rgb(156 163 175 / var(--tw-bg-opacity, 1));
+    background-color: rgb(156 163 175 / var(--tw-bg-opacity, 1)) !important;
 }
 
 .btn-cancel:hover{
         --tw-bg-opacity: 1;
-    background-color: rgb(107 114 128 / var(--tw-bg-opacity, 1));
+    background-color: rgb(107 114 128 / var(--tw-bg-opacity, 1)) !important;
 }
 
 .TablePlus {

@@ -267,6 +267,7 @@ button.btn-outline-warning:hover {
   border-radius: 14px;
   padding: 20px;
   box-shadow: 0 2px 16px rgba(80,80,160,.07);
+  overflow: visible;
 }
 
 .section-title {
@@ -327,12 +328,12 @@ button.btn-outline-warning:hover {
 }
 
 .btn-cancel {
-    background-color: rgb(156 163 175 / var(--tw-bg-opacity, 1));
+    background-color: rgb(156 163 175 / var(--tw-bg-opacity, 1)) !important;
 }
 
 .btn-cancel:hover{
         --tw-bg-opacity: 1;
-    background-color: rgb(107 114 128 / var(--tw-bg-opacity, 1));
+    background-color: rgb(107 114 128 / var(--tw-bg-opacity, 1)) !important;
 }
 
 .action-btn{
@@ -341,7 +342,7 @@ button.btn-outline-warning:hover {
 }
 
 .outline-btn{
-    color: var(--bs-primary) !important;
+    color: #fff !important;
     border-color: var(--bs-primary);
 }
 

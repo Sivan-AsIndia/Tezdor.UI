@@ -222,32 +222,29 @@
             <div class="form-group flex-1">
               <label class="form-label">Branch</label>
 
-              <select class="form-select" [value]="form().branchId"
-                (change)="update('branchId', $any($event.target).value)">
+              <app-search-dropdown [items]="branchDropdownItems()" [selectedId]="form().branchId ?? null"
+                placeholder="Select Branch" (selectedIdChange)="
+                  update(
+                    'branchId',
+                    $event
+                  )
+                ">
 
-                <option value="">Select Branch</option>
-
-                @for(b of branches(); track b.branchId){
-                <option [value]="b.branchId">{{ b.branchName }}</option>
-                }
-
-              </select>
+              </app-search-dropdown>
             </div>
 
             <!-- Department -->
             <div class="form-group flex-1">
               <label class="form-label">Department</label>
 
-              <select class="form-select" [value]="form().departmentId"
-                (change)="update('departmentId', $any($event.target).value)">
+              <app-search-dropdown [items]="departmentDropdownItems()" [selectedId]="form().departmentId ?? null"
+                placeholder="Select Department" (selectedIdChange)="
+                update(
+                  'departmentId',
+                  $event
+                )">
 
-                <option value="">Select Department</option>
-
-                @for(d of departments(); track d.id){
-                <option [value]="d.id">{{ d.name }}</option>
-                }
-
-              </select>
+              </app-search-dropdown>
             </div>
 
           </div>
@@ -295,19 +292,18 @@
             <div class="form-group flex-1">
               <label class="form-label required">Custodian</label>
 
-              <select class="form-select" [value]="form().custodianEmployeeId"
-                (change)="update('custodianEmployeeId', $any($event.target).value)"
-                [class.is-invalid]="isSubmitted() && hasError('custodianEmployeeId')">
+              <app-search-dropdown [items]="employeeDropdownItems()" [selectedId]="form().custodianEmployeeId ?? null"
+                [invalid]="
+                  isSubmitted() &&
+                  hasError('custodianEmployeeId')
+                " placeholder="-- Select Custodian --" (selectedIdChange)="
+                  update(
+                    'custodianEmployeeId',
+                    $event
+                  )
+                ">
 
-                <option value="">Select Employee</option>
-
-                @for(e of employees(); track e.employeeId){
-                <option [value]="e.employeeId" [selected]="e.employeeId === form().custodianEmployeeId">
-                  {{ e.firstName }} {{ e.lastName }}
-                </option>
-                }
-
-              </select>
+              </app-search-dropdown>
 
               @if(isSubmitted() && hasError('custodianEmployeeId')){
               <small class="text-danger">Custodian is required</small>
@@ -318,19 +314,18 @@
             <div class="form-group flex-1">
               <label class="form-label">Alternate Custodian</label>
 
-              <select class="form-select" [value]="form().alternateCustodianEmployeeId"
-                (change)="update('alternateCustodianEmployeeId', $any($event.target).value)"
-                [class.is-invalid]="custodianError()">
+              <app-search-dropdown [items]="employeeDropdownItems()"
+                [selectedId]="form().alternateCustodianEmployeeId ?? null" [invalid]="
+                  isSubmitted() &&
+                  hasError('alternateCustodianEmployeeId')
+                " placeholder="-- Select Alternate Custodian --" (selectedIdChange)="
+                  update(
+                    'alternateCustodianEmployeeId',
+                    $event
+                  )
+                ">
 
-                <option value="">Select Employee</option>
-
-                @for(e of employees(); track e.employeeId){
-                <option [value]="e.employeeId">
-                  {{ e.firstName }} {{ e.lastName }}
-                </option>
-                }
-
-              </select>
+              </app-search-dropdown>
 
               @if(custodianError()){
               <small class="text-danger">
@@ -345,18 +340,19 @@
           <div class="form-group">
             <label class="form-label">Finance Owner</label>
 
-            <select class="form-select" [value]="form().financeOwnerUserId"
-              (change)="update('financeOwnerUserId', $any($event.target).value)">
 
-              <option value="">Select Finance Owner</option>
+            <app-search-dropdown [items]="employeeDropdownItems()" [selectedId]="form().financeOwnerUserId ?? null"
+              [invalid]="
+                  isSubmitted() &&
+                  hasError('financeOwnerUserId')
+                " placeholder="-- Select Finance Owner --" (selectedIdChange)="
+                  update(
+                    'financeOwnerUserId',
+                    $event
+                  )
+                ">
 
-              @for(e of employees(); track e.employeeId){
-              <option [value]="e.employeeId">
-                {{ e.firstName }} {{ e.lastName }}
-              </option>
-              }
-
-            </select>
+            </app-search-dropdown>
           </div>
 
         </div>
@@ -372,12 +368,16 @@
           <div class="form-row">
             <div class="form-group flex-1">
               <label class="form-label required">Type</label>
-              <select class="form-select" (change)="update('pettyCashTransactionType',$any($event.target).value)">
-                <option [value]="">-- select type -- </option>
-                @for(t of transactionTypes; track t){
-                <option [value]="t" [selected]="t=== form().pettyCashTransactionType">{{t}}</option>
-                }
-              </select>
+              <app-search-dropdown [items]="transactionTypeDropdownItems()" [selectedId]="
+                  form().pettyCashTransactionType ?? null
+                " placeholder="-- select type --" (selectedIdChange)="
+                  update(
+                    'pettyCashTransactionType',
+                    $event
+                  )
+                ">
+
+              </app-search-dropdown>
             </div>
 
             <div class="form-group flex-1">
@@ -646,17 +646,16 @@
             <div class="form-group flex-1">
               <label class="form-label">Expense Ledger Account</label>
 
-              <select class="form-select" [value]="form().expenseLedgerAccountId"
-                (change)="update('expenseLedgerAccountId', $any($event.target).value)">
+              <app-search-dropdown [items]="expenseLedgerDropdownItems()" [selectedId]="
+                  form().expenseLedgerAccountId ?? null
+                " placeholder="Select Ledger" (selectedIdChange)="
+                  update(
+                    'expenseLedgerAccountId',
+                    $event
+                  )
+                ">
 
-                <option value="">Select Ledger</option>
-
-                @for(l of expenseLedgerAccounts(); track l.accountId){
-                <option [value]="l.accountId" [selected]="l.accountId === form().expenseLedgerAccountId">{{
-                  l.accountName }}</option>
-                }
-
-              </select>
+              </app-search-dropdown>
             </div>
 
           </div>
@@ -887,9 +886,23 @@
           <div class="form-group mt-2">
             <label class="form-label">Missing Receipt Reason</label>
 
-            <textarea class="form-control" placeholder="Explain why receipt is missing"
-              (input)="update('missingReceiptReason',$any($event.target).value)">
-    </textarea>
+            <div class="rich-editor-wrapper">
+              <form [formGroup]="editorForm">
+
+                @if (showEditor()) {
+                <!-- TOOLBAR -->
+                <ngx-editor-menu [editor]="editor" [toolbar]="toolbar">
+                </ngx-editor-menu>
+
+                <!-- EDITOR -->
+                <ngx-editor [editor]="editor" formControlName="missingReceiptReason"
+                  placeholder="Explain why receipt is missing">
+                </ngx-editor>
+                }
+
+              </form>
+            </div>
+
           </div>
           }
 

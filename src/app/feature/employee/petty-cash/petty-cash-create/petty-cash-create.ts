@@ -1,16 +1,23 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { afterNextRender, ChangeDetectorRef, Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { PettyCashDataClient } from '../petty-cash-data-client';
 import { ToastNotifier } from '../../../../core/services/toast';
-import { ApprovalStatus, FinanceVerificationStatus, PettyCash, PettyCashFundType, PettyCashSourceDocumentType, PettyCashStatus, PettyCashTransactionType, PostingStatus, ReceiptAttachment, ReceiptAttachmentFile, ReceiptVerificationStatus, ReconciliationStatus, ReplenishmentStatus } from '../petty-cash';
+import { ApprovalStatus, FinanceVerificationStatus, PettyCash, PettyCashFundType, PettyCashStatus, PettyCashTransactionType, PostingStatus, ReceiptAttachment, ReceiptAttachmentFile, ReceiptVerificationStatus, ReconciliationStatus, ReplenishmentStatus } from '../petty-cash';
 import { EmployeeDataClient } from '../../employee-data-client';
 import { CommonModule } from '@angular/common';
 import { MasterDataClient } from '../../../../core/services/master-data';
 import { PettyCashLine } from '../petty-cash-line';
+import { SearchDropdownComponent } from "../../../../shared/components/search-dropdown/search-dropdown";
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  Editor,
+  NgxEditorModule,
+  Toolbar
+} from 'ngx-editor';
 
 @Component({
   selector: 'app-petty-cash-create',
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, SearchDropdownComponent,NgxEditorModule,ReactiveFormsModule],
   templateUrl: './petty-cash-create.html',
   styleUrl: './petty-cash-create.css',
 })
@@ -22,12 +29,76 @@ export class PettyCashCreateComponent {
   private readonly toast = inject(ToastNotifier);
   private readonly route = inject(ActivatedRoute);
   private readonly master = inject(MasterDataClient);
+editor!: Editor;   
+
+readonly editorForm = new FormGroup({
+
+  missingReceiptReason:
+    new FormControl('')
+
+});
+
+readonly toolbar: Toolbar = [
+
+  ['bold', 'italic', 'underline'],
+
+  ['strike'],
+
+  ['code', 'blockquote'],
+
+  [
+    {
+      heading: [
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6'
+      ]
+    }
+  ],
+
+  ['ordered_list', 'bullet_list'],
+
+  ['link', 'image'],
+
+  ['text_color', 'background_color'],
+
+  ['horizontal_rule'],
+
+  ['undo', 'redo']
+
+];
 
   id = this.route.snapshot.paramMap.get('id');
   isEditMode = signal(false);
 
+  private readonly cdr =
+  inject(ChangeDetectorRef);
+
+showEditor =
+  signal(false);
+
   // ================= INIT =================
-  constructor() {
+
+
+constructor() {
+  afterNextRender(() => {
+    requestAnimationFrame(() => {
+      this.editor = new Editor();   // init here first
+
+      // subscribe AFTER editor is created
+      this.editorForm.controls['missingReceiptReason']
+        .valueChanges.subscribe(value => {
+          this.update('missingReceiptReason', value || '');
+        });
+
+      this.showEditor.set(true);
+      this.cdr.detectChanges();
+    });
+  });
+
     if (this.id) {
       this.isEditMode.set(true);
 
@@ -61,6 +132,28 @@ if (attachment) {
 }
       }
     }
+
+  this.editorForm.controls[
+    'missingReceiptReason'
+  ].valueChanges.subscribe(value => {
+
+    this.update(
+      'missingReceiptReason',
+      value || ''
+    );
+
+  });
+      effect(() => {
+
+    const reason =
+      this.form().missingReceiptReason;
+
+    if (reason === undefined) {
+      return;
+    }
+
+  });
+
   }
 
   // ===== TABS =====
@@ -749,4 +842,78 @@ formatFileSize(bytes: number) {
 
     return true;
   }
+
+  // -------- Drop down items --------------//
+
+departmentDropdownItems = computed(() =>
+
+  this.departments()
+
+    .filter(x => !!x.id)
+
+    .map(x => ({
+
+      id: x.id!,
+
+      name: x.name
+
+    }))
+);
+
+branchDropdownItems = computed(() =>
+
+  this.branches()
+
+    .filter(x => !!x.branchId)
+
+    .map(x => ({
+
+      id: x.branchId!,
+
+      name: x.branchName
+
+    }))
+);
+
+employeeDropdownItems = computed(() =>
+
+  this.employees()
+
+    .filter(x => !!x.employeeId)
+
+    .map(x => ({
+
+      id: x.employeeId!,
+
+      name:
+        `${x.firstName} ${x.lastName}`
+
+    }))
+);
+
+transactionTypeDropdownItems = computed(() =>
+
+  this.transactionTypes.map(x => ({
+
+    id: x,
+
+    name: x
+
+  }))
+);
+
+expenseLedgerDropdownItems = computed(() =>
+
+  this.expenseLedgerAccounts()
+
+    .filter(x => !!x.accountId)
+
+    .map(x => ({
+
+      id: x.accountId!,
+
+      name: x.accountName
+
+    }))
+);
 }
