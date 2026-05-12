@@ -105,10 +105,7 @@
         <span class="sv-leg-dot sv-leg-out"></span> OUT
       </div>
       <button class="sv-print-btn v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="printPage()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-          <rect x="6" y="14" width="12" height="8"/>
-        </svg>
+     
         Print
       </button>
     </div>
@@ -126,8 +123,8 @@
 
         <div class="border-table">
           <div class="v-table v-theme--BLUE_THEME v-table--density-default">
-            <div class="v-table__wrapper">
-              <table class="sv-table">
+            <div class="v-table__wrapper" appResponsiveTable [hidePriority]="[3, 2, 4, 1]" [stickyLastCol]="true">
+              <table class="sv-table"  >
                 <thead>
                   <tr class="sv-thead-row">
                     <th>S.No</th>

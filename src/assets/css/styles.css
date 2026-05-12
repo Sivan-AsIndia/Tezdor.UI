@@ -39905,13 +39905,30 @@ background-color: var(--color-primary) !important;
 body {
    font-family: var( --font-other) !important;
 }
-h1,h2,h3,h4,h5,h6{
-     /* font-size:var(--font-other) !important;
-     font-weight:var(--font-weight-base) !important; */
+
+
+ .card-title, .page-title{
+      font-size: var(--font-size-other) !important;
+  font-family: var(--font-other) !important;
+ }
+.hide-menu{
+          font-size: var(--font-size-other) !important;
 }
-span{
-         font-weight:var(--font-weight-base) !important;
+/* Other elements font size */
+p, label, td, th,.text-subtitle-1, .btn {
+  font-size: var(--font-size-other) !important;
+  font-family: var(--font-other) !important;
 }
+table td{
+      font-size: var(--font-size-other) !important;
+}
+
+/* Base / menu font size */
+body, .sidebar, .nav-link, .menu-item {
+  font-size: var(--font-size-base) !important;
+  font-family: var(--font-menu) !important;
+}
+
 .page-wrapper {
     min-height: 100vh
 }
@@ -53453,6 +53470,7 @@ body .connect-sorting-content {
 }
 [data-bs-theme=dark] .border-table .v-table .v-table__wrapper>table>thead>tr:last-child>th{
         color: white !important;
+        background: transparent !important;
 }
 [data-bs-theme=dark] .textSecondary{
      color:#ffffff4f !important;

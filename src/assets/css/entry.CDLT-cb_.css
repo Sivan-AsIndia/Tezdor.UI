@@ -63943,7 +63943,8 @@ html.overflow-y-hidden {
 }
 
 .text-subtitle-1 {
-    font-size: .875rem !important;
+      font-size: var(--font-size-other) !important;
+    font-family: var(--font-other) !important;
     letter-spacing: .009375em !important;
     line-height: 1.1rem
 }

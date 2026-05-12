@@ -160,7 +160,8 @@
                         <div class="pf-card__header d-flex justify-content-between">
                             <h3 class="cardheader">Salary Lines</h3>
 
-                            <button class="btn btn-primary" (click)="generateSalary()">
+                            <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
+" (click)="generateSalary()">
                                 Generate Salary
                             </button>
                         </div>
@@ -311,11 +312,12 @@
             <!-- FOOTER -->
             <div class="d-flex justify-content-end gap-3 mt-3">
 
-                <button class="btn btn-cancel" (click)="onCancel()">
+                <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="onCancel()">
                     Cancel
                 </button>
 
-                <button class="btn btn-primary" (click)="onSave()">
+                <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
+" (click)="onSave()">
                     {{ editMode ? 'Update' : 'Create' }}
                 </button>
 

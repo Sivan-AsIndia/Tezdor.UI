@@ -61,14 +61,14 @@
             @if (inv.invoiceStatus === 'draft') {
               <!-- FIX: goEdit() now navigates to '/purchaseinvoice-edit' consistently -->
               <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="goEdit(inv.id)">
-                <i class="ti ti-edit me-1"></i>Edit
+                Edit
               </button>
             }
             <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="printPage()">
-              <i class="ti ti-printer me-1"></i>Print
+             Print
             </button>
             <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated" (click)="goBack()">
-              <i class="ti ti-arrow-left me-1"></i>Back
+           Back
             </button>
           </div>
         </div>

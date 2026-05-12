@@ -198,7 +198,7 @@
                           <td>
                             <div class="d-flex align-center">
   <!-- VIEW -->
-                              <a [routerLink]="['/purchase-order', po.id]"
+                              <a [routerLink]="['/purchase-order', po.id]" title="View"
                                 class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default"
                                 style="text-transform:capitalize;letter-spacing:0;">
                                 <span class="v-btn__content" data-no-activator="">
@@ -215,7 +215,7 @@
                               </a>
 
                               <!-- EDIT -->
-                              <button type="button"
+                              <button type="button" title="Edit"
                                 class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default"
                                 style="text-transform:capitalize;letter-spacing:0;"
                                 [routerLink]="['/purchase-order/edit', po.id]">
@@ -233,7 +233,7 @@
                               </button>
 
                               <!-- DELETE -->
-                              <button type="button"
+                              <button type="button" title="Delete"
                                 data-bs-toggle="modal"
                                 data-bs-target="#deleteModal"
                                 class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default"

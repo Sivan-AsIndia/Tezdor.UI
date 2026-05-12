@@ -37,18 +37,19 @@
 
 
         <div class="mt-2 d-flex gap-2">
-          <span class="badge" [class]="getStatusClass(pc.pettyCashStatus)">
+          <span class="badge rounded-2" [class]="getStatusClass(pc.pettyCashStatus)">
             {{ pc.pettyCashStatus }}
           </span>
 
-          <span class="badge bg-success-subtle text-success">
+          <span class="badge bg-success-subtle text-success rounded-2">
             {{ pc.pettyCashTransactionType }}
           </span>
         </div>
       </div>
 
-      <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" (click)="print()">
-        <i class="ti ti-printer"></i>
+      <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-secondary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
+" (click)="print()">
+        <!-- <i class="ti ti-printer"></i> -->
         <span class="d-none d-md-inline">Print</span>
       </button>
 
@@ -163,7 +164,7 @@
         <div class="card-header d-flex justify-content-between align-items-center">
           <span class="fw-semibold  text-primary">Transaction Summary</span>
 
-          <button class="btn btn-sm btn-primary" (click)="addLine()">
+          <button class="btn btn-sm bg-primary rounded-2" (click)="addLine()">
             + Add Line
           </button>
         </div>
@@ -296,25 +297,25 @@
 
                   <!-- EDIT -->
                   @if(!isEditing(i)){
-                  <button class="btn btn-sm btn-light text-dark" (click)="startEdit(i)">
+                  <button class="btn btn-sm rounded-2 btn-light text-dark" (click)="startEdit(i)">
                     <i class="ti ti-pencil"></i>
                   </button>
                   }
 
                   <!-- SAVE -->
                   @if(isEditing(i)){
-                  <button class="btn btn-sm btn-success" (click)="saveEdit(i)">
+                  <button class="btn btn-sm bg-success rounded-2" (click)="saveEdit(i)">
                     <i class="ti ti-check"></i>
                   </button>
 
                   <!-- CANCEL -->
-                  <button class="btn btn-sm btn-warning" (click)="cancelEdit()">
+                  <button class="btn btn-sm bg-warning rounded-2" (click)="cancelEdit()">
                     <i class="ti ti-x"></i>
                   </button>
                   }
 
                   <!-- DELETE -->
-                  <button class="btn btn-sm btn-light text-danger" (click)="removeLine(i)">
+                  <button class="btn btn-sm btn-light rounded-2 text-danger" (click)="removeLine(i)">
                     <i class="ti ti-trash"></i>
                   </button>
 
@@ -379,7 +380,7 @@
 
             <!-- ===== SUBMIT ===== -->
             @if (pc.pettyCashStatus === 'Draft') {
-            <button class="btn btn-primary w-100" (click)="submit(pc.pettyCashId)">
+            <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated w-100" (click)="submit(pc.pettyCashId)">
               Submit
             </button>
             }
@@ -387,11 +388,13 @@
             <!-- ===== APPROVAL ===== -->
             @if (pc.approvalStatus === 'Submitted' || pc.approvalStatus === 'UnderReview') {
 
-            <button class="btn btn-success w-100" (click)="approve(pc.pettyCashId)">
+            <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
+ w-100" (click)="approve(pc.pettyCashId)">
               Approve
             </button>
 
-            <button class="btn btn-outline-danger w-100 btn-clr" (click)="openReasonPopup('reject', pc.pettyCashId)">>
+            <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
+ w-100 btn-clr" (click)="openReasonPopup('reject', pc.pettyCashId)">
               Reject
             </button>
             }
@@ -401,7 +404,8 @@
             pc.approvalStatus === 'Approved' &&
             pc.financeVerificationStatus !== 'Verified'
             ) {
-            <button class="btn btn-info w-100" (click)="verifyReceipt(pc.pettyCashId)">
+            <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-info v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
+ w-100" (click)="verifyReceipt(pc.pettyCashId)">
               Verify Receipt
             </button>
             }
@@ -412,7 +416,7 @@
             pc.financeVerificationStatus === 'Verified' &&
             pc.postingStatus !== 'Posted'
             ) {
-            <button class="btn btn-success w-100" (click)="post(pc.pettyCashId)">
+            <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-success v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated w-100" (click)="post(pc.pettyCashId)">
               Post Transaction
             </button>
             }
@@ -422,7 +426,7 @@
             pc.postingStatus === 'Posted' &&
             pc.replenishmentStatus === 'Required'
             ) {
-            <button class="btn btn-warning w-100" (click)="requestReplenishment(pc.pettyCashId)">
+            <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-warning v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated w-100" (click)="requestReplenishment(pc.pettyCashId)">
               Request Replenishment
             </button>
             }
@@ -433,7 +437,7 @@
             pc.reconciliationStatus !== reconciliationStatuses.Matched &&
             pc.reconciliationStatus !== reconciliationStatuses.Closed
             ) {
-            <button class="btn btn-dark w-100" (click)="reconcile(pc.pettyCashId)">
+            <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-dark text-white v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated w-100" (click)="reconcile(pc.pettyCashId)">
               Reconcile Cash
             </button>
             }
@@ -452,7 +456,7 @@
             pc.pettyCashStatus !== 'Closed' &&
             pc.pettyCashStatus !== 'Posted'
             ) {
-            <button class="btn btn-outline-danger w-100 btn-clr" (click)="openReasonPopup('cancel', pc.pettyCashId)">
+            <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3 w-100 btn-clr" (click)="openReasonPopup('cancel', pc.pettyCashId)">
               Cancel
             </button>
             }
@@ -461,7 +465,7 @@
             pc.postingStatus === 'Posted' &&
             pc.pettyCashStatus === 'Posted'
             ) {
-            <button class="btn btn-outline-warning w-100 btn-clr" (click)="openReasonPopup('reverse', pc.pettyCashId)">
+            <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-warning v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevatedw-100 btn-clr" (click)="openReasonPopup('reverse', pc.pettyCashId)">
               Reverse
             </button>
             }
@@ -813,9 +817,9 @@
 
       <div class="modal-footer">
 
-        <button class="btn btn-cancel" (click)="closeModal()">Cancel</button>
+        <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="closeModal()">Cancel</button>
 
-        <button class="btn btn-primary" (click)="confirmAction()">
+        <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated" (click)="confirmAction()">
           Confirm
         </button>
 

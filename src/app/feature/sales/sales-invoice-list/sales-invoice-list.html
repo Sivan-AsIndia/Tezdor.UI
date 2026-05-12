@@ -111,7 +111,7 @@
               <a routerLink="/sales-invoice/create"
                 class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-primary v-btn--density-default v-btn--size-default v-btn--variant-elevated"
                 style="text-transform:capitalize;letter-spacing:0;padding:0 14px;">
-                <i class="ti ti-plus me-1"></i> New
+               <i class="mdi mdi-plus-circle-outline v-icon mr-2"></i> New
               </a>
 
             </div>
@@ -217,13 +217,13 @@
                           @if (inv.payment.balanceDue > 0) {
                             ₹{{ inv.payment.balanceDue | number:'1.2-2' }}
                           } @else {
-                            <span class="sil-paid-chip"><i class="ti ti-check"></i> Paid</span>
+                            <span class="sil-paid-chip rounded-2"><i class="ti ti-check"></i> Paid</span>
                           }
                         </td>
 
                         <!-- Status -->
                         <td>
-                          <span class="sil-status-badge sil-status-{{ inv.status }}">
+                          <span class="sil-status-badge sil-status-{{ inv.status }} rounded-2">
                             {{ statusLabel(inv.status) }}
                           </span>
                         </td>

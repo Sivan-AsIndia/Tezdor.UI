@@ -1,18 +1,15 @@
-// ── Product View Component ───────────────────────────────────
-// ✅ Angular 21 — uses input() signal for route param binding,
-//    computed() for derived state, no OnInit/NgZone.
-
 import { Component, inject, input, signal, computed, effect } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductDataClient } from '../product-data-client';
 import { Product } from '../product';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { PrintService } from '../../../core/print/print.service';
+import { TooltipDirective } from '../../../shared/components/tooltip-ui/tooltip';
 
 @Component({
   selector: 'app-product-view',
   standalone: true,
-  imports: [CommonModule, DecimalPipe],
+  imports: [CommonModule, DecimalPipe,TooltipDirective],
   templateUrl: './product-view.html',
   styleUrl: './product-view.css',
 })
@@ -21,47 +18,31 @@ export class ProductViewComponent {
   private router  = inject(Router);
   private service = inject(ProductDataClient);
   private printService = inject(PrintService);
-
-  /**
-   * ✅ Angular 21 input() signal — binds the ':id' route param
-   *    automatically via withComponentInputBinding() in app.config.
-   *    No OnInit, no ActivatedRoute snapshot needed.
-   */
   id = input<string>();
 
-  // ✅ PRODUCT — derived from the route param via computed()
   product = computed<Product | null>(() => {
     const routeId = this.id();
     if (!routeId) return null;
     return this.service.getById(+routeId) ?? null;
   });
 
-  // ✅ IMAGES — derived from product
   images = computed(() => {
     const p = this.product();
     if (!p || !Array.isArray(p.images)) return [];
     return p.images;
   });
 
-  // ✅ SELECTED IMAGE
   selectedIndex = signal(0);
 
-  // ✅ ZOOM STATES
   showZoom = signal(false);
   zoomTransform = signal<Record<string, string>>({});
 
-  /**
-   * ✅ effect() replaces ngOnInit() — runs whenever product() changes.
-   *    Sets the selected image to the primary image index.
-   *    Navigates away if the product ID is invalid.
-   */
   constructor() {
     effect(() => {
       const p = this.product();
       const routeId = this.id();
 
       if (routeId && !p) {
-        // Invalid product ID → redirect to list
         this.router.navigate(['/products']);
         return;
       }
@@ -74,7 +55,6 @@ export class ProductViewComponent {
     });
   }
 
-  // ✅ CLICK THUMB
   selectImage(index: number) {
     this.selectedIndex.set(index);
     this.showZoom.set(false);
@@ -116,7 +96,6 @@ export class ProductViewComponent {
     }
   }
 
-  // ✅ HELPERS
   getCategoryLabel(id: number) {
     return ['Electronics', 'Clothing', 'Food', 'Books'][id - 1] ?? '-';
   }

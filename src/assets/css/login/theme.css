@@ -11534,3 +11534,278 @@ html[dir=rtl] .toast-onload{
 [data-bs-theme="dark"] .light-logo{
   display: block !important;
 }
+[data-bs-theme="dark"] .card-value-md{
+  color: white !important;
+}
+[data-bs-theme="dark"] .inner-bg-card,[data-bs-theme="dark"] .stock-item{
+  background: #111c2d !important;
+}
+[data-bs-theme="dark"] .header-left span{
+    color: white !important;
+}
+[data-bs-theme="dark"] .employee-cell .emp-name{
+  color: white !important;
+}
+[data-bs-theme="dark"]  .sales-stat-card,[data-bs-theme="dark"] .timeline-card{
+  background: #111c2d !important;
+}
+[data-bs-theme="dark"]  .header-left .ti{
+  color: white;
+}
+[data-bs-theme="dark"] .item-header .title{
+  color: white;
+}
+[data-bs-theme="dark"]  .dashboard-widget{
+   background: #111c2d !important;
+}
+[data-bs-theme="dark"] .mini-stat-card.orange,[data-bs-theme="dark"] .mini-stat-card.purple{
+ background: #111c2d !important;
+ border: 1px solid white;
+}
+[data-bs-theme="dark"] .mini-value,[data-bs-theme="dark"] .widget-title{
+  color: white !important;
+}
+[data-bs-theme="dark"] #leavetext,[data-bs-theme="dark"] .invoice_date,[data-bs-theme="dark"] .invoice_no{
+  color: white;
+}
+[data-bs-theme="dark"] .sil-customer-name{
+  color:white !important
+}
+[data-bs-theme="dark"] .sil-tr-overdue td{
+ background: #111c2d !important;
+}
+
+[data-bs-theme="dark"]  .sil-tr-overdue .sil-customer-name,[data-bs-theme="dark"]  .sil-tr-overdue .sil-td-date,[data-bs-theme="dark"]  .sil-tr-overdue .sil-td-amt{
+  color: black !important;
+}
+[data-bs-theme="dark"] .upi-container{
+   background: #111c2d !important;
+}
+[data-bs-theme="dark"] .infos-card,[data-bs-theme="dark"] .pf-bank{
+  background: #111c2d !important; 
+}
+[data-bs-theme="dark"] .pf-bank-name{
+  color:white !important
+}
+[data-bs-theme="dark"] .pf-bank-row b{
+  color:white !important
+}
+[data-bs-theme="dark"] .oc-card-body{
+  background: #111c2d !important; 
+  border: 1px solid ;
+}
+[data-bs-theme="dark"] .oc-card-header h6{
+color: black;
+}
+[data-bs-theme="dark"] .offcanvas-footer{
+  background: #111c2d !important; 
+  border-top:none !important
+}
+[data-bs-theme="dark"] .offcanvas-backdrop{
+background: rgb(255 255 255 / 53%) !important;
+}
+[data-bs-theme="dark"] .modal-custom-header small{
+  color:white
+}
+[data-bs-theme="dark"] .pf-status-option{
+  color: white;
+}
+[data-bs-theme="dark"] .pf-status-option--active{
+color: black !important;
+}
+[data-bs-theme="dark"] .pf-status-option:hover{
+  color: black !important;
+}
+
+[data-bs-theme="dark"] .pf-card{
+  color:white
+}
+
+[data-bs-theme="dark"] .payslip-modal{
+   background: #111c2d !important; 
+   color: white;
+}
+[data-bs-theme="dark"] .modal-overlay{
+  background-color: rgba(255, 255, 255, 0.219) !important;
+}
+[data-bs-theme="dark"] .table-header{
+   background: #111c2d !important; 
+}
+[data-bs-theme="dark"] .table-header div{
+   background: #111c2d !important; 
+   color: white;
+}
+[data-bs-theme="dark"] .table-total,[data-bs-theme="dark"] .final-net{
+ background: #111c2d !important; 
+}
+[data-bs-theme="dark"] .net-box{
+  background: #43434378 !important;
+}
+[data-bs-theme="dark"] .modal-card{
+ background: #111c2d !important; 
+}
+[data-bs-theme="dark"] .modal-backdrop-custom{
+  background: #ffffff1e !important;
+}
+[data-bs-theme="dark"] .filter-panel{
+   background: #111c2d !important; 
+}
+[data-bs-theme="dark"] .filter-overlay{
+background: rgba(255, 255, 255, 0.123) !important;
+}
+[data-bs-theme="dark"] .filter-panel::before{
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #111c2d ;
+}
+[data-bs-theme="dark"] .salary-summary{
+     background: #111c2d !important; 
+     color: white;
+}
+[data-bs-theme="dark"] .card-body .flex-grow-1 h5{
+color: white !important;
+}
+[data-bs-theme="dark"] .info-box{
+   background: #111c2d !important; 
+}
+[data-bs-theme="dark"] .info-box div{
+   color: white !important;
+}
+[data-bs-theme="dark"] .table thead th{
+background:#111c2d !important; 
+}
+[data-bs-theme="dark"] .audit-item .content .title{
+  color: white !important;
+}
+
+[data-bs-theme="dark"] .border-table table{
+  background:#111c2d !important; 
+}
+[data-bs-theme="dark"] .sticky-col,[data-bs-theme="dark"] .header-cell,[data-bs-theme="dark"] .attendance-header{
+    background:#111c2d !important; 
+}
+[data-bs-theme="dark"] .permission-modal{
+  background:#111c2d !important; 
+  color: white;
+}
+[data-bs-theme="dark"] [type='date'],[data-bs-theme="dark"] [type='time']{
+   background:#111c2d !important; 
+}
+[data-bs-theme="dark"] .permission-summary{
+   background:#111c2d !important; 
+}
+[data-bs-theme="dark"] .type-chip{
+  background:#585858 !important; 
+}
+[data-bs-theme="dark"] .type-chip.active{
+  background:var(--color-primary) !important; 
+}
+[data-bs-theme="dark"] select option {
+     background:#111c2d !important; 
+}
+[data-bs-theme="dark"] .leave-popup{
+  background:#111c2d !important; 
+  color: white;
+}
+[data-bs-theme="dark"] .leave-popup-title{
+color: white !important;
+}
+[data-bs-theme="dark"] .leave-popup-footer{
+    background:#111c2d !important; 
+    border-top: 0 !important;
+}
+[data-bs-theme="dark"] .leave-input{
+   background:#111c2d !important; 
+}
+[data-bs-theme="dark"] .leave-label{
+color: white !important;
+}
+
+[data-bs-theme="dark"] .leave-close-btn{
+ background:#ffffff2d !important; 
+ /* color: white; */
+}
+
+[data-bs-theme="dark"] .leave-overlay{
+  background: rgba(255, 255, 255, 0.123) !important;
+}
+
+[data-bs-theme="dark"] .pf-status-option--active .pf-status-option__label{
+color: black !important;
+}
+[data-bs-theme="dark"] .pf-status-option:hover .pf-status-option__label{
+  color: black !important;
+}
+
+[data-bs-theme="dark"] .layout-card{
+    background: transparent;
+}
+[data-bs-theme="dark"] .layout-preview{
+  background: #ffffff4f;
+}
+[data-bs-theme="dark"] .rt-popup,[data-bs-theme="dark"] .rt-popup div{
+  background:#111c2d !important; 
+}
+[data-bs-theme="dark"]  .rt-popup-title{
+  color: white !important;
+}
+[data-bs-theme="dark"] .sv-date-d{
+  color: white !important;
+}
+[data-bs-theme="dark"] .line-card{
+ background:#111c2d !important; 
+}
+
+[data-bs-theme="dark"] .ng-select .ng-select-container{
+ background:#111c2d !important; 
+ color: white;
+}
+[data-bs-theme="dark"] .si-paper{
+   background:#111c2d !important; 
+}
+
+[data-bs-theme="dark"] select,[data-bs-theme="dark"] .si-inp-wrap,[data-bs-theme="dark"] .si-textarea{
+   background:#111c2d !important; 
+   color: white !important;
+   border: 1px solid white !important;
+}
+[data-bs-theme="dark"] .si-section-title{
+   background:#111c2d !important; 
+   color: white !important;
+}
+[data-bs-theme="dark"] .si-line-card,[data-bs-theme="dark"] .si-li-row--calc{
+   background:#111c2d !important; 
+}
+[data-bs-theme="dark"] .si-rupee-wrap{
+     background:#111c2d !important; 
+     border: 1px solid white !important;
+}
+[data-bs-theme="dark"] .si-totals-block{
+     background:#111c2d !important; 
+}
+[data-bs-theme="dark"] .si-scard{
+   background:#111c2d !important; 
+   color: white !important;
+}
+[data-bs-theme="dark"] .si-scard-hdr,[data-bs-theme="dark"] .ti-chart-bar,[data-bs-theme="dark"] .ti-info-circle,[data-bs-theme="dark"] .si-payment-title{
+color: white !important;
+}
+[data-bs-theme="dark"] .si-add-btn{
+  background: transparent !important;
+}
+[data-bs-theme="dark"] .si-scard-hdr{
+     background:#111c2d !important; 
+}
+[data-bs-theme="dark"] input[type="checkbox"]{
+accent-color: var(--color-primary);
+    background: transparent !important;
+    border-radius: 4px;
+    border: 1px solid;
+}
+input[type="checkbox"] {
+accent-color: var(--color-primary);
+    background: transparent;
+    border-radius: 4px;
+    border: 1px solid;
+}
+

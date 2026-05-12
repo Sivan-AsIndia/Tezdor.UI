@@ -8,6 +8,8 @@
 	 --font-size-base: 14px;
 	 --font-weight-base: 600;
 	 --line-height-base: 1.6;
+     --font-size-heading: 22px; 
+  --font-size-other: 14px;  
 	 --shadow-strength: 0.15;
 	 --radius: 8px;
 	 --btn-radius: 8px;
@@ -469,10 +471,12 @@ box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 20%, transparent);
 .theme-mode-card input[type="radio"] { display: none; }
 .theme-mode-card:hover { border-color: var(--color-primary); color: var(--color-primary); }
 .theme-mode-card.active {
-  border-color: var(--color-primary);
-  background: color-mix(in srgb,  var(--color-primary) 12%, white);
-  color: var(--color-primary);
- box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 20%, transparent);
+border-color: var(--color-primary);
+    background: 
+color-mix(in srgb, var(--color-primary) 12%, #ffffff00);
+    color: var(--color-primary);
+    box-shadow: 0 0 0 3px 
+color-mix(in srgb, var(--color-primary) 20%, transparent);
 }
 
 /* ─── Sidebar Backgrounds ─────────────────────── */

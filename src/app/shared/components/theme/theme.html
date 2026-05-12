@@ -237,34 +237,56 @@
     </div>
 
     <!-- 5. Font Size & Style -->
-    <div class="accordion-item">
-      <button class="accordion-header" (click)="toggleSection('fontSizeStyle')">
-        <span>Font Size &amp; Style</span>
-        <svg class="chevron" [class.rotated]="openSections['fontSizeStyle']" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="accordion-body" [class.open]="openSections['fontSizeStyle']">
-        <div class="ff-label"><span class="ff-dot"></span>Font Size</div>
-        <div class="size-tile-grid">
-             @for (size of fontSizes; track size) {
-          <div class="size-tile" [class.active]="selectedFontSize === size.toString()" (click)="setFontSize(size)">
-            <span class="size-num">{{ size }}</span><span class="size-unit">px</span>
-          </div>
-        }
-        </div>
+  <div class="accordion-item">
+  <button class="accordion-header" (click)="toggleSection('fontSizeStyle')">
+    <span>Font Size &amp; Style</span>
+    <svg class="chevron" [class.rotated]="openSections['fontSizeStyle']" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="6 9 12 15 18 9"/>
+    </svg>
+  </button>
+  <div class="accordion-body" [class.open]="openSections['fontSizeStyle']">
 
-        <div class="ff-label"><span class="ff-dot"></span>Font Weight</div>
-        <div class="weight-card-grid">
-            @for ( w of fontWeights; track w) {
-          <div  class="weight-card" [class.active]="selectedFontWeight === w.value" (click)="setFontWeight(w.value)">
-            <span class="weight-sample" [style.fontWeight]="w.value">Aa</span>
-            <span class="weight-name">{{ w.label }}</span>
-          </div>
-        }
+    <!-- Heading Font Size -->
+    <div class="ff-label"><span class="ff-dot"></span>Heading Font Size</div>
+    <div class="size-tile-grid">
+      @for (size of headingFontSizes; track size) {
+        <div class="size-tile"
+          [class.active]="selectedHeadingFontSize === size.toString()"
+          (click)="setHeadingFontSize(size)">
+          <span class="size-num">{{ size }}</span>
+          <span class="size-unit">px</span>
         </div>
-
-      </div>
+      }
     </div>
 
+    <!-- Other Font Size -->
+    <div class="ff-label"><span class="ff-dot"></span>Other Font Size</div>
+    <div class="size-tile-grid">
+      @for (size of otherFontSizes; track size) {
+        <div class="size-tile"
+          [class.active]="selectedOtherFontSize === size.toString()"
+          (click)="setOtherFontSize(size)">
+          <span class="size-num">{{ size }}</span>
+          <span class="size-unit">px</span>
+        </div>
+      }
+    </div>
+
+    <!-- Font Weight -->
+    <div class="ff-label"><span class="ff-dot"></span>Font Weight</div>
+    <div class="weight-card-grid">
+      @for (w of fontWeights; track w) {
+        <div class="weight-card"
+          [class.active]="selectedFontWeight === w.value"
+          (click)="setFontWeight(w.value)">
+          <span class="weight-sample" [style.fontWeight]="w.value">Aa</span>
+          <span class="weight-name">{{ w.label }}</span>
+        </div>
+      }
+    </div>
+
+  </div>
+</div>
     <!-- 8. Icon Colors -->
     <div class="accordion-item">
       <button class="accordion-header" (click)="toggleSection('iconColors')">

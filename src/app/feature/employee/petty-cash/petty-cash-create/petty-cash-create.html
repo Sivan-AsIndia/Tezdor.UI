@@ -48,7 +48,7 @@
         </button>
         <button class="pf-tab" [class.pf-tab--active]="activeTab() === 'ownership'" (click)="setTab('ownership')">
 
-          <svg width="15" height="15" viewBox="0 0 24 24">
+          <svg width="15" height="15" viewBox="0 0 24 24"  fill="none" stroke="currentColor">
             <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5z" />
             <path d="M2 22c0-4 4-7 10-7s10 3 10 7" />
           </svg>
@@ -489,7 +489,7 @@
           <div class="pf-card__header d-flex justify-content-between align-items-center">
             <h3 class="cardheader">Petty Cash Lines</h3>
 
-            <button class="btn btn-primary btn-sm" (click)="addLine()">
+            <button class="btn btn-primary btn-sm mb-2" (click)="addLine()">
               + Add Line
             </button>
           </div>
@@ -596,7 +596,7 @@
 
                   <!-- DELETE -->
                   <td class="text-center">
-                    <button class="btn btn-sm btn-light text-danger" (click)="removeLine(i)">
+                    <button class="btn btn-sm btn-light text-white" (click)="removeLine(i)">
                       <i class="ti ti-trash"></i>
 
                     </button>
@@ -665,9 +665,9 @@
 
             <!-- Tax Applicable -->
             <div class="form-group flex-1">
-              <label class="form-label">Tax Applicable</label>
+              <label class="form-label" for="Tax_Applicable" style="cursor: pointer;">Tax Applicable</label>
 
-              <input type="checkbox" [checked]="form().taxApplicable"
+              <input type="checkbox" id="Tax_Applicable" [checked]="form().taxApplicable"
                 (change)="update('taxApplicable', $any($event.target).checked)">
             </div>
 
@@ -910,9 +910,9 @@
           <div class="form-row mb-2">
 
             <div class="form-group flex-1">
-              <label class="form-label">Duplicate Suspected</label>
+              <label class="form-label" for="Duplicate_Suspected" style="cursor: pointer;">Duplicate Suspected</label>
 
-              <input type="checkbox" [checked]="form().duplicateReceiptSuspected"
+              <input type="checkbox" id="Duplicate_Suspected" [checked]="form().duplicateReceiptSuspected"
                 (change)="update('duplicateReceiptSuspected',$any($event.target).checked)">
             </div>
 
@@ -1031,9 +1031,10 @@
     </div>
 
     <!-- FOOTER -->
-    <div class="text-end mt-3">
-      <button class="btn btn-cancel me-2" (click)="onCancel()">Cancel</button>
-      <button class="btn btn-primary" (click)="onSave()">{{ isEditMode() ? 'Update' : 'Create' }}</button>
+    <div class="text-end mt-3 d-flex  gap-2 justify-content-end">
+      <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="onCancel()">Cancel</button>
+      <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
+" (click)="onSave()">{{ isEditMode() ? 'Update' : 'Create' }}</button>
     </div>
 
   </div>

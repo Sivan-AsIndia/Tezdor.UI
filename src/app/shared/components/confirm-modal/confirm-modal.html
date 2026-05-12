@@ -5,9 +5,9 @@
   <div class="modal-card">
 
     <!-- CLOSE -->
-    <button class="close-btn" (click)="close()">
+    <!-- <button class="close-btn" (click)="close()">
       <i class="ti ti-x"></i>
-    </button>
+    </button> -->
 
     <!-- ICON -->
     <div class="icon-wrapper" [class]="type()">
@@ -35,14 +35,15 @@
 
   @if(type() !== 'success'){
   <button 
-          class="btn-cancel"
+          class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3"
           (click)="close()">
     Cancel
   </button>
   }
 
 
-  <button class="btn-confirm"
+  <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
+"
           [class]="type()"
           (click)="confirm()">
     {{ confirmText() }}

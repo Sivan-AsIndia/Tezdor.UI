@@ -207,9 +207,25 @@
                                             <td>
                                                 <div class="action-icons">
 
-                                                    <button class="icon-btn view" (click)="onView(s)">
+                                                    <!-- <button class="icon-btn view"  title="View" (click)="onView(s)">
                                                         <i class="ti ti-eye"></i>
-                                                    </button>
+                                                    </button> -->
+
+
+                                                      <a (click)="onView(s)"
+                              class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                              title="View">
+                              <span class="v-btn__content">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-eye text-info"
+                                  width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5"
+                                  stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/>
+                                  <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/>
+                                </svg>
+                              </span>
+                            </a>
+
 
                                                     <!-- <button class="icon-btn edit" (click)="onEdit(s)" title="Edit">
                                                         <i class="ti ti-pencil"></i>
@@ -699,12 +715,12 @@
                                                 @if (editingLineId() === row.attendanceLineId) {
 
                                                 <!-- SAVE -->
-                                                <button class="icon-btn success" title="Save" (click)="saveEdit(row)">
+                                                <button class="icon-btn bg-success" title="Save" (click)="saveEdit(row)">
                                                     <i class="ti ti-check"></i>
                                                 </button>
 
                                                 <!-- CANCEL -->
-                                                <button class="icon-btn danger" title="Cancel" (click)="cancelEdit()">
+                                                <button class="icon-btn bg-danger" title="Cancel" (click)="cancelEdit()">
                                                     <i class="ti ti-x"></i>
                                                 </button>
 
@@ -712,16 +728,30 @@
 
                                                 @if(row.attendanceType !== AttendanceType.Leave){
                                                 <!-- EDIT -->
-                                                <button class="icon-btn edit" title="Edit" (click)="startEdit(row)">
+                                                <!-- <button class="icon-btn edit" title="Edit" (click)="startEdit(row)">
                                                     <i class="ti ti-pencil"></i>
-                                                </button>
+                                                </button> -->
+
+                                                  <a (click)="startEdit(row)"
+                              class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                              title="Edit">
+                              <span class="v-btn__content">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-pencil text-primary"
+                                  width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5"
+                                  stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"/>
+                                  <path d="M13.5 6.5l4 4"/>
+                                </svg>
+                              </span>
+                            </a>
                                                 }
 
                                                 @if(row.attendanceType === AttendanceType.Leave){
                                                 <div class="leave-pop-wrapper">
 
                                                     <!-- INFO ICON -->
-                                                    <button class="icon-btn info" (click)="openLeavePopup(
+                                                    <button class="icon-btn bg-info" (click)="openLeavePopup(
           getLeaveByAttendance(row.attendanceId)
         )">
 
@@ -971,13 +1001,14 @@
         <!-- FOOTER -->
         <div class="modal-footer">
 
-            <button class="btn-cancel-perm" (click)="closePermissionModal()">
+            <button class="btn-cancel-perm v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="closePermissionModal()">
                 Cancel
             </button>
 
-            <button class="btn-save" (click)="savePermission()">
+            <button class=" v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
+" (click)="savePermission()">
 
-                Save Permission
+                Save
 
             </button>
 
@@ -1010,11 +1041,11 @@
                 </p>
             </div>
 
-            <button class="leave-close-btn" (click)="showLeaveModal.set(false)">
+            <!-- <button class="leave-close-btn" (click)="showLeaveModal.set(false)">
 
                 <i class="ti ti-x"></i>
 
-            </button>
+            </button> -->
 
         </div>
 
@@ -1162,16 +1193,17 @@
         <!-- FOOTER -->
         <div class="leave-popup-footer">
 
-            <button class="btn-cancel-perm" (click)="showLeaveModal.set(false)">
+            <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="showLeaveModal.set(false)">
 
                 Cancel
 
             </button>
 
-            <button class="btn-save" (click)="saveLeave()">
+            <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
+" (click)="saveLeave()">
 
 
-                Save Leave
+                Save
 
             </button>
 

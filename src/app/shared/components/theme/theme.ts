@@ -82,7 +82,11 @@ containerMode: 'fluid' | 'fixed' = 'fluid';
 
   ];
 
-  fontSizes = [12, 13, 14, 15, 16, 18];
+headingFontSizes = [20, 22, 24, 26, 28, 30, 32];
+otherFontSizes   = [12, 13, 14, 15, 16, 18];
+
+selectedHeadingFontSize = '22';
+selectedOtherFontSize   = '14';
 
   fontWeights: WeightOption[] = [
     { label: 'Light',   value: '300' },
@@ -161,6 +165,8 @@ containerMode: 'fluid' | 'fixed' = 'fluid';
     this.selectedBg           = s.sidebarBg;
     this.selectedProfilePhoto = s.profilePhoto;
       this.containerMode = s.containerMode ?? 'fluid'; 
+        this.selectedHeadingFontSize = s.headingFontSize ?? '22';
+  this.selectedOtherFontSize   = s.otherFontSize   ?? '14';
   }
 
   toggleSection(key: string): void {
@@ -277,11 +283,17 @@ setThemeMode(dark: boolean): void {
     document.documentElement.style.setProperty(map[type], value);
   }
 
-  setFontSize(size: number): void {
-    this.selectedFontSize = size.toString();
-    document.documentElement.style.setProperty('--font-size-base', `${size}px`);
-  }
+setHeadingFontSize(size: number): void {
+  this.selectedHeadingFontSize = size.toString();
+  document.documentElement.style.setProperty('--font-size-heading', `${size}px`);
+  localStorage.setItem('font-size-heading', size.toString()); 
+}
 
+setOtherFontSize(size: number): void {
+  this.selectedOtherFontSize = size.toString();
+  document.documentElement.style.setProperty('--font-size-other', `${size}px`);
+  localStorage.setItem('font-size-other', size.toString()); 
+}
   setFontWeight(w: string): void {
     this.selectedFontWeight = w;
     document.documentElement.style.setProperty('--font-weight-base', w);
@@ -372,9 +384,11 @@ setThemeMode(dark: boolean): void {
       otherFont:      this.selectedOtherFont,
       sidebarBg:      this.selectedBg,
       profilePhoto:   this.selectedProfilePhoto,
-      containerMode :this.containerMode
+      containerMode :this.containerMode,
+         headingFontSize: this.selectedHeadingFontSize,
+    otherFontSize:   this.selectedOtherFontSize,
     };
-  }
+  } 
 
   // ── Save ─────────────────────────────────────────
   saveTheme(): void {
