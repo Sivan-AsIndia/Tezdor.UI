@@ -886,8 +886,8 @@
           <div class="form-group mt-2">
             <label class="form-label">Missing Receipt Reason</label>
 
-            <div class="rich-editor-wrapper">
-              <form [formGroup]="editorForm">
+            <div class="rich-editor-wrapper" >
+              <form [formGroup]="editorForm" >
 
                 @if (showEditor()) {
                 <!-- TOOLBAR -->
@@ -895,9 +895,11 @@
                 </ngx-editor-menu>
 
                 <!-- EDITOR -->
-                <ngx-editor [editor]="editor" formControlName="missingReceiptReason"
+                 <div class="ngx-overflow">
+                    <ngx-editor  [editor]="editor" formControlName="missingReceiptReason"
                   placeholder="Explain why receipt is missing">
-                </ngx-editor>
+                </ngx-editor></div>
+
                 }
 
               </form>

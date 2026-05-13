@@ -183,7 +183,8 @@
                   </ngx-editor-menu>
 
                   <!-- EDITOR -->
-                  <ngx-editor [editor]="notesEditor" [formControl]="
+                  <div class="ngx-overflow">
+                    <ngx-editor [editor]="notesEditor" [formControl]="
     $any(
       poForm.controls['notes']
     )
@@ -191,8 +192,8 @@
       Any special instructions...
     ">
 
-                  </ngx-editor>
-
+                    </ngx-editor>
+                  </div>
                   }
 
                 </div>
@@ -578,16 +579,17 @@
                   </ngx-editor-menu>
 
                   <!-- EDITOR -->
-                  <ngx-editor [editor]="remarksEditor" [formControl]="
-    $any(
-      poForm.controls['remarks']
-    )
-  " placeholder="
-      Additional notes...
-    ">
+                  <div class="ngx-overflow">
+                    <ngx-editor [editor]="remarksEditor" [formControl]="
+                        $any(
+                          poForm.controls['remarks']
+                        )
+                      " placeholder="
+                          Additional notes...
+                        ">
 
-                  </ngx-editor>
-
+                    </ngx-editor>
+                  </div>
                   }
 
                 </div>

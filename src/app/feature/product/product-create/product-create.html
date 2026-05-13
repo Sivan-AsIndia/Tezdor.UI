@@ -191,12 +191,13 @@
                     </ngx-editor-menu>
 
                     <!-- EDITOR -->
-                    <ngx-editor [editor]="descriptionEditor" formControlName="description" placeholder="
+                    <div class="ngx-overflow">
+                      <ngx-editor [editor]="descriptionEditor" formControlName="description" placeholder="
         Long product description — printed on Invoice / Purchase Order.
       ">
 
-                    </ngx-editor>
-
+                      </ngx-editor>
+                    </div>
                     }
 
                   </form>
@@ -354,14 +355,15 @@
                     </ngx-editor-menu>
 
                     <!-- EDITOR -->
-                    <ngx-editor [editor]="metaDescriptionEditor" formControlName="
-        metaTagDescription
-      " placeholder="
-        Enter meta description
-      ">
+                    <div class="ngx-overflow">
+                      <ngx-editor [editor]="metaDescriptionEditor" formControlName="
+                        metaTagDescription
+                      " placeholder="
+                        Enter meta description
+                      ">
 
-                    </ngx-editor>
-
+                      </ngx-editor>
+                    </div>
                     }
 
                   </form>

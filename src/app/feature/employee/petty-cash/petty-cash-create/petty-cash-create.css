@@ -674,9 +674,12 @@
 
   max-width: 100% !important;
 
-  overflow: hidden;
+height: 125px !important;
+    overflow: scroll !important;
 
   border: 0 !important;
+        border: none;
+      border-top: 1px solid var(--ngx-editor-border-color) !important;
 
   background: #ffffff;
 }
@@ -719,9 +722,6 @@
     sans-serif;
 }
 
-/* =====================================================
-   IMAGES
-===================================================== */
 
 .NgxEditor__Content img {
 
@@ -732,10 +732,6 @@
   border-radius: 10px;
 }
 
-/* =====================================================
-   TABLES
-===================================================== */
-
 .NgxEditor__Content table {
 
   width: 100% !important;
@@ -743,18 +739,12 @@
   table-layout: fixed;
 }
 
-/* =====================================================
-   PARAGRAPH
-===================================================== */
 
 .NgxEditor__Content p {
 
   margin-bottom: 12px;
 }
 
-/* =====================================================
-   PLACEHOLDER
-===================================================== */
 
 .NgxEditor__Placeholder {
 
@@ -765,9 +755,6 @@
   font-weight: 400;
 }
 
-/* =====================================================
-   SCROLLBAR
-===================================================== */
 
 .NgxEditor__Content::-webkit-scrollbar {
 
@@ -781,9 +768,6 @@
   border-radius: 10px;
 }
 
-/* =====================================================
-   MOBILE
-===================================================== */
 
 @media (max-width: 768px) {
 
@@ -801,9 +785,6 @@
 }
 
 
-/* =====================================================
-   CRITICAL WIDTH FIX
-===================================================== */
 
 .rich-editor-wrapper,
 .NgxEditor,
@@ -818,11 +799,10 @@
   min-width: 0 !important;
 
   box-sizing: border-box;
+
+  overflow: hidden;
 }
 
-/* =====================================================
-   STOP HORIZONTAL EXPANSION
-===================================================== */
 
 .ProseMirror {
 
@@ -835,11 +815,14 @@
   overflow-wrap: anywhere !important;
 
   white-space: pre-wrap !important;
+
+  max-width: 100% !important;
+
+  min-height: 220px;
+
+  max-height: 320px;
 }
 
-/* =====================================================
-   FIX LONG TEXT / URLS
-===================================================== */
 
 .ProseMirror p,
 .ProseMirror span,
@@ -850,11 +833,21 @@
   word-break: break-word !important;
 
   overflow-wrap: anywhere !important;
+
+  white-space: pre-wrap !important;
+
+  max-width: 100%;
 }
 
-/* =====================================================
-   FIX IMAGES
-===================================================== */
+
+.col,
+[class*='col-'],
+.card,
+.card-body {
+
+  min-width: 0 !important;
+}
+
 
 .ProseMirror img {
 
@@ -863,9 +856,6 @@
   height: auto !important;
 }
 
-/* =====================================================
-   FIX TABLES
-===================================================== */
 
 .ProseMirror table {
 
@@ -878,9 +868,6 @@
   table-layout: fixed;
 }
 
-/* =====================================================
-   FIX FLEX PARENT ISSUE
-===================================================== */
 
 .rich-editor-wrapper {
 
@@ -888,10 +875,6 @@
 
   min-width: 0;
 }
-
-/* =====================================================
-   FIX GRID PARENT ISSUE
-===================================================== */
 
 .col,
 [class*='col-'] {
