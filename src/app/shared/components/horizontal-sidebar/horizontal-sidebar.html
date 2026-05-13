@@ -1,309 +1,386 @@
 <style>
-  .first-level .sidebar-link .hide-menu {
-    font-weight: 600;
+  /* ═══ BASE NAV ITEM ═══ */
+  #sidebarnav > .sidebar-item > .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 14px;
+    border-radius: 8px;
     font-size: 13.5px;
-    color: black;
+    font-weight: 500;
+    color: #1e293b;
+    transition: all 0.2s;
+    position: relative;
+    white-space: nowrap;
+    text-decoration: none;
   }
 
-  .menu-warning .first-level .sidebar-link.active-submenu .sidebar-icon {
-    background-color: #ffc107;
+  /* ═══ DROPDOWN PANEL ═══ */
+  #sidebarnav > .sidebar-item {
+    position: relative;
   }
 
-  .menu-success .first-level .sidebar-link.active-submenu .sidebar-icon {
-    background-color: #13a65b;
+  #sidebarnav > .sidebar-item > .first-level {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    min-width: 200px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 4px;
+    z-index: 9999;
+    animation: dropFade 0.15s ease;
   }
 
-   .menu-error .first-level .sidebar-link.active-submenu .sidebar-icon {
-    background-color: red !important;
+  @keyframes dropFade {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
-
-  .menu-info .first-level .sidebar-link.active-submenu .sidebar-icon {
-    background-color: #01b8d8;
+  #sidebarnav > .sidebar-item > .first-level.show {
+    display: block;
   }
 
-  .menu-warning .first-level .sidebar-link.active-submenu .hide-menu {
-    font-weight: 700;
-    color: #e6a817;
+  /* ═══ DROPDOWN ITEMS ═══ */
+  .first-level .sidebar-item .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #475569;
+    transition: all 0.15s;
+    text-decoration: none;
   }
 
-  .menu-success .first-level .sidebar-link.active-submenu .hide-menu {
-    font-weight: 700;
-    color: #13a65b;
+  /* ═══ DOT ═══ */
+  .first-level .sidebar-link .sidebar-icon {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    flex-shrink: 0;
+    transition: background 0.15s;
   }
 
-  .menu-info .first-level .sidebar-link.active-submenu .hide-menu {
-    font-weight: 700;
-    color: #01b8d8;
+  /* ════════════════════════════════
+     PER-MENU COLORS
+  ════════════════════════════════ */
+
+  /* DASHBOARD */
+  #sidebarnav > .sidebar-item > .sidebar-link.menu-dashboard:hover,
+  #sidebarnav > .sidebar-item > .sidebar-link.menu-dashboard.active-parent {
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent) !important;
+    color: var(--color-primary) !important;
+    font-weight: 600;
   }
 
-  @media (prefers-color-scheme: dark) {
-    .sidebar-link.before\:bg-lightprimary:hover,
-    .sidebar-link.bg-lightprimary:hover {
-      background-color: rgba(93, 135, 255, 0.15) !important;
-    }
-
-    .sidebar-link.before\:bg-lightsuccess:hover,
-    .sidebar-link.bg-lightsuccess:hover {
-      background-color: rgba(19, 166, 91, 0.15) !important;
-    }
-
-    .sidebar-link.before\:bg-lightinfo:hover,
-    .sidebar-link.bg-lightinfo:hover {
-      background-color: rgba(1, 184, 216, 0.15) !important;
-    }
-
-    .sidebar-link.before\:bg-lighterror:hover,
-    .sidebar-link.bg-lighterror:hover {
-      background-color: rgba(250, 82, 82, 0.15) !important;
-    }
-
-    .sidebar-link.before\:bg-lightwarning:hover,
-    .sidebar-link.bg-lightwarning:hover {
-      background-color: rgba(255, 165, 0, 0.15) !important;
-    }
-
-    .first-level .sidebar-link .hide-menu {
-      color: #a0aec0;
-    }
-
-    .first-level .sidebar-link .sidebar-icon {
-      background-color: #4a5568;
-    }
-
-    .first-level {
-      color: #ffc107;
-    }
-
-    .menu-success .first-level .sidebar-link.active-submenu .hide-menu {
-      color: #13a65b;
-    }
-
-    .menu-info .first-level .sidebar-link.active-submenu .hide-menu {
-      color: #01b8d8;
-    }
+  /* PRODUCTS */
+  #sidebarnav > .sidebar-item > .sidebar-link.menu-product:hover,
+  #sidebarnav > .sidebar-item > .sidebar-link.menu-product.active-parent {
+    background: #be00bf14 !important;
+    color: #be00bf !important;
+    font-weight: 600;
+  }
+  .first-level .sidebar-link.menu-product:hover,
+  .first-level .sidebar-link.menu-product.active-submenu {
+    background: #be00bf14 !important;
+    color: #be00bf !important;
+  }
+  .first-level .sidebar-link.menu-product:hover .sidebar-icon,
+  .first-level .sidebar-link.menu-product.active-submenu .sidebar-icon {
+    background: #be00bf !important;
   }
 
-  .active-bg-error { background-color: rgba(220, 53, 69, 0.15) !important; border-radius: 7px; }
+  /* STORE */
+  #sidebarnav > .sidebar-item > .sidebar-link.menu-store:hover,
+  #sidebarnav > .sidebar-item > .sidebar-link.menu-store.active-parent {
+    background: var(--color-lightsuccess) !important;
+    color: var(--color-success) !important;
+    font-weight: 600;
+  }
+  .first-level .sidebar-link.menu-store:hover,
+  .first-level .sidebar-link.menu-store.active-submenu {
+    background: var(--color-lightsuccess) !important;
+    color: var(--color-success) !important;
+  }
+  .first-level .sidebar-link.menu-store:hover .sidebar-icon,
+  .first-level .sidebar-link.menu-store.active-submenu .sidebar-icon {
+    background: var(--color-success) !important;
+  }
 
+  /* PURCHASE */
+  #sidebarnav > .sidebar-item > .sidebar-link.menu-purchase:hover,
+  #sidebarnav > .sidebar-item > .sidebar-link.menu-purchase.active-parent {
+    background: var(--color-lightinfo) !important;
+    color: var(--color-info) !important;
+    font-weight: 600;
+  }
+  .first-level .sidebar-link.menu-purchase:hover,
+  .first-level .sidebar-link.menu-purchase.active-submenu {
+    background: var(--color-lightinfo) !important;
+    color: var(--color-info) !important;
+  }
+  .first-level .sidebar-link.menu-purchase:hover .sidebar-icon,
+  .first-level .sidebar-link.menu-purchase.active-submenu .sidebar-icon {
+    background: var(--color-info) !important;
+  }
+
+  /* SALES */
+  #sidebarnav > .sidebar-item > .sidebar-link.menu-sales:hover,
+  #sidebarnav > .sidebar-item > .sidebar-link.menu-sales.active-parent {
+    background: var(--color-lighterror) !important;
+    color: var(--color-error) !important;
+    font-weight: 600;
+  }
+  .first-level .sidebar-link.menu-sales:hover,
+  .first-level .sidebar-link.menu-sales.active-submenu {
+    background: var(--color-lighterror) !important;
+    color: var(--color-error) !important;
+  }
+  .first-level .sidebar-link.menu-sales:hover .sidebar-icon,
+  .first-level .sidebar-link.menu-sales.active-submenu .sidebar-icon {
+    background: var(--color-error) !important;
+  }
+
+  /* EMPLOYEES */
+  #sidebarnav > .sidebar-item > .sidebar-link.menu-employee:hover,
+  #sidebarnav > .sidebar-item > .sidebar-link.menu-employee.active-parent {
+    background: var(--color-lightwarning) !important;
+    color: var(--color-warning) !important;
+    font-weight: 600;
+  }
+  .first-level .sidebar-link.menu-employee:hover,
+  .first-level .sidebar-link.menu-employee.active-submenu {
+    background: var(--color-lightwarning) !important;
+    color: var(--color-warning) !important;
+  }
+  .first-level .sidebar-link.menu-employee:hover .sidebar-icon,
+  .first-level .sidebar-link.menu-employee.active-submenu .sidebar-icon {
+    background: var(--color-warning) !important;
+  }
+
+  /* LEDGER */
+  #sidebarnav > .sidebar-item > .sidebar-link.menu-ledger:hover,
+  #sidebarnav > .sidebar-item > .sidebar-link.menu-ledger.active-parent {
+    background: var(--color-lightindigo) !important;
+    color: var(--color-indigo) !important;
+    font-weight: 600;
+  }
+  .first-level .sidebar-link.menu-ledger:hover,
+  .first-level .sidebar-link.menu-ledger.active-submenu {
+    background: var(--color-lightindigo) !important;
+    color: var(--color-indigo) !important;
+  }
+  .first-level .sidebar-link.menu-ledger:hover .sidebar-icon,
+  .first-level .sidebar-link.menu-ledger.active-submenu .sidebar-icon {
+    background: var(--color-indigo) !important;
+  }
+
+  /* PETTY CASH */
+  #sidebarnav > .sidebar-item > .sidebar-link.menu-petty:hover,
+  #sidebarnav > .sidebar-item > .sidebar-link.menu-petty.active-parent {
+    background: var(--color-lighterror) !important;
+    color: var(--color-error) !important;
+    font-weight: 600;
+  }
+  .first-level .sidebar-link.menu-petty:hover,
+  .first-level .sidebar-link.menu-petty.active-submenu {
+    background: var(--color-lighterror) !important;
+    color: var(--color-error) !important;
+  }
+  .first-level .sidebar-link.menu-petty:hover .sidebar-icon,
+  .first-level .sidebar-link.menu-petty.active-submenu .sidebar-icon {
+    background: var(--color-error) !important;
+  }
+
+  /* ═══ DARK MODE ═══ */
+  [data-bs-theme="dark"] #sidebarnav > .sidebar-item > .sidebar-link {
+    color: #e2e8f0;
+  }
+  [data-bs-theme="dark"] #sidebarnav > .sidebar-item > .first-level {
+    background: #1e293b;
+    border-color: #334155;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  [data-bs-theme="dark"] .first-level .sidebar-item .sidebar-link {
+    color: #94a3b8;
+  }
+  [data-bs-theme="dark"] .first-level .sidebar-link .sidebar-icon {
+    background: #475569;
+  }
 </style>
 
 <aside class="left-sidebar with-horizontal">
   <div>
     <nav id="sidebarnavh" class="sidebar-nav scroll-sidebar container-fluid">
-      <ul id="sidebarnav">
+      <ul id="sidebarnav" class="gap-2">
 
-        <!-- Home Section -->
-        <li class="nav-small-cap">
-          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-          <span class="hide-menu">Home</span>
-        </li>
-
+        <!-- DASHBOARD -->
         <li class="sidebar-item">
           <a routerLink="/dashboard"
-             routerLinkActive="active text-primary"
-             [routerLinkActiveOptions]="{ exact: true }"
-             class="sidebar-link primary-hover-bg"
-             href="javascript:void(0)"
-             aria-expanded="false">
+            routerLinkActive="active-parent"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="sidebar-link menu-dashboard">
             <iconify-icon icon="solar:screencast-2-line-duotone" class="fs-6"></iconify-icon>
-            <span class="hide-menu ps-1">Dashboard</span>
+            <span class="hide-menu">Dashboard</span>
           </a>
         </li>
 
-        <!-- List Models -->
+        <!-- PRODUCTS (direct link, no dropdown) -->
         <li class="sidebar-item">
-          <a class="sidebar-link two-column has-arrow"
-             href="javascript:void(0)"
-             aria-expanded="false"
-             [class]="getMenuClasses('category')"
-             (click)="toggle('category')">
-            <iconify-icon icon="solar:folder-line-duotone" class="fs-6"></iconify-icon>
-            <span class="hide-menu ps-1">List Models</span>
+          <a class="sidebar-link menu-product"
+            routerLink="/products"
+            routerLinkActive="active-parent"
+            [routerLinkActiveOptions]="{ exact: false }"
+            [class.active-parent]="isParentActive('productMenu')"
+            (click)="toggle('productMenu')">
+            <iconify-icon icon="solar:box-line-duotone" class="fs-6"></iconify-icon>
+            <span class="hide-menu">Products</span>
           </a>
-          <ul aria-expanded="false" class="collapse first-level" [class.show]="isOpen('category')">
+        </li>
+
+        <!-- STORE (direct link) -->
+        <li class="sidebar-item">
+          <a class="sidebar-link menu-store"
+            routerLink="/store"
+            routerLinkActive="active-parent"
+            [routerLinkActiveOptions]="{ exact: false }">
+            <iconify-icon icon="mdi:warehouse" class="fs-6"></iconify-icon>
+            <span class="hide-menu">Store</span>
+          </a>
+        </li>
+
+        <!-- PURCHASE (dropdown: Order + Invoice) -->
+        <li class="sidebar-item">
+          <a class="sidebar-link menu-purchase has-arrow"
+            href="javascript:void(0)"
+            [class.active-parent]="isParentActive('purchaseMenu')"
+            (click)="toggle('purchaseMenu')">
+            <iconify-icon icon="solar:cart-3-line-duotone" class="fs-6"></iconify-icon>
+            <span class="hide-menu">Purchase</span>
+          </a>
+          <ul class="collapse first-level" [class.show]="isOpen('purchaseMenu')">
             <li class="sidebar-item">
-              <a routerLink="/product/categorylist"
-                 routerLinkActive="active-submenu"
-                 [routerLinkActiveOptions]="{ exact: true }"
-                 class="sidebar-link">
+              <a routerLink="/purchase-order"
+                routerLinkActive="active-submenu"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="sidebar-link menu-purchase"
+                (click)="openMenu.set(null)">
                 <span class="sidebar-icon"></span>
-                <span class="hide-menu">List1</span>
+                <span class="hide-menu">Purchase Order</span>
               </a>
             </li>
             <li class="sidebar-item">
-              <a routerLink="/product/list-model"
-                 routerLinkActive="active-submenu"
-                 [routerLinkActiveOptions]="{ exact: true }"
-                 class="sidebar-link">
+              <a routerLink="/purchase-invoice"
+                routerLinkActive="active-submenu"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="sidebar-link menu-purchase"
+                (click)="openMenu.set(null)">
                 <span class="sidebar-icon"></span>
-                <span class="hide-menu">List2</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a routerLink="/product/list3"
-                 routerLinkActive="active-submenu"
-                 [routerLinkActiveOptions]="{ exact: true }"
-                 class="sidebar-link">
-                <span class="sidebar-icon"></span>
-                <span class="hide-menu">List3</span>
+                <span class="hide-menu">Purchase Invoice</span>
               </a>
             </li>
           </ul>
         </li>
 
-        <!-- Pages Section -->
-        <li class="nav-small-cap">
-          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-          <span class="hide-menu">Pages</span>
-        </li>
-
-        <!-- Create Model -->
+        <!-- SALES (direct link) -->
         <li class="sidebar-item">
-          <a class="sidebar-link has-arrow"
-             href="javascript:void(0)"
-             aria-expanded="false"
-             [class]="getMenuClasses('createEmployee')"
-             (click)="toggle('createEmployee')">
-            <iconify-icon icon="solar:document-text-line-duotone" class="fs-6 aside-icon"></iconify-icon>
-            <span class="hide-menu ps-1">Create Model</span>
+          <a class="sidebar-link menu-sales"
+            routerLink="/sales-invoice"
+            routerLinkActive="active-parent"
+            [routerLinkActiveOptions]="{ exact: false }">
+            <iconify-icon icon="solar:wallet-money-line-duotone" class="fs-6"></iconify-icon>
+            <span class="hide-menu">Sales Invoice</span>
           </a>
-          <ul aria-expanded="false" class="collapse first-level" [class.show]="isOpen('createEmployee')">
-            <li class="sidebar-item">
-              <a routerLink="/employee/create"
-                 routerLinkActive="active-submenu"
-                 [routerLinkActiveOptions]="{ exact: true }"
-                 class="sidebar-link">
-                <span class="sidebar-icon"></span>
-                <span class="hide-menu">Create1</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a routerLink="/product/create-category"
-                 routerLinkActive="active-submenu"
-                 [routerLinkActiveOptions]="{ exact: true }"
-                 class="sidebar-link">
-                <span class="sidebar-icon"></span>
-                <span class="hide-menu">Create2</span>
-              </a>
-            </li>
-          </ul>
         </li>
 
-        <!-- View Model Section -->
-        <li class="nav-small-cap">
-          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-          <span class="hide-menu">View Model</span>
-        </li>
-
+        <!-- EMPLOYEES (dropdown) -->
         <li class="sidebar-item">
-          <a class="sidebar-link two-column has-arrow"
-             href="javascript:void(0)"
-             aria-expanded="false"
-             [class]="getMenuClasses('viewEmployee')"
-             (click)="toggle('viewEmployee')">
-            <iconify-icon icon="solar:file-text-line-duotone" class="fs-6 aside-icon"></iconify-icon>
-            <span class="hide-menu ps-1">View Model</span>
+          <a class="sidebar-link menu-employee has-arrow"
+            href="javascript:void(0)"
+            [class.active-parent]="isParentActive('viewEmployees')"
+            (click)="toggle('viewEmployees')">
+            <iconify-icon icon="solar:users-group-rounded-line-duotone" class="fs-6"></iconify-icon>
+            <span class="hide-menu">Employees</span>
           </a>
-          <ul aria-expanded="false" class="collapse first-level" [class.show]="isOpen('viewEmployee')">
-            <li class="sidebar-item">
-              <a routerLink="/employee/view"
-                 routerLinkActive="active-submenu"
-                 [routerLinkActiveOptions]="{ exact: true }"
-                 class="sidebar-link">
-                <span class="sidebar-icon"></span>
-                <span class="hide-menu text-truncate">View1</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a routerLink="/product/view-model"
-                 routerLinkActive="active-submenu"
-                 [routerLinkActiveOptions]="{ exact: true }"
-                 class="sidebar-link">
-                <span class="sidebar-icon"></span>
-                <span class="hide-menu text-truncate">View2</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a routerLink="/employee/view1"
-                 routerLinkActive="active-submenu"
-                 [routerLinkActiveOptions]="{ exact: true }"
-                 class="sidebar-link">
-                <span class="sidebar-icon"></span>
-                <span class="hide-menu text-truncate">View3</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a routerLink="/vendor"
-                 routerLinkActive="active-submenu"
-                 [routerLinkActiveOptions]="{ exact: true }"
-                 class="sidebar-link">
-                <span class="sidebar-icon"></span>
-                <span class="hide-menu text-truncate">View4</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-
-        <!-- Products -->
-        <li class="sidebar-item">
-          <a class="sidebar-link two-column has-arrow "
-             href="javascript:void(0)"
-             aria-expanded="false"
-             [class]="getMenuClasses('productMenu')"
-             (click)="toggle('productMenu')">
-<iconify-icon icon="solar:box-line-duotone" class="fs-6 aside-icon"></iconify-icon>
-            <span class="hide-menu ps-1">Products</span>
-          </a>
-          <ul aria-expanded="false" class="collapse first-level" [class.show]="isOpen('productMenu')">
-            <li class="sidebar-item">
-              <a routerLink="/products"
-                 routerLinkActive="active-submenu"
-                 [routerLinkActiveOptions]="{ exact: true }"
-                 class="sidebar-link">
-                <span class="sidebar-icon"></span>
-                <span class="hide-menu text-truncate">List</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a routerLink="/productCreate"
-                 routerLinkActive="active-submenu"
-                 [routerLinkActiveOptions]="{ exact: true }"
-                 class="sidebar-link">
-                <span class="sidebar-icon"></span>
-                <span class="hide-menu text-truncate">Create</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-
-        <!-- Employees -->
-        <li class="sidebar-item">
-          <a class="sidebar-link two-column has-arrow"
-             href="javascript:void(0)"
-             aria-expanded="false"
-             [class]="getMenuClasses('viewEmployees')"
-             (click)="toggle('viewEmployees')">
-            <iconify-icon icon="solar:file-text-line-duotone" class="fs-6 aside-icon"></iconify-icon>
-            <span class="hide-menu ps-1">Employees</span>
-          </a>
-          <ul aria-expanded="false" class="collapse first-level" [class.show]="isOpen('viewEmployees')">
+          <ul class="collapse first-level" [class.show]="isOpen('viewEmployees')">
             <li class="sidebar-item">
               <a routerLink="/employees"
-                 routerLinkActive="active-submenu"
-                 [routerLinkActiveOptions]="{ exact: true }"
-                 class="sidebar-link">
+                routerLinkActive="active-submenu"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="sidebar-link menu-employee"
+                (click)="openMenu.set(null)">
                 <span class="sidebar-icon"></span>
-                <span class="hide-menu text-truncate">List</span>
+                <span class="hide-menu">Employee List</span>
               </a>
             </li>
             <li class="sidebar-item">
               <a routerLink="/employees/create"
-                 routerLinkActive="active-submenu"
-                 [routerLinkActiveOptions]="{ exact: true }"
-                 class="sidebar-link">
+                routerLinkActive="active-submenu"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="sidebar-link menu-employee"
+                (click)="openMenu.set(null)">
                 <span class="sidebar-icon"></span>
-                <span class="hide-menu text-truncate">Create</span>
+                <span class="hide-menu">Create Employee</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a routerLink="/attendance"
+                routerLinkActive="active-submenu"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="sidebar-link menu-employee"
+                (click)="openMenu.set(null)">
+                <span class="sidebar-icon"></span>
+                <span class="hide-menu">Attendance</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a routerLink="/salary"
+                routerLinkActive="active-submenu"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="sidebar-link menu-employee"
+                (click)="openMenu.set(null)">
+                <span class="sidebar-icon"></span>
+                <span class="hide-menu">Salary</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a routerLink="/petty-cash"
+                routerLinkActive="active-submenu"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="sidebar-link menu-employee"
+                (click)="openMenu.set(null)">
+                <span class="sidebar-icon"></span>
+                <span class="hide-menu">Petty Cash</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- LEDGER (dropdown) -->
+        <li class="sidebar-item">
+          <a class="sidebar-link menu-ledger has-arrow"
+            href="javascript:void(0)"
+            [class.active-parent]="isParentActive('ledgerMenu')"
+            (click)="toggle('ledgerMenu')">
+            <iconify-icon icon="solar:notebook-line-duotone" class="fs-6"></iconify-icon>
+            <span class="hide-menu">Ledger</span>
+          </a>
+          <ul class="collapse first-level" [class.show]="isOpen('ledgerMenu')">
+            <li class="sidebar-item">
+              <a routerLink="/general-ledger-entries"
+                routerLinkActive="active-submenu"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="sidebar-link menu-ledger"
+                (click)="openMenu.set(null)">
+                <span class="sidebar-icon"></span>
+                <span class="hide-menu">Ledger Entry</span>
               </a>
             </li>
           </ul>

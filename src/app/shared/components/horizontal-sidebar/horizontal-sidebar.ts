@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit, signal } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, HostListener, inject, OnInit, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { SidebarManager } from '../../../core/services/sidebar';
 import { filter } from 'rxjs';
@@ -15,60 +15,31 @@ export class HorizontalSidebarComponent implements OnInit {
   readonly sidebar = inject(SidebarManager);
 
   openMenu = signal<string | null>(null);
-  hoveredMenu = signal<string | null>(null);
-  isHovered = signal(false);
+  activeMenu = signal<string | null>(null); // ← hover தனியா, active தனியா
   currentUrl = signal(this.router.url);
 
   menuRoutes: Record<string, string[]> = {
-    category:       ['/product/categorylist', '/product/list-model', '/product/list3'],
-    createEmployee: ['/employee/create', '/employee/stepper', '/product/create-category'],
-    viewEmployee:   ['/employee/view', '/product/view-model', '/employee/view1', '/vendor'],
-    viewEmployees:  ['/employees', '/employees/create', '/employee/edit'],
-    productMenu:    ['/products', '/productCreate', '/productEdit', '/product/view', '/product'],
+    productMenu:   ['/products', '/productCreate', '/productEdit', '/product'],
+    purchaseMenu:  ['/purchase-order', '/purchase-invoice'],
+    viewEmployees: ['/employees', '/employees/create', '/employee/edit', '/attendance', '/salary', '/petty-cash'],
+    ledgerMenu:    ['/general-ledger-entries'],
   };
 
- private readonly menuColorMap: Record<string, { active: string; text: string; hover: string,before:string }> = {
-  category:       { active: 'active-bg-indigo',   text: 'text-indigo',   hover: 'indigo-hover-bg', before:'indigo-hover-bg'},
-  createEmployee: { active: 'active-bg-warning',  text: 'text-warning',  hover: 'warning-hover-bg' ,before: 'warning-hover-bg'},
-  viewEmployee:   { active: 'active-bg-primary',  text: 'text-primary',  hover: 'primary-hover-bg' ,before: 'primary-hover-bg'},
-  productMenu:    { active: 'active-bg-secondary',  text: 'text-secondary',  hover: 'secondary-hover-bg' ,before: 'secondary-hover-bg'  }, // ← same as viewEmployee
-  viewEmployees:  { active: 'active-bg-success',  text: 'text-success',  hover: 'success-hover-bg', before: 'success-hover-bg' },
-};
-
-
   ngOnInit(): void {
+    this.detectActive(this.router.url);
+
     this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe((e: any) => {
         this.currentUrl.set(e.urlAfterRedirects);
-        this.openMenu.set(this.getMatchingKey(e.urlAfterRedirects));
+        this.detectActive(e.urlAfterRedirects);
       });
-
-    this.openMenu.set(this.getMatchingKey(this.currentUrl()));
   }
 
-  getMenuClasses(menu: string): Record<string, boolean> {
-    const highlighted = this.isHighlighted(menu);
-    const cfg = this.menuColorMap[menu];
-
-    return {
-      'active':        highlighted,
-      [cfg.active]:    highlighted,
-      [cfg.text]:      highlighted,
-      [cfg.hover]:     true,
-    };
-  }
-
-  onHover(val: boolean): void {
-    this.isHovered.set(val);
-  }
-
-  onMenuHover(menu: string): void {
-    this.hoveredMenu.set(menu);
-  }
-
-  onMenuLeave(): void {
-    this.hoveredMenu.set(null);
+  detectActive(url: string): void {
+    const key = this.getMatchingKey(url);
+    this.activeMenu.set(key);
+    this.openMenu.set(key); // active menu open வை
   }
 
   toggle(menu: string): void {
@@ -79,16 +50,13 @@ export class HorizontalSidebarComponent implements OnInit {
     return this.openMenu() === menu;
   }
 
-  isMenuActive(routes: string[]): boolean {
-    return routes.some(r => this.matchRoute(this.currentUrl(), r));
+  // active route match மட்டும் — hover இல்லாம
+  isParentActive(menu: string): boolean {
+    return this.activeMenu() === menu;
   }
 
-  isHighlighted(menu: string): boolean {
-    return (
-      this.isOpen(menu) ||
-      this.isMenuActive(this.menuRoutes[menu]) ||
-      this.hoveredMenu() === menu
-    );
+  isMenuActive(routes: string[]): boolean {
+    return routes.some(r => this.matchRoute(this.currentUrl(), r));
   }
 
   private matchRoute(currentUrl: string, route: string): boolean {
@@ -96,10 +64,19 @@ export class HorizontalSidebarComponent implements OnInit {
     return clean === route || clean.startsWith(route + '/');
   }
 
-  private getMatchingKey(currentUrl: string): string | null {
+  private getMatchingKey(url: string): string | null {
     for (const [key, routes] of Object.entries(this.menuRoutes)) {
-      if (routes.some(r => this.matchRoute(currentUrl, r))) return key;
+      if (routes.some(r => this.matchRoute(url, r))) return key;
     }
     return null;
+  }
+
+   @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    const clickedInsideSidebar = target.closest('#sidebarnav');
+    if (!clickedInsideSidebar) {
+      this.openMenu.set('');
+    }
   }
 }
