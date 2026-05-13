@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit, effect } from '@angular/core';
+import { Component, inject, signal, OnInit, effect, computed } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   FormBuilder,
@@ -14,6 +14,7 @@ import { EmployeeStatus, EmploymentType, Gender, Employee, PaymentMode } from '.
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { EmployeeDataClient } from '../employee-data-client';
 import { MasterDataClient } from '../../../core/services/master-data';
+import { SearchDropdownComponent } from "../../../shared/components/search-dropdown/search-dropdown";
 
 type EducationForm = FormGroup<{
   degree: FormControl<string>;
@@ -35,7 +36,7 @@ type Option = { id: string; name: string };
 
 @Component({
   selector: 'app-create-employee',
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, SearchDropdownComponent],
   templateUrl: './employee-create.html',
   styleUrl: './employee-create.css',
 })
@@ -782,6 +783,114 @@ copyAddress() {
 isPermanentAddressValid(): boolean {
   return this.form.controls.permanentAddress.valid;
 }
+
+// -------- Drop down items --------------//
+
+departmentDropdownItems = computed(() =>
+
+  this.departments()
+
+    .filter(x => !!x.id)
+
+    .map(x => ({
+
+      id: x.id!,
+
+      name: x.name
+
+    }))
+);
+
+designationDropdownItems = computed(() =>
+
+  this.designations()
+
+    .filter(x => !!x.id)
+
+    .map(x => ({
+
+      id: x.id!,
+
+      name: x.name
+
+    }))
+);
+
+bankDropdownItems = computed(() =>
+
+  this.bankNames()
+
+    .filter(x => !!x.id)
+
+    .map(x => ({
+
+      id: x.id!,
+
+      name: x.name
+
+    }))
+);
+
+degreeDropdownItems = computed(() =>
+
+  this.degrees()
+
+    .filter(x => !!x.id)
+
+    .map(x => ({
+
+      id: x.id!,
+
+      name: x.name
+
+    }))
+);
+
+
+roleDropdownItems = computed(() =>
+
+  this.roles()
+
+    .filter(x => !!x.id)
+
+    .map(x => ({
+
+      id: x.id!,
+
+      name: x.name
+
+    }))
+);
+
+stateDropdownItems = computed(() =>
+
+  this.states()
+
+    .filter(x => !!x.id)
+
+    .map(x => ({
+
+      id: x.id!,
+
+      name: x.name
+
+    }))
+);
+
+countryDropdownItems = computed(() =>
+
+  this.countries()
+
+    .filter(x => !!x.id)
+
+    .map(x => ({
+
+      id: x.id!,
+
+      name: x.name
+
+    }))
+);
 
 
 }

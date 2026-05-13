@@ -2,8 +2,8 @@
 // ✅ Angular 21 — uses input() signal for route params,
 //    effect() instead of subscribe(), no OnInit/NgZone.
 
-import { Component, computed, inject, signal, input, effect } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, computed, inject, signal, input, effect, afterNextRender, ChangeDetectorRef } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import {
   BRAND_OPTIONS, CATEGORY_OPTIONS, DISCOUNT_OPTIONS, IDiscountOption,
@@ -12,21 +12,23 @@ import {
 } from '../product';
 import { Router } from '@angular/router';
 import { ProductDataClient } from '../product-data-client';
+import { SearchDropdownComponent } from "../../../shared/components/search-dropdown/search-dropdown";
+import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-product-create',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, SearchDropdownComponent,NgxEditorModule,ReactiveFormsModule],
   templateUrl: './product-create.html',
   styleUrl: './product-create.css',
 })
 export class ProductCreateComponent {
 
-  private fb     = inject(FormBuilder);
+  private fb = inject(FormBuilder);
   private router = inject(Router);
-  service        = inject(ProductDataClient);
+  service = inject(ProductDataClient);
 
   id = input<string>();
 
@@ -37,50 +39,97 @@ export class ProductCreateComponent {
     return raw ? +raw : 0;
   });
 
-  activeTab    = signal<TabId>('general');
-  isDragging   = signal(false);
+  descriptionEditor!: Editor;
+
+metaDescriptionEditor!: Editor;
+
+readonly editorForm = new FormGroup({
+
+  description:
+    new FormControl(''),
+
+  metaTagDescription:
+    new FormControl('')
+
+});
+
+
+readonly toolbar: Toolbar = [
+
+  ['bold', 'italic', 'underline'],
+
+  ['strike'],
+
+  ['code', 'blockquote'],
+
+  [
+    {
+      heading: [
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6'
+      ]
+    }
+  ],
+
+  ['ordered_list', 'bullet_list'],
+
+  ['link', 'image'],
+
+  ['text_color', 'background_color'],
+
+  ['horizontal_rule'],
+
+  ['undo', 'redo']
+
+];
+  activeTab = signal<TabId>('general');
+  isDragging = signal(false);
   imagePreviews = signal<string[]>([]);
   selectedFiles = signal<File[]>([]);
-  currentIndex  = signal(0);
-  primaryIndex  = signal(0);
-  dragStartX    = signal(0);
+  currentIndex = signal(0);
+  primaryIndex = signal(0);
+  dragStartX = signal(0);
   pendingDeleteIndex = signal<number | null>(null);
 
   readonly maxImages = 5;
 
-  categoryOptions: ISelectOption[]    = CATEGORY_OPTIONS;
-  brandOptions: ISelectOption[]       = BRAND_OPTIONS;
-  unitOptions                         = UNIT_OPTIONS;
-  taxOptions: ISelectOption[]         = TAX_OPTIONS;
-  discountTypes: IDiscountOption[]    = DISCOUNT_OPTIONS;
-  statusOptions: IStatusOption[]      = STATUS_OPTIONSPRODUCT;
-  templateOptions: ISelectOption[]    = TEMPLATE_OPTIONS;
-  ProductType: ISelectOption[]        = PRODUCT_TYPE_OPTIONS;
+  categoryOptions: ISelectOption[] = CATEGORY_OPTIONS;
+  brandOptions: ISelectOption[] = BRAND_OPTIONS;
+  unitOptions = UNIT_OPTIONS;
+  taxOptions: ISelectOption[] = TAX_OPTIONS;
+  discountTypes: IDiscountOption[] = DISCOUNT_OPTIONS;
+  statusOptions: IStatusOption[] = STATUS_OPTIONSPRODUCT;
+  templateOptions: ISelectOption[] = TEMPLATE_OPTIONS;
+  ProductType: ISelectOption[] = PRODUCT_TYPE_OPTIONS;
 
   productForm: FormGroup = this.fb.group({
-    productCode:        ['', [Validators.required, Validators.maxLength(30)]],
-    productName:        ['', [Validators.required, Validators.maxLength(200)]],
-    categoryId:         ['', Validators.required],
-    brandId:            [''],
-    unitId:             ['', Validators.required],
-    barcode:            ['', Validators.maxLength(50)],
-    costPrice:          [null, [Validators.required, Validators.min(0.01)]],
-    sellingPrice:       [null, [Validators.required, Validators.min(0.01)]],
-    taxId:              [''],
-    isInclusiveTax:     [false],
-    discountType:       ['none'],
-    discountValue:      [null],
-    reorderLevel:       [0],
-    maxStockLevel:      [0],
-    currentStock:       [0],
-    description:        [''],
-    metaTagTitle:       [''],
+    productCode: ['', [Validators.required, Validators.maxLength(30)]],
+    productName: ['', [Validators.required, Validators.maxLength(200)]],
+    categoryId: ['', Validators.required],
+    brandId: [''],
+    unitId: ['', Validators.required],
+    barcode: ['', Validators.maxLength(50)],
+    costPrice: [null, [Validators.required, Validators.min(0.01)]],
+    sellingPrice: [null, [Validators.required, Validators.min(0.01)]],
+    taxId: [''],
+    isInclusiveTax: [false],
+    discountType: ['none'],
+    discountValue: [null],
+    reorderLevel: [0],
+    maxStockLevel: [0],
+    currentStock: [0],
+    description: [''],
+    metaTagTitle: [''],
     metaTagDescription: [''],
-    isPhysical:         [false],
-    productTemplate:    [''],
-    ProductType:        [''],
-    status:             ['active'],
-    mediaFiles:         [[]],
+    isPhysical: [false],
+    productTemplate: [''],
+    ProductType: [''],
+    status: ['active'],
+    mediaFiles: [[]],
   });
 
   pageTitle = computed(() => this.editMode() ? 'Product Inventory' : 'Product Inventory');
@@ -106,7 +155,52 @@ export class ProductCreateComponent {
    *    Uses effect() to react to route param changes,
    *    and another effect() to auto-generate product code.
    */
-  constructor() {
+showEditor =
+  signal(false);
+  private readonly cdr =
+  inject(ChangeDetectorRef);
+/* =====================================================
+   CONSTRUCTOR
+===================================================== */
+
+constructor() {
+
+  afterNextRender(() => {
+    requestAnimationFrame(() => {
+      this.descriptionEditor = new Editor();  
+      this.metaDescriptionEditor = new Editor();  
+
+
+      // subscribe AFTER editor is created
+this.editorForm.controls[
+  'description'
+].valueChanges.subscribe(value => {
+
+  this.productForm.patchValue({
+
+    description:
+      value || ''
+
+  });
+
+});
+
+this.editorForm.controls[
+  'metaTagDescription'
+].valueChanges.subscribe(value => {
+
+  this.productForm.patchValue({
+
+    metaTagDescription:
+      value || ''
+
+  });
+
+});
+      this.showEditor.set(true);
+      this.cdr.detectChanges();
+    });
+  });
     // ── effect #1: Load product data in edit mode ──
     effect(() => {
       const routeId = this.id();
@@ -309,4 +403,26 @@ export class ProductCreateComponent {
   onCancel() {
     this.router.navigate(['/products']);
   }
+
+  categoryDropdownItems = computed(() =>
+
+    this.categoryOptions.map(x => ({
+
+      id: x.value,
+
+      name: x.label
+
+    }))
+  );
+
+  brandDropdownItems = computed(() =>
+
+    this.brandOptions.map(x => ({
+
+      id: x.value,
+
+      name: x.label
+
+    }))
+  );
 }

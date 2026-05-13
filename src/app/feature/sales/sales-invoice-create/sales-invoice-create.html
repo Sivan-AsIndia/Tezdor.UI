@@ -9,7 +9,8 @@
             {{ isEditMode() ? 'Invoice' : 'New Invoice' }} — {{ invoiceNo() }}
           </h4>
           <small class="text-muted subdescription">
-            {{ isEditMode() ? 'Update the sales invoice details below.' : 'Create a new sales invoice — add customer, line items and post.' }}
+            {{ isEditMode() ? 'Update the sales invoice details below.' : 'Create a new sales invoice — add customer,
+            line items and post.' }}
           </small>
         </div>
         <div class="arrow-steps d-none d-md-flex">
@@ -23,10 +24,10 @@
 
       <!-- ══ SUCCESS BANNER ═══════════════════════════════════════ -->
       @if (saveSuccess) {
-        <div class="si-success-bar">
-          <i class="ti ti-circle-check"></i>
-          Sales invoice {{ isEditMode() ? 'updated' : 'saved' }} successfully! Redirecting…
-        </div>
+      <div class="si-success-bar">
+        <i class="ti ti-circle-check"></i>
+        Sales invoice {{ isEditMode() ? 'updated' : 'saved' }} successfully! Redirecting…
+      </div>
       }
 
       <!-- ══ MAIN LAYOUT ══════════════════════════════════════════ -->
@@ -46,38 +47,33 @@
                 <!-- Customer select -->
                 <div class="si-field si-field--top">
                   <label class="si-lbl si-lbl--req">Customer <span class="si-req-star">*</span></label>
-                  <div class="si-sel-wrap" [class.si-err-border]="errCustomer">
-                    <select class="si-sel" (change)="onCustomerChange($any($event.target).value)">
-                      <option value="">— Select Customer —</option>
-                      @for (c of customerOptions; track c.value) {
-                        <option [value]="c.value" [selected]="c.value === customerId()">
-                          {{ c.label }}
-                        </option>
-                      }
-                    </select>
-                    <i class="ti ti-chevron-down si-sel-arrow"></i>
-                  </div>
+                  <app-search-dropdown [items]="customerDropdownItems()" [selectedId]="customerId()"
+                    placeholder="— Select Customer —" (selectedIdChange)="
+                            onCustomerChange($event)
+                          ">
+
+                  </app-search-dropdown>
                   @if (errCustomer) {
-                    <div class="si-err-msg">
-                      <i class="ti ti-alert-circle"></i> Customer is required
-                    </div>
+                  <div class="si-err-msg">
+                    <i class="ti ti-alert-circle"></i> Customer is required
+                  </div>
                   }
                 </div>
 
                 <!-- Customer details chip -->
                 @if (selectedCustomer()) {
-                  <div class="si-customer-chip">
-                    <div class="si-customer-chip-row">
-                      <i class="ti ti-map-pin"></i>
-                      <span>{{ selectedCustomer()?.address }}</span>
-                    </div>
-                    @if (selectedCustomer()?.gstin) {
-                      <div class="si-customer-chip-row">
-                        <i class="ti ti-id-badge"></i>
-                        <span>GSTIN: {{ selectedCustomer()?.gstin }}</span>
-                      </div>
-                    }
+                <div class="si-customer-chip">
+                  <div class="si-customer-chip-row">
+                    <i class="ti ti-map-pin"></i>
+                    <span>{{ selectedCustomer()?.address }}</span>
                   </div>
+                  @if (selectedCustomer()?.gstin) {
+                  <div class="si-customer-chip-row">
+                    <i class="ti ti-id-badge"></i>
+                    <span>GSTIN: {{ selectedCustomer()?.gstin }}</span>
+                  </div>
+                  }
+                </div>
                 }
 
                 <!-- PO Reference -->
@@ -85,18 +81,15 @@
                   <label class="si-lbl">Purchase Order Reference</label>
                   <div class="si-inp-wrap">
                     <i class="ti ti-file-description si-inp-icon"></i>
-                    <input type="text" class="si-inp"
-                      [value]="poReference()"
-                      (input)="poReference.set($any($event.target).value)"
-                      placeholder="e.g. PO-2026-0041" />
+                    <input type="text" class="si-inp" [value]="poReference()"
+                      (input)="poReference.set($any($event.target).value)" placeholder="e.g. PO-2026-0041" />
                   </div>
                 </div>
 
                 <!-- Delivery Address -->
                 <div class="si-field si-field--mt">
                   <label class="si-lbl">Delivery Address</label>
-                  <textarea class="si-textarea" rows="2"
-                    [value]="deliveryAddress()"
+                  <textarea class="si-textarea" rows="2" [value]="deliveryAddress()"
                     (input)="deliveryAddress.set($any($event.target).value)"
                     placeholder="Ship-to address (if different from billing)…"></textarea>
                 </div>
@@ -104,10 +97,26 @@
                 <!-- Notes -->
                 <div class="si-field si-field--mt">
                   <label class="si-lbl">Notes / Remarks</label>
-                  <textarea class="si-textarea" rows="2"
-                    [value]="notes()"
-                    (input)="notes.set($any($event.target).value)"
-                    placeholder="Any instructions, terms or notes…"></textarea>
+                  <div class="rich-editor-wrapper si-editor">
+
+                    @if(showSalesNotesEditor()){
+
+                    <!-- TOOLBAR -->
+                    <ngx-editor-menu [editor]="salesNotesEditor" [toolbar]="toolbar">
+
+                    </ngx-editor-menu>
+
+                    <!-- EDITOR -->
+                    <div class="ngx-overflow">
+                      <ngx-editor [editor]="salesNotesEditor" [formControl]="salesNotesControl" placeholder="
+                        Any instructions, terms or notes…
+                      ">
+
+                      </ngx-editor>
+                    </div>
+                    }
+
+                  </div>
                 </div>
 
               </div>
@@ -134,15 +143,13 @@
                   <div class="si-id-row">
                     <span class="si-id-key">Invoice Date <span class="si-req-star">*</span></span>
                     <div class="si-id-input-wrap" [class.si-err-border]="errDate">
-            <input type="date" class="si-id-input"
-  [value]="invoiceDate()"
-  [max]="todayStr()"
-  (change)="setInvoiceDate($any($event.target).value)" />
+                      <input type="date" class="si-id-input" [value]="invoiceDate()" [max]="todayStr()"
+                        (change)="setInvoiceDate($any($event.target).value)" />
                     </div>
                     @if (errDate) {
-                      <div class="si-err-msg si-err-msg--right">
-                        <i class="ti ti-alert-circle"></i> Invoice date is required
-                      </div>
+                    <div class="si-err-msg si-err-msg--right">
+                      <i class="ti ti-alert-circle"></i> Invoice date is required
+                    </div>
                     }
                   </div>
 
@@ -150,15 +157,13 @@
                   <div class="si-id-row">
                     <span class="si-id-key">Due Date</span>
                     <div class="si-id-input-wrap" [class.si-err-border]="errDueDate">
-                      <input type="date" class="si-id-input"
-                        [value]="dueDate()"
-                        [min]="invoiceDate()"
+                      <input type="date" class="si-id-input" [value]="dueDate()" [min]="invoiceDate()"
                         (change)="dueDate.set($any($event.target).value)" />
                     </div>
                     @if (errDueDate) {
-                      <div class="si-err-msg si-err-msg--right">
-                        <i class="ti ti-alert-circle"></i> Due date must be after invoice date
-                      </div>
+                    <div class="si-err-msg si-err-msg--right">
+                      <i class="ti ti-alert-circle"></i> Due date must be after invoice date
+                    </div>
                     }
                   </div>
 
@@ -166,11 +171,10 @@
                   <div class="si-id-row">
                     <span class="si-id-key">Invoice Type</span>
                     <div class="si-id-sel-wrap">
-                      <select class="si-id-sel"
-                        [value]="invoiceType()"
+                      <select class="si-id-sel" [value]="invoiceType()"
                         (change)="invoiceType.set($any($event.target).value)">
                         @for (t of invoiceTypeOptions; track t.value) {
-                          <option [value]="t.value">{{ t.label }}</option>
+                        <option [value]="t.value">{{ t.label }}</option>
                         }
                       </select>
                       <i class="ti ti-chevron-down si-sel-arrow si-sel-arrow--id"></i>
@@ -181,46 +185,39 @@
                   <div class="si-id-row">
                     <span class="si-id-key">Status <span class="si-req-star">*</span></span>
                     <div class="si-id-sel-wrap" [class.si-err-border]="errStatus">
-                      <select class="si-id-sel"
-                        [value]="invoiceStatus()"
+                      <select class="si-id-sel" [value]="invoiceStatus()"
                         (change)="invoiceStatus.set($any($event.target).value)">
                         @for (s of statusOptions; track s.value) {
-                          <option [value]="s.value">{{ s.label }}</option>
+                        <option [value]="s.value">{{ s.label }}</option>
                         }
                       </select>
                       <i class="ti ti-chevron-down si-sel-arrow si-sel-arrow--id"></i>
                     </div>
                     @if (errStatus) {
-                      <div class="si-err-msg si-err-msg--right">
-                        <i class="ti ti-alert-circle"></i> Status is required
-                      </div>
+                    <div class="si-err-msg si-err-msg--right">
+                      <i class="ti ti-alert-circle"></i> Status is required
+                    </div>
                     }
                   </div>
 
                   <!-- Place of Supply -->
                   <div class="si-id-row">
                     <span class="si-id-key">Place of Supply</span>
-                    <div class="si-id-sel-wrap">
-                      <select class="si-id-sel"
-                        [value]="placeOfSupply()"
-                        (change)="placeOfSupply.set($any($event.target).value)">
-                        @for (p of placeOfSupplyOptions; track p.value) {
-                          <option [value]="p.value">{{ p.label }}</option>
-                        }
-                      </select>
-                      <i class="ti ti-chevron-down si-sel-arrow si-sel-arrow--id"></i>
-                    </div>
+                    <app-search-dropdown class="invoice-search-dropdown" [items]="placeOfSupplyDropdownItems()"
+                      [selectedId]="placeOfSupply()" placeholder="-- Select Place Of Supply --" (selectedIdChange)="
+    placeOfSupply.set($event)
+  ">
+
+                    </app-search-dropdown>
                   </div>
 
                   <!-- GST Type toggle -->
                   <div class="si-id-row si-id-row--gst">
                     <span class="si-id-key">GST Type</span>
                     <div class="si-gst-seg">
-                      <button type="button" class="si-gst-btn"
-                        [class.si-gst-btn--active]="gstType() === 'gst'"
+                      <button type="button" class="si-gst-btn" [class.si-gst-btn--active]="gstType() === 'gst'"
                         (click)="gstType.set('gst')">CGST + SGST</button>
-                      <button type="button" class="si-gst-btn"
-                        [class.si-gst-btn--active]="gstType() === 'igst'"
+                      <button type="button" class="si-gst-btn" [class.si-gst-btn--active]="gstType() === 'igst'"
                         (click)="gstType.set('igst')">IGST</button>
                     </div>
                   </div>
@@ -244,172 +241,160 @@
 
               <!-- No lines error -->
               @if (errNoLines) {
-                <div class="si-alert-banner">
-                  <i class="ti ti-alert-circle"></i>
-                  At least one product line with qty and price is required.
-                </div>
+              <div class="si-alert-banner">
+                <i class="ti ti-alert-circle"></i>
+                At least one product line with qty and price is required.
+              </div>
               }
 
               <!-- Line Item Cards -->
               <div class="si-lines-wrap">
                 @for (row of lineItems(); track row.sNo; let i = $index) {
-                  <div class="si-line-card" [class.si-line-card--err]="row.errProduct || row.errQty || row.errPrice">
+                <div class="si-line-card" [class.si-line-card--err]="row.errProduct || row.errQty || row.errPrice">
 
-                    <!-- Card header -->
-                    <div class="si-line-hdr">
-                      <span class="si-line-num">#{{ i + 1 }}</span>
+                  <!-- Card header -->
+                  <div class="si-line-hdr">
+                    <span class="si-line-num">#{{ i + 1 }}</span>
 
-                      @if (row.errProduct || row.errQty || row.errPrice) {
-                        <span class="si-line-err-pill">
-                          <i class="ti ti-alert-triangle"></i>
-                          Fix errors below
-                        </span>
-                      }
+                    @if (row.errProduct || row.errQty || row.errPrice) {
+                    <span class="si-line-err-pill">
+                      <i class="ti ti-alert-triangle"></i>
+                      Fix errors below
+                    </span>
+                    }
 
-                      <div class="si-line-total-chip">
-                        <span class="si-line-total-label">LINE TOTAL</span>
-                        <strong>₹{{ lineTotal(row) | number:'1.2-2' }}</strong>
+                    <div class="si-line-total-chip">
+                      <span class="si-line-total-label">LINE TOTAL</span>
+                      <strong>₹{{ lineTotal(row) | number:'1.2-2' }}</strong>
+                    </div>
+                    <button type="button" class="si-del-btn" [disabled]="lineItems().length === 1"
+                      (click)="removeRow(row.sNo)" title="Remove row">
+                      <i class="ti ti-trash"></i>
+                    </button>
+                  </div>
+
+                  <!-- Row 1: Product full width -->
+                  <div class="si-li-field si-li-field--full">
+                    <label class="si-li-lbl">Product / Service <span class="si-req-star">*</span></label>
+                    <app-search-dropdown [items]="productServiceDropdownItems()" [selectedId]="row.productCode"
+                      placeholder="— Select product or service —" (selectedIdChange)="
+                          onProductSelect(
+                            row.sNo,
+                            $event
+                          )
+                        ">
+
+                    </app-search-dropdown>
+                    @if (row.errProduct) {
+                    <div class="si-err-msg">
+                      <i class="ti ti-alert-circle"></i> Product is required
+                    </div>
+                    }
+                  </div>
+
+                  <!-- Row 2: Qty | Unit | Unit Price | Discount -->
+                  <div class="si-li-row si-li-row--4">
+
+                    <div class="si-li-field">
+                      <label class="si-li-lbl">Qty <span class="si-req-star">*</span></label>
+                      <div [class.si-err-border]="row.errQty" class="si-inp-wrap si-inp-wrap--sm">
+                        <input type="number" class="si-inp si-inp--right" min="0.001" step="0.001"
+                          [value]="row.quantity" (input)="updateRow(row.sNo, 'quantity', +$any($event.target).value)"
+                          placeholder="0" />
                       </div>
-                      <button type="button" class="si-del-btn"
-                        [disabled]="lineItems().length === 1"
-                        (click)="removeRow(row.sNo)" title="Remove row">
-                        <i class="ti ti-trash"></i>
-                      </button>
+                      @if (row.errQty) {
+                      <div class="si-err-msg">
+                        <i class="ti ti-alert-circle"></i> Qty must be &gt; 0
+                      </div>
+                      }
                     </div>
 
-                    <!-- Row 1: Product full width -->
-                    <div class="si-li-field si-li-field--full">
-                      <label class="si-li-lbl">Product / Service <span class="si-req-star">*</span></label>
-                      <div class="si-sel-wrap" [class.si-err-border]="row.errProduct">
-                        <select class="si-sel"
-                          [value]="row.productCode"
-                          (change)="onProductSelect(row.sNo, $any($event.target).value)">
-                          <option value="">— Select product or service —</option>
-                          @for (p of productOptions; track p.value) {
-                            <option [value]="p.value" [selected]="p.value === row.productCode">{{ p.label }}</option>
+                    <div class="si-li-field">
+                      <label class="si-li-lbl">Unit</label>
+                      <div class="si-sel-wrap si-sel-wrap--sm">
+                        <select class="si-sel" [value]="row.unitId"
+                          (change)="updateRow(row.sNo, 'unitId', +$any($event.target).value)">
+                          @for (u of unitOptions; track u.value) {
+                          <option [value]="u.value">{{ u.label }}</option>
                           }
                         </select>
                         <i class="ti ti-chevron-down si-sel-arrow"></i>
                       </div>
-                      @if (row.errProduct) {
-                        <div class="si-err-msg">
-                          <i class="ti ti-alert-circle"></i> Product is required
-                        </div>
+                    </div>
+
+                    <div class="si-li-field">
+                      <label class="si-li-lbl">Unit Price <span class="si-req-star">*</span></label>
+                      <div class="si-rupee-wrap" [class.si-err-border]="row.errPrice">
+                        <span class="si-rupee-sym">₹</span>
+                        <input type="number" class="si-inp si-inp--right" min="0" step="0.01" [value]="row.unitPrice"
+                          (input)="updateRow(row.sNo, 'unitPrice', +$any($event.target).value)" placeholder="0.00" />
+                      </div>
+                      @if (row.errPrice) {
+                      <div class="si-err-msg">
+                        <i class="ti ti-alert-circle"></i> Price must be &gt; 0
+                      </div>
                       }
                     </div>
 
-                    <!-- Row 2: Qty | Unit | Unit Price | Discount -->
-                    <div class="si-li-row si-li-row--4">
-
-                      <div class="si-li-field">
-                        <label class="si-li-lbl">Qty <span class="si-req-star">*</span></label>
-                        <div [class.si-err-border]="row.errQty" class="si-inp-wrap si-inp-wrap--sm">
-                          <input type="number" class="si-inp si-inp--right"
-                            min="0.001" step="0.001"
-                            [value]="row.quantity"
-                            (input)="updateRow(row.sNo, 'quantity', +$any($event.target).value)"
-                            placeholder="0" />
-                        </div>
-                        @if (row.errQty) {
-                          <div class="si-err-msg">
-                            <i class="ti ti-alert-circle"></i> Qty must be &gt; 0
-                          </div>
-                        }
+                    <div class="si-li-field">
+                      <label class="si-li-lbl">Discount %</label>
+                      <div class="si-inp-wrap si-inp-wrap--sm" [class.si-err-border]="row.errDiscount">
+                        <input type="number" class="si-inp si-inp--right" min="0" max="100" step="0.1"
+                          [value]="row.discountPercent"
+                          (input)="updateRow(row.sNo, 'discountPercent', +$any($event.target).value)" placeholder="0" />
+                        <span class="si-inp-suffix">%</span>
                       </div>
-
-                      <div class="si-li-field">
-                        <label class="si-li-lbl">Unit</label>
-                        <div class="si-sel-wrap si-sel-wrap--sm">
-                          <select class="si-sel"
-                            [value]="row.unitId"
-                            (change)="updateRow(row.sNo, 'unitId', +$any($event.target).value)">
-                            @for (u of unitOptions; track u.value) {
-                              <option [value]="u.value">{{ u.label }}</option>
-                            }
-                          </select>
-                          <i class="ti ti-chevron-down si-sel-arrow"></i>
-                        </div>
+                      @if (row.errDiscount) {
+                      <div class="si-err-msg">
+                        <i class="ti ti-alert-circle"></i> Discount must be 0–100%
                       </div>
-
-                      <div class="si-li-field">
-                        <label class="si-li-lbl">Unit Price <span class="si-req-star">*</span></label>
-                        <div class="si-rupee-wrap" [class.si-err-border]="row.errPrice">
-                          <span class="si-rupee-sym">₹</span>
-                          <input type="number" class="si-inp si-inp--right"
-                            min="0" step="0.01"
-                            [value]="row.unitPrice"
-                            (input)="updateRow(row.sNo, 'unitPrice', +$any($event.target).value)"
-                            placeholder="0.00" />
-                        </div>
-                        @if (row.errPrice) {
-                          <div class="si-err-msg">
-                            <i class="ti ti-alert-circle"></i> Price must be &gt; 0
-                          </div>
-                        }
-                      </div>
-
-                      <div class="si-li-field">
-                        <label class="si-li-lbl">Discount %</label>
-                        <div class="si-inp-wrap si-inp-wrap--sm" [class.si-err-border]="row.errDiscount">
-                          <input type="number" class="si-inp si-inp--right"
-                            min="0" max="100" step="0.1"
-                            [value]="row.discountPercent"
-                            (input)="updateRow(row.sNo, 'discountPercent', +$any($event.target).value)"
-                            placeholder="0" />
-                          <span class="si-inp-suffix">%</span>
-                        </div>
-                        @if (row.errDiscount) {
-                          <div class="si-err-msg">
-                            <i class="ti ti-alert-circle"></i> Discount must be 0–100%
-                          </div>
-                        }
-                      </div>
-
-                    </div>
-
-                    <!-- Row 3: Tax | Tax Amt | Sub Total | Line Total -->
-                    <div class="si-li-row si-li-row--4 si-li-row--calc">
-
-                      <div class="si-li-field">
-                        <label class="si-li-lbl">Tax Rate</label>
-                        <div class="si-sel-wrap si-sel-wrap--sm">
-                          <select class="si-sel"
-                            [value]="row.taxPercent"
-                            (change)="updateRow(row.sNo, 'taxPercent', +$any($event.target).value)">
-                            @for (t of taxOptions; track t.value) {
-                              <option [value]="t.value">{{ t.label }}</option>
-                            }
-                          </select>
-                          <i class="ti ti-chevron-down si-sel-arrow"></i>
-                        </div>
-                      </div>
-
-                      <div class="si-li-field">
-                        <label class="si-li-lbl">Tax Amount</label>
-                        <div class="si-calc-val">₹{{ lineTax(row) | number:'1.2-2' }}</div>
-                      </div>
-
-                      <div class="si-li-field">
-                        <label class="si-li-lbl">Sub Total</label>
-                        <div class="si-calc-val">₹{{ lineSubTotal(row) | number:'1.2-2' }}</div>
-                      </div>
-
-                      <div class="si-li-field">
-                        <label class="si-li-lbl">Line Total</label>
-                        <div class="si-calc-val si-calc-val--strong">₹{{ lineTotal(row) | number:'1.2-2' }}</div>
-                      </div>
-
+                      }
                     </div>
 
                   </div>
+
+                  <!-- Row 3: Tax | Tax Amt | Sub Total | Line Total -->
+                  <div class="si-li-row si-li-row--4 si-li-row--calc">
+
+                    <div class="si-li-field">
+                      <label class="si-li-lbl">Tax Rate</label>
+                      <div class="si-sel-wrap si-sel-wrap--sm">
+                        <select class="si-sel" [value]="row.taxPercent"
+                          (change)="updateRow(row.sNo, 'taxPercent', +$any($event.target).value)">
+                          @for (t of taxOptions; track t.value) {
+                          <option [value]="t.value">{{ t.label }}</option>
+                          }
+                        </select>
+                        <i class="ti ti-chevron-down si-sel-arrow"></i>
+                      </div>
+                    </div>
+
+                    <div class="si-li-field">
+                      <label class="si-li-lbl">Tax Amount</label>
+                      <div class="si-calc-val">₹{{ lineTax(row) | number:'1.2-2' }}</div>
+                    </div>
+
+                    <div class="si-li-field">
+                      <label class="si-li-lbl">Sub Total</label>
+                      <div class="si-calc-val">₹{{ lineSubTotal(row) | number:'1.2-2' }}</div>
+                    </div>
+
+                    <div class="si-li-field">
+                      <label class="si-li-lbl">Line Total</label>
+                      <div class="si-calc-val si-calc-val--strong">₹{{ lineTotal(row) | number:'1.2-2' }}</div>
+                    </div>
+
+                  </div>
+
+                </div>
                 }
 
                 <!-- Empty state -->
                 @if (lineItems().length === 0) {
-                  <div class="si-empty-state">
-                    <i class="ti ti-file-off"></i>
-                    <span>No line items yet — click <strong>+ Add</strong> below</span>
-                  </div>
+                <div class="si-empty-state">
+                  <i class="ti ti-file-off"></i>
+                  <span>No line items yet — click <strong>+ Add</strong> below</span>
+                </div>
                 }
 
               </div>
@@ -441,15 +426,13 @@
                     <label class="si-pay-lbl">Amount Paid (₹)</label>
                     <div class="si-rupee-wrap" [class.si-err-border]="errAmountPaid">
                       <span class="si-rupee-sym">₹</span>
-                      <input type="number" class="si-inp si-inp--right"
-                        min="0" step="0.01" placeholder="0.00"
-                        [value]="amountPaid()"
-                        (input)="amountPaid.set(+$any($event.target).value)" />
+                      <input type="number" class="si-inp si-inp--right" min="0" step="0.01" placeholder="0.00"
+                        [value]="amountPaid()" (input)="amountPaid.set(+$any($event.target).value)" />
                     </div>
                     @if (errAmountPaid) {
-                      <div class="si-err-msg">
-                        <i class="ti ti-alert-circle"></i> Amount paid cannot exceed grand total
-                      </div>
+                    <div class="si-err-msg">
+                      <i class="ti ti-alert-circle"></i> Amount paid cannot exceed grand total
+                    </div>
                     }
                     <span class="si-hint">Partial payments allowed</span>
                   </div>
@@ -458,20 +441,19 @@
                   <div class="si-pay-field">
                     <label class="si-pay-lbl">Payment Mode</label>
                     <div class="si-sel-wrap" [class.si-err-border]="errPaymentMode">
-                      <select class="si-sel"
-                        [value]="paymentMode()"
+                      <select class="si-sel" [value]="paymentMode()"
                         (change)="paymentMode.set($any($event.target).value)">
                         <option value="">— Select —</option>
                         @for (m of paymentModeOptions; track m.value) {
-                          <option [value]="m.value">{{ m.label }}</option>
+                        <option [value]="m.value">{{ m.label }}</option>
                         }
                       </select>
                       <i class="ti ti-chevron-down si-sel-arrow"></i>
                     </div>
                     @if (errPaymentMode) {
-                      <div class="si-err-msg">
-                        <i class="ti ti-alert-circle"></i> Payment mode required when amount paid &gt; 0
-                      </div>
+                    <div class="si-err-msg">
+                      <i class="ti ti-alert-circle"></i> Payment mode required when amount paid &gt; 0
+                    </div>
                     }
                   </div>
 
@@ -480,9 +462,7 @@
                     <label class="si-pay-lbl">Payment Due Date</label>
                     <div class="si-inp-wrap">
                       <i class="ti ti-calendar si-inp-icon"></i>
-                      <input type="date" class="si-inp"
-                        [value]="paymentDueDate()"
-                        [min]="invoiceDate()"
+                      <input type="date" class="si-inp" [value]="paymentDueDate()" [min]="invoiceDate()"
                         (change)="paymentDueDate.set($any($event.target).value)" />
                     </div>
                   </div>
@@ -491,13 +471,12 @@
                   <div class="si-pay-field">
                     <label class="si-pay-lbl">Payment Terms</label>
                     <div class="si-sel-wrap">
-                  <select class="si-sel"
-  [value]="paymentTerms()"
-  (change)="setPaymentTerms($any($event.target).value)">
-  @for (t of paymentTermOptions; track t.value) {
-    <option [value]="t.value">{{ t.label }}</option>
-  }
-</select>
+                      <select class="si-sel" [value]="paymentTerms()"
+                        (change)="setPaymentTerms($any($event.target).value)">
+                        @for (t of paymentTermOptions; track t.value) {
+                        <option [value]="t.value">{{ t.label }}</option>
+                        }
+                      </select>
                       <i class="ti ti-chevron-down si-sel-arrow"></i>
                     </div>
                   </div>
@@ -506,8 +485,7 @@
                   <div class="si-pay-field">
                     <label class="si-pay-lbl">Payment Status</label>
                     <div class="si-pay-status-row">
-                      <span class="si-pay-badge"
-                        [class.si-badge--unpaid]="paymentStatus() === 'unpaid'"
+                      <span class="si-pay-badge" [class.si-badge--unpaid]="paymentStatus() === 'unpaid'"
                         [class.si-badge--partial]="paymentStatus() === 'partial'"
                         [class.si-badge--paid]="paymentStatus() === 'paid'">
                         @if (paymentStatus() === 'unpaid') { <i class="ti ti-x"></i> }
@@ -527,8 +505,7 @@
                   <div class="si-charge-row">
                     <label class="si-charge-label">
                       <span class="si-toggle-wrap">
-                        <input type="checkbox"
-                          [checked]="showFreight()"
+                        <input type="checkbox" [checked]="showFreight()"
                           (change)="toggleFreight($any($event.target).checked)" />
                         <span class="si-toggle-box">
                           @if (showFreight()) { <i class="ti ti-check"></i> }
@@ -538,26 +515,23 @@
                       Add Freight / Shipping
                     </label>
                     @if (showFreight()) {
-                      <div class="si-rupee-wrap si-charge-inp" [class.si-err-border]="errFreight">
-                        <span class="si-rupee-sym">₹</span>
-                        <input type="number" class="si-inp si-inp--right"
-                          min="0" step="0.01" placeholder="0.00"
-                          [value]="freightCharges()"
-                          (input)="freightCharges.set(+$any($event.target).value)" />
-                      </div>
-                      @if (errFreight) {
-                        <div class="si-err-msg">
-                          <i class="ti ti-alert-circle"></i> Enter a valid freight amount
-                        </div>
-                      }
+                    <div class="si-rupee-wrap si-charge-inp" [class.si-err-border]="errFreight">
+                      <span class="si-rupee-sym">₹</span>
+                      <input type="number" class="si-inp si-inp--right" min="0" step="0.01" placeholder="0.00"
+                        [value]="freightCharges()" (input)="freightCharges.set(+$any($event.target).value)" />
+                    </div>
+                    @if (errFreight) {
+                    <div class="si-err-msg">
+                      <i class="ti ti-alert-circle"></i> Enter a valid freight amount
+                    </div>
+                    }
                     }
                   </div>
 
                   <div class="si-charge-row">
                     <label class="si-charge-label">
                       <span class="si-toggle-wrap">
-                        <input type="checkbox"
-                          [checked]="showCustomDuty()"
+                        <input type="checkbox" [checked]="showCustomDuty()"
                           (change)="toggleCustomDuty($any($event.target).checked)" />
                         <span class="si-toggle-box">
                           @if (showCustomDuty()) { <i class="ti ti-check"></i> }
@@ -567,18 +541,16 @@
                       Add Custom Duty
                     </label>
                     @if (showCustomDuty()) {
-                      <div class="si-rupee-wrap si-charge-inp" [class.si-err-border]="errCustomDuty">
-                        <span class="si-rupee-sym">₹</span>
-                        <input type="number" class="si-inp si-inp--right"
-                          min="0" step="0.01" placeholder="0.00"
-                          [value]="customDuty()"
-                          (input)="customDuty.set(+$any($event.target).value)" />
-                      </div>
-                      @if (errCustomDuty) {
-                        <div class="si-err-msg">
-                          <i class="ti ti-alert-circle"></i> Enter a valid custom duty amount
-                        </div>
-                      }
+                    <div class="si-rupee-wrap si-charge-inp" [class.si-err-border]="errCustomDuty">
+                      <span class="si-rupee-sym">₹</span>
+                      <input type="number" class="si-inp si-inp--right" min="0" step="0.01" placeholder="0.00"
+                        [value]="customDuty()" (input)="customDuty.set(+$any($event.target).value)" />
+                    </div>
+                    @if (errCustomDuty) {
+                    <div class="si-err-msg">
+                      <i class="ti ti-alert-circle"></i> Enter a valid custom duty amount
+                    </div>
+                    }
                     }
                   </div>
 
@@ -601,54 +573,58 @@
 
                   <!-- GST breakdown -->
                   @if (gstType() === 'gst') {
-                    <tr class="si-tot-sub-row">
-                      <td class="si-tot-lbl si-tot-lbl--sub">
-                        <span class="si-sub-dot"></span> CGST (50%)
-                      </td>
-                      <td class="si-tot-val si-tot-val--sub">₹{{ cgst() | number:'1.2-2' }}</td>
-                    </tr>
-                    <tr class="si-tot-sub-row">
-                      <td class="si-tot-lbl si-tot-lbl--sub">
-                        <span class="si-sub-dot"></span> SGST (50%)
-                      </td>
-                      <td class="si-tot-val si-tot-val--sub">₹{{ sgst() | number:'1.2-2' }}</td>
-                    </tr>
+                  <tr class="si-tot-sub-row">
+                    <td class="si-tot-lbl si-tot-lbl--sub">
+                      <span class="si-sub-dot"></span> CGST (50%)
+                    </td>
+                    <td class="si-tot-val si-tot-val--sub">₹{{ cgst() | number:'1.2-2' }}</td>
+                  </tr>
+                  <tr class="si-tot-sub-row">
+                    <td class="si-tot-lbl si-tot-lbl--sub">
+                      <span class="si-sub-dot"></span> SGST (50%)
+                    </td>
+                    <td class="si-tot-val si-tot-val--sub">₹{{ sgst() | number:'1.2-2' }}</td>
+                  </tr>
                   }
 
                   @if (gstType() === 'igst') {
-                    <tr class="si-tot-sub-row">
-                      <td class="si-tot-lbl si-tot-lbl--sub">
-                        <span class="si-sub-dot"></span> IGST (100%)
-                      </td>
-                      <td class="si-tot-val si-tot-val--sub">₹{{ igst() | number:'1.2-2' }}</td>
-                    </tr>
+                  <tr class="si-tot-sub-row">
+                    <td class="si-tot-lbl si-tot-lbl--sub">
+                      <span class="si-sub-dot"></span> IGST (100%)
+                    </td>
+                    <td class="si-tot-val si-tot-val--sub">₹{{ igst() | number:'1.2-2' }}</td>
+                  </tr>
                   }
 
                   <!-- Freight -->
                   @if (showFreight() || freightCharges() > 0) {
-                    <tr>
-                      <td class="si-tot-lbl">
-                        <span class="si-tot-icon-row">
-                          <i class="ti ti-truck"></i> Freight Charges
-                        </span>
-                      </td>
-                      <td class="si-tot-val">₹{{ freightCharges() | number:'1.2-2' }}</td>
-                    </tr>
+                  <tr>
+                    <td class="si-tot-lbl">
+                      <span class="si-tot-icon-row">
+                        <i class="ti ti-truck"></i> Freight Charges
+                      </span>
+                    </td>
+                    <td class="si-tot-val">₹{{ freightCharges() | number:'1.2-2' }}</td>
+                  </tr>
                   }
 
                   <!-- Custom Duty -->
                   @if (showCustomDuty() || customDuty() > 0) {
-                    <tr>
-                      <td class="si-tot-lbl">
-                        <span class="si-tot-icon-row">
-                          <i class="ti ti-shield"></i> Custom Duty
-                        </span>
-                      </td>
-                      <td class="si-tot-val">₹{{ customDuty() | number:'1.2-2' }}</td>
-                    </tr>
+                  <tr>
+                    <td class="si-tot-lbl">
+                      <span class="si-tot-icon-row">
+                        <i class="ti ti-shield"></i> Custom Duty
+                      </span>
+                    </td>
+                    <td class="si-tot-val">₹{{ customDuty() | number:'1.2-2' }}</td>
+                  </tr>
                   }
 
-                  <tr class="si-tot-divider"><td colspan="2"><hr /></td></tr>
+                  <tr class="si-tot-divider">
+                    <td colspan="2">
+                      <hr />
+                    </td>
+                  </tr>
 
                   <!-- Grand Total -->
                   <tr class="si-tot-grand-row">
@@ -662,17 +638,19 @@
                     <td class="si-tot-val si-tot-paid-val">− ₹{{ amountPaid() | number:'1.2-2' }}</td>
                   </tr>
 
-                  <tr class="si-tot-divider"><td colspan="2"><hr /></td></tr>
+                  <tr class="si-tot-divider">
+                    <td colspan="2">
+                      <hr />
+                    </td>
+                  </tr>
 
                   <!-- Balance Due -->
                   <tr class="si-tot-balance-row">
-                    <td class="si-tot-lbl"
-                      [class.si-balance-danger]="balanceDue() > 0"
+                    <td class="si-tot-lbl" [class.si-balance-danger]="balanceDue() > 0"
                       [class.si-balance-safe]="balanceDue() <= 0">
                       Balance Due
                     </td>
-                    <td class="si-tot-val"
-                      [class.si-balance-danger]="balanceDue() > 0"
+                    <td class="si-tot-val" [class.si-balance-danger]="balanceDue() > 0"
                       [class.si-balance-safe]="balanceDue() <= 0">
                       ₹{{ balanceDue() | number:'1.2-2' }}
                     </td>
@@ -685,7 +663,7 @@
             </div>
             <!-- /si-paper-footer -->
 
-          
+
 
           </div>
           <!-- /si-paper -->
@@ -710,16 +688,16 @@
                 <span class="si-sval">₹{{ totalTax() | number:'1.2-2' }}</span>
               </div>
               @if (showFreight() || freightCharges() > 0) {
-                <div class="si-srow">
-                  <span class="si-slbl">Freight</span>
-                  <span class="si-sval">₹{{ freightCharges() | number:'1.2-2' }}</span>
-                </div>
+              <div class="si-srow">
+                <span class="si-slbl">Freight</span>
+                <span class="si-sval">₹{{ freightCharges() | number:'1.2-2' }}</span>
+              </div>
               }
               @if (showCustomDuty() || customDuty() > 0) {
-                <div class="si-srow">
-                  <span class="si-slbl">Custom Duty</span>
-                  <span class="si-sval">₹{{ customDuty() | number:'1.2-2' }}</span>
-                </div>
+              <div class="si-srow">
+                <span class="si-slbl">Custom Duty</span>
+                <span class="si-sval">₹{{ customDuty() | number:'1.2-2' }}</span>
+              </div>
               }
               <div class="si-srow si-srow--grand">
                 <span class="si-slbl-grand">Grand Total</span>
@@ -729,8 +707,7 @@
                 <span class="si-slbl" style="color:var(--si-green)">Amount Paid</span>
                 <span class="si-sval" style="color:var(--si-green)">₹{{ amountPaid() | number:'1.2-2' }}</span>
               </div>
-              <div class="si-srow si-srow--balance"
-                [class.si-srow--danger]="balanceDue() > 0">
+              <div class="si-srow si-srow--balance" [class.si-srow--danger]="balanceDue() > 0">
                 <span class="si-slbl">Balance Due</span>
                 <span class="si-sval">₹{{ balanceDue() | number:'1.2-2' }}</span>
               </div>
@@ -763,8 +740,7 @@
               </div>
               <div class="si-info-chip">
                 <span class="si-chip-lbl">Payment</span>
-                <span class="si-pay-badge si-pay-badge--sm"
-                  [class.si-badge--unpaid]="paymentStatus() === 'unpaid'"
+                <span class="si-pay-badge si-pay-badge--sm" [class.si-badge--unpaid]="paymentStatus() === 'unpaid'"
                   [class.si-badge--partial]="paymentStatus() === 'partial'"
                   [class.si-badge--paid]="paymentStatus() === 'paid'">
                   {{ capitalize(paymentStatus()) }}
@@ -779,22 +755,22 @@
 
           <!-- Validation Status Card -->
           @if (submitted) {
-            <div class="si-scard" [class.si-scard--valid]="formValid" [class.si-scard--invalid]="!formValid">
-              <div class="si-scard-hdr">
-                @if (formValid) {
-                  <i class="ti ti-circle-check" style="color:#15803d"></i> Form Valid
-                } @else {
-                  <i class="ti ti-alert-triangle" style="color:#dc2626"></i> Fix Errors
-                }
-              </div>
-              <div class="si-scard-body">
-                @if (formValid) {
-                  <p class="si-valid-msg">All required fields are filled. Ready to save.</p>
-                } @else {
-                  <p class="si-invalid-msg">Scroll up to fix highlighted errors before saving.</p>
-                }
-              </div>
+          <div class="si-scard" [class.si-scard--valid]="formValid" [class.si-scard--invalid]="!formValid">
+            <div class="si-scard-hdr">
+              @if (formValid) {
+              <i class="ti ti-circle-check" style="color:#15803d"></i> Form Valid
+              } @else {
+              <i class="ti ti-alert-triangle" style="color:#dc2626"></i> Fix Errors
+              }
             </div>
+            <div class="si-scard-body">
+              @if (formValid) {
+              <p class="si-valid-msg">All required fields are filled. Ready to save.</p>
+              } @else {
+              <p class="si-invalid-msg">Scroll up to fix highlighted errors before saving.</p>
+              }
+            </div>
+          </div>
           }
 
           <!-- Business Rules -->

@@ -24,561 +24,557 @@
 
         <!-- ══ SUCCESS BANNER ════════════════════════════════════ -->
         @if (saveSuccess) {
-          <div class="sc-success-bar">
-            <i class="ti ti-circle-check"></i>
-            Stock transaction saved successfully! Redirecting…
-          </div>
+        <div class="sc-success-bar">
+          <i class="ti ti-circle-check"></i>
+          Stock transaction saved successfully! Redirecting…
+        </div>
         }
 
         <!-- ══ STEPPER ═══════════════════════════════════════════ -->
         <div class="sc-stepper">
           @for (step of steps; track step.id; let i = $index) {
-            <div class="sc-step"
-              [class.sc-step-active]="currentStep() === step.id"
-              [class.sc-step-done]="currentStep() > step.id"
-              (click)="goStep(step.id)">
-              <div class="sc-step-circle">
-                @if (currentStep() > step.id) {
-                  <i class="ti ti-check" style="font-size:13px;"></i>
-                } @else { {{ step.id }} }
-              </div>
-              <div class="sc-step-text">
-                <div class="sc-step-label">{{ step.label }}</div>
-                <div class="sc-step-sub">{{ step.sub }}</div>
-              </div>
-              @if (i < steps.length - 1) {
-                <div class="sc-step-line" [class.sc-step-line-done]="currentStep() > step.id"></div>
-              }
+          <div class="sc-step" [class.sc-step-active]="currentStep() === step.id"
+            [class.sc-step-done]="currentStep() > step.id" (click)="goStep(step.id)">
+            <div class="sc-step-circle">
+              @if (currentStep() > step.id) {
+              <i class="ti ti-check" style="font-size:13px;"></i>
+              } @else { {{ step.id }} }
             </div>
+            <div class="sc-step-text">
+              <div class="sc-step-label">{{ step.label }}</div>
+              <div class="sc-step-sub">{{ step.sub }}</div>
+            </div>
+            @if (i < steps.length - 1) { <div class="sc-step-line" [class.sc-step-line-done]="currentStep() > step.id">
+          </div>
           }
         </div>
+        }
+      </div>
 
-        <!-- ══ STEP 1 — Transaction Type ════════════════════════ -->
-        @if (currentStep() === 1) {
-          <div class="sc-card sc-anim-in">
-            <div class="sc-card-head">
-              <i class="ti ti-category"></i>
-              <span>Select Transaction Type</span>
+      <!-- ══ STEP 1 — Transaction Type ════════════════════════ -->
+      @if (currentStep() === 1) {
+      <div class="sc-card sc-anim-in">
+        <div class="sc-card-head">
+          <i class="ti ti-category"></i>
+          <span>Select Transaction Type</span>
+        </div>
+        <div class="sc-card-body">
+
+          @if (submitted && !step1Valid) {
+          <div class="sc-err-banner">
+            <i class="ti ti-alert-circle"></i>
+            Please select a transaction type to continue.
+          </div>
+          }
+
+          @if (selectedType()) {
+          <div class="sc-info-banner sc-anim-slide" [style.background]="typeConfig()?.bannerBg"
+            [style.border-color]="typeConfig()?.bannerBorder" [style.color]="typeConfig()?.bannerText">
+            <i class="ti ti-info-circle"></i>
+            <span>
+              This is a <strong>{{ selectedTypeMeta?.label }} ({{ selectedType() }})</strong>
+              transaction. The system will automatically update inventory levels and post
+              journal entries upon approval.
+            </span>
+          </div>
+          }
+
+          <div class="sc-type-grid mt-3">
+            @for (t of transactionTypes; track t.value) {
+            <div class="sc-type-tile" [class.sc-type-tile-selected]="selectedType() === t.value" [style.--tc]="t.color"
+              (click)="selectType(t.value)">
+              <div class="sc-type-icon"><i [class]="'ti ' + t.icon"></i></div>
+              <div class="sc-type-label">{{ t.label }}</div>
+              <div class="sc-type-desc">{{ t.desc }}</div>
+              @if (selectedType() === t.value) {
+              <div class="sc-type-tick"><i class="ti ti-check"></i></div>
+              }
             </div>
-            <div class="sc-card-body">
+            }
+          </div>
 
-              @if (submitted && !step1Valid) {
-                <div class="sc-err-banner">
-                  <i class="ti ti-alert-circle"></i>
-                  Please select a transaction type to continue.
-                </div>
-              }
+        </div>
+      </div>
+      }
 
-              @if (selectedType()) {
-                <div class="sc-info-banner sc-anim-slide"
-                  [style.background]="typeConfig()?.bannerBg"
-                  [style.border-color]="typeConfig()?.bannerBorder"
-                  [style.color]="typeConfig()?.bannerText">
-                  <i class="ti ti-info-circle"></i>
-                  <span>
-                    This is a <strong>{{ selectedTypeMeta?.label }} ({{ selectedType() }})</strong>
-                    transaction. The system will automatically update inventory levels and post
-                    journal entries upon approval.
-                  </span>
-                </div>
-              }
+      <!-- ══ STEP 2 — Transaction Details ═════════════════════ -->
+      @if (currentStep() === 2) {
 
-              <div class="sc-type-grid mt-3">
-                @for (t of transactionTypes; track t.value) {
-                  <div class="sc-type-tile"
-                    [class.sc-type-tile-selected]="selectedType() === t.value"
-                    [style.--tc]="t.color"
-                    (click)="selectType(t.value)">
-                    <div class="sc-type-icon"><i [class]="'ti ' + t.icon"></i></div>
-                    <div class="sc-type-label">{{ t.label }}</div>
-                    <div class="sc-type-desc">{{ t.desc }}</div>
-                    @if (selectedType() === t.value) {
-                      <div class="sc-type-tick"><i class="ti ti-check"></i></div>
-                    }
-                  </div>
-                }
+      <!-- ── Transaction Header Card ───────────────────── -->
+      <div class="sc-card sc-anim-in">
+        <div class="sc-card-head">
+          <i class="ti ti-layout-grid"></i>
+          <span>Transaction Header</span>
+
+        </div>
+        <div class="sc-card-body">
+
+          <!-- Type-aware info banner -->
+          @if (typeConfig()) {
+          <div class="sc-info-banner sc-anim-slide mb-4" [style.background]="typeConfig()!.bannerBg"
+            [style.border-color]="typeConfig()!.bannerBorder" [style.color]="typeConfig()!.bannerText">
+            <i class="ti ti-info-circle"></i>
+            <span>This is a <strong>{{ selectedTypeMeta?.label }}</strong> transaction.
+              @if (selectedType() === 'IN') { Inventory will increase. Vendor &amp; cost price required. }
+              @if (selectedType() === 'OUT') { Inventory will decrease. No cost entry needed. }
+              @if (selectedType() === 'ADJUSTMENT') { Corrects stock balance. Provide reason. }
+              @if (selectedType() === 'RETURN') { Customer return — increases stock. Vendor &amp; cost required. }
+              @if (selectedType() === 'TRANSFER') { Moves stock between warehouses. Select source &amp; destination. }
+            </span>
+          </div>
+          }
+
+          <!-- Row 1: Date | Type (readonly) | TN Code -->
+          <div class="sc-form-row sc-row-3 mb-4">
+
+            <div class="sc-field">
+              <label class="sc-lbl sc-lbl-req">Transaction Date</label>
+              <div class="sc-inp-wrap" [class.sc-inp-err]="errDate">
+                <input type="date" class="form-control" [value]="tnDate()" [max]="todayStr()"
+                  (change)="tnDate.set($any($event.target).value)" />
               </div>
+              @if (errDate) {
+              <div class="sc-err"><i class="ti ti-alert-circle"></i> Date required, cannot be future</div>
+              }
+            </div>
 
+            <div class="sc-field">
+              <label class="sc-lbl sc-lbl-req">Transaction Type</label>
+              <div class="sc-readonly-inp sc-type-readonly">
+                <span class="sc-type-dot" [style.background]="selectedTypeMeta?.color"></span>
+                {{ selectedTypeMeta?.label }}
+              </div>
+            </div>
+
+
+          </div>
+
+          <!-- Row 2: Warehouse | To Warehouse (TRANSFER only) | Ref Type | Ref Doc -->
+          <div class="sc-form-row sc-row-3 mb-4">
+
+            <div class="sc-field">
+              <label class="sc-lbl sc-lbl-req">
+                @if (selectedType() === 'TRANSFER') { From Warehouse } @else { Branch / Warehouse }
+              </label>
+              <div class="sc-sel-wrap" [class.sc-inp-err]="errWarehouse">
+                <select class="form-select" [value]="warehouseId()"
+                  (change)="warehouseId.set($any($event.target).value)">
+                  <option value="">— Select Warehouse —</option>
+                  @for (w of warehouses; track w.id) {
+                  <option [value]="w.id">{{ w.name }}</option>
+                  }
+                </select>
+              </div>
+              <div class="sc-hint">Select the destination warehouse</div>
+              @if (errWarehouse) {
+              <div class="sc-err"><i class="ti ti-alert-circle"></i> Warehouse required</div>
+              }
+            </div>
+
+            <!-- TRANSFER: To Warehouse — animated slide in -->
+            @if (typeConfig()?.showToWarehouse) {
+            <div class="sc-field sc-anim-slide">
+              <label class="sc-lbl sc-lbl-req">To Warehouse</label>
+              <div class="sc-sel-wrap">
+                <select class="form-select" [value]="toWarehouseId()"
+                  (change)="toWarehouseId.set($any($event.target).value)">
+                  <option value="">— Select Destination —</option>
+                  @for (w of warehouses; track w.id) {
+                  <option [value]="w.id" [disabled]="w.id === warehouseId()">{{ w.name }}</option>
+                  }
+                </select>
+              </div>
+              <div class="sc-hint">Goods will move to this warehouse</div>
+            </div>
+            }
+
+            <div class="sc-field">
+              <label class="sc-lbl">Reference Type</label>
+              <div class="sc-sel-wrap">
+                <select class="form-select" [value]="referenceType()"
+                  (change)="referenceType.set($any($event.target).value || null)">
+                  <option value="">— None —</option>
+                  @for (r of referenceTypes; track r) {
+                  <option [value]="r">{{ r }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+
+            <div class="sc-field">
+              <label class="sc-lbl">Reference Document</label>
+              <div class="sc-inp-wrap" [class.sc-inp-disabled]="!referenceType()">
+                <input type="text" class="form-control" [value]="referenceDoc()"
+                  (input)="referenceDoc.set($any($event.target).value)" [disabled]="!referenceType()"
+                  placeholder="e.g. PI-2026-0091" />
+              </div>
+              <div class="sc-hint">Link to source {{ referenceType() || 'document' }}</div>
+            </div>
+
+          </div>
+
+          <!-- Row 3: Valuation | Remarks -->
+          <div class="sc-form-row sc-row-2">
+            <div class="sc-field">
+              <label class="sc-lbl">Valuation Method</label>
+              <div class="sc-sel-wrap">
+                <select class="form-select" [value]="valuationMethod()"
+                  (change)="valuationMethod.set($any($event.target).value)">
+                  @for (v of valuationMethods; track v.value) {
+                  <option [value]="v.value">{{ v.label }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="sc-field">
+              <label class="sc-lbl">Remarks / Notes</label>
+
+              <div class="rich-editor-wrapper">
+
+                @if(showRemarksEditor()){
+
+                <!-- TOOLBAR -->
+                <ngx-editor-menu [editor]="remarksEditor" [toolbar]="toolbar">
+
+                </ngx-editor-menu>
+
+                <!-- EDITOR -->
+                <div class="ngx-overflow">
+                  <ngx-editor [editor]="remarksEditor" [formControl]="remarksControl" placeholder="
+      e.g. Received February batch – checked with delivery challan DC-2026-0211.
+    ">
+
+                  </ngx-editor>
+                </div>
+                }
+
+              </div>
             </div>
           </div>
+
+        </div>
+      </div>
+
+      <!-- ── Line Items Card ──────────────────────────── -->
+      <div class="sc-card sc-anim-in" style="animation-delay:0.05s">
+        <div class="sc-card-head">
+          <i class="ti ti-list-details"></i>
+          <span>Transaction Line Items</span>
+          <span class="sc-head-count ms-auto">{{ lineItems().length }} row{{ lineItems().length !== 1 ? 's' : ''
+            }}</span>
+        </div>
+
+        @if (errNoLines) {
+        <div class="sc-err-banner sc-err-banner--inline">
+          <i class="ti ti-alert-circle"></i>
+          At least one product line with a valid quantity is required.
+        </div>
+        }
+        @if (negativeBalanceRows().length > 0) {
+        <div class="sc-err-banner sc-err-banner--warn">
+          <i class="ti ti-alert-triangle"></i>
+          <span><strong>Insufficient stock</strong> — negative balance:
+            @for (r of negativeBalanceRows(); track r.rowId) {
+            <em class="sc-neg-tag">{{ r.productName || r.productCode }}</em>
+            }
+          </span>
+        </div>
         }
 
-        <!-- ══ STEP 2 — Transaction Details ═════════════════════ -->
-        @if (currentStep() === 2) {
+        <div class="sc-li-grid">
+          @for (row of lineItems(); track row.rowId; let i = $index) {
+          <div class="sc-li-card sc-anim-slide" [class.sc-li-card--filled]="row.productCode"
+            [class.sc-li-card--error]="row.errProduct || row.errQty || row.errCost">
 
-          <!-- ── Transaction Header Card ───────────────────── -->
-          <div class="sc-card sc-anim-in">
-            <div class="sc-card-head">
-              <i class="ti ti-layout-grid"></i>
-              <span>Transaction Header</span>
-          
-            </div>
-            <div class="sc-card-body">
+            <!-- Top bar -->
+            <div class="sc-li-topbar">
+              <span class="sc-li-num" [class.sc-li-num-filled]="row.productCode">{{ i + 1 }}</span>
 
-              <!-- Type-aware info banner -->
-              @if (typeConfig()) {
-                <div class="sc-info-banner sc-anim-slide mb-4"
-                  [style.background]="typeConfig()!.bannerBg"
-                  [style.border-color]="typeConfig()!.bannerBorder"
-                  [style.color]="typeConfig()!.bannerText">
-                  <i class="ti ti-info-circle"></i>
-                  <span>This is a <strong>{{ selectedTypeMeta?.label }}</strong> transaction.
-                    @if (selectedType() === 'IN') { Inventory will increase. Vendor &amp; cost price required. }
-                    @if (selectedType() === 'OUT') { Inventory will decrease. No cost entry needed. }
-                    @if (selectedType() === 'ADJUSTMENT') { Corrects stock balance. Provide reason. }
-                    @if (selectedType() === 'RETURN') { Customer return — increases stock. Vendor &amp; cost required. }
-                    @if (selectedType() === 'TRANSFER') { Moves stock between warehouses. Select source &amp; destination. }
-                  </span>
-                </div>
+              <!-- Movement badge (type-aware) -->
+              @if (selectedType() === 'IN' || selectedType() === 'RETURN') {
+              <span class="sc-move-badge sc-move-in"><i class="ti ti-arrow-down-circle"></i> IN</span>
+              } @else if (selectedType() === 'OUT') {
+              <span class="sc-move-badge sc-move-out"><i class="ti ti-arrow-up-circle"></i> OUT</span>
+              } @else if (selectedType() === 'ADJUSTMENT') {
+              <span class="sc-move-badge sc-move-adj"><i class="ti ti-settings"></i> ADJ</span>
+              } @else if (selectedType() === 'TRANSFER') {
+              <span class="sc-move-badge sc-move-transfer"><i class="ti ti-arrows-transfer"></i> TRANSFER</span>
+              } @else {
+              <span class="sc-move-badge sc-move-empty">—</span>
               }
 
-              <!-- Row 1: Date | Type (readonly) | TN Code -->
-              <div class="sc-form-row sc-row-3 mb-4">
-
-                <div class="sc-field">
-                  <label class="sc-lbl sc-lbl-req">Transaction Date</label>
-                  <div class="sc-inp-wrap" [class.sc-inp-err]="errDate">
-                    <input type="date" class="form-control"
-                      [value]="tnDate()" [max]="todayStr()"
-                      (change)="tnDate.set($any($event.target).value)" />
-                  </div>
-                  @if (errDate) {
-                    <div class="sc-err"><i class="ti ti-alert-circle"></i> Date required, cannot be future</div>
-                  }
-                </div>
-
-                <div class="sc-field">
-                  <label class="sc-lbl sc-lbl-req">Transaction Type</label>
-                  <div class="sc-readonly-inp sc-type-readonly">
-                    <span class="sc-type-dot" [style.background]="selectedTypeMeta?.color"></span>
-                    {{ selectedTypeMeta?.label }}
-                  </div>
-                </div>
-
-
-              </div>
-
-              <!-- Row 2: Warehouse | To Warehouse (TRANSFER only) | Ref Type | Ref Doc -->
-              <div class="sc-form-row sc-row-3 mb-4">
-
-                <div class="sc-field">
-                  <label class="sc-lbl sc-lbl-req">
-                    @if (selectedType() === 'TRANSFER') { From Warehouse } @else { Branch / Warehouse }
-                  </label>
-                  <div class="sc-sel-wrap" [class.sc-inp-err]="errWarehouse">
-                    <select class="form-select"
-                      [value]="warehouseId()"
-                      (change)="warehouseId.set($any($event.target).value)">
-                      <option value="">— Select Warehouse —</option>
-                      @for (w of warehouses; track w.id) {
-                        <option [value]="w.id">{{ w.name }}</option>
-                      }
-                    </select>
-                  </div>
-                  <div class="sc-hint">Select the destination warehouse</div>
-                  @if (errWarehouse) {
-                    <div class="sc-err"><i class="ti ti-alert-circle"></i> Warehouse required</div>
-                  }
-                </div>
-
-                <!-- TRANSFER: To Warehouse — animated slide in -->
-                @if (typeConfig()?.showToWarehouse) {
-                  <div class="sc-field sc-anim-slide">
-                    <label class="sc-lbl sc-lbl-req">To Warehouse</label>
-                    <div class="sc-sel-wrap">
-                      <select class="form-select"
-                        [value]="toWarehouseId()"
-                        (change)="toWarehouseId.set($any($event.target).value)">
-                        <option value="">— Select Destination —</option>
-                        @for (w of warehouses; track w.id) {
-                          <option [value]="w.id" [disabled]="w.id === warehouseId()">{{ w.name }}</option>
-                        }
-                      </select>
-                    </div>
-                    <div class="sc-hint">Goods will move to this warehouse</div>
-                  </div>
-                }
-
-                <div class="sc-field">
-                  <label class="sc-lbl">Reference Type</label>
-                  <div class="sc-sel-wrap">
-                    <select class="form-select"
-                      [value]="referenceType()"
-                      (change)="referenceType.set($any($event.target).value || null)">
-                      <option value="">— None —</option>
-                      @for (r of referenceTypes; track r) {
-                        <option [value]="r">{{ r }}</option>
-                      }
-                    </select>
-                  </div>
-                </div>
-
-                <div class="sc-field">
-                  <label class="sc-lbl">Reference Document</label>
-                  <div class="sc-inp-wrap" [class.sc-inp-disabled]="!referenceType()">
-                    <input type="text" class="form-control"
-                      [value]="referenceDoc()"
-                      (input)="referenceDoc.set($any($event.target).value)"
-                      [disabled]="!referenceType()"
-                      placeholder="e.g. PI-2026-0091" />
-                  </div>
-                  <div class="sc-hint">Link to source {{ referenceType() || 'document' }}</div>
-                </div>
-
-              </div>
-
-              <!-- Row 3: Valuation | Remarks -->
-              <div class="sc-form-row sc-row-2">
-                <div class="sc-field">
-                  <label class="sc-lbl">Valuation Method</label>
-                  <div class="sc-sel-wrap">
-                    <select class="form-select"
-                      [value]="valuationMethod()"
-                      (change)="valuationMethod.set($any($event.target).value)">
-                      @for (v of valuationMethods; track v.value) {
-                        <option [value]="v.value">{{ v.label }}</option>
-                      }
-                    </select>
-                  </div>
-                </div>
-                <div class="sc-field">
-                  <label class="sc-lbl">Remarks / Notes</label>
-                  <textarea class="form-control" rows="3"
-                    [value]="remarks()"
-                    (input)="remarks.set($any($event.target).value)"
-                    maxlength="300"
-                    placeholder="e.g. Received February batch – checked with delivery challan DC-2026-0211."></textarea>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- ── Line Items Card ──────────────────────────── -->
-          <div class="sc-card sc-anim-in" style="animation-delay:0.05s">
-            <div class="sc-card-head">
-              <i class="ti ti-list-details"></i>
-              <span>Transaction Line Items</span>
-              <span class="sc-head-count ms-auto">{{ lineItems().length }} row{{ lineItems().length !== 1 ? 's' : '' }}</span>
-            </div>
-
-            @if (errNoLines) {
-              <div class="sc-err-banner sc-err-banner--inline">
-                <i class="ti ti-alert-circle"></i>
-                At least one product line with a valid quantity is required.
-              </div>
-            }
-            @if (negativeBalanceRows().length > 0) {
-              <div class="sc-err-banner sc-err-banner--warn">
-                <i class="ti ti-alert-triangle"></i>
-                <span><strong>Insufficient stock</strong> — negative balance:
-                  @for (r of negativeBalanceRows(); track r.rowId) {
-                    <em class="sc-neg-tag">{{ r.productName || r.productCode }}</em>
-                  }
-                </span>
-              </div>
-            }
-
-            <div class="sc-li-grid">
-              @for (row of lineItems(); track row.rowId; let i = $index) {
-                <div class="sc-li-card sc-anim-slide"
-                  [class.sc-li-card--filled]="row.productCode"
-                  [class.sc-li-card--error]="row.errProduct || row.errQty || row.errCost">
-
-                  <!-- Top bar -->
-                  <div class="sc-li-topbar">
-                    <span class="sc-li-num" [class.sc-li-num-filled]="row.productCode">{{ i + 1 }}</span>
-
-                    <!-- Movement badge (type-aware) -->
-                    @if (selectedType() === 'IN' || selectedType() === 'RETURN') {
-                      <span class="sc-move-badge sc-move-in"><i class="ti ti-arrow-down-circle"></i> IN</span>
-                    } @else if (selectedType() === 'OUT') {
-                      <span class="sc-move-badge sc-move-out"><i class="ti ti-arrow-up-circle"></i> OUT</span>
-                    } @else if (selectedType() === 'ADJUSTMENT') {
-                      <span class="sc-move-badge sc-move-adj"><i class="ti ti-settings"></i> ADJ</span>
-                    } @else if (selectedType() === 'TRANSFER') {
-                      <span class="sc-move-badge sc-move-transfer"><i class="ti ti-arrows-transfer"></i> TRANSFER</span>
-                    } @else {
-                      <span class="sc-move-badge sc-move-empty">—</span>
-                    }
-
-                    @if (row.qty && row.unitCost) {
-                      <span class="sc-li-total-chip">₹{{ (row.qty * row.unitCost) | number:'1.2-2' }}</span>
-                    }
-
-                    <button type="button" class="sc-del-btn ms-auto"
-                      [disabled]="lineItems().length === 1"
-                      (click)="removeRow(row.rowId)">
-                      <i class="ti ti-x"></i>
-                    </button>
-                  </div>
-
-                  <!-- ══ TYPE-AWARE FIELDS ═══════════════════════════════ -->
-                  <div class="sc-li-fields-wrap">
-
-                    <!-- Product (always shown) -->
-                    <div class="sc-li-field sc-li-field--wide">
-                      <label class="sc-li-lbl">Product <span class="sc-req-star">*</span></label>
-                      <div [class.sc-inp-err]="row.errProduct">
-                        <select class="form-select"
-                          [value]="row.productCode"
-                          (change)="onProductSelect(row.rowId, $any($event.target).value)">
-                          <option value="">— Select product —</option>
-                          @for (p of products; track p.code) {
-                            <option [value]="p.code">{{ p.name }}</option>
-                          }
-                        </select>
-                      </div>
-                      @if (row.errProduct) {
-                        <div class="sc-err sc-err-inline"><i class="ti ti-alert-circle"></i> Required</div>
-                      }
-                    </div>
-
-                    <!-- Warehouse (always) -->
-                    <div class="sc-li-field">
-                      <label class="sc-li-lbl">Warehouse <span class="sc-req-star">*</span></label>
-                      <select class="form-select"
-                        [value]="row.warehouseId || warehouseId()"
-                        (change)="updateRow(row.rowId, 'warehouseId', $any($event.target).value)">
-                        <option value="">Select warehouse</option>
-                        @for (w of warehouses; track w.id) {
-                          <option [value]="w.id">{{ w.name }}</option>
-                        }
-                      </select>
-                    </div>
-
-                    <!-- Vendor — only IN / RETURN (animated) -->
-                    @if (typeConfig()?.showVendor) {
-                      <div class="sc-li-field sc-anim-field">
-                        <label class="sc-li-lbl">Vendor <span class="sc-req-star">*</span></label>
-                        <select class="form-select"
-                          [value]="row.vendorCode"
-                          (change)="updateRow(row.rowId, 'vendorCode', $any($event.target).value)">
-                          <option value="">— Select Vendor —</option>
-                          @for (v of vendorOptions; track v.code) {
-                            <option [value]="v.code">{{ v.name }}</option>
-                          }
-                        </select>
-                      </div>
-                    }
-
-                    <!-- Unit (always) -->
-                    <div class="sc-li-field">
-                      <label class="sc-li-lbl">Unit</label>
-                      <select class="form-select"
-                        [value]="row.unitId ?? ''"
-                        (change)="updateRow(row.rowId, 'unitId', +$any($event.target).value)">
-                        <option value="">— Unit —</option>
-                        @for (u of unitOptions; track u.value) {
-                          <option [value]="u.value">{{ u.label }}</option>
-                        }
-                      </select>
-                    </div>
-
-                    <!-- Qty (always) -->
-                    <div class="sc-li-field">
-                      <label class="sc-li-lbl">Qty <span class="sc-req-star">*</span></label>
-                      <div [class.sc-inp-err]="row.errQty">
-                        <input type="number" class="form-control"
-                          min="0.001" step="0.001"
-                          [value]="row.qty ?? ''"
-                          (input)="onQtyChange(row.rowId, $any($event.target).value)"
-                          placeholder="0" />
-                      </div>
-                      @if (row.errQty) {
-                        <div class="sc-err sc-err-inline"><i class="ti ti-alert-circle"></i> Qty &gt; 0</div>
-                      }
-                    </div>
-
-                    <!-- Unit Cost — only IN / RETURN (animated) -->
-                    @if (typeConfig()?.showCostPrice) {
-                      <div class="sc-li-field sc-anim-field">
-                        <label class="sc-li-lbl">Unit Cost <span class="sc-req-star">*</span></label>
-                        <div class="sc-cost-wrap" [class.sc-inp-err]="row.errCost">
-                          <span class="sc-rs">₹</span>
-                          <input type="number" class="sc-tbl-inp sc-tbl-inp-r sc-cost-inp"
-                            min="0" step="0.01"
-                            [value]="row.unitCost ?? ''"
-                            (input)="onCostChange(row.rowId, $any($event.target).value)"
-                            placeholder="0.00" />
-                        </div>
-                        @if (row.errCost) {
-                          <div class="sc-err sc-err-inline"><i class="ti ti-alert-circle"></i> Cost required</div>
-                        }
-                      </div>
-                    }
-
-                    <!-- Adjustment Reason — only ADJUSTMENT (animated) -->
-                    @if (typeConfig()?.showAdjustReason) {
-                      <div class="sc-li-field sc-anim-field">
-                        <label class="sc-li-lbl">Reason <span class="sc-req-star">*</span></label>
-                        <select class="form-select"
-                          [value]="row.adjustReason"
-                          (change)="updateRow(row.rowId, 'adjustReason', $any($event.target).value)">
-                          <option value="">— Select Reason —</option>
-                          @for (a of adjustmentReasons; track a.value) {
-                            <option [value]="a.value">{{ a.label }}</option>
-                          }
-                        </select>
-                      </div>
-                    }
-
-                    <!-- Batch No — only IN (animated) -->
-                    @if (typeConfig()?.showBatch) {
-                      <div class="sc-li-field sc-anim-field">
-                        <label class="sc-li-lbl">Batch No</label>
-                        <input type="text" class="form-control"
-                          [value]="row.batchNo"
-                          (input)="updateRow(row.rowId, 'batchNo', $any($event.target).value)"
-                          placeholder="e.g. BTH-001" />
-                      </div>
-                    }
-
-                    <!-- Expiry Date — only IN (animated) -->
-                    @if (typeConfig()?.showExpiry) {
-                      <div class="sc-li-field sc-anim-field">
-                        <label class="sc-li-lbl">Expiry Date</label>
-                        <input type="date" class="form-control"
-                          [value]="row.expiry"
-                          (change)="updateRow(row.rowId, 'expiry', $any($event.target).value)" />
-                      </div>
-                    }
-
-                    <!-- Balance After (always, calculated) -->
-                    <div class="sc-li-field">
-                      <label class="sc-li-lbl">Balance After</label>
-                      <div class="sc-bal-pill-wrap">
-                        @if (row.balanceAfter !== null) {
-                          <span class="sc-bal-pill" [style.color]="balanceColor(row.balanceAfter)">
-                            @if (row.balanceAfter < 0) { <i class="ti ti-alert-triangle"></i> }
-                            @else if (row.balanceAfter <= 10) { <i class="ti ti-alert-circle"></i> }
-                            @else { <i class="ti ti-check"></i> }
-                            {{ row.balanceAfter | number:'1.0-3' }}
-                          </span>
-                        } @else {
-                          <span class="sc-bal-pill sc-bal-pill--empty">—</span>
-                        }
-                      </div>
-                    </div>
-
-                  </div>
-                  <!-- end fields wrap -->
-
-                </div>
+              @if (row.qty && row.unitCost) {
+              <span class="sc-li-total-chip">₹{{ (row.qty * row.unitCost) | number:'1.2-2' }}</span>
               }
-            </div>
 
-            <!-- Add Row -->
-            <div class="sc-add-row-bar">
-              <button type="button" class="sc-add-row-btn" (click)="addRow()">
-                <i class="ti ti-plus"></i> Add Item
+              <button type="button" class="sc-del-btn ms-auto" [disabled]="lineItems().length === 1"
+                (click)="removeRow(row.rowId)">
+                <i class="ti ti-x"></i>
               </button>
             </div>
 
-            <!-- Summary -->
-            @if (totalLines() > 0) {
-              <div class="sc-summary-strip">
-                <div class="sc-summary-box">
-                  <div class="sc-summary-title">TRANSACTION SUMMARY</div>
-                  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;">
-                    <div class="sc-sum-row"><span>Total Lines</span><span>:</span><span class="sc-sum-val">{{ totalLines() }} Items</span></div>
-                    <div class="sc-sum-row"><span>Total Quantity</span><span>:</span><span class="sc-sum-val sc-sum-blue">{{ totalQty() | number:'1.3-3' }} Units</span></div>
-                    <div class="sc-sum-row"><span>Subtotal</span><span>:</span><span class="sc-sum-val">₹{{ totalCost() | number:'1.2-2' }}</span></div>
-                    <div class="sc-sum-row sc-sum-total-row"><span>Total Cost</span><span>:</span><span class="sc-sum-val sc-sum-grand">₹{{ totalCost() | number:'1.2-2' }}</span></div>
-                  </div>
+            <!-- ══ TYPE-AWARE FIELDS ═══════════════════════════════ -->
+            <div class="sc-li-fields-wrap">
+
+              <!-- Product (always shown) -->
+              <div class="sc-li-field sc-li-field--wide">
+                <label class="sc-li-lbl">Product <span class="sc-req-star">*</span></label>
+                <div [class.sc-inp-err]="row.errProduct">
+                  <app-search-dropdown [items]="productDropdownItems()" [selectedId]="row.productCode"
+                    placeholder="— Select product —" (selectedIdChange)="
+                      onProductSelect(
+                        row.rowId,
+                        $event
+                      )
+                    ">
+
+                  </app-search-dropdown>
+                </div>
+                @if (row.errProduct) {
+                <div class="sc-err sc-err-inline"><i class="ti ti-alert-circle"></i> Required</div>
+                }
+              </div>
+
+              <!-- Warehouse (always) -->
+              <div class="sc-li-field">
+                <label class="sc-li-lbl">Warehouse <span class="sc-req-star">*</span></label>
+                <select class="form-select" [value]="row.warehouseId || warehouseId()"
+                  (change)="updateRow(row.rowId, 'warehouseId', $any($event.target).value)">
+                  <option value="">Select warehouse</option>
+                  @for (w of warehouses; track w.id) {
+                  <option [value]="w.id">{{ w.name }}</option>
+                  }
+                </select>
+              </div>
+
+              <!-- Vendor — only IN / RETURN (animated) -->
+              @if (typeConfig()?.showVendor) {
+              <div class="sc-li-field sc-anim-field">
+                <label class="sc-li-lbl">Vendor <span class="sc-req-star">*</span></label>
+                <app-search-dropdown [items]="vendorDropdownItems()" [selectedId]="row.vendorCode"
+                  placeholder="— Select Vendor —" (selectedIdChange)="
+                    updateRow(
+                      row.rowId,
+                      'vendorCode',
+                      $event
+                    )
+                  ">
+
+                </app-search-dropdown>
+              </div>
+              }
+
+              <!-- Unit (always) -->
+              <div class="sc-li-field">
+                <label class="sc-li-lbl">Unit</label>
+                <select class="form-select" [value]="row.unitId ?? ''"
+                  (change)="updateRow(row.rowId, 'unitId', +$any($event.target).value)">
+                  <option value="">— Unit —</option>
+                  @for (u of unitOptions; track u.value) {
+                  <option [value]="u.value">{{ u.label }}</option>
+                  }
+                </select>
+              </div>
+
+              <!-- Qty (always) -->
+              <div class="sc-li-field">
+                <label class="sc-li-lbl">Qty <span class="sc-req-star">*</span></label>
+                <div [class.sc-inp-err]="row.errQty">
+                  <input type="number" class="form-control" min="0.001" step="0.001" [value]="row.qty ?? ''"
+                    (input)="onQtyChange(row.rowId, $any($event.target).value)" placeholder="0" />
+                </div>
+                @if (row.errQty) {
+                <div class="sc-err sc-err-inline"><i class="ti ti-alert-circle"></i> Qty &gt; 0</div>
+                }
+              </div>
+
+              <!-- Unit Cost — only IN / RETURN (animated) -->
+              @if (typeConfig()?.showCostPrice) {
+              <div class="sc-li-field sc-anim-field">
+                <label class="sc-li-lbl">Unit Cost <span class="sc-req-star">*</span></label>
+                <div class="sc-cost-wrap" [class.sc-inp-err]="row.errCost">
+                  <span class="sc-rs">₹</span>
+                  <input type="number" class="sc-tbl-inp sc-tbl-inp-r sc-cost-inp" min="0" step="0.01"
+                    [value]="row.unitCost ?? ''" (input)="onCostChange(row.rowId, $any($event.target).value)"
+                    placeholder="0.00" />
+                </div>
+                @if (row.errCost) {
+                <div class="sc-err sc-err-inline"><i class="ti ti-alert-circle"></i> Cost required</div>
+                }
+              </div>
+              }
+
+              <!-- Adjustment Reason — only ADJUSTMENT (animated) -->
+              @if (typeConfig()?.showAdjustReason) {
+              <div class="sc-li-field sc-anim-field">
+                <label class="sc-li-lbl">Reason <span class="sc-req-star">*</span></label>
+                <select class="form-select" [value]="row.adjustReason"
+                  (change)="updateRow(row.rowId, 'adjustReason', $any($event.target).value)">
+                  <option value="">— Select Reason —</option>
+                  @for (a of adjustmentReasons; track a.value) {
+                  <option [value]="a.value">{{ a.label }}</option>
+                  }
+                </select>
+              </div>
+              }
+
+              <!-- Batch No — only IN (animated) -->
+              @if (typeConfig()?.showBatch) {
+              <div class="sc-li-field sc-anim-field">
+                <label class="sc-li-lbl">Batch No</label>
+                <input type="text" class="form-control" [value]="row.batchNo"
+                  (input)="updateRow(row.rowId, 'batchNo', $any($event.target).value)" placeholder="e.g. BTH-001" />
+              </div>
+              }
+
+              <!-- Expiry Date — only IN (animated) -->
+              @if (typeConfig()?.showExpiry) {
+              <div class="sc-li-field sc-anim-field">
+                <label class="sc-li-lbl">Expiry Date</label>
+                <input type="date" class="form-control" [value]="row.expiry"
+                  (change)="updateRow(row.rowId, 'expiry', $any($event.target).value)" />
+              </div>
+              }
+
+              <!-- Balance After (always, calculated) -->
+              <div class="sc-li-field">
+                <label class="sc-li-lbl">Balance After</label>
+                <div class="sc-bal-pill-wrap">
+                  @if (row.balanceAfter !== null) {
+                  <span class="sc-bal-pill" [style.color]="balanceColor(row.balanceAfter)">
+                    @if (row.balanceAfter < 0) { <i class="ti ti-alert-triangle"></i> }
+                      @else if (row.balanceAfter <= 10) { <i class="ti ti-alert-circle"></i> }
+                        @else { <i class="ti ti-check"></i> }
+                        {{ row.balanceAfter | number:'1.0-3' }}
+                  </span>
+                  } @else {
+                  <span class="sc-bal-pill sc-bal-pill--empty">—</span>
+                  }
                 </div>
               </div>
-            }
+
+            </div>
+            <!-- end fields wrap -->
 
           </div>
-        }
-
-        <!-- ══ STEP 3 — Review ═══════════════════════════════════ -->
-        @if (currentStep() === 3) {
-          <div class="sc-card sc-anim-in">
-            <div class="sc-card-head">
-              <i class="ti ti-clipboard-check"></i>
-              <span>Review &amp; Confirm</span>
-            </div>
-            <div class="sc-card-body">
-              <div class="sc-review-grid">
-
-                <div class="sc-review-tile">
-                  <div class="sc-review-tile-title">Transaction Type</div>
-                  <div class="sc-type-pill"
-                    [style.background]="typeConfig()?.bannerBg"
-                    [style.color]="typeConfig()?.bannerText">
-                    <i [class]="'ti ' + selectedTypeMeta?.icon"></i>
-                    {{ selectedTypeMeta?.label }}
-                  </div>
-                </div>
-
-                <div class="sc-review-tile">
-                  <div class="sc-review-tile-title">Transaction Header</div>
-                  <div class="sc-review-row"><span>TN Code</span><strong>{{ autoTnCode() }}</strong></div>
-                  <div class="sc-review-row"><span>Date</span><strong>{{ tnDate() | date:'dd MMM yyyy' }}</strong></div>
-                  <div class="sc-review-row"><span>Warehouse</span><strong>{{ getWarehouseName(warehouseId()) }}</strong></div>
-                  <div class="sc-review-row"><span>Valuation</span><strong>{{ valuationMethod() }}</strong></div>
-                  @if (referenceType()) {
-                    <div class="sc-review-row"><span>Reference</span><strong>{{ referenceType() }} · {{ referenceDoc() || '—' }}</strong></div>
-                  }
-                  @if (remarks()) {
-                    <div class="sc-review-row"><span>Remarks</span><strong>{{ remarks() }}</strong></div>
-                  }
-                </div>
-
-                <div class="sc-review-tile sc-review-tile-wide">
-                  <div class="sc-review-tile-title">Line Items ({{ totalLines() }})</div>
-                  @for (row of filledLines(); track row.rowId; let i = $index) {
-                    <div class="sc-review-row">
-                      <span>{{ i + 1 }}. {{ row.productName || row.productCode }}</span>
-                      <strong>{{ row.qty | number:'1.0-3' }} {{ row.unitName || '' }}
-                        @if (row.unitCost) { · ₹{{ ((row.qty ?? 0) * row.unitCost) | number:'1.2-2' }} }
-                      </strong>
-                    </div>
-                  }
-                  <div class="sc-review-row sc-review-total">
-                    <span>Total Cost</span>
-                    <strong style="color:#1a2744;">₹{{ totalCost() | number:'1.2-2' }}</strong>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        }
-
-        <!-- ══ FOOTER ACTIONS ════════════════════════════════════ -->
-        <div class="sc-footer-actions">
-          <button routerLink="/store"
-            class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated bg-secondary px-3">
-            Cancel
-          </button>
-          <div class="sc-footer-spacer"></div>
-          @if (currentStep() > 1) {
-            <button type="button"
-              class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated bg-secondary px-3"
-              (click)="prevStep()">
-              Previous
-            </button>
-          }
-          @if (currentStep() < 3) {
-            <button type="button"
-              class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
-              (click)="nextStep()">
-              Next 
-            </button>
-          }
-          @if (currentStep() === 3) {
-            <button type="button"
-              class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
-              (click)="onSubmit()">
-              {{ isEditMode ? 'Update' : 'Save' }}
-            </button>
           }
         </div>
 
+        <!-- Add Row -->
+        <div class="sc-add-row-bar">
+          <button type="button" class="sc-add-row-btn" (click)="addRow()">
+            <i class="ti ti-plus"></i> Add Item
+          </button>
+        </div>
+
+        <!-- Summary -->
+        @if (totalLines() > 0) {
+        <div class="sc-summary-strip">
+          <div class="sc-summary-box">
+            <div class="sc-summary-title">TRANSACTION SUMMARY</div>
+            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;">
+              <div class="sc-sum-row"><span>Total Lines</span><span>:</span><span class="sc-sum-val">{{ totalLines() }}
+                  Items</span></div>
+              <div class="sc-sum-row"><span>Total Quantity</span><span>:</span><span class="sc-sum-val sc-sum-blue">{{
+                  totalQty() | number:'1.3-3' }} Units</span></div>
+              <div class="sc-sum-row"><span>Subtotal</span><span>:</span><span class="sc-sum-val">₹{{ totalCost() |
+                  number:'1.2-2' }}</span></div>
+              <div class="sc-sum-row sc-sum-total-row"><span>Total Cost</span><span>:</span><span
+                  class="sc-sum-val sc-sum-grand">₹{{ totalCost() | number:'1.2-2' }}</span></div>
+            </div>
+          </div>
+        </div>
+        }
+
       </div>
+      }
+
+      <!-- ══ STEP 3 — Review ═══════════════════════════════════ -->
+      @if (currentStep() === 3) {
+      <div class="sc-card sc-anim-in">
+        <div class="sc-card-head">
+          <i class="ti ti-clipboard-check"></i>
+          <span>Review &amp; Confirm</span>
+        </div>
+        <div class="sc-card-body">
+          <div class="sc-review-grid">
+
+            <div class="sc-review-tile">
+              <div class="sc-review-tile-title">Transaction Type</div>
+              <div class="sc-type-pill" [style.background]="typeConfig()?.bannerBg"
+                [style.color]="typeConfig()?.bannerText">
+                <i [class]="'ti ' + selectedTypeMeta?.icon"></i>
+                {{ selectedTypeMeta?.label }}
+              </div>
+            </div>
+
+            <div class="sc-review-tile">
+              <div class="sc-review-tile-title">Transaction Header</div>
+              <div class="sc-review-row"><span>TN Code</span><strong>{{ autoTnCode() }}</strong></div>
+              <div class="sc-review-row"><span>Date</span><strong>{{ tnDate() | date:'dd MMM yyyy' }}</strong></div>
+              <div class="sc-review-row"><span>Warehouse</span><strong>{{ getWarehouseName(warehouseId()) }}</strong>
+              </div>
+              <div class="sc-review-row"><span>Valuation</span><strong>{{ valuationMethod() }}</strong></div>
+              @if (referenceType()) {
+              <div class="sc-review-row"><span>Reference</span><strong>{{ referenceType() }} · {{ referenceDoc() || '—'
+                  }}</strong></div>
+              }
+              @if (remarks()) {
+              <div class="sc-review-row"><span>Remarks</span><strong>{{ remarks() }}</strong></div>
+              }
+            </div>
+
+            <div class="sc-review-tile sc-review-tile-wide">
+              <div class="sc-review-tile-title">Line Items ({{ totalLines() }})</div>
+              @for (row of filledLines(); track row.rowId; let i = $index) {
+              <div class="sc-review-row">
+                <span>{{ i + 1 }}. {{ row.productName || row.productCode }}</span>
+                <strong>{{ row.qty | number:'1.0-3' }} {{ row.unitName || '' }}
+                  @if (row.unitCost) { · ₹{{ ((row.qty ?? 0) * row.unitCost) | number:'1.2-2' }} }
+                </strong>
+              </div>
+              }
+              <div class="sc-review-row sc-review-total">
+                <span>Total Cost</span>
+                <strong style="color:#1a2744;">₹{{ totalCost() | number:'1.2-2' }}</strong>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      }
+
+      <!-- ══ FOOTER ACTIONS ════════════════════════════════════ -->
+      <div class="sc-footer-actions">
+        <button routerLink="/store"
+          class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated bg-secondary px-3">
+          Cancel
+        </button>
+        <div class="sc-footer-spacer"></div>
+        @if (currentStep() > 1) {
+        <button type="button"
+          class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated bg-secondary px-3"
+          (click)="prevStep()">
+          Previous
+        </button>
+        }
+        @if (currentStep() < 3) { <button type="button"
+          class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+          (click)="nextStep()">
+          Next
+          </button>
+          }
+          @if (currentStep() === 3) {
+          <button type="button"
+            class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+            (click)="onSubmit()">
+            {{ isEditMode ? 'Update' : 'Save' }}
+          </button>
+          }
+      </div>
+
     </div>
   </div>
+</div>
 </div>

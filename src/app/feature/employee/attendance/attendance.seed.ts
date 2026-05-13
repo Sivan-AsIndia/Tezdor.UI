@@ -122,7 +122,7 @@ export const ATTENDANCE_SEED: Attendance [] = [
 
     attendanceNumber: 'ATT-2026-MAY-001',
 
-    status: AttendanceStatus.Submitted,
+    status: AttendanceStatus.Open,
 
     attendanceLines: [],
 

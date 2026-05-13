@@ -1,0 +1,244 @@
+/* =====================================================
+   WRAPPER
+===================================================== */
+
+.search-dropdown {
+
+  position: relative;
+
+  width: 100%;
+}
+
+/* =====================================================
+   CONTROL
+===================================================== */
+
+.search-dropdown-control {
+
+  width: 100%;
+
+  min-height: 40px;
+
+  padding: 0 14px;
+
+  border-radius: 12px;
+
+  border: 1px solid #d1d5db;
+
+  background: white;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  cursor: pointer;
+
+  transition: .15s ease;
+}
+
+.search-dropdown-control:hover {
+
+  border-color: #94a3b8;
+}
+
+.search-dropdown-control.invalid {
+
+  border-color: red;
+}
+
+.search-dropdown-control.disabled {
+
+  background: #f8fafc;
+
+  opacity: .7;
+
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   TEXT
+===================================================== */
+
+.selected-text {
+
+  font-size: 13px;
+
+  color: var(--bs-body-color);
+
+  overflow: hidden;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+/* =====================================================
+   MENU
+===================================================== */
+
+.search-dropdown-menu {
+
+  position: absolute;
+
+  top: calc(100% + 6px);
+
+  left: 0;
+
+  width: 100%;
+
+  background: white;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.08);
+
+  z-index: 999;
+}
+
+/* =====================================================
+   SEARCH BOX
+===================================================== */
+
+.search-box {
+
+  height: 48px;
+
+  padding: 0 10px;
+
+  border-bottom: 1px solid #eef2f7;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+/* SEARCH ICON */
+.search-icon {
+
+  color: #94a3b8;
+
+  font-size: 16px;
+}
+
+/* INPUT */
+.search-box input {
+
+  flex: 1;
+
+  height: 100%;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  font-size: 14px;
+}
+
+/* =====================================================
+   CLEAR BUTTON
+===================================================== */
+
+.clear-search-btn {
+
+  width: 26px;
+
+  height: 26px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #94a3b8;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  transition: .15s ease;
+
+  flex-shrink: 0;
+}
+
+.clear-search-btn:hover {
+
+  background: #f1f5f9;
+
+  color: #475569;
+}
+
+.clear-search-btn i {
+
+  font-size: 14px;
+}
+
+/* =====================================================
+   ITEMS
+===================================================== */
+
+.dropdown-items {
+
+  max-height: 240px;
+
+  overflow-y: auto;
+}
+
+.dropdown-item {
+
+  min-height: 42px;
+
+  padding: 0 14px;
+
+  display: flex;
+
+  align-items: center;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  transition: .15s ease;
+}
+
+.dropdown-item:hover {
+
+  background: #f8fafc;
+}
+
+.dropdown-item.active {
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-weight: 600;
+}
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty-item {
+
+  padding: 14px;
+
+  text-align: center;
+
+  font-size: 13px;
+
+  color: #94a3b8;
+}

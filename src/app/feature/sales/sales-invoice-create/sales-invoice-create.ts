@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal, OnInit } from '@angular/core';
+import { Component, computed, inject, signal, OnInit, ChangeDetectorRef, afterNextRender } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   CUSTOMER_OPTIONS, DEMO_PRODUCTS,
@@ -16,6 +16,9 @@ import { SalesInvoiceDataClient } from '../sales-invoice-data-client';
 import { ToastNotifier } from '../../../core/services/toast';
 import { TAX_MAP, TAX_OPTIONS } from '../../product/product';
 import { INITIAL_PRODUCTS } from '../../product/product.seed';
+import { SearchDropdownComponent } from "../../../shared/components/search-dropdown/search-dropdown";
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 
 export interface SILineItemEx extends SILineItem {
   errDiscount: boolean;
@@ -23,7 +26,7 @@ export interface SILineItemEx extends SILineItem {
 @Component({
   selector: 'app-sales-invoice-create',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SearchDropdownComponent,NgxEditorModule,ReactiveFormsModule],
   templateUrl: './sales-invoice-create.html',
   styleUrl: './sales-invoice-create.css',
 })
@@ -39,14 +42,14 @@ export class SalesInvoiceCreateComponent implements OnInit {
   get pageTitle() { return this.isEditMode() ? 'Invoice' : 'New Invoice'; }
 
   customerOptions = CUSTOMER_OPTIONS;
-productOptions = INITIAL_PRODUCTS.map(p => ({
-  value:  p.productCode,
-  label:  `${p.productCode} — ${p.productName}`,
-  price:  p.costPrice,
-  taxPct: TAX_MAP[p.taxId ?? 0] ?? 18,  
-  unitId: p.unitId,
-  hsn:    '',
-}));
+  productOptions = INITIAL_PRODUCTS.map(p => ({
+    value: p.productCode,
+    label: `${p.productCode} — ${p.productName}`,
+    price: p.costPrice,
+    taxPct: TAX_MAP[p.taxId ?? 0] ?? 18,
+    unitId: p.unitId,
+    hsn: '',
+  }));
 
   unitOptions = UNIT_OPTIONS;
   taxOptions = TAX_OPTIONS;
@@ -83,6 +86,92 @@ productOptions = INITIAL_PRODUCTS.map(p => ({
   selectedCustomer = computed(() =>
     this.customerOptions.find(c => c.value === this.customerId()) ?? null
   );
+
+  private readonly cdr =
+  inject(ChangeDetectorRef);
+
+salesNotesEditor!: Editor;
+
+showSalesNotesEditor =
+  signal(false);
+
+  readonly toolbar: Toolbar = [
+  
+    ['bold', 'italic', 'underline'],
+  
+    ['strike'],
+  
+    ['code', 'blockquote'],
+  
+    [
+      {
+        heading: [
+          'h1',
+          'h2',
+          'h3',
+          'h4',
+          'h5',
+          'h6'
+        ]
+      }
+    ],
+  
+    ['ordered_list', 'bullet_list'],
+  
+    ['link', 'image'],
+  
+    ['text_color', 'background_color'],
+  
+    ['horizontal_rule'],
+  
+    ['undo', 'redo']
+  
+  ];
+
+  constructor() {
+
+  afterNextRender(() => {
+
+    requestAnimationFrame(() => {
+
+      /* INIT */
+      this.salesNotesEditor =
+        new Editor();
+
+      /* INITIAL */
+      this.salesNotesControl.setValue(
+        this.notes() || '',
+        {
+          emitEvent: false
+        }
+      );
+
+      /* CHANGES */
+      this.salesNotesControl
+        .valueChanges
+        .subscribe(value => {
+
+          this.notes.set(
+            value || ''
+          );
+
+        });
+
+      /* SHOW */
+      this.showSalesNotesEditor
+        .set(true);
+
+      this.cdr.detectChanges();
+
+    });
+
+  });
+
+}
+
+
+readonly salesNotesControl =
+  new FormControl('');
 
   onCustomerChange(id: string) {
     this.customerId.set(id);
@@ -414,4 +503,37 @@ productOptions = INITIAL_PRODUCTS.map(p => ({
     const year = now.getMonth() >= 3 ? now.getFullYear() : now.getFullYear() - 1;
     return `FY ${year}-${String(year + 1).slice(2)}`;
   }
+
+  customerDropdownItems = computed(() =>
+
+    this.customerOptions.map(x => ({
+
+      id: x.value,
+
+      name: x.label
+
+    }))
+  );
+
+  placeOfSupplyDropdownItems = computed(() =>
+
+    this.placeOfSupplyOptions.map(x => ({
+
+      id: x.value,
+
+      name: x.label
+
+    }))
+  );
+
+  productServiceDropdownItems = computed(() =>
+
+    this.productOptions.map(x => ({
+
+      id: x.value,
+
+      name: x.label
+
+    }))
+  );
 }

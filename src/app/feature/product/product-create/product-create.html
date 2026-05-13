@@ -6,8 +6,7 @@
       <div class="mb-2">
         <div class="v-card__loader">
           <div class="v-progress-linear v-theme--BLUE_THEME v-locale--is-ltr" role="progressbar" aria-hidden="true"
-            aria-valuemin="0" aria-valuemax="100"
-            style="top: 0px; height: 0px; --v-progress-linear-height: 2px;">
+            aria-valuemin="0" aria-valuemax="100" style="top: 0px; height: 0px; --v-progress-linear-height: 2px;">
             <div class="v-progress-linear__background"></div>
             <div class="v-progress-linear__buffer" style="width: 0%;"></div>
             <div class="v-progress-linear__indeterminate">
@@ -29,7 +28,7 @@
               <ul id="breadcrumb">
                 <li><a href="#"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a></li>
                 <li><a href="products"><span class="fa fa-list"></span>&nbsp;&nbsp;Product List</a></li>
-                <li><a ><span class="fa fa-plus-circle"></span>&nbsp;&nbsp;{{ pageCrumb() }}</a></li>
+                <li><a><span class="fa fa-plus-circle"></span>&nbsp;&nbsp;{{ pageCrumb() }}</a></li>
               </ul>
             </div>
           </div>
@@ -38,18 +37,24 @@
       </div>
 
       <!-- ══════════ Tabs ══════════ -->
-    
 
-        <div class="pf-tabs">
-      <button class="pf-tab" [class.pf-tab--active]="activeTab() === 'general'" (click)="setTab('general')">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z"/></svg>
-       General
-      </button>
-      <button class="pf-tab" [class.pf-tab--active]="activeTab() === 'advanced'" (click)="setTab('advanced')">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        Advanced
-      </button>
-    </div>
+
+      <div class="pf-tabs">
+        <button class="pf-tab" [class.pf-tab--active]="activeTab() === 'general'" (click)="setTab('general')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" />
+            <path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z" />
+          </svg>
+          General
+        </button>
+        <button class="pf-tab" [class.pf-tab--active]="activeTab() === 'advanced'" (click)="setTab('advanced')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23" />
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+          </svg>
+          Advanced
+        </button>
+      </div>
 
 
       <!-- ══════════ Content ══════════ -->
@@ -64,8 +69,8 @@
 
             <!-- ── Product Identity ── -->
             <div class="card">
-                <div class="pf-card__header">
-              <h2 class="cardheader">General</h2>
+              <div class="pf-card__header">
+                <h2 class="cardheader">General</h2>
               </div>
 
               <!-- Product ID — Edit mode only -->
@@ -95,11 +100,10 @@
               <div class="form-group">
                 <label class="form-label required cardlabel">Product Name</label>
                 <input type="text" class="form-input form-control" placeholder="Product Name"
-                  formControlName="productName" maxlength="200"
-                  [class.error]="hasError('productName')" />
+                  formControlName="productName" maxlength="200" [class.error]="hasError('productName')" />
                 <span class="form-hint">A product name is required and recommended to be unique.</span>
                 @if (hasError('productName')) {
-                  <span class="form-error">Product name is required.</span>
+                <span class="form-error">Product name is required.</span>
                 }
               </div>
 
@@ -107,33 +111,37 @@
               <div class="form-row">
                 <div class="form-group flex-1">
                   <label class="form-label required cardlabel">Category</label>
-                  <select class="form-select" formControlName="categoryId"
-                    [class.error]="hasError('categoryId')">
-                    <option value="">-- Select category --</option>
-                    @for (c of categoryOptions; track c.value) {
-                      <option [value]="c.value">{{ c.label }}</option>
-                    }
-                  </select>
+                  <app-search-dropdown [items]="categoryDropdownItems()" [selectedId]="
+                      productForm.controls['categoryId'].value ?? null
+                    " [invalid]="hasError('categoryId')" placeholder="-- Select category --" (selectedIdChange)="
+                      productForm.controls['categoryId']
+                        .setValue($event)
+                    ">
+
+                  </app-search-dropdown>
                   <span class="form-hint">Select a product category.</span>
                   @if (hasError('categoryId')) {
-                    <span class="form-error">Category is required.</span>
+                  <span class="form-error">Category is required.</span>
                   }
                 </div>
                 <div class="form-group flex-1">
                   <label class="form-label cardlabel">Brand <span class="form-label--optional">(optional)</span></label>
-                  <select class="form-select" formControlName="brandId">
-                    <option value="">-- Select brand --</option>
-                    @for (b of brandOptions; track b.value) {
-                      <option [value]="b.value">{{ b.label }}</option>
-                    }
-                  </select>
+
+                  <app-search-dropdown [items]="brandDropdownItems()" [selectedId]="
+                      productForm.controls['brandId'].value ?? null
+                    " placeholder="-- Select brand --" (selectedIdChange)="
+                      productForm.controls['brandId']
+                        .setValue($event)
+                    ">
+
+                  </app-search-dropdown>
                 </div>
-                  <div class="form-group flex-1">
+                <div class="form-group flex-1">
                   <label class="form-label cardlabel">Product Type</label>
                   <select class="form-select" formControlName="brandId">
                     <option value="">-- Select Type --</option>
                     @for (p of ProductType; track p.value) {
-                      <option [value]="p.value">{{ p.label }}</option>
+                    <option [value]="p.value">{{ p.label }}</option>
                     }
                   </select>
                 </div>
@@ -144,24 +152,24 @@
               <div class="form-row">
                 <div class="form-group flex-1">
                   <label class="form-label required cardlabel">Unit of Measure</label>
-                  <select class="form-select" formControlName="unitId"
-                    [class.error]="hasError('unitId')">
+                  <select class="form-select" formControlName="unitId" [class.error]="hasError('unitId')">
                     <option value="">Select unit</option>
                     @for (u of unitOptions; track u.value) {
-                      <option [value]="u.value">{{ u.label }}</option>
+                    <option [value]="u.value">{{ u.label }}</option>
                     }
                   </select>
                   <span class="form-hint">e.g. Pcs, Kg, Litre, Box, Dozen</span>
                   @if (hasError('unitId')) {
-                    <span class="form-error">Unit of Measure is required.</span>
+                  <span class="form-error">Unit of Measure is required.</span>
                   }
                 </div>
                 <div class="form-group flex-1">
-                  <label class="form-label cardlabel">Barcode / SKU <span class="form-label--optional">(optional)</span></label>
+                  <label class="form-label cardlabel">Barcode / SKU <span
+                      class="form-label--optional">(optional)</span></label>
                   <div class="input-scanner-wrap">
                     <input type="text" class="form-input form-control" placeholder="EAN-13 / QR / SKU"
                       formControlName="barcode" maxlength="50" />
-                 
+
                   </div>
                   <span class="form-hint">Unique if provided. Read-only after hardware scan.</span>
                 </div>
@@ -170,10 +178,30 @@
               <!-- Description -->
               <div class="form-group">
                 <label class="form-label cardlabel">Description</label>
-                <div class="NgxEditor__Wrapper">
-                  <textarea style="border: 1px solid #8080802e; width: 100%; border-radius: 5px;"
-                    rows="4" placeholder="Long product description — printed on Invoice / Purchase Order."
-                    formControlName="description" maxlength="1000"></textarea>
+
+                <div class="rich-editor-wrapper">
+
+                  <form [formGroup]="productForm">
+
+                    @if(showEditor()){
+
+                    <!-- TOOLBAR -->
+                    <ngx-editor-menu [editor]="descriptionEditor" [toolbar]="toolbar">
+
+                    </ngx-editor-menu>
+
+                    <!-- EDITOR -->
+                    <div class="ngx-overflow">
+                      <ngx-editor [editor]="descriptionEditor" formControlName="description" placeholder="
+        Long product description — printed on Invoice / Purchase Order.
+      ">
+
+                      </ngx-editor>
+                    </div>
+                    }
+
+                  </form>
+
                 </div>
                 <span class="form-hint">Max 1000 chars. Printed on Invoice & Purchase Orders.</span>
               </div>
@@ -181,38 +209,36 @@
 
             <!-- ── Pricing ── -->
             <div class="card">
-                <div class="pf-card__header">
-              <h2 class="cardheader">Pricing</h2>
-</div>
+              <div class="pf-card__header">
+                <h2 class="cardheader">Pricing</h2>
+              </div>
               <!-- Cost Price + Selling Price -->
               <div class="form-row">
                 <div class="form-group flex-1">
                   <label class="form-label required cardlabel">Cost Price</label>
                   <div class="input-prefix-wrap">
                     <input type="number" class="form-input form-input--prefixed form-control" placeholder="0.00"
-                      min="0.01" step="0.01" formControlName="costPrice"
-                      [class.error]="hasError('costPrice')" />
+                      min="0.01" step="0.01" formControlName="costPrice" [class.error]="hasError('costPrice')" />
                   </div>
                   <span class="form-hint">Purchase cost — used for inventory valuation.</span>
                   @if (hasError('costPrice')) {
-                    <span class="form-error">Cost Price is required and must be &gt; 0.</span>
+                  <span class="form-error">Cost Price is required and must be &gt; 0.</span>
                   }
                 </div>
                 <div class="form-group flex-1">
                   <label class="form-label required cardlabel">Selling Price</label>
                   <div class="input-prefix-wrap">
                     <input type="number" class="form-input form-input--prefixed form-control" placeholder="0.00"
-                      min="0.01" step="0.01" formControlName="sellingPrice"
-                      [class.error]="hasError('sellingPrice')" />
+                      min="0.01" step="0.01" formControlName="sellingPrice" [class.error]="hasError('sellingPrice')" />
                   </div>
                   <span class="form-hint">Default price pre-filled in Invoice line items.</span>
                   @if (hasError('sellingPrice')) {
-                    <span class="form-error">Selling Price is required and must be &gt; 0.</span>
+                  <span class="form-error">Selling Price is required and must be &gt; 0.</span>
                   }
                   @if (sellingPriceWarn()) {
-                    <span class="form-warn">
-                      ⚠ Selling Price is below Cost Price.
-                    </span>
+                  <span class="form-warn">
+                    ⚠ Selling Price is below Cost Price.
+                  </span>
                   }
                 </div>
               </div>
@@ -225,8 +251,7 @@
                   Discount Value
                   {{ productForm.get('discountType')?.value === 'percentage' ? '(%)' : '(₹)' }}
                 </label>
-                <input type="number" class="form-input" placeholder="0" min="0"
-                  formControlName="discountValue" />
+                <input type="number" class="form-input" placeholder="0" min="0" formControlName="discountValue" />
               </div>
               }
 
@@ -236,7 +261,7 @@
                   <label class="form-label cardlabel">Tax / GST</label>
                   <select class="form-select" formControlName="taxId">
                     @for (t of taxOptions; track t.value) {
-                      <option [value]="t.value">{{ t.label }}</option>
+                    <option [value]="t.value">{{ t.label }}</option>
                     }
                   </select>
                   <span class="form-hint">Default tax rate applied in Invoice / Purchase Invoice.</span>
@@ -260,20 +285,20 @@
 
             <!-- ── Stock Settings ── -->
             <div class="card">
-                <div class="pf-card__header">
-              <h2 class="cardheader">Stock Settings</h2>
-</div>
+              <div class="pf-card__header">
+                <h2 class="cardheader">Stock Settings</h2>
+              </div>
               <div class="form-row">
                 <div class="form-group flex-1">
                   <label class="form-label cardlabel">Reorder Level</label>
-                  <input type="number" class="form-input form-control" placeholder="0.000"
-                    min="0" step="0.001" formControlName="reorderLevel" />
+                  <input type="number" class="form-input form-control" placeholder="0.000" min="0" step="0.001"
+                    formControlName="reorderLevel" />
                   <span class="form-hint">Low-stock alert when Current Stock ≤ Reorder Level.</span>
                 </div>
                 <div class="form-group flex-1">
                   <label class="form-label cardlabel">Max Stock Level</label>
-                  <input type="number" class="form-input form-control" placeholder="0.000"
-                    min="0" step="0.001" formControlName="maxStockLevel" />
+                  <input type="number" class="form-input form-control" placeholder="0.000" min="0" step="0.001"
+                    formControlName="maxStockLevel" />
                   <span class="form-hint">Upper limit hint for procurement planning.</span>
                 </div>
               </div>
@@ -282,7 +307,7 @@
               <div class="form-group">
                 <label class="form-label cardlabel">Current Stock</label>
                 <div class="stock-readonly-wrap">
-                  <input type="text" class="form-input form-control"  formControlName="currentStock" />
+                  <input type="text" class="form-input form-control" formControlName="currentStock" />
                 </div>
                 <span class="form-hint">Live balance from Stock Maintain module — not editable here.</span>
               </div>
@@ -290,8 +315,8 @@
 
             <!-- ── Shipping ── -->
             <div class="card">
-                <div class="pf-card__header">
-              <h2 class="cardheader">Shipping</h2>
+              <div class="pf-card__header">
+                <h2 class="cardheader">Shipping</h2>
               </div>
               <label class="checkbox-option">
                 <input type="checkbox" formControlName="isPhysical" />
@@ -304,9 +329,9 @@
 
             <!-- ── Meta Options ── -->
             <div class="card">
-                <div class="pf-card__header">
-              <h2 class="cardheader">Meta Options</h2>
-</div>
+              <div class="pf-card__header">
+                <h2 class="cardheader">Meta Options</h2>
+              </div>
               <div class="form-group">
                 <label class="form-label cardlabel">Meta Tag Title</label>
                 <input type="text" class="form-input form-control" placeholder="Meta tag name"
@@ -316,9 +341,33 @@
 
               <div class="form-group">
                 <label class="form-label cardlabel">Meta Tag Description</label>
-                <div class="NgxEditor__Wrapper">
-                  <textarea style="border: 1px solid #8080802e; width: 100%; border-radius: 5px;"
-                    placeholder="Enter meta description" formControlName="metaTagDescription"></textarea>
+
+
+                <div class="rich-editor-wrapper">
+
+                  <form [formGroup]="editorForm">
+
+                    @if(showEditor()){
+
+                    <!-- TOOLBAR -->
+                    <ngx-editor-menu [editor]="metaDescriptionEditor" [toolbar]="toolbar">
+
+                    </ngx-editor-menu>
+
+                    <!-- EDITOR -->
+                    <div class="ngx-overflow">
+                      <ngx-editor [editor]="metaDescriptionEditor" formControlName="
+                        metaTagDescription
+                      " placeholder="
+                        Enter meta description
+                      ">
+
+                      </ngx-editor>
+                    </div>
+                    }
+
+                  </form>
+
                 </div>
                 <span class="form-hint">Set a meta tag description to increase SEO ranking.</span>
               </div>
@@ -334,102 +383,103 @@
         <div class="sidebar-column">
 
           <!-- ── Product Images ── -->
-            <div class="pf-card">
-          <div class="pf-card__header d-flex justify-content-between">
-            <h3 class="cardheader">Product Images</h3>
-            <span class="pf-img-count">{{ imagePreviews().length }} / {{ maxImages }}</span>
-          </div>
+          <div class="pf-card">
+            <div class="pf-card__header d-flex justify-content-between">
+              <h3 class="cardheader">Product Images</h3>
+              <span class="pf-img-count">{{ imagePreviews().length }} / {{ maxImages }}</span>
+            </div>
 
-          <!-- Slider -->
-          <div class="pf-slider" (mousedown)="onDragStart($event)" (mouseup)="onDragEnd($event)">
-            @if (imagePreviews().length > 0) {
+            <!-- Slider -->
+            <div class="pf-slider" (mousedown)="onDragStart($event)" (mouseup)="onDragEnd($event)">
+              @if (imagePreviews().length > 0) {
               <img [src]="imagePreviews()[currentIndex()]" class="pf-slider__img" alt="Product image" />
 
               @if (currentIndex() === primaryIndex()) {
-                <span class="pf-primary-badge">★ Primary</span>
+              <span class="pf-primary-badge">★ Primary</span>
               }
 
               @if (imagePreviews().length > 1) {
-                <button class="pf-slider__arr pf-slider__arr--left"
-                  [disabled]="currentIndex() === 0" (click)="prev()">‹</button>
-                <button class="pf-slider__arr pf-slider__arr--right"
-                  [disabled]="currentIndex() === imagePreviews().length - 1" (click)="next()">›</button>
+              <button class="pf-slider__arr pf-slider__arr--left" [disabled]="currentIndex() === 0"
+                (click)="prev()">‹</button>
+              <button class="pf-slider__arr pf-slider__arr--right"
+                [disabled]="currentIndex() === imagePreviews().length - 1" (click)="next()">›</button>
               }
-            } @else {
-              <div class="pf-slider__empty" (click)="fileInput.click()"
-                [class.pf-slider__empty--drag]="isDragging()"
+              } @else {
+              <div class="pf-slider__empty" (click)="fileInput.click()" [class.pf-slider__empty--drag]="isDragging()"
                 (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDrop($event)">
                 <div class="pf-upload-icon">
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>
-                    <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+                    <polyline points="16 16 12 12 8 16" />
+                    <line x1="12" y1="12" x2="12" y2="21" />
+                    <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
                   </svg>
                 </div>
                 <p class="pf-upload-text">Click or drag images here</p>
                 <span class="pf-upload-sub">PNG, JPG · Max {{ maxImages }} images</span>
               </div>
+              }
+            </div>
+
+            <!-- Dots -->
+            @if (imagePreviews().length > 1) {
+            <div class="pf-dots">
+              @for (img of imagePreviews(); track $index; let i = $index) {
+              <span class="pf-dot" [class.pf-dot--active]="i === currentIndex()" (click)="goTo(i)"></span>
+              }
+            </div>
+            }
+
+            <!-- Thumbnails -->
+            @if (imagePreviews().length > 0) {
+            <div class="pf-thumbs">
+              @for (img of imagePreviews(); track $index; let i = $index) {
+              <div class="pf-thumb-wrap" [class.pf-thumb-wrap--active]="i === currentIndex()"
+                [class.pf-thumb-wrap--primary]="i === primaryIndex()">
+                <img [src]="img" class="pf-thumb" (click)="goTo(i)" alt="thumb" />
+                <button class="pf-thumb__remove" (click)="removeImage(i, $event)">✕</button>
+                @if (i === primaryIndex()) {
+                <span class="pf-thumb__star">★</span>
+                }
+              </div>
+              }
+
+              @if (imagePreviews().length < maxImages) { <div class="pf-thumb-add" (click)="fileInput.click()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+            </div>
             }
           </div>
 
-          <!-- Dots -->
-          @if (imagePreviews().length > 1) {
-            <div class="pf-dots">
-              @for (img of imagePreviews(); track $index; let i = $index) {
-                <span class="pf-dot" [class.pf-dot--active]="i === currentIndex()" (click)="goTo(i)"></span>
-              }
-            </div>
+          <!-- Set Primary -->
+          @if (currentIndex() !== primaryIndex()) {
+          <button type="button" class="pf-set-primary-btn" (click)="setPrimary()">
+            Set Image {{ currentIndex() + 1 }} as Primary
+          </button>
           }
-
-          <!-- Thumbnails -->
-          @if (imagePreviews().length > 0) {
-            <div class="pf-thumbs">
-              @for (img of imagePreviews(); track $index; let i = $index) {
-                <div class="pf-thumb-wrap" [class.pf-thumb-wrap--active]="i === currentIndex()"
-                  [class.pf-thumb-wrap--primary]="i === primaryIndex()">
-                  <img [src]="img" class="pf-thumb" (click)="goTo(i)" alt="thumb" />
-                  <button class="pf-thumb__remove" (click)="removeImage(i, $event)">✕</button>
-                  @if (i === primaryIndex()) {
-                    <span class="pf-thumb__star">★</span>
-                  }
-                </div>
-              }
-
-              @if (imagePreviews().length < maxImages) {
-                <div class="pf-thumb-add" (click)="fileInput.click()">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-                  </svg>
-                </div>
-              }
-            </div>
-
-            <!-- Set Primary -->
-            @if (currentIndex() !== primaryIndex()) {
-              <button type="button" class="pf-set-primary-btn" (click)="setPrimary()">
-                Set Image {{ currentIndex() + 1 }} as Primary
-              </button>
-            }
           }
 
           <input #fileInput type="file" multiple accept="image/*" class="pf-hidden-input"
             (change)="onMultipleSelect($event)" />
         </div>
 
-          <!-- ── Status ── -->
-           <div class="pf-card">
+        <!-- ── Status ── -->
+        <div class="pf-card">
           <div class="pf-card__header">
             <h3 class="cardheader">Status</h3>
           </div>
 
           <div class="pf-status-options">
             @for (s of statusOptions; track s.value) {
-              <label class="pf-status-option" [class.pf-status-option--active]="productForm.get('status')?.value === s.value">
-                <input type="radio" [value]="s.value" formControlName="status" class="pf-status-radio" />
-                <div class="pf-status-option__body">
-                  <span class="pf-status-option__label">{{ s.label }}</span>
-                  <span class="pf-status-option__hint">{{ s.hint }}</span>
-                </div>
-              </label>
+            <label class="pf-status-option"
+              [class.pf-status-option--active]="productForm.get('status')?.value === s.value">
+              <input type="radio" [value]="s.value" formControlName="status" class="pf-status-radio" />
+              <div class="pf-status-option__body">
+                <span class="pf-status-option__label">{{ s.label }}</span>
+                <span class="pf-status-option__hint">{{ s.hint }}</span>
+              </div>
+            </label>
             }
           </div>
         </div>
@@ -437,28 +487,28 @@
 
 
 
-        </div>
-        <!-- /sidebar-column -->
-
       </div>
-
-      <!-- ══════════ Footer Actions ══════════ -->
-      <div class="d-flex mb-md-0 mb-3 gap-3" style="justify-content: flex-end;">
-          <button type="button"
-          class="v-btn v-btn--elevated v-theme--BLUE_THEME  v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated bg-secondary px-3"
-          (click)="onCancel()">
-          Cancel
-        </button>
-        <button type="button"
-          class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
-          (click)="onSave()">
-          {{ editMode() ? 'Update' : 'Create' }}
-        </button>
-      
-      </div>
+      <!-- /sidebar-column -->
 
     </div>
+
+    <!-- ══════════ Footer Actions ══════════ -->
+    <div class="d-flex mb-md-0 mb-3 gap-3" style="justify-content: flex-end;">
+      <button type="button"
+        class="v-btn v-btn--elevated v-theme--BLUE_THEME  v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated bg-secondary px-3"
+        (click)="onCancel()">
+        Cancel
+      </button>
+      <button type="button"
+        class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+        (click)="onSave()">
+        {{ editMode() ? 'Update' : 'Create' }}
+      </button>
+
+    </div>
+
   </div>
+</div>
 </div>
 
 <!-- ══════════ Primary Image Delete Modal ══════════ -->
@@ -472,9 +522,9 @@
           <div class="pdc-icon-wrap">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
-              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
-              <line x1="12" y1="9" x2="12" y2="13"/>
-              <line x1="12" y1="17" x2="12.01" y2="17"/>
+              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
             </svg>
           </div>
           <div>
@@ -486,9 +536,10 @@
           </div>
         </div>
         <button type="button" class="pdc-close" data-bs-dismiss="modal" aria-label="Close">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="18" y1="6" x2="6" y2="18"/>
-            <line x1="6" y1="6" x2="18" y2="18"/>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
         </button>
       </div>
@@ -497,19 +548,20 @@
       <div class="pdc-preview">
         <div class="pdc-thumb">
           @if (imagePreviews()[primaryIndex()]) {
-            <img [src]="imagePreviews()[primaryIndex()]" alt="Primary image" />
+          <img [src]="imagePreviews()[primaryIndex()]" alt="Primary image" />
           } @else {
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
-              <rect x="3" y="3" width="18" height="18" rx="3"/>
-              <circle cx="8.5" cy="8.5" r="1.5"/>
-              <polyline points="21 15 16 10 5 21"/>
-            </svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="3" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <polyline points="21 15 16 10 5 21" />
+          </svg>
           }
         </div>
         <div class="pdc-img-info">
           <span class="pdc-primary-tag">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
             </svg>
             Primary image
           </span>
@@ -522,18 +574,19 @@
       <!-- Footer -->
       <div class="pdc-footer">
         <button type="button" class="pdc-btn pdc-btn-cancel" data-bs-dismiss="modal">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="18" y1="6" x2="6" y2="18"/>
-            <line x1="6" y1="6" x2="18" y2="18"/>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
           Cancel
         </button>
         <button type="button" class="pdc-btn pdc-btn-danger" data-bs-dismiss="modal" (click)="confirmDeletePrimary()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="3 6 5 6 21 6"/>
-            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
-            <path d="M10 11v6M14 11v6"/>
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
           </svg>
           Delete anyway
         </button>

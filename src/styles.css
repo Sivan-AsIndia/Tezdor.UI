@@ -381,3 +381,9 @@ input[type='number']:not([step]) {
   background-color: color-mix(in srgb, var(--color-primary) 15%, white) !important;
   color: var(--color-primary) !important;
 }
+
+.ngx-overflow{
+  height: 125px !important;
+  overflow: scroll !important;
+  scrollbar-width: none;
+}

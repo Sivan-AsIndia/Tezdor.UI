@@ -74,25 +74,21 @@
                                 <!-- STATUS -->
                                 <div class="mb-3">
                                     <label class="fw-semibold mb-2">Status</label>
-                                    <select class="form-select" [value]="filters().status ?? ''"
-                                        (change)="selectStatus($any($event.target).value)">
-                                        <option value="">All</option>
-                                        @for(s of statuses; track s){
-                                        <option [value]="s">{{ s }}</option>
-                                        }
-                                    </select>
+                                    <app-search-dropdown [items]="statusDropdownItems()"
+                                        [selectedId]="filters().status ?? null" placeholder="All" (selectedIdChange)="
+                                        selectStatus($event)">
+
+                                    </app-search-dropdown>
                                 </div>
 
                                 <!-- TRANSACTION TYPE -->
                                 <div class="mb-3">
                                     <label class="fw-semibold mb-2">Transaction Type</label>
-                                    <select class="form-select" [value]="filters().type ?? ''"
-                                        (change)="selectType($any($event.target).value)">
-                                        <option value="">All</option>
-                                        @for(t of transactionTypes; track t){
-                                        <option [value]="t">{{ t }}</option>
-                                        }
-                                    </select>
+                                    <app-search-dropdown [items]="transactionTypeFilterDropdownItems()"
+                                        [selectedId]="filters().type ?? null" placeholder="All" (selectedIdChange)="
+                                        selectType($event)">
+
+                                    </app-search-dropdown>
                                 </div>
 
                                 <div class="d-flex gap-2 mt-4">

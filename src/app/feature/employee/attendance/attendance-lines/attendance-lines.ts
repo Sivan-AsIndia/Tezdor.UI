@@ -13,10 +13,11 @@ import { LeaveDataClient } from '../../leave/leave-data-client';
 import { Permission, PermissionStatus, PermissionType } from '../../permission/permission';
 import { Leave, LeaveStatus } from '../../leave/leave';
 import { CommonModule } from '@angular/common';
+import { SearchDropdownComponent } from '../../../../shared/components/search-dropdown/search-dropdown';
 
 @Component({
   selector: 'app-attendance-lines',
-  imports: [ConfirmModalComponent, RouterModule,CommonModule],
+  imports: [ConfirmModalComponent, RouterModule,CommonModule,SearchDropdownComponent],
   templateUrl: './attendance-lines.html',
   styleUrl: './attendance-lines.css',
 })
@@ -50,7 +51,21 @@ export class AttendanceLinesComponent {
   showQuickMenu = signal(false);
 
   selectedPermission = signal<Permission | null>(null);
+employeeDropdownItems = computed(() =>
 
+  this.employees()
+
+    .filter(x => !!x.employeeId)
+
+    .map(x => ({
+
+      id: x.employeeId!,
+
+      name:
+        `${x.firstName} ${x.lastName}`
+
+    }))
+);
   searchValue = signal('');
   page = signal(1);
   pageSize = signal(10);

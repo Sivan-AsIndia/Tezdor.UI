@@ -6,10 +6,11 @@ import { PettyCashDataClient } from '../petty-cash-data-client';
 import { ConfirmModalComponent } from '../../../../shared/components/confirm-modal/confirm-modal';
 import { CommonModule } from '@angular/common';
 import { EmployeeDataClient } from '../../employee-data-client';
+import { SearchDropdownComponent } from "../../../../shared/components/search-dropdown/search-dropdown";
 
 @Component({
   selector: 'app-petty-cash-list',
-  imports: [CommonModule, RouterModule, ConfirmModalComponent],
+  imports: [CommonModule, RouterModule, ConfirmModalComponent, SearchDropdownComponent],
   templateUrl: './petty-cash-list.html',
   styleUrl: './petty-cash-list.css',
 })
@@ -284,5 +285,35 @@ export class PettyCashListComponent {
     const emp = this.employeeMap()[id];
     return emp ? emp.firstName + ' ' + emp.lastName : '-';
   }
+
+  statusDropdownItems = computed(() => [
+    {
+      id: '',
+      name: 'All'
+    },
+    ...this.statuses.map(x => ({
+
+      id: x,
+
+      name: x
+
+    }))
+
+  ]);
+
+  transactionTypeFilterDropdownItems = computed(() => [
+    {
+      id: '',
+      name: 'All'
+    },
+    ...this.transactionTypes.map(x => ({
+
+      id: x,
+
+      name: x
+
+    }))
+
+  ]);
 
 }
