@@ -205,6 +205,12 @@ readonly salesNotesControl =
   showCustomDuty = signal(false);
   customDuty = signal(0);
 
+  onSameAddressToggle(checked: boolean) {
+  if (checked) {
+    this.shippingAddress.set(this.billingAddress());
+  }
+}
+
   toggleFreight(v: boolean) { this.showFreight.set(v); if (!v) this.freightCharges.set(0); }
   toggleCustomDuty(v: boolean) { this.showCustomDuty.set(v); if (!v) this.customDuty.set(0); }
 

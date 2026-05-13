@@ -11892,4 +11892,9 @@ color: var(--color-error) !important;
 .sidebar-link.before\:bg-lightsales:hover{
   color: #be00bf !important
 }
-
+.container-fluid{
+  max-width: 100% !important;
+}
+.container{
+  max-width: 1300px !important;
+}

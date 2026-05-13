@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, HostListener, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, HostListener, inject, OnInit, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { SidebarManager } from '../../../core/services/sidebar';
 import { filter } from 'rxjs';
+import { ThemeService } from '../../../core/services/theme';
 
 @Component({
   selector: 'app-horizontal-sidebar',
@@ -13,9 +14,10 @@ import { filter } from 'rxjs';
 export class HorizontalSidebarComponent implements OnInit {
   private readonly router = inject(Router);
   readonly sidebar = inject(SidebarManager);
+  private themeService = inject(ThemeService);
 
   openMenu = signal<string | null>(null);
-  activeMenu = signal<string | null>(null); // ← hover தனியா, active தனியா
+  activeMenu = signal<string | null>(null); 
   currentUrl = signal(this.router.url);
 
   menuRoutes: Record<string, string[]> = {
@@ -24,6 +26,8 @@ export class HorizontalSidebarComponent implements OnInit {
     viewEmployees: ['/employees', '/employees/create', '/employee/edit', '/attendance', '/salary', '/petty-cash'],
     ledgerMenu:    ['/general-ledger-entries'],
   };
+
+containerMode = this.themeService.containerMode; 
 
   ngOnInit(): void {
     this.detectActive(this.router.url);

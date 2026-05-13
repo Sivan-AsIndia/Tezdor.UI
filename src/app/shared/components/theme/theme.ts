@@ -193,10 +193,17 @@ selectedOtherFontSize   = '14';
   }
 
 setContainerMode(mode: 'fluid' | 'fixed'): void {
-  this.containerMode = mode;
-  document.documentElement.setAttribute('data-container', mode);
+  this.containerMode = mode;                
+  this.themeService.containerMode.set(mode); 
 }
 
+
+private applyContainerMode(mode: 'fluid' | 'fixed'): void {
+  document.documentElement.setAttribute('data-container', mode);
+  document.querySelectorAll<HTMLElement>('.body-wrapper > div').forEach(el => {
+    el.className = mode === 'fluid' ? 'container-fluid' : 'container';
+  });
+}
   setSecondaryPreset(color: string): void {
     this.secondaryColor = color.toLowerCase();
     document.documentElement.style.setProperty('--secondary', this.secondaryColor);

@@ -20131,7 +20131,7 @@ progress {
     .container-md,
     .container-sm,
     .container-xl {
-        max-width: 1140px
+        max-width: 1140px !important
     }
 }
 
@@ -39940,7 +39940,8 @@ body, .sidebar, .nav-link, .menu-item {
 .page-wrapper .body-wrapper>.container-xl,
 .page-wrapper .body-wrapper>.container-xxl {
     transition: .2s ease-in;
-    padding-top: 16px !important
+    padding-top: 16px !important;
+    max-width: 100% !important;
 }
 
 .body-wrapper {

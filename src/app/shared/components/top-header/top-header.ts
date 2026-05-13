@@ -2,6 +2,7 @@ import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, inject, OnDestroy, OnInit,
 import { RouterModule } from '@angular/router';
 import { SidebarManager } from '../../../core/services/sidebar';
 import { AuthService } from '../../../core/services/auth';
+import { ThemeService } from '../../../core/services/theme';
 
 @Component({
   selector: 'app-top-header',
@@ -20,6 +21,8 @@ export class TopHeaderComponent implements OnInit, OnDestroy {
   userName = computed(() => this.currentUser()?.name ?? 'User');
   userEmail = computed(() => this.currentUser()?.email ?? '');
   userRole = computed(() => this.currentUser()?.role ?? 'Admin');
+  private themeService = inject(ThemeService);
+containerMode = this.themeService.containerMode;
 
   /* ── Base signal ── */
   time = signal(new Date());

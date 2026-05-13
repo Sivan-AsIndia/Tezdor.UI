@@ -87,12 +87,49 @@
                 </div>
 
                 <!-- Delivery Address -->
-                <div class="si-field si-field--mt">
+                <!-- <div class="si-field si-field--mt">
                   <label class="si-lbl">Delivery Address</label>
                   <textarea class="si-textarea" rows="2" [value]="deliveryAddress()"
                     (input)="deliveryAddress.set($any($event.target).value)"
                     placeholder="Ship-to address (if different from billing)…"></textarea>
-                </div>
+                </div> -->
+
+
+                <!-- Billing Address -->
+<div style="gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+  <div class="si-field si-field--mt w-100">
+  <label class="si-lbl">
+    <i class="ti ti-building" aria-hidden="true"></i>
+    Billing Address
+  </label>
+  <textarea class="si-textarea" rows="3"
+    [value]="billingAddress()"
+    (input)="billingAddress.set($any($event.target).value)"
+    placeholder="Billing / bill-to address…"></textarea>
+</div>
+
+<!-- Ship To Address -->
+<div class="si-field si-field--mt w-100">
+  <label class="si-lbl">
+    <i class="ti ti-map-2" aria-hidden="true"></i>
+    Shipping Address
+  </label>
+  <textarea class="si-textarea" rows="3"
+    [value]="shippingAddress()"
+    (input)="shippingAddress.set($any($event.target).value)"
+    placeholder="Ship-to address (if different from billing)…"></textarea>
+  <label class="si-same-addr-toggle">
+    <input type="checkbox"
+      [checked]="shippingAddress() === billingAddress() && !!billingAddress()"
+      (change)="onSameAddressToggle($any($event.target).checked)" />
+    <i class="ti ti-copy" aria-hidden="true"></i>
+    Same as billing address
+  </label>
+</div>
+
+</div>
 
                 <!-- Notes -->
                 <div class="si-field si-field--mt">
