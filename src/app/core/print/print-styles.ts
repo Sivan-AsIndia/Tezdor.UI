@@ -27,31 +27,36 @@ export const PRINT_COMMON_CSS = `
     padding: 0;
   }
 
-  /* ── Document Title ─────────────────────────────────── */
+  /* ── Document Title (no borders – just centered text) ── */
   .doc-title {
     text-align: center;
     font-size: 18px;
     font-weight: 700;
     padding: 8px 0 4px;
     letter-spacing: 0.5px;
-    border-bottom: 2px solid #333;
     margin-bottom: 0;
   }
 
+  /* ── Copy Label (outside the border, top-right) ─────── */
   .doc-copy-label {
     text-align: right;
     font-style: italic;
     font-size: 11px;
     color: #555;
-    padding: 2px 4px 0 0;
+    padding: 0 2px 2px 0;
+    margin-bottom: 0;
   }
 
   /* ── Header Section (Company + Doc Meta) ────────────── */
+  /* Full border on all 4 sides – the thick top border     */
+  /* acts as the separator line below the title.            */
+  /* Left & right borders start here and continue through   */
+  /* all subsequent sections via border-top:none chaining.  */
   .header-section {
     display: flex;
     justify-content: space-between;
     border: 1px solid #333;
-    border-top: none;
+    border-top: 2px solid #333;
     padding: 0;
   }
 
@@ -72,7 +77,7 @@ export const PRINT_COMMON_CSS = `
     line-height: 1.5;
   }
 
-  /* ── Meta Block: 2-Column Grid (no box, unified borders) ── */
+  /* ── Meta Block: 2-Column Grid (seamless borders) ───── */
   .meta-block {
     border-left: 1px solid #333;
     padding: 0;
