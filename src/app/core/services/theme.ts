@@ -58,6 +58,7 @@ export class ThemeService {
   private LAYOUT_KEY = 'layoutMode';
 
   currentSettings = signal<ThemeSettings>(this.loadTheme());
+  containerMode = signal<'fluid' | 'fixed'>('fluid');
 
   loadTheme(): ThemeSettings {
     try {
@@ -143,6 +144,8 @@ root.style.setProperty('--font-size-other',   `${otherFontSize}px`);
     root.style.setProperty('--shadow-strength', (settings.shadowStrength / 100).toFixed(2));
     root.style.setProperty('--radius', `${settings.borderRadius}px`);
     root.style.setProperty('--btn-radius', `${settings.buttonRadius}px`);
+        document.documentElement.setAttribute('data-container', settings.containerMode);
+    this.containerMode.set(settings.containerMode ?? 'fluid');
 
     // Font families
     root.style.setProperty('--font-menu', settings.menuFont);
@@ -153,7 +156,19 @@ root.style.setProperty('--font-size-other',   `${otherFontSize}px`);
     // Dark / light mode
     document.documentElement.classList.toggle('dark-theme', settings.isDarkMode);
     document.documentElement.setAttribute('data-bs-theme', settings.isDarkMode ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-container', settings.containerMode);
+document.documentElement.setAttribute('data-container', settings.containerMode ?? 'fluid');
+  this.containerMode.set(settings.containerMode ?? 'fluid');
+
+  // Container class apply
+  document.querySelectorAll<HTMLElement>('.body-wrapper > div').forEach(el => {
+    if (settings.containerMode === 'fixed') {
+      el.classList.remove('container-fluid');
+      el.classList.add('container');
+    } else {
+      el.classList.remove('container');
+      el.classList.add('container-fluid');
+    }
+  });
 
     // Layout
     document.documentElement.setAttribute('data-layout', settings.layoutMode);

@@ -25,16 +25,7 @@
     <!-- DOCUMENT -->
     <div class="siv-document" id="siv-print-area">
 
-      <!-- ── COPY TYPE BANNER ── -->
-      @if (inv.invoiceCopyType) {
-        <div class="siv-copy-type-banner">
-          {{ inv.invoiceCopyType === 'original_for_buyer'          ? 'ORIGINAL FOR BUYER'
-           : inv.invoiceCopyType === 'duplicate_for_transporter'   ? 'DUPLICATE FOR TRANSPORTER'
-           : inv.invoiceCopyType === 'triplicate_for_supplier'     ? 'TRIPLICATE FOR SUPPLIER'
-           : '' }}
-        </div>
-      }
-
+ 
       <!-- ── DOC HEADER ── -->
       <div class="siv-doc-header">
 
@@ -46,6 +37,14 @@
           </div>
 
           <div class="siv-company-info">
+    @if (inv.invoiceCopyType) {
+        <div class="siv-copy-type-banner" style="    width: max-content;">
+          {{ inv.invoiceCopyType === 'original'          ? 'ORIGINAL FOR BUYER'
+           : inv.invoiceCopyType === 'duplicate'   ? 'DUPLICATE FOR TRANSPORTER'
+           : inv.invoiceCopyType === 'triplicate'     ? 'TRIPLICATE FOR SUPPLIER'
+           : '' }}
+        </div>
+      }
 
             <div class="siv-company-name">
               {{ inv.companyName }}
@@ -77,8 +76,10 @@
               </div>
             }
 
+            
           </div>
-
+     <!-- ── COPY TYPE BANNER ── -->
+  
         </div>
 
         <!-- IDENTITY -->
@@ -395,9 +396,9 @@
               </thead>
 
               <tbody>
-                @for (row of inv.hsnWiseTaxSummary; track row.hsnSac) {
+                @for (row of inv.hsnWiseTaxSummary; track row.hsnSacCode) {
                   <tr>
-                    <td class="siv-id-val--code">{{ row.hsnSac }}</td>
+                    <td class="siv-id-val--code">{{ row.hsnSacCode }}</td>
                     <td>₹{{ row.taxableValue | number:'1.2-2' }}</td>
                     <td>{{ row.cgstRate }}%</td>
                     <td>₹{{ row.cgstAmount | number:'1.2-2' }}</td>
@@ -520,7 +521,7 @@
               </div>
               <div class="siv-bank-row">
                 <span class="siv-bank-key">Account No.</span>
-                <span class="siv-bank-val siv-id-val--code">{{ inv.companyBankDetails.accountNo }}</span>
+                <span class="siv-bank-val siv-id-val--code">{{ inv.companyBankDetails.accountNumber }}</span>
               </div>
               <div class="siv-bank-row">
                 <span class="siv-bank-key">Branch &amp; IFSC</span>

@@ -216,9 +216,10 @@
   }
 </style>
 
-<aside class="left-sidebar with-horizontal">
+<aside class="left-sidebar with-horizontal" >
   <div>
-    <nav id="sidebarnavh" class="sidebar-nav scroll-sidebar container-fluid">
+    <nav id="sidebarnavh" class="sidebar-nav scroll-sidebar"   [class.container-fluid]="containerMode() === 'fluid'"
+  [class.container]="containerMode() === 'fixed'">
       <ul id="sidebarnav" class="gap-2">
 
         <!-- DASHBOARD -->
