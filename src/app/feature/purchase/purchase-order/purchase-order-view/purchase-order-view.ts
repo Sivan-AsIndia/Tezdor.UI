@@ -57,6 +57,12 @@ export class PurchaseOrderViewComponent implements OnInit {
     this.activeTab.set(tab);
   }
 
+  getBarPct(value: number, base: number): number {
+  if (!base || base === 0) return 0;
+  const pct = (value / base) * 100;
+  return Math.min(Math.round(pct), 100);
+}
+
   getVendorInitials(): string {
     if (!this.po?.vendorName) return '??';
     const parts = this.po.vendorName.trim().split(' ');

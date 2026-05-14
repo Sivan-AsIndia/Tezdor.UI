@@ -727,3 +727,317 @@ gap: 25px;
     grid-template-columns: 1fr;
   }
 }
+
+/* ── AMOUNT BREAKDOWN ── */
+.ab-list {
+  padding: 4px 0;
+}
+
+.ab-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 4px;
+  border-bottom: 0.5px solid var(--bs-border-color);
+  opacity: 0;
+  transform: translateY(8px);
+  animation: abFadeUp 0.35s ease forwards;
+}
+
+.ab-item:last-child {
+  border-bottom: none;
+}
+
+.ab-item:nth-child(1) { animation-delay: 0.05s; }
+.ab-item:nth-child(2) { animation-delay: 0.15s; }
+.ab-item:nth-child(3) { animation-delay: 0.25s; }
+.ab-item:nth-child(4) { animation-delay: 0.35s; }
+
+@keyframes abFadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Dot */
+.ab-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-sub  { background: #818cf8; }
+.dot-disc { background: #f87171; }
+.dot-tax  { background: #fbbf24; }
+.dot-ship { background: #34d399; }
+
+/* Label */
+.ab-name {
+  font-size: 13px;
+  color: #6c757d;
+  min-width: 90px;
+}
+
+/* Progress bar */
+.ab-bar-wrap {
+  flex: 1;
+  height: 4px;
+  background: #f1f3f5;
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.ab-bar {
+  height: 100%;
+  border-radius: 100px;
+  width: 0;
+  transition: width 1s cubic-bezier(.22, 1, .36, 1);
+  animation: barGrow 1s cubic-bezier(.22, 1, .36, 1) forwards;
+}
+
+.bar-sub  { background: #818cf8; animation-delay: 0.15s; }
+.bar-disc { background: #f87171; animation-delay: 0.25s; }
+.bar-tax  { background: #fbbf24; animation-delay: 0.35s; }
+.bar-ship { background: #34d399; animation-delay: 0.45s; }
+
+@keyframes barGrow {
+  from { width: 0; }
+}
+
+/* Amount */
+.ab-amount {
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 90px;
+  text-align: right;
+  color: #1e293b;
+}
+.ab-amount.neg  { color: #ef4444; }
+.ab-amount.warn { color: #d97706; }
+.ab-amount.ship { color: #10b981; }
+
+/* Divider */
+.ab-divider {
+  height: 0.5px;
+  background: var(--bs-border-color);
+  margin: 4px 0 0;
+}
+
+/* Grand Total */
+.ab-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 4px 4px;
+}
+
+.ab-total-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ab-total-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.ab-total-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.ab-total-val {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+  letter-spacing: -0.5px;
+  opacity: 0;
+  transform: scale(0.85);
+  animation: totalPop 0.4s cubic-bezier(.34, 1.56, .64, 1) 0.55s forwards;
+}
+
+@keyframes totalPop {
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ══ WRAPPER ════════════════════════════════════════════════════════════ */
+
+.ab2-wrap {
+  background: #f8faff;
+  border-radius: 14px;
+  padding: 1.25rem;
+}
+
+/* ══ CARD ═══════════════════════════════════════════════════════════════ */
+
+.ab2-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f8;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ══ HEADER ═════════════════════════════════════════════════════════════ */
+
+.ab2-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid #f1f5ff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ab2-header i {
+  font-size: 16px;
+  color: #8892aa;
+}
+
+.ab2-header span {
+  font-size: 12px;
+  font-weight: 700;
+  color: #8892aa;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+}
+
+/* ══ ITEMS ══════════════════════════════════════════════════════════════ */
+
+.ab2-items {
+  padding: 4px 0;
+}
+
+.ab2-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  gap: 12px;
+  transition: background .15s ease;
+}
+
+.ab2-item:hover {
+  background: #f8faff;
+}
+
+/* ── Left side ── */
+
+.ab2-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 140px;
+}
+
+.ab2-icon-wrap {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+/* Icon color variants */
+.icon-purple { background: #EEEDFE; color: #534AB7; }
+.icon-coral  { background: #FAECE7; color: #993C1D; }
+.icon-amber  { background: #FAEEDA; color: #854F0B; }
+.icon-teal   { background: #E1F5EE; color: #0F6E56; }
+
+.ab2-lbl {
+  font-size: 13px;
+  color: #4a5578;
+  font-weight: 500;
+}
+
+/* ── Right side ── */
+
+.ab2-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ── Pill badges ── */
+
+.ab2-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 99px;
+  letter-spacing: .2px;
+}
+
+.pill-purple { background: #EEEDFE; color: #3C3489; }
+.pill-coral  { background: #FAECE7; color: #712B13; }
+.pill-amber  { background: #FAEEDA; color: #633806; }
+.pill-teal   { background: #E1F5EE; color: #085041; }
+
+/* ── Amount values ── */
+
+.ab2-amt {
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 100px;
+  text-align: right;
+  font-family: 'JetBrains Mono', monospace;
+  color: #0f1729;
+}
+
+.ab2-amt.neg  { color: #993C1D; }
+.ab2-amt.warn { color: #854F0B; }
+.ab2-amt.ship { color: #0F6E56; }
+
+/* ══ FOOTER ═════════════════════════════════════════════════════════════ */
+
+.ab2-footer {
+  border-top: 1px solid #e2e8f8;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8faff;
+}
+
+.ab2-footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ab2-footer-tag {
+  font-size: 10px;
+  font-weight: 700;
+  color: #8892aa;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+}
+
+.ab2-footer-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f1729;
+}
+
+.ab2-footer-amt {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f1729;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ══ RESPONSIVE ═════════════════════════════════════════════════════════ */
+
+@media (max-width: 480px) {
+  .ab2-pill     { display: none; }
+  .ab2-left     { min-width: 110px; }
+  .ab2-amt      { min-width: 80px; font-size: 12px; }
+  .ab2-footer-amt { font-size: 18px; }
+  .ab2-item     { padding: 10px 14px; }
+  .ab2-header   { padding: 12px 14px; }
+  .ab2-footer   { padding: 12px 14px; }
+}

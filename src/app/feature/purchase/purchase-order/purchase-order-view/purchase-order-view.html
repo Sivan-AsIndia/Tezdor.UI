@@ -171,30 +171,81 @@
           </div>
 
           <!-- AMOUNT BREAKDOWN (like Work Experience card) -->
-          <div class="pf-card">
-            <div class="pf-head">Amount Breakdown</div>
+      <!-- AMOUNT BREAKDOWN CARD -->
+<div class="ab2-wrap">
+  <div class="ab2-card">
 
-            <div class="pf-amount-row mb-3">
-              <b>Sub Total</b>
-              <span>₹{{ po.subTotal | number:'1.2-2' }}</span>
-            </div>
-            <div class="pf-amount-row mb-3">
-              <b>Total Discount</b>
-              <span class="text-danger">− ₹{{ po.discountAmount | number:'1.2-2' }}</span>
-            </div>
-            <div class="pf-amount-row mb-3">
-              <b>Tax Amount</b>
-              <span>+ ₹{{ po.taxAmount | number:'1.2-2' }}</span>
-            </div>
-            <div class="pf-amount-row mb-3" >
-              <b>Shipping Charge</b>
-              <span>+ ₹{{ po.shippingCharge | number:'1.2-2' }}</span>
-            </div>
-            <div class="pf-amount-row pf-amount-total">
-              <b>Grand Total</b>
-              <span class="text-success">₹{{ po.grandTotal | number:'1.2-2' }}</span>
-            </div>
+    <div class="ab2-header">
+      <i class="ti ti-list"></i>
+      <span>Amount breakdown</span>
+    </div>
+
+    <div class="ab2-items">
+
+      <div class="ab2-item">
+        <div class="ab2-left">
+          <div class="ab2-icon-wrap icon-purple">
+            <i class="ti ti-cash"></i>
           </div>
+          <span class="ab2-lbl">Sub total</span>
+        </div>
+        <div class="ab2-right">
+          <span class="ab2-pill pill-purple">Base</span>
+          <span class="ab2-amt">₹{{ po.subTotal | number:'1.2-2' }}</span>
+        </div>
+      </div>
+
+      <div class="ab2-item">
+        <div class="ab2-left">
+          <div class="ab2-icon-wrap icon-coral">
+            <i class="ti ti-tag"></i>
+          </div>
+          <span class="ab2-lbl">Discount</span>
+        </div>
+        <div class="ab2-right">
+          <span class="ab2-pill pill-coral">Saving</span>
+          <span class="ab2-amt neg">−₹{{ po.discountAmount | number:'1.2-2' }}</span>
+        </div>
+      </div>
+
+      <div class="ab2-item">
+        <div class="ab2-left">
+          <div class="ab2-icon-wrap icon-amber">
+            <i class="ti ti-receipt-tax"></i>
+          </div>
+          <span class="ab2-lbl">Tax amount</span>
+        </div>
+        <div class="ab2-right">
+          <span class="ab2-pill pill-amber">GST</span>
+          <span class="ab2-amt warn">+₹{{ po.taxAmount | number:'1.2-2' }}</span>
+        </div>
+      </div>
+
+      <div class="ab2-item">
+        <div class="ab2-left">
+          <div class="ab2-icon-wrap icon-teal">
+            <i class="ti ti-truck"></i>
+          </div>
+          <span class="ab2-lbl">Shipping</span>
+        </div>
+        <div class="ab2-right">
+          <span class="ab2-pill pill-teal">Freight</span>
+          <span class="ab2-amt ship">+₹{{ po.shippingCharge | number:'1.2-2' }}</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="ab2-footer">
+      <div class="ab2-footer-left">
+        <span class="ab2-footer-tag">Payable</span>
+        <span class="ab2-footer-label">Grand total</span>
+      </div>
+      <span class="ab2-footer-amt">₹{{ po.grandTotal | number:'1.2-2' }}</span>
+    </div>
+
+  </div>
+</div>
 
         </div>
       </div>

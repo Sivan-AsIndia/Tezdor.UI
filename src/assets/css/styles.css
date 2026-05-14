@@ -18745,7 +18745,7 @@
 [data-bs-theme=dark] .ql-snow .ql-picker.ql-header .ql-picker-item::before,
 [data-bs-theme=dark] .ql-snow .ql-picker.ql-header .ql-picker-label::before,
 [data-bs-theme=dark] .text-dark {
-    color: #7c8fac !important
+    color: white !important
 }
 
 [data-bs-theme=dark] .jsgrid-cell,
@@ -53463,7 +53463,7 @@ body .connect-sorting-content {
     color:white !important;
 }
 [data-bs-theme=dark] .hide-menu{
-    color:#ffffff85 !important;
+    color:white !important;
 }
 [data-bs-theme=dark] .content-card,[data-bs-theme=dark] table tr th,[data-bs-theme=dark] table td{
     background: #111c2d !important;

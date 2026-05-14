@@ -300,8 +300,8 @@ padding-top: 6px;
   transition: all 0.15s;
 }
 
-.pf-status-option:hover { border-color:  var(--color-primary); background: color-mix(in srgb, var(--color-primary) 7%, white); }
-.pf-status-option--active { border-color:  var(--color-primary); background: color-mix(in srgb, var(--color-primary) 7%, white); }
+.pf-status-option:hover { border-color:  var(--color-primary); background: color-mix(in srgb, var(--color-primary) 7%, #ffffff47); }
+.pf-status-option--active { border-color:  var(--color-primary); background: color-mix(in srgb, var(--color-primary) 7%, #ffffff47); }
 
 .pf-status-radio { accent-color:  var(--color-primary); }
 
