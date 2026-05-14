@@ -99,13 +99,26 @@
                                     <div class="mb-3">
                                         <label class="fw-semibold mb-2">Posting Date</label>
 
-                                        <input type="date" class="form-control" [value]="filters().date ?? ''"
-                                            (change)="setDate($any($event.target).value)" />
+
+                                        <div class="position-relative">
+                                            <input class="form-control pe-5" [matDatepicker]="postingDatePicker"
+                                                [value]="filters().date ?? ''"
+                                                (dateChange)="setDate($any($event.target).value)"
+                                                placeholder="Select date..." readonly
+                                                (click)="postingDatePicker.open()" />
+                                            <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                                                style="font-size:18px; cursor:pointer;"
+                                                (click)="postingDatePicker.open()">
+                                            </i>
+                                        </div>
+                                        <mat-datepicker #postingDatePicker></mat-datepicker>
                                     </div>
 
                                     <!-- FOOTER -->
                                     <div class="d-flex gap-2 mt-4">
-                                        <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="closeFilter()">Cancel</button>
+                                        <button
+                                            class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3"
+                                            (click)="closeFilter()">Cancel</button>
                                         <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
 " (click)="closeFilter()">Apply</button>
                                     </div>
@@ -187,7 +200,7 @@
 
                                                 <!-- DATE -->
                                                 <td class="d-none d-md-table-cell">
-                                                    {{ e.postingDate | date:'dd/MM/yyyy' }}
+                                                    {{ e.postingDate | date:'dd MMM yyyy' }}
                                                 </td>
 
                                                 <!-- ACCOUNT -->
@@ -259,19 +272,22 @@
                                                         </button> -->
 
 
-                                                          <a (click)="onView(e)" style="cursor: pointer;"
-                              class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
-                              title="View">
-                              <span class="v-btn__content">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-eye text-info"
-                                  width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5"
-                                  stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                  <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/>
-                                  <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/>
-                                </svg>
-                              </span>
-                            </a>
+                                                        <a (click)="onView(e)" style="cursor: pointer;"
+                                                            class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                                                            title="View">
+                                                            <span class="v-btn__content">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="icon-tabler icon-tabler-eye text-info"
+                                                                    width="20" height="20" viewBox="0 0 24 24"
+                                                                    stroke-width="1.5" stroke="currentColor" fill="none"
+                                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                                    <path
+                                                                        d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                                                </svg>
+                                                            </span>
+                                                        </a>
 
 
                                                         <!-- <button class="icon-btn delete" (click)="onDelete(e)">

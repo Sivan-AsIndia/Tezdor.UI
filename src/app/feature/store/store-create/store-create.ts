@@ -8,10 +8,13 @@ import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { SearchDropdownComponent } from "../../../shared/components/search-dropdown/search-dropdown";
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-store-create',
-  imports: [CommonModule, RouterLink, DatePipe, DecimalPipe, SearchDropdownComponent,NgxEditorModule,ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, DatePipe, DecimalPipe, SearchDropdownComponent,NgxEditorModule,ReactiveFormsModule,
+    MatDatepickerModule
+  ],
   templateUrl: './store-create.html',
   styleUrl: './store-create.css',
 })

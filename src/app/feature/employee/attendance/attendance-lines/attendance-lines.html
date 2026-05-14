@@ -51,18 +51,36 @@
                         <div class="topbar-actions">
                             @if(viewMode() === 'table'){
                             <!-- DATE FILTER -->
-                            <div class="date-filter" (click)="openDatePicker(dateInput)">
+                            <div class="date-filter">
 
-                                <input #dateInput type="date" class="form-control form-control-sm"
-                                    [value]="filterDate()" (input)="filterDate.set($any($event.target).value)" />
+                                <div class="position-relative">
+                                    <input class="form-control pe-5" [matDatepicker]="permissionDatePicker"
+                                        [value]="filterDate()" (dateChange)="filterDate.set($any($event.target).value)"
+                                        (dateChange)="setFilterDate($event.value)" 
+                                        placeholder="Select date..." readonly (click)="permissionDatePicker.open()" />
+
+                                    @if(filterDate()){
+                                    <button class="icon-clear" (click)="clearDate($event)">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                    }@else{
+                                    <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                                        style="font-size:18px; cursor:pointer;" (click)="permissionDatePicker.open()">
+                                    </i>
+                                    }
+
+                                </div>
 
                                 @if(filterDate()){
                                 <button class="icon-clear" (click)="clearDate($event)">
                                     <i class="bi bi-x"></i>
                                 </button>
                                 }
-
+                                <mat-datepicker #permissionDatePicker></mat-datepicker>
                             </div>
+
+
+
                             <!-- SEARCH -->
                             <div class="search-box">
                                 <input type="text" placeholder="Search by employee..." [value]="searchValue()"
@@ -195,8 +213,9 @@
                                                 </div>
                                             </td>
 
-                                            <td class="d-none d-md-table-cell">{{ s.fromDate }}</td>
-                                            <td class="d-none d-md-table-cell">{{ s.toDate }}</td>
+                                            <td class="d-none d-md-table-cell">{{ s.fromDate | date:'dd MMM yyyy' }}
+                                            </td>
+                                            <td class="d-none d-md-table-cell">{{ s.toDate | date:'dd MMM yyyy' }}</td>
                                             <td class="d-none d-xl-table-cell">{{ s.totalPresent }}</td>
                                             <td class="d-none d-xl-table-cell">{{ formatHours(s.totalWorkingHours) }}
                                             </td>
@@ -212,19 +231,22 @@
                                                     </button> -->
 
 
-                                                      <a (click)="onView(s)"
-                              class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
-                              title="View">
-                              <span class="v-btn__content">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-eye text-info"
-                                  width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5"
-                                  stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                  <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/>
-                                  <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/>
-                                </svg>
-                              </span>
-                            </a>
+                                                    <a (click)="onView(s)"
+                                                        class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                                                        title="View">
+                                                        <span class="v-btn__content">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="icon-tabler icon-tabler-eye text-info" width="20"
+                                                                height="20" viewBox="0 0 24 24" stroke-width="1.5"
+                                                                stroke="currentColor" fill="none" stroke-linecap="round"
+                                                                stroke-linejoin="round">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                                <path
+                                                                    d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                                            </svg>
+                                                        </span>
+                                                    </a>
 
 
                                                     <!-- <button class="icon-btn edit" (click)="onEdit(s)" title="Edit">
@@ -407,8 +429,16 @@
             <!-- DATE -->
             <div class="field">
                 <label>Date</label>
-                <input type="date" [value]="form().attendanceDate" (input)="setDate($any($event.target).value)"
-                    [class.is-invalid]="hasError('attendanceDate')">
+                <div class="position-relative">
+                    <input class="form-control pe-5" [matDatepicker]="attendanceDatePicker"
+                        [value]="form().attendanceDate" (dateChange)="setDate($event.value)"
+                        [class.is-invalid]="hasError('attendanceDate')" placeholder="Select date..." readonly
+                        (click)="attendanceDatePicker.open()" />
+                    <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                        style="font-size:18px; cursor:pointer;" (click)="attendanceDatePicker.open()">
+                    </i>
+                </div>
+                <mat-datepicker #attendanceDatePicker></mat-datepicker>
                 @if(hasError('attendanceDate')){
                 <div class="field-error">
                     {{ getError('attendanceDate') }}
@@ -654,7 +684,7 @@
                                 <tbody>
                                     @for (row of paginatedEmployeeAttendance(); track row.attendanceLineId) {
                                     <tr>
-                                        <td>{{ row.attendanceDate }}</td>
+                                        <td>{{ row.attendanceDate | date:'dd MMM yyyy' }}</td>
                                         <!-- IN TIME -->
                                         <td>
                                             @if (editingLineId() === row.attendanceLineId) {
@@ -715,12 +745,14 @@
                                                 @if (editingLineId() === row.attendanceLineId) {
 
                                                 <!-- SAVE -->
-                                                <button class="icon-btn bg-success" title="Save" (click)="saveEdit(row)">
+                                                <button class="icon-btn bg-success" title="Save"
+                                                    (click)="saveEdit(row)">
                                                     <i class="ti ti-check"></i>
                                                 </button>
 
                                                 <!-- CANCEL -->
-                                                <button class="icon-btn bg-danger" title="Cancel" (click)="cancelEdit()">
+                                                <button class="icon-btn bg-danger" title="Cancel"
+                                                    (click)="cancelEdit()">
                                                     <i class="ti ti-x"></i>
                                                 </button>
 
@@ -732,19 +764,22 @@
                                                     <i class="ti ti-pencil"></i>
                                                 </button> -->
 
-                                                  <a (click)="startEdit(row)"
-                              class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
-                              title="Edit">
-                              <span class="v-btn__content">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-pencil text-primary"
-                                  width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5"
-                                  stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                  <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"/>
-                                  <path d="M13.5 6.5l4 4"/>
-                                </svg>
-                              </span>
-                            </a>
+                                                <a (click)="startEdit(row)"
+                                                    class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                                                    title="Edit">
+                                                    <span class="v-btn__content">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="icon-tabler icon-tabler-pencil text-primary"
+                                                            width="20" height="20" viewBox="0 0 24 24"
+                                                            stroke-width="1.5" stroke="currentColor" fill="none"
+                                                            stroke-linecap="round" stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                            <path
+                                                                d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
+                                                            <path d="M13.5 6.5l4 4" />
+                                                        </svg>
+                                                    </span>
+                                                </a>
                                                 }
 
                                                 @if(row.attendanceType === AttendanceType.Leave){
@@ -875,9 +910,16 @@
             <div class="field">
                 <label>Permission Date</label>
 
-                <input type="date" [value]="permissionForm().permissionDate"
-                    (input)="setPermissionDate($any($event.target).value)"
-                    [class.is-invalid]="hasError('permissionDate')">
+                <div class="position-relative">
+                    <input class="form-control pe-5" [matDatepicker]="permissionDatePicker"
+                        [value]="permissionForm().permissionDate" (dateChange)="setPermissionDate($event.value)"
+                        [class.is-invalid]="hasError('permissionDate')" placeholder="Select date..." readonly
+                        (click)="permissionDatePicker.open()" />
+                    <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                        style="font-size:18px; cursor:pointer;" (click)="permissionDatePicker.open()">
+                    </i>
+                </div>
+                <mat-datepicker #permissionDatePicker></mat-datepicker>
 
                 @if(hasError('permissionDate')){
                 <div class="field-error">
@@ -1001,7 +1043,9 @@
         <!-- FOOTER -->
         <div class="modal-footer">
 
-            <button class="btn-cancel-perm v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="closePermissionModal()">
+            <button
+                class="btn-cancel-perm v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3"
+                (click)="closePermissionModal()">
                 Cancel
             </button>
 
@@ -1124,11 +1168,24 @@
                         From Date
                     </label>
 
-                    <input type="date" class="leave-input" [class.is-invalid]="hasLeaveError('fromDate')"
-                        [value]="leaveForm().fromDate" (input)="leaveForm.update(f => ({
-                             ...f,
-                             fromDate: $any($event.target).value
-                           }))">
+
+                    <div class="position-relative">
+                        <input class="form-control pe-5" [matDatepicker]="leaveFromDatePicker"
+                            [class.is-invalid]="hasLeaveError('fromDate')" [value]="leaveForm().fromDate" (dateChange)="leaveForm.update(f => ({
+                                ...f,
+                                fromDate:
+                                $event.value
+                                    ?
+                                    formatDate(
+                                    $event.value
+                                    )
+                                    :''
+                            }))" placeholder="Select date..." readonly (click)="leaveFromDatePicker.open()" />
+                        <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                            style="font-size:18px; cursor:pointer;" (click)="leaveFromDatePicker.open()">
+                        </i>
+                    </div>
+                    <mat-datepicker #leaveFromDatePicker></mat-datepicker>
 
                     @if(hasLeaveError('fromDate')){
 
@@ -1147,11 +1204,25 @@
                         To Date
                     </label>
 
-                    <input type="date" class="leave-input" [class.is-invalid]="hasLeaveError('toDate')"
-                        [min]="leaveForm().fromDate" [value]="leaveForm().toDate" (input)="leaveForm.update(f => ({
-                             ...f,
-                             toDate: $any($event.target).value
-                           }))">
+
+                    <div class="position-relative">
+                        <input class="form-control pe-5" [matDatepicker]="leaveToDatePicker"
+                            [class.is-invalid]="hasLeaveError('toDate')" [min]="leaveForm().fromDate"
+                            [value]="leaveForm().toDate" (dateChange)="leaveForm.update(f => ({
+                                ...f,
+                                toDate:
+                                $event.value
+                                    ?
+                                    formatDate(
+                                    $event.value
+                                    )
+                                    :''
+                            }))" placeholder="Select date..." readonly (click)="leaveToDatePicker.open()" />
+                        <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                            style="font-size:18px; cursor:pointer;" (click)="leaveToDatePicker.open()">
+                        </i>
+                    </div>
+                    <mat-datepicker #leaveToDatePicker></mat-datepicker>
 
                     @if(hasLeaveError('toDate')){
 
@@ -1193,7 +1264,9 @@
         <!-- FOOTER -->
         <div class="leave-popup-footer">
 
-            <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="showLeaveModal.set(false)">
+            <button
+                class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3"
+                (click)="showLeaveModal.set(false)">
 
                 Cancel
 
@@ -1372,7 +1445,7 @@
 
                         <strong class="leave-info-value">
 
-                            {{ selectedLeave()?.fromDate }}
+                            {{ selectedLeave()?.fromDate | date:'dd MMM yyyy' }}
 
                         </strong>
 

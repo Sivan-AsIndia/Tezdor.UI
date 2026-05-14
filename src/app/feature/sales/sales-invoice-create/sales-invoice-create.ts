@@ -19,6 +19,7 @@ import { INITIAL_PRODUCTS } from '../../product/product.seed';
 import { SearchDropdownComponent } from "../../../shared/components/search-dropdown/search-dropdown";
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 export interface SILineItemEx extends SILineItem {
   errDiscount: boolean;
@@ -26,7 +27,7 @@ export interface SILineItemEx extends SILineItem {
 @Component({
   selector: 'app-sales-invoice-create',
   standalone: true,
-  imports: [CommonModule, SearchDropdownComponent,NgxEditorModule,ReactiveFormsModule],
+  imports: [CommonModule, SearchDropdownComponent,NgxEditorModule,ReactiveFormsModule,MatDatepickerModule],
   templateUrl: './sales-invoice-create.html',
   styleUrl: './sales-invoice-create.css',
 })

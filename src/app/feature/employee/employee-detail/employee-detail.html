@@ -138,7 +138,7 @@
                             <label>Display Name</label>
                             <b>{{ employee()?.displayName || '-' }}</b>
                         </div>
-                        <div><label>DOB</label><b>{{ formatDate(employee()?.dateOfBirth) }}</b></div>
+                        <div><label>DOB</label><b>{{ formatDate(employee()?.dateOfBirth)  | date:'dd MMM yyyy' }}</b></div>
                         <div><label>Gender</label><span class="pf-chip blue">{{ employee()?.gender }}</span></div>
 
 

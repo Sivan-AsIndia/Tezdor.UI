@@ -108,8 +108,15 @@
 
                 <div class="col-md-3">
                     <label>Date of Birth<span class="text-danger ms-1">*</span></label>
-                    <input type="date" class="form-control" formControlName="dateOfBirth"
-                        [class.is-invalid]="hasError('dateOfBirth')">
+                    <div class="position-relative">
+                        <input class="form-control pe-5" [matDatepicker]="dateOfBirthPicker"
+                            formControlName="dateOfBirth" placeholder="Select date..."
+                            [class.is-invalid]="hasError('dateOfBirth')" readonly (click)="dateOfBirthPicker.open()" />
+                        <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                            style="font-size:18px; cursor:pointer;" (click)="dateOfBirthPicker.open()">
+                        </i>
+                    </div>
+                    <mat-datepicker #dateOfBirthPicker></mat-datepicker>
                     @if(hasError('dateOfBirth')){
                     <div class="text-danger mt-1">
                         DOB is required
@@ -226,8 +233,8 @@
 
                 <!-- SAME AS -->
                 <div class="form-check gap-2 d-flex align-items-center mb-0">
-                    <input class="form-check-input" id="addresscheckbox" type="checkbox" formControlName="sameAsPresentAddress"
-                        (change)="copyAddress()">
+                    <input class="form-check-input" id="addresscheckbox" type="checkbox"
+                        formControlName="sameAsPresentAddress" (change)="copyAddress()">
 
                     <label class="form-check-label small mb-0" for="addresscheckbox" style="cursor: pointer;">
                         Use residential address as permanent address
@@ -488,8 +495,16 @@
 
                 <div class="col-md-3">
                     <label>Date of Joining</label>
-                    <input type="date" class="form-control" formControlName="dateOfJoining"
-                        [class.is-invalid]="hasError('dateOfJoining')">
+                    <div class="position-relative">
+                        <input class="form-control pe-5" [matDatepicker]="dateOfJoiningPicker"
+                            formControlName="dateOfJoining" placeholder="Select date..."
+                            [class.is-invalid]="hasError('dateOfJoining')" readonly
+                            (click)="dateOfJoiningPicker.open()" />
+                        <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                            style="font-size:18px; cursor:pointer;" (click)="dateOfJoiningPicker.open()">
+                        </i>
+                    </div>
+                    <mat-datepicker #dateOfJoiningPicker></mat-datepicker>
                     @if(hasError('dateOfJoining')){
                     <div class="text-danger mt-1">
                         DOJ is required
@@ -500,8 +515,16 @@
 
                 <div class="col-md-3">
                     <label>Probation End Date</label>
-
-                    <input type="date" class="form-control" formControlName="probationEndDate">
+                    <div class="position-relative">
+                        <input class="form-control pe-5" [matDatepicker]="probationEndDatePicker"
+                            formControlName="probationEndDate" placeholder="Select date..."
+                            [class.is-invalid]="hasError('probationEndDate')" readonly
+                            (click)="probationEndDatePicker.open()" />
+                        <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                            style="font-size:18px; cursor:pointer;" (click)="probationEndDatePicker.open()">
+                        </i>
+                    </div>
+                    <mat-datepicker #probationEndDatePicker></mat-datepicker>
                 </div>
 
                 <div class="col-md-3">
@@ -652,8 +675,7 @@
 
                         <!-- ADD BUTTON -->
                         <button type="button" class="btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
- btn-sm" style="font-size:10px ;"
-                            (click)="addUpi()">
+ btn-sm" style="font-size:10px ;" (click)="addUpi()">
                             + Add UPI ID
                         </button>
                     </div>
@@ -814,8 +836,18 @@
 
                                     <div class="col-md-2">
                                         <label class="form-label">Completion</label>
-                                        <input type="date" class="form-control"
-                                            [formControl]="edu.controls.dateOfCompletion">
+
+                                        <div class="position-relative">
+                                            <input class="form-control pe-5" [matDatepicker]="dateOfCompletionPicker"
+                                                [formControl]="edu.controls.dateOfCompletion"
+                                                placeholder="Select date..." readonly
+                                                (click)="dateOfCompletionPicker.open()" />
+                                            <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                                                style="font-size:18px; cursor:pointer;"
+                                                (click)="dateOfCompletionPicker.open()">
+                                            </i>
+                                        </div>
+                                        <mat-datepicker #dateOfCompletionPicker></mat-datepicker>
                                     </div>
 
                                     <div class="col-md-1">
@@ -881,12 +913,29 @@
 
                                     <div class="col-md-2">
                                         <label class="form-label">From</label>
-                                        <input type="date" class="form-control" [formControl]="work.controls.fromDate">
+                                        <div class="position-relative">
+                                            <input class="form-control pe-5" [matDatepicker]="fromDatePicker"
+                                                [formControl]="work.controls.fromDate" placeholder="Select date..."
+                                                readonly (click)="fromDatePicker.open()" />
+                                            <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                                                style="font-size:18px; cursor:pointer;" (click)="fromDatePicker.open()">
+                                            </i>
+                                        </div>
+                                        <mat-datepicker #fromDatePicker></mat-datepicker>
                                     </div>
 
                                     <div class="col-md-2">
                                         <label class="form-label">To</label>
-                                        <input type="date" class="form-control" [formControl]="work.controls.toDate">
+                                        <div class="position-relative">
+                                            <input class="form-control pe-5" [matDatepicker]="toDatePicker"
+                                                [formControl]="work.controls.toDate" placeholder="Select date..."
+                                                      [min]="work.controls.fromDate.value"
+                                                readonly (click)="toDatePicker.open()" />
+                                            <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                                                style="font-size:18px; cursor:pointer;" (click)="toDatePicker.open()">
+                                            </i>
+                                        </div>
+                                        <mat-datepicker #toDatePicker></mat-datepicker>
                                     </div>
 
                                     <div class="col-md-1">
@@ -921,8 +970,12 @@
 
     <!-- ================= ACTION ================= -->
     <div class="text-end mb-5 gap-2 action-btn">
-        <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="reset()">Cancel</button>
-        <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated" type="submit" (click)="save()">
+        <button
+            class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3"
+            (click)="reset()">Cancel</button>
+        <button
+            class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+            type="submit" (click)="save()">
             {{ mode() === 'create' ? 'Save' : 'Update' }}
         </button>
     </div>

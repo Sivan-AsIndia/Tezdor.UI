@@ -129,10 +129,21 @@
 
             <div class="sc-field">
               <label class="sc-lbl sc-lbl-req">Transaction Date</label>
-              <div class="sc-inp-wrap" [class.sc-inp-err]="errDate">
+              <!-- <div class="sc-inp-wrap" [class.sc-inp-err]="errDate">
                 <input type="date" class="form-control" [value]="tnDate()" [max]="todayStr()"
                   (change)="tnDate.set($any($event.target).value)" />
-              </div>
+              </div> -->
+
+                              <div class="sc-inp-wrap position-relative" [class.sc-inp-err]="errDate">
+                  <input class="form-control pe-5" [matDatepicker]="transactionDatePicker" 
+                    placeholder="Select date..." [value]="tnDate()" [max]="todayStr()"
+                  (change)="tnDate.set($any($event.target).value)" readonly
+                    (click)="transactionDatePicker.open()" />
+                  <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                    style="font-size:18px; cursor:pointer;" (click)="transactionDatePicker.open()">
+                  </i>
+                </div>
+                <mat-datepicker #transactionDatePicker></mat-datepicker>
               @if (errDate) {
               <div class="sc-err"><i class="ti ti-alert-circle"></i> Date required, cannot be future</div>
               }

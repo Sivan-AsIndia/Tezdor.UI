@@ -15,6 +15,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { EmployeeDataClient } from '../employee-data-client';
 import { MasterDataClient } from '../../../core/services/master-data';
 import { SearchDropdownComponent } from "../../../shared/components/search-dropdown/search-dropdown";
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 type EducationForm = FormGroup<{
   degree: FormControl<string>;
@@ -36,7 +37,7 @@ type Option = { id: string; name: string };
 
 @Component({
   selector: 'app-create-employee',
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, SearchDropdownComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, SearchDropdownComponent,MatDatepickerModule],
   templateUrl: './employee-create.html',
   styleUrl: './employee-create.css',
 })

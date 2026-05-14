@@ -449,16 +449,21 @@
                   Warehouse
                 </label>
 
-                <!-- <ng-select
-    formControlName="warehouseId"
-    [items]="warehouseOptions"
-    bindValue="value"
-    bindLabel="label"
-    placeholder="-- Select Warehouse --"
-    [searchable]="true"
-    [clearable]="true"
-    [class.is-invalid]="hasError('warehouseId')">
-  </ng-select> -->
+                <select class="form-select" formControlName="warehouseId" [class.is-invalid]="hasError('warehouseId')">
+
+                  <option value="">
+                    -- Select Warehouse --
+                  </option>
+
+                  @for (w of warehouseOptions; track w.value) {
+
+                  <option [value]="w.value">
+                    {{ w.label }}
+                  </option>
+
+                  }
+
+                </select>
 
                 @if (hasError('warehouseId')) {
                 <div class="invalid-feedback" style="display:block">

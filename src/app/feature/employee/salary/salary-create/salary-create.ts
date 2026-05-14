@@ -10,10 +10,11 @@ import { ToastNotifier } from '../../../../core/services/toast';
 import { SalaryComponentType } from '../salary-component';
 import { CommonModule } from '@angular/common';
 import { SearchDropdownComponent } from "../../../../shared/components/search-dropdown/search-dropdown";
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-salary-create',
-  imports: [CommonModule, RouterModule, SearchDropdownComponent],
+  imports: [CommonModule, RouterModule, SearchDropdownComponent,MatDatepickerModule],
   templateUrl: './salary-create.html',
   styleUrl: './salary-create.css',
 })
