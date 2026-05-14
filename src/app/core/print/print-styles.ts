@@ -72,38 +72,71 @@ export const PRINT_COMMON_CSS = `
     line-height: 1.5;
   }
 
+  /* ── Meta Block: 2-Column Grid (no box, unified borders) ── */
   .meta-block {
     border-left: 1px solid #333;
     padding: 0;
-    min-width: 280px;
+    min-width: 380px;
+    max-width: 420px;
   }
 
-  .meta-row {
+  .meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    height: 100%;
+  }
+
+  .meta-cell {
     display: flex;
     justify-content: space-between;
-    padding: 4px 10px;
-    border-bottom: 1px solid #ddd;
-    font-size: 11.5px;
+    align-items: center;
+    padding: 5px 10px;
+    border-bottom: 1px solid #333;
+    border-right: 1px solid #333;
+    font-size: 11px;
+    min-height: 28px;
   }
 
-  .meta-row:last-child {
+  .meta-cell:nth-child(even) {
+    border-right: none;
+  }
+
+  .meta-cell--full {
+    grid-column: 1 / -1;
+    border-right: none;
+  }
+
+  /* Remove bottom border from the last row of cells */
+  .meta-grid > .meta-cell:nth-last-child(1),
+  .meta-grid > .meta-cell:nth-last-child(2):nth-child(odd) {
     border-bottom: none;
   }
 
   .meta-label {
     font-weight: 600;
     color: #333;
+    white-space: nowrap;
+    margin-right: 8px;
+    font-size: 10.5px;
   }
 
   .meta-value {
     font-weight: 700;
     color: #111;
     text-align: right;
+    font-size: 11px;
   }
 
   .meta-value.amount {
     color: #c0392b;
     font-size: 12px;
+    font-weight: 800;
+  }
+
+  .meta-value.highlight {
+    color: #1a5276;
+    font-weight: 800;
   }
 
   /* ── Party Section (Buyer / Consignee / Ship To) ────── */

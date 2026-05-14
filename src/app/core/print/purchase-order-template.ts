@@ -1,6 +1,7 @@
 // ── Purchase Order Print Template ─────────────────────────────
 // Generates the HTML content for printing a Purchase Order.
 // Layout matches the provided Order_Sample.jpg template.
+// Meta block uses a 2-column grid layout with red border.
 
 import { PurchaseOrder, PAYMENT_TERMS_OPTIONS, DELIVERY_OPTIONS } from '../../feature/purchase/purchase-order/purchase-order';
 import { COMPANY_INFO } from './company-info';
@@ -82,7 +83,7 @@ export function buildPurchaseOrderPrintHtml(po: PurchaseOrder): string {
     <div class="doc-title">Purchase Order</div>
     <div class="doc-copy-label">Original Copy</div>
 
-    <!-- ═══ Company + PO Meta ═══ -->
+    <!-- ═══ Company + PO Meta (2-Column Grid) ═══ -->
     <div class="header-section">
       <div class="company-block">
         <div class="company-name">${company.name}</div>
@@ -94,37 +95,39 @@ export function buildPurchaseOrderPrintHtml(po: PurchaseOrder): string {
         </div>
       </div>
       <div class="meta-block">
-        <div class="meta-row">
-          <span class="meta-label">PO No:</span>
-          <span class="meta-value" style="color:#1a5276; font-size:13px;">${po.poNumber}</span>
-        </div>
-        <div class="meta-row">
-          <span class="meta-label">Amount Due:</span>
-          <span class="meta-value amount">INR ${formatIndianNumber(po.grandTotal)}</span>
-        </div>
-        <div class="meta-row">
-          <span class="meta-label">Issue Date:</span>
-          <span class="meta-value">${formatPrintDate(po.orderDate)}</span>
-        </div>
-        <div class="meta-row">
-          <span class="meta-label">Valid Until:</span>
-          <span class="meta-value">${formatPrintDate(validUntil.toISOString())}</span>
-        </div>
-        <div class="meta-row">
-          <span class="meta-label">Expected Delivery:</span>
-          <span class="meta-value">${formatPrintDate(po.expectedDate)}</span>
-        </div>
-        <div class="meta-row">
-          <span class="meta-label">Payment Terms:</span>
-          <span class="meta-value">${paymentLabel}</span>
-        </div>
-        <div class="meta-row">
-          <span class="meta-label">Delivery Method:</span>
-          <span class="meta-value">${deliveryLabel}</span>
-        </div>
-        <div class="meta-row">
-          <span class="meta-label">Status:</span>
-          <span class="meta-value">${po.status.charAt(0).toUpperCase() + po.status.slice(1)}</span>
+        <div class="meta-grid">
+          <div class="meta-cell">
+            <span class="meta-label">PO No:</span>
+            <span class="meta-value highlight">${po.poNumber}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">Amount Due:</span>
+            <span class="meta-value amount">INR ${formatIndianNumber(po.grandTotal)}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">Issue Date:</span>
+            <span class="meta-value">${formatPrintDate(po.orderDate)}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">Valid Until:</span>
+            <span class="meta-value">${formatPrintDate(validUntil.toISOString())}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">Expected Delivery:</span>
+            <span class="meta-value">${formatPrintDate(po.expectedDate)}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">Payment Terms:</span>
+            <span class="meta-value">${paymentLabel}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">Delivery Method:</span>
+            <span class="meta-value">${deliveryLabel}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">Status:</span>
+            <span class="meta-value">${po.status.charAt(0).toUpperCase() + po.status.slice(1)}</span>
+          </div>
         </div>
       </div>
     </div>
