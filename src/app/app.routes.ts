@@ -134,7 +134,7 @@ export const routes: Routes = [
 
       // ── Sales Invoice ────────────────────────────────────────
 
-{
+      {
         path: 'sales-invoice',
         loadComponent: () =>
           import('./feature/sales/sales-invoice-list/sales-invoice-list')
@@ -146,13 +146,13 @@ export const routes: Routes = [
           import('./feature/sales/sales-invoice-create/sales-invoice-create')
             .then(m => m.SalesInvoiceCreateComponent),
       },
-    {
+      {
         path: 'sales-invoice/edit/:id',
         loadComponent: () =>
           import('./feature/sales/sales-invoice-create/sales-invoice-create')
             .then(m => m.SalesInvoiceCreateComponent),
       },
-  {
+      {
         path: 'sales-invoice/:id',
         loadComponent: () =>
           import('./feature/sales/sales-invoice-view/sales-invoice-view')
@@ -254,7 +254,7 @@ export const routes: Routes = [
             .then(m => m.PettyCashDetailComponent),
       },
 
-            // ── General ledger Entry ──────────────────────────────────────────────
+      // ── General ledger Entry ──────────────────────────────────────────────
       {
         path: 'general-ledger-entries',
         loadComponent: () =>
@@ -266,6 +266,18 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./feature/ledger/general-ledger-entry-detail/general-ledger-entry-detail')
             .then(m => m.GeneralLedgerEntryDetailComponent),
+      },
+      {
+        path: 'shifts',
+        loadComponent: () =>
+          import('./feature/employee/shift/shift-list/shift-list')
+            .then(m => m.ShiftListComponent),
+      },
+            {
+        path: 'shift/create',
+        loadComponent: () =>
+          import('./feature/employee/shift/shift-create/shift-create')
+            .then(m => m.ShiftCreateComponent),
       },
     ],
   },

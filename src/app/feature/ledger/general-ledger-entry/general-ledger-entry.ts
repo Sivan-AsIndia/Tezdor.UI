@@ -6,10 +6,11 @@ import { GeneralLedgerEntryClient } from '../general-ledger-entry-client';
 import { GeneralLedgerEntry } from '../general-ledger-entry';
 import { CommonModule } from '@angular/common';
 import { TooltipDirective } from '../../../shared/components/tooltip-ui/tooltip';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-general-ledger-entry',
-  imports: [CommonModule, RouterModule, ConfirmModalComponent,TooltipDirective],
+  imports: [CommonModule, RouterModule, ConfirmModalComponent,TooltipDirective,MatDatepickerModule],
   templateUrl: './general-ledger-entry.html',
   styleUrl: './general-ledger-entry.css',
 })

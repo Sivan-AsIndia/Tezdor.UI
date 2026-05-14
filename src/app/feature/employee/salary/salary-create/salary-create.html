@@ -144,8 +144,15 @@
                         <!-- Salary Date -->
                         <div class="form-group">
                             <label class="form-label">Salary Date</label>
-                            <input type="date" class="form-control" [value]="form().salaryDate"
-                                (input)="setSalaryDate($any($event.target).value)">
+                            <div class="position-relative">
+                                <input class="form-control pe-5" [matDatepicker]="salaryDatePicker"
+                                    [value]="form().salaryDate" (input)="setSalaryDate($any($event.target).value)"
+                                    placeholder="Select date..." readonly (click)="salaryDatePicker.open()" />
+                                <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                                    style="font-size:18px; cursor:pointer;" (click)="salaryDatePicker.open()">
+                                </i>
+                            </div>
+                            <mat-datepicker #salaryDatePicker></mat-datepicker>
                         </div>
 
                     </div>
@@ -312,7 +319,9 @@
             <!-- FOOTER -->
             <div class="d-flex justify-content-end gap-3 mt-3">
 
-                <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="onCancel()">
+                <button
+                    class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3"
+                    (click)="onCancel()">
                     Cancel
                 </button>
 

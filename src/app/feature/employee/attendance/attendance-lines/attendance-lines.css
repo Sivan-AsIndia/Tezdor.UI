@@ -537,7 +537,7 @@ td {
 .date-filter {
   position: relative;
   cursor: pointer;
-
+    width: 50%;
   display: inline-block;
 }
 

@@ -210,8 +210,8 @@
                                                 <td class="d-none d-md-table-cell">
                                                     {{ getDepartmentName(emp.departmentId) }}
                                                 </td>
-                                                <td class="d-none d-xl-table-cell">{{ emp.dateOfJoining |
-                                                    date:'dd/MM/yyyy' }}</td>
+                                                <td class="d-none d-xl-table-cell">{{ emp.dateOfJoining 
+                                                     | date:'dd MMM yyyy' }}</td>
 
                                                 <td class="d-none d-xl-table-cell">
                                                     <span class="badge rounded-2" [class.active]="emp.status === 'Active'"

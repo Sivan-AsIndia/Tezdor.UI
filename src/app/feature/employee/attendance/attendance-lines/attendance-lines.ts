@@ -14,10 +14,11 @@ import { Permission, PermissionStatus, PermissionType } from '../../permission/p
 import { Leave, LeaveStatus } from '../../leave/leave';
 import { CommonModule } from '@angular/common';
 import { SearchDropdownComponent } from '../../../../shared/components/search-dropdown/search-dropdown';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-attendance-lines',
-  imports: [ConfirmModalComponent, RouterModule,CommonModule,SearchDropdownComponent],
+  imports: [ConfirmModalComponent, RouterModule, CommonModule, SearchDropdownComponent, MatDatepickerModule],
   templateUrl: './attendance-lines.html',
   styleUrl: './attendance-lines.css',
 })
@@ -51,21 +52,21 @@ export class AttendanceLinesComponent {
   showQuickMenu = signal(false);
 
   selectedPermission = signal<Permission | null>(null);
-employeeDropdownItems = computed(() =>
+  employeeDropdownItems = computed(() =>
 
-  this.employees()
+    this.employees()
 
-    .filter(x => !!x.employeeId)
+      .filter(x => !!x.employeeId)
 
-    .map(x => ({
+      .map(x => ({
 
-      id: x.employeeId!,
+        id: x.employeeId!,
 
-      name:
-        `${x.firstName} ${x.lastName}`
+        name:
+          `${x.firstName} ${x.lastName}`
 
-    }))
-);
+      }))
+  );
   searchValue = signal('');
   page = signal(1);
   pageSize = signal(10);
@@ -101,11 +102,11 @@ employeeDropdownItems = computed(() =>
     this.leaveTypeService.leaveTypes;
   selectedLeave = signal<Leave | null>(null);
 
-    showLeaveDetailsPopup =
-  signal(false);
+  showLeaveDetailsPopup =
+    signal(false);
 
   showPermissionDetailsPopup =
-  signal(false);
+    signal(false);
 
 
 
@@ -617,8 +618,42 @@ employeeDropdownItems = computed(() =>
     this.form.update(f => ({ ...f, outTime: value }));
   }
 
-  setDate(value: string) {
-    this.form.update(f => ({ ...f, attendanceDate: value }));
+  setDate(
+    value: Date | null
+  ) {
+
+    if (!value) {
+      return;
+    }
+
+    const day =
+
+      String(
+        value.getDate()
+      ).padStart(2, '0');
+
+    const month =
+
+      String(
+        value.getMonth() + 1
+      ).padStart(2, '0');
+
+    const year =
+      value.getFullYear();
+
+    const formattedDate =
+
+      `${year}-${month}-${day}`;
+
+    this.form.update(f => ({
+
+      ...f,
+
+      attendanceDate:
+        formattedDate
+
+    }));
+
   }
 
 
@@ -873,6 +908,42 @@ employeeDropdownItems = computed(() =>
     input.focus();        // fallback
   }
 
+  setFilterDate(
+  value: Date | null
+) {
+
+  if (!value) {
+
+    this.filterDate.set('');
+
+    return;
+  }
+
+  const day =
+
+    String(
+      value.getDate()
+    ).padStart(2, '0');
+
+  const month =
+
+    String(
+      value.getMonth() + 1
+    ).padStart(2, '0');
+
+  const year =
+    value.getFullYear();
+
+  const formattedDate =
+
+    `${year}-${month}-${day}`;
+
+  this.filterDate.set(
+    formattedDate
+  );
+
+}
+
   clearDate(event: Event) {
     event.stopPropagation(); // prevent opening picker
     this.filterDate.set('');
@@ -957,12 +1028,43 @@ employeeDropdownItems = computed(() =>
     }));
   }
 
-  setPermissionDate(value: string) {
-    this.permissionForm.update(f => ({
-      ...f,
-      permissionDate: value
-    }));
+setPermissionDate(
+  value: Date | null
+) {
+
+  if (!value) {
+    return;
   }
+
+  const day =
+
+    String(
+      value.getDate()
+    ).padStart(2, '0');
+
+  const month =
+
+    String(
+      value.getMonth() + 1
+    ).padStart(2, '0');
+
+  const year =
+    value.getFullYear();
+
+  const formattedDate =
+
+    `${year}-${month}-${day}`;
+
+  this.permissionForm.update(f => ({
+
+    ...f,
+
+    permissionDate:
+      formattedDate
+
+  }));
+
+}
 
   setFromTime(value: string) {
     this.permissionForm.update(f => ({
@@ -1072,24 +1174,24 @@ employeeDropdownItems = computed(() =>
       return;
     }
 
-      const alreadyExists =
-    this.permissionService
-      .permissions()
-      .some(p =>
+    const alreadyExists =
+      this.permissionService
+        .permissions()
+        .some(p =>
 
-        p.employeeId === f.employeeId &&
-        p.permissionDate === f.permissionDate &&
-        p.status !== PermissionStatus.Cancelled
+          p.employeeId === f.employeeId &&
+          p.permissionDate === f.permissionDate &&
+          p.status !== PermissionStatus.Cancelled
+        );
+
+    if (alreadyExists) {
+
+      this.toast.error(
+        'Only one permission is allowed per day'
       );
 
-  if (alreadyExists) {
-
-    this.toast.error(
-      'Only one permission is allowed per day'
-    );
-
-    return;
-  }
+      return;
+    }
 
     const permission: Permission = {
 
@@ -1398,20 +1500,20 @@ employeeDropdownItems = computed(() =>
       return;
     }
 
-const hasAttendance =
-  this.service.hasAttendance(
+    const hasAttendance =
+      this.service.hasAttendance(
 
-    f.employeeId,
+        f.employeeId,
 
-    f.fromDate,
+        f.fromDate,
 
-    f.toDate,
+        f.toDate,
 
-    this.selectedLeave()?.leaveId
-  );
+        this.selectedLeave()?.leaveId
+      );
 
-if (hasAttendance) {      
-  this.leaveErrors.update(e => ({
+    if (hasAttendance) {
+      this.leaveErrors.update(e => ({
         ...e,
 
         fromDate:
@@ -1421,12 +1523,12 @@ if (hasAttendance) {
           'Attendance already exists for selected dates'
       }));
 
-  this.toast.error(
-    'Attendance already exists for selected dates'
-  );
+      this.toast.error(
+        'Attendance already exists for selected dates'
+      );
 
-  return;
-}
+      return;
+    }
 
     const alreadyExists =
       this.leaveService.exists(
@@ -1650,42 +1752,62 @@ if (hasAttendance) {
 
 
 
-openLeavePopup(
-  leave?: Leave
-) {
+  openLeavePopup(
+    leave?: Leave
+  ) {
 
-  if (!leave) return;
+    if (!leave) return;
 
-  this.selectedLeave.set(leave);
+    this.selectedLeave.set(leave);
 
-  this.showLeaveDetailsPopup.set(true);
-}
-
-closeLeavePopup() {
-
-  this.showLeaveDetailsPopup.set(false);
-
-  this.selectedLeave.set(null);
-}
-
-openPermissionPopup(
-  permission?: Permission
-) {
-
-  if (!permission) {
-    return;
+    this.showLeaveDetailsPopup.set(true);
   }
 
-  this.selectedPermission.set(permission);
+  closeLeavePopup() {
 
-  this.showPermissionDetailsPopup.set(true);
-}
+    this.showLeaveDetailsPopup.set(false);
 
-closePermissionPopup() {
+    this.selectedLeave.set(null);
+  }
 
-  this.selectedPermission.set(null);
+  openPermissionPopup(
+    permission?: Permission
+  ) {
 
-  this.showPermissionDetailsPopup.set(false);
-}
+    if (!permission) {
+      return;
+    }
 
+    this.selectedPermission.set(permission);
+
+    this.showPermissionDetailsPopup.set(true);
+  }
+
+  closePermissionPopup() {
+
+    this.selectedPermission.set(null);
+
+    this.showPermissionDetailsPopup.set(false);
+  }
+
+  formatDate(
+    date: Date
+  ): string {
+
+    const day =
+      String(
+        date.getDate()
+      ).padStart(2, '0');
+
+    const month =
+      String(
+        date.getMonth() + 1
+      ).padStart(2, '0');
+
+    const year =
+      date.getFullYear();
+
+    return `${year}-${month}-${day}`;
+
+  }
 }

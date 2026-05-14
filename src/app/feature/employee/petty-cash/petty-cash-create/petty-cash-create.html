@@ -48,7 +48,7 @@
         </button>
         <button class="pf-tab" [class.pf-tab--active]="activeTab() === 'ownership'" (click)="setTab('ownership')">
 
-          <svg width="15" height="15" viewBox="0 0 24 24"  fill="none" stroke="currentColor">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5z" />
             <path d="M2 22c0-4 4-7 10-7s10 3 10 7" />
           </svg>
@@ -180,9 +180,16 @@
             <div class="form-group flex-1">
               <label class="form-label required">Effective From</label>
 
-              <input type="date" class="form-control" [value]="form().effectiveFromDate"
-                (change)="update('effectiveFromDate',$any($event.target).value)"
-                [class.is-invalid]="isSubmitted() && hasError('effectiveFromDate')">
+              <div class="position-relative">
+                <input class="form-control pe-5" [matDatepicker]="effectiveFromDatePicker"
+                  [value]="form().effectiveFromDate" (dateChange)="update('effectiveFromDate',$any($event.target).value)"
+                  [class.is-invalid]="isSubmitted() && hasError('effectiveFromDate')" placeholder="Select date..."
+                  readonly (click)="effectiveFromDatePicker.open()" />
+                <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                  style="font-size:18px; cursor:pointer;" (click)="effectiveFromDatePicker.open()">
+                </i>
+              </div>
+              <mat-datepicker #effectiveFromDatePicker></mat-datepicker>
 
               @if(isSubmitted() && hasError('effectiveFromDate')){
               <small class="text-danger">Effective From is required</small>
@@ -193,9 +200,16 @@
             <div class="form-group flex-1">
               <label class="form-label">Effective To</label>
 
-              <input type="date" class="form-control" [value]="form().effectiveToDate"
-                (change)="update('effectiveToDate',$any($event.target).value)" [class.is-invalid]="dateError()">
-
+              <div class="position-relative">
+                <input class="form-control pe-5" [matDatepicker]="effectiveToDatePicker"
+                  [value]="form().effectiveToDate" (dateChange)="update('effectiveToDate',$any($event.target).value)"
+                  [class.is-invalid]="dateError()" placeholder="Select date..." readonly
+                  (click)="effectiveToDatePicker.open()" />
+                <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                  style="font-size:18px; cursor:pointer;" (click)="effectiveToDatePicker.open()">
+                </i>
+              </div>
+              <mat-datepicker #effectiveToDatePicker></mat-datepicker>
               @if(dateError()){
               <small class="text-danger">
                 Effective To cannot be earlier than Effective From
@@ -383,9 +397,16 @@
             <div class="form-group flex-1">
               <label class="form-label required">Transaction Date</label>
 
-              <input type="date" class="form-control" [value]="form().transactionDate"
-                (change)="onTransactionDateChange($any($event.target).value)"
-                [class.is-invalid]="isSubmitted() && hasError('transactionDate')">
+              <div class="position-relative">
+                <input class="form-control pe-5" [matDatepicker]="transactionDatePicker"
+                  [value]="form().transactionDate" (dateChange)="onTransactionDateChange($any($event.target).value)"
+                  [class.is-invalid]="isSubmitted() && hasError('transactionDate')" placeholder="Select date..."
+                  readonly (click)="transactionDatePicker.open()" />
+                <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                  style="font-size:18px; cursor:pointer;" (click)="transactionDatePicker.open()">
+                </i>
+              </div>
+              <mat-datepicker #transactionDatePicker></mat-datepicker>
 
               @if(isSubmitted() && hasError('transactionDate')){
               <small class="text-danger">Transaction Date is required</small>
@@ -886,8 +907,8 @@
           <div class="form-group mt-2">
             <label class="form-label">Missing Receipt Reason</label>
 
-            <div class="rich-editor-wrapper" >
-              <form [formGroup]="editorForm" >
+            <div class="rich-editor-wrapper">
+              <form [formGroup]="editorForm">
 
                 @if (showEditor()) {
                 <!-- TOOLBAR -->
@@ -895,10 +916,11 @@
                 </ngx-editor-menu>
 
                 <!-- EDITOR -->
-                 <div class="ngx-overflow">
-                    <ngx-editor  [editor]="editor" formControlName="missingReceiptReason"
-                  placeholder="Explain why receipt is missing">
-                </ngx-editor></div>
+                <div class="ngx-overflow">
+                  <ngx-editor [editor]="editor" formControlName="missingReceiptReason"
+                    placeholder="Explain why receipt is missing">
+                  </ngx-editor>
+                </div>
 
                 }
 
@@ -1034,7 +1056,9 @@
 
     <!-- FOOTER -->
     <div class="text-end mt-3 d-flex  gap-2 justify-content-end">
-      <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="onCancel()">Cancel</button>
+      <button
+        class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3"
+        (click)="onCancel()">Cancel</button>
       <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
 " (click)="onSave()">{{ isEditMode() ? 'Update' : 'Create' }}</button>
     </div>

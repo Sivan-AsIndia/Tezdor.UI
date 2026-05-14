@@ -1,0 +1,586 @@
+<div class="max-w-full">
+
+    <div class="full-container">
+
+        <div class="v-container v-container--fluid v-locale--is-ltr rounded-xl p-0">
+
+            <!-- =====================================================
+           HEADER
+      ===================================================== -->
+
+            <div id="TopHeading" class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <h4 class="fw-bold mb-1 mainheading">
+                        Shift Management
+                    </h4>
+
+                    <small class="text-muted subdescription">
+                        Manage employee shifts, batches and working schedules.
+                    </small>
+
+                </div>
+
+                <!-- BREADCRUMB -->
+                <div class="arrow-steps d-none d-md-flex">
+
+                    <ul id="breadcrumb">
+
+                        <li>
+                            <a routerLink="/dashboard">
+                                <span class="fa fa-home me-1"></span>
+                                Home
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="javascript:void(0)">
+                                <span class="fa fa-clock me-1"></span>
+                                Shift List
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <!-- =====================================================
+           CONTENT
+      ===================================================== -->
+
+            <div class="content-card">
+
+                <div class="card-body-inner">
+
+                    <!-- =====================================================
+               TOP BAR
+          ===================================================== -->
+
+                    <div class="table-topbar">
+
+                        <div class="table-title-badge">
+
+                            <h5 class="tableheading">
+                                Shift List
+                            </h5>
+
+                            <span class="count-badge">
+                                {{ total() }}
+                            </span>
+
+                        </div>
+
+                        <div class="topbar-actions">
+
+                            <!-- SEARCH -->
+                            <div class="search-box">
+
+                                <input type="text" placeholder="Search shifts..." [value]="searchValue()"
+                                    (input)="onSearch($any($event.target).value)" />
+
+                                @if(!searchValue()){
+
+                                <button class="icon-clear">
+                                    <i class="bi bi-search"></i>
+                                </button>
+
+                                }
+
+                                @if(searchValue()){
+
+                                <button class="icon-clear" (click)="clearSearch()">
+
+                                    <i class="bi bi-x"></i>
+
+                                </button>
+
+                                }
+
+                            </div>
+
+                            <!-- FILTER -->
+                            <!-- <button
+                class="filter-btn"
+                (click)="toggleFilter()">
+
+                <i class="ti ti-filter fs-5"></i>
+
+              </button> -->
+
+                            <!-- ADD BUTTON -->
+                            <button (click)="onAddShift()"
+                                class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-primary v-btn--density-default  v-btn--size-default v-btn--variant-elevated ml-auto">
+                                <i class="mdi mdi-plus-circle-outline v-icon mr-2" aria-hidden="true"></i> Add </button>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="border-table">
+
+                        <div class="v-table v-theme--BLUE_THEME v-table--density-default">
+
+                            <div class="v-table__wrapper">
+
+                                <table>
+
+                                    <thead>
+
+                                        <tr style="background:#8080800d;">
+                                            <th class="d-xl-none" style="width:40px"></th>
+                                            <th style="width:220px;">
+                                                Shift
+                                            </th>
+
+                                            <th class="d-none d-md-table-cell">
+                                                Time
+                                            </th>
+
+                                            <th class="d-none d-md-table-cell">
+                                                Working Hours
+                                            </th>
+
+                                            <th class="d-none d-xl-table-cell">
+                                                Type
+                                            </th>
+
+                                            <th class="d-none d-xl-table-cell">
+                                                Status
+                                            </th>
+
+                                            <th style="width:130px;">
+                                                Actions
+                                            </th>
+
+                                        </tr>
+
+                                    </thead>
+
+
+                                    <tbody>
+
+                                        @for(
+                                        shift of paginatedShifts();
+                                        track shift.shiftId
+                                        ){
+
+                                        <tr>
+                                            <!-- PLUS ICON -->
+                                            <td class="d-xl-none text-center" style="padding: 0;padding-left: 15px;">
+                                                <a href="javascript:void(0);" class="TablePlus" data-bs-toggle="modal"
+                                                    data-bs-target="#rowDetailsModal" (click)="openRowDetails(shift)">
+                                                    <i class="ti ti-plus"></i>
+                                                </a>
+                                            </td>
+                                            <!-- SHIFT -->
+                                            <td>
+
+                                                <div class="d-flex align-items-center gap-2">
+
+                                                    <div class="avatar" style="
+                              background:#eef2ff;
+                              color:#4f46e5;
+                            ">
+
+                                                        <i class="ti ti-clock"></i>
+
+                                                    </div>
+
+                                                    <div>
+
+                                                        <div class="fw-semibold">
+                                                            {{ shift.shiftName }}
+                                                        </div>
+
+                                                        <small class="text-muted">
+                                                            {{ shift.shiftCode }}
+                                                        </small>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </td>
+
+                                            <!-- TIME -->
+                                            <td class="d-none d-md-table-cell">
+
+                                                {{ shift.startTime }}
+                                                -
+                                                {{ shift.endTime }}
+
+                                            </td>
+
+                                            <!-- HOURS -->
+                                            <td class="d-none d-md-table-cell">
+
+                                                {{ shift.workingHours }}
+                                                hrs
+
+                                            </td>
+
+                                            <!-- TYPE -->
+                                            <td class="d-none d-xl-table-cell">
+
+                                                @if(shift.isNightShift){
+
+                                                <span class="badge bg-dark">
+                                                    Night
+                                                </span>
+
+                                                }
+
+                                                @else if(shift.isFlexibleShift){
+
+                                                <span class="badge bg-info">
+                                                    Flexible
+                                                </span>
+
+                                                }
+
+                                                @else {
+
+                                                <span class="badge bg-primary">
+                                                    Regular
+                                                </span>
+
+                                                }
+
+                                            </td>
+
+                                            <!-- STATUS -->
+                                            <td class="d-none d-xl-table-cell">
+
+                                                <span class="badge rounded-2" [class.active]="shift.isActive"
+                                                    [class.inactive]="!shift.isActive">
+
+                                                    {{
+                                                    shift.isActive
+                                                    ? 'Active'
+                                                    : 'Inactive'
+                                                    }}
+
+                                                </span>
+
+                                            </td>
+
+                                            <!-- ACTIONS -->
+                                            <td>
+
+                                                <div class="action-icons">
+
+                                                    <!-- VIEW -->
+
+                                                    <a title="View" (click)="onView(shift)" style="cursor: pointer;"
+                                                        class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated">
+                                                        <span class="v-btn__content">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="icon-tabler icon-tabler-eye text-info" width="20"
+                                                                height="20" viewBox="0 0 24 24" stroke-width="1.5"
+                                                                stroke="currentColor" fill="none" stroke-linecap="round"
+                                                                stroke-linejoin="round">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                                <path
+                                                                    d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                                            </svg>
+                                                        </span>
+                                                    </a>
+
+                                                    <!-- EDIT -->
+                                                    <a (click)="onEdit(shift)" style="cursor: pointer;"
+                                                        class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                                                        title="Edit">
+                                                        <span class="v-btn__content">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="icon-tabler icon-tabler-pencil text-primary"
+                                                                width="20" height="20" viewBox="0 0 24 24"
+                                                                stroke-width="1.5" stroke="currentColor" fill="none"
+                                                                stroke-linecap="round" stroke-linejoin="round">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                <path
+                                                                    d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
+                                                                <path d="M13.5 6.5l4 4" />
+                                                            </svg>
+                                                        </span>
+                                                    </a>
+
+
+                                                    <!-- DELETE -->
+                                                    <button type="button" title="Delete" (click)="onDelete(shift)"
+                                                        class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated">
+                                                        <span class="v-btn__content">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="icon-tabler icon-tabler-trash text-error"
+                                                                width="20" height="20" viewBox="0 0 24 24"
+                                                                stroke-width="1.5" stroke="currentColor" fill="none"
+                                                                stroke-linecap="round" stroke-linejoin="round">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                <path d="M4 7l16 0" />
+                                                                <path d="M10 11l0 6" />
+                                                                <path d="M14 11l0 6" />
+                                                                <path
+                                                                    d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                                                <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                                            </svg>
+                                                        </span>
+                                                    </button>
+                                                </div>
+
+                                            </td>
+
+                                        </tr>
+
+                                        }
+
+                                        <!-- EMPTY -->
+                                        @if(
+                                        paginatedShifts().length === 0
+                                        ){
+
+                                        <tr>
+
+                                            <td colspan="6" class="text-center py-4">
+
+                                                <div class="empty-table">
+
+                                                    <i class="ti ti-database-off"></i>
+
+                                                    <div>
+                                                        No data found
+                                                    </div>
+
+                                                </div>
+
+                                            </td>
+
+                                        </tr>
+
+                                        }
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!--  PAGINATION -->
+                    <div class="pagination-bar Pagination">
+
+                        <!-- Page Size -->
+                        <div class="d-flex align-items-center fs-13"><!--!--><span class="me-2"
+                                style="font-size: 12px;">Rows Per Page</span>
+                            <select class="form-select form-select-sm w-auto"
+                                (change)="changePageSize($any($event.target).value)">
+                                <option [selected]="pageSize() === 5">5</option>
+                                <option [selected]="pageSize() === 10">10</option>
+                                <option [selected]="pageSize() === 25">25</option>
+                            </select><!--!-->
+                            <!--!--><span class="ms-2" style="font-size: 12px;">Entries</span>
+                        </div>
+
+                        <!-- Controls -->
+                        <div class="pagination-controls">
+
+                            <nav class="v-pagination v-theme--BLUE_THEME text-subtitle-1 text-grey100" role="navigation"
+                                aria-label="Pagination Navigation" data-test="v-pagination-root">
+                                <ul class="pagination-list">
+                                    <li><button class="page-btn" (click)="changePage(page()-1)"
+                                            [disabled]="page() === 1"><span class="mdi mdi-chevron-left"
+                                                style="font-size: 26px;"></span></button></li>
+                                    @for(p of [].constructor(totalPages()); let i = $index; track i){
+                                    <button class="page-btn" (click)="changePage(i+1)" [class.active]="page() === i+1">
+                                        {{ i+1 }}
+                                    </button>
+                                    }
+                                    <li><button class="page-btn" (click)="changePage(page()+1)"
+                                            [disabled]="page() === totalPages()"><span class="mdi mdi-chevron-right"
+                                                style="font-size: 26px;"></span></button></li>
+                                </ul>
+                            </nav>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<app-confirm-modal #modal></app-confirm-modal>
+
+
+<!-- =====================================================
+ROW DETAILS MODAL
+===================================================== -->
+<div class="modal fade"
+     id="rowDetailsModal"
+     tabindex="-1"
+     aria-labelledby="rowDetailsModalLabel"
+     aria-hidden="true">
+
+  <div class="modal-dialog modal-dialog-centered modal-md">
+
+    <div class="modal-content border-0 rounded-4 overflow-hidden">
+
+      <!-- HEADER -->
+      <div class="modal-header border-0 pb-0">
+
+        <div class="d-flex align-items-center gap-3">
+
+          <div class="details-avatar">
+            <i class="ti ti-clock"></i>
+          </div>
+
+          <div>
+
+            <h5 class="modal-title fw-bold mb-0"
+                id="rowDetailsModalLabel">
+
+              {{ selectedShift()?.shiftName }}
+
+            </h5>
+
+            <small class="text-muted">
+
+              {{ selectedShift()?.shiftCode }}
+
+            </small>
+
+          </div>
+
+        </div>
+
+        <button type="button"
+                class="btn-close shadow-none"
+                data-bs-dismiss="modal">
+        </button>
+
+      </div>
+
+      <!-- BODY -->
+      <div class="modal-body pt-3">
+
+        <div class="details-grid">
+
+          <!-- TIME -->
+          <div class="detail-card">
+
+            <div class="detail-label">
+              Shift Time
+            </div>
+
+            <div class="detail-value">
+
+              {{ selectedShift()?.startTime }}
+              -
+              {{ selectedShift()?.endTime }}
+
+            </div>
+
+          </div>
+
+          <!-- HOURS -->
+          <div class="detail-card">
+
+            <div class="detail-label">
+              Working Hours
+            </div>
+
+            <div class="detail-value">
+
+              {{ selectedShift()?.workingHours }}
+              hrs
+
+            </div>
+
+          </div>
+
+          <!-- TYPE -->
+          <div class="detail-card">
+
+            <div class="detail-label">
+              Shift Type
+            </div>
+
+            <div class="detail-value">
+
+              @if(selectedShift()?.isNightShift){
+
+              <span class="badge bg-dark">
+                Night Shift
+              </span>
+
+              }
+
+              @else if(selectedShift()?.isFlexibleShift){
+
+              <span class="badge bg-info">
+                Flexible Shift
+              </span>
+
+              }
+
+              @else {
+
+              <span class="badge bg-primary">
+                Regular Shift
+              </span>
+
+              }
+
+            </div>
+
+          </div>
+
+          <!-- STATUS -->
+          <div class="detail-card">
+
+            <div class="detail-label">
+              Status
+            </div>
+
+            <div class="detail-value">
+
+              <span class="badge rounded-2"
+                    [class.active]="selectedShift()?.isActive"
+                    [class.inactive]="!selectedShift()?.isActive">
+
+                {{
+                  selectedShift()?.isActive
+                  ? 'Active'
+                  : 'Inactive'
+                }}
+
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+    </div>
+
+  </div>
+
+</div>

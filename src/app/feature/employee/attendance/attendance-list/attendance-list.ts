@@ -5,11 +5,12 @@ import { AttendanceDataClient } from '../attendance-data-client';
 import { ConfirmModalComponent } from "../../../../shared/components/confirm-modal/confirm-modal";
 import { AttendanceStatus, Attendance } from '../attendance';
 import { ToastNotifier } from '../../../../core/services/toast';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-attendance-list',
-  imports: [CommonModule, ConfirmModalComponent, RouterModule],
+  imports: [CommonModule, ConfirmModalComponent, RouterModule,MatDatepickerModule],
   templateUrl: './attendance-list.html',
   styleUrl: './attendance-list.css',
 })

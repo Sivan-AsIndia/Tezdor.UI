@@ -179,10 +179,16 @@
                   <!-- Invoice Date -->
                   <div class="si-id-row">
                     <span class="si-id-key">Invoice Date <span class="si-req-star">*</span></span>
-                    <div class="si-id-input-wrap" [class.si-err-border]="errDate">
-                      <input type="date" class="si-id-input" [value]="invoiceDate()" [max]="todayStr()"
-                        (change)="setInvoiceDate($any($event.target).value)" />
+                    <div class=" si-id-input-wrap position-relative" [class.si-err-border]="errDate">
+                      <input class="si-id-input form-control pe-5" [matDatepicker]="invoiceDatePicker" 
+                        placeholder="Select date..." [value]="invoiceDate()" [max]="todayStr()"
+                        (change)="setInvoiceDate($any($event.target).value)" readonly
+                        (click)="invoiceDatePicker.open()" />
+                      <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                        style="font-size:18px; cursor:pointer;" (click)="invoiceDatePicker.open()">
+                      </i>
                     </div>
+                    <mat-datepicker #invoiceDatePicker></mat-datepicker>
                     @if (errDate) {
                     <div class="si-err-msg si-err-msg--right">
                       <i class="ti ti-alert-circle"></i> Invoice date is required
@@ -193,10 +199,18 @@
                   <!-- Due Date -->
                   <div class="si-id-row">
                     <span class="si-id-key">Due Date</span>
-                    <div class="si-id-input-wrap" [class.si-err-border]="errDueDate">
-                      <input type="date" class="si-id-input" [value]="dueDate()" [min]="invoiceDate()"
-                        (change)="dueDate.set($any($event.target).value)" />
+
+
+                                        <div class=" si-id-input-wrap position-relative" [class.si-err-border]="errDate">
+                      <input class="si-id-input form-control pe-5" [matDatepicker]="dueDatePicker" 
+                        placeholder="Select date..."  [value]="dueDate()" [min]="invoiceDate()"
+                        (change)="dueDate.set($any($event.target).value)" readonly
+                        (click)="dueDatePicker.open()" />
+                      <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                        style="font-size:18px; cursor:pointer;" (click)="invoiceDatePicker.open()">
+                      </i>
                     </div>
+                    <mat-datepicker #dueDatePicker></mat-datepicker>
                     @if (errDueDate) {
                     <div class="si-err-msg si-err-msg--right">
                       <i class="ti ti-alert-circle"></i> Due date must be after invoice date
@@ -497,11 +511,18 @@
                   <!-- Payment Due Date -->
                   <div class="si-pay-field">
                     <label class="si-pay-lbl">Payment Due Date</label>
-                    <div class="si-inp-wrap">
-                      <i class="ti ti-calendar si-inp-icon"></i>
-                      <input type="date" class="si-inp" [value]="paymentDueDate()" [min]="invoiceDate()"
-                        (change)="paymentDueDate.set($any($event.target).value)" />
+
+
+                                                            <div class=" si-id-input-wrap position-relative" >
+                      <input class=" form-control pe-5" [matDatepicker]="paymentDueDatePicker" 
+                        placeholder="Select date..."   [value]="paymentDueDate()" [min]="invoiceDate()"
+                        (change)="paymentDueDate.set($any($event.target).value)" readonly
+                        (click)="paymentDueDatePicker.open()" />
+                      <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                        style="font-size:18px; cursor:pointer;" (click)="invoiceDatePicker.open()">
+                      </i>
                     </div>
+                    <mat-datepicker #paymentDueDatePicker></mat-datepicker>
                   </div>
 
                   <!-- Payment Terms -->

@@ -117,7 +117,7 @@
                             <!-- ADD BUTTON -->
                             <button (click)="offCanvas.set(true)"
                                 class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-primary v-btn--density-default  v-btn--size-default v-btn--variant-elevated ml-auto">
-                                <i class="mdi-account-multiple-plus mdi v-icon notranslate v-theme--BLUE_THEME v-icon--size-default mr-2"
+                                <i class="mdi mdi-plus-circle-outline v-icon mr-2"
                                     aria-hidden="true"></i> Add </button>
 
                         </div>
@@ -181,9 +181,9 @@
                                             <td>{{ a.attendancePeriodName }}</td>
 
 
-                                            <td class="d-none d-xl-table-cell">{{ a.fromDate }}</td>
+                                            <td class="d-none d-xl-table-cell">{{ a.fromDate | date:'dd MMM yyyy'  }}</td>
 
-                                            <td class="d-none d-xl-table-cell">{{ a.toDate }}</td>
+                                            <td class="d-none d-xl-table-cell">{{ a.toDate | date:'dd MMM yyyy'  }}</td>
 
                                             <td class="d-none d-md-table-cell">{{ a.payableDays }}</td>
 
@@ -560,9 +560,18 @@
                         <div class="oc-field">
                             <label class="oc-field-label">From Date *</label>
 
-                            <input type="date" class="form-control" [value]="model().fromDate"
-                                (change)="onDateChange('fromDate', $any($event.target).value)"
-                                [class.is-invalid]="hasError('fromDate')">
+
+                            <div class="position-relative">
+                                <input class="form-control pe-5" [matDatepicker]="fromDatePicker"
+                                    [value]="model().fromDate"
+                                    (dateChange)="onDateChange('fromDate', $any($event.target).value)"
+                                    [class.is-invalid]="hasError('fromDate')" placeholder="Select date..." readonly
+                                    (click)="fromDatePicker.open()" />
+                                <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                                    style="font-size:18px; cursor:pointer;" (click)="fromDatePicker.open()">
+                                </i>
+                            </div>
+                            <mat-datepicker #fromDatePicker></mat-datepicker>
 
                             @if(hasError('fromDate')){
                             <div class="field-error">
@@ -577,10 +586,18 @@
                         <div class="oc-field">
                             <label class="oc-field-label">To Date *</label>
 
-                            <input type="date" class="form-control" [value]="model().toDate"
-                                [min]="model().fromDate || ''"
-                                (change)="onDateChange('toDate', $any($event.target).value)"
-                                [class.is-invalid]="hasError('toDate')">
+
+                                                            <div class="position-relative">
+                                <input class="form-control pe-5" [matDatepicker]="toDatePicker"
+                                    [value]="model().toDate"  [min]="model().fromDate || ''"
+                                    (dateChange)="onDateChange('toDate', $any($event.target).value)"
+                                    [class.is-invalid]="hasError('toDate')" placeholder="Select date..." readonly
+                                    (click)="toDatePicker.open()" />
+                                <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                                    style="font-size:18px; cursor:pointer;" (click)="toDatePicker.open()">
+                                </i>
+                            </div>
+                            <mat-datepicker #toDatePicker></mat-datepicker>
 
                             @if(hasError('toDate')){
                             <div class="field-error">

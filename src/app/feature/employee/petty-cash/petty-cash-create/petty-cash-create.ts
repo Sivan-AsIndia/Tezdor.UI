@@ -14,10 +14,11 @@ import {
   NgxEditorModule,
   Toolbar
 } from 'ngx-editor';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-petty-cash-create',
-  imports: [RouterModule, CommonModule, SearchDropdownComponent,NgxEditorModule,ReactiveFormsModule],
+  imports: [RouterModule, CommonModule, SearchDropdownComponent,NgxEditorModule,ReactiveFormsModule,MatDatepickerModule],
   templateUrl: './petty-cash-create.html',
   styleUrl: './petty-cash-create.css',
 })

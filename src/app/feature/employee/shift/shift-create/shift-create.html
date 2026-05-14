@@ -1,0 +1,1155 @@
+<div class="sf">
+
+              <!-- HEADER -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+
+                <div>
+                    <h4 class="fw-bold mb-1 mainheading">
+                        {{ isEditMode() ? 'Shift' : 'New shift' }}
+                    </h4>
+                    <small class="text-muted">
+                         Configure schedule rules, timing and attendance policies
+                    </small>
+                </div>
+
+
+
+                <!-- 🔷 ARROW BREADCRUMB -->
+                <div class="arrow-steps d-none d-md-flex">
+
+
+                    <ul id="breadcrumb">
+                        <li><a routerLink="/dashboard"><span class="fa fa-home me-1"> </span>Home</a></li>
+                        <li>
+                            <a routerLink="/shifts">
+                                <i class="bi bi-list-ul me-1"></i> List
+                            </a>
+                        </li>
+
+                        <!-- CREATE / EDIT -->
+                        <li class="active">
+                            <a href="javascript:void(0)">
+                                <span>
+                                    <i class="bi bi-pencil-square"></i>
+                                    {{ isEditMode() ? 'Edit' : 'Create' }}
+                                </span>
+                            </a>
+
+                        </li>
+                    </ul>
+
+                </div>
+
+            </div>
+
+  <div
+    class="sf-body"
+    [formGroup]="form">
+
+    <!-- ── Sidebar ── -->
+    <aside class="sf-sidebar">
+
+      <nav>
+
+        @for(
+          sec of sections;
+          track sec.id
+        ){
+
+        <button
+          type="button"
+          class="sf-nav"
+          [class.active]="isNavActive(sec.id)"
+          (click)="openFromNav(sec.id)">
+
+          <span
+            class="material-icons nav-icon"
+            aria-hidden="true">
+
+            {{ sec.icon }}
+
+          </span>
+
+          <span class="nav-label">
+
+            {{ sec.label }}
+
+          </span>
+
+          <span
+            class="material-icons nav-chev"
+            [class.open]="isSectionOpen(sec.id)"
+            aria-hidden="true">
+
+            expand_more
+
+          </span>
+
+        </button>
+
+        }
+
+      </nav>
+
+      <div class="sf-nav-sep"></div>
+
+      <div class="sf-wh-card">
+
+        <div class="sf-wh-label">
+          Working hours
+        </div>
+
+        <div class="sf-wh-value">
+          {{ calculatedHours }}
+        </div>
+
+        <div class="sf-wh-sub">
+          auto-calculated
+        </div>
+
+      </div>
+
+    </aside>
+
+    <!-- ── Accordion sections ── -->
+    <main class="sf-main">
+
+      <!-- 01 · Basic information -->
+      <section
+        class="acc"
+        [class.acc--open]="isSectionOpen('s1')"
+        id="s1">
+
+        <div
+          class="acc-head"
+          (click)="toggleSection('s1')"
+          role="button"
+          [attr.aria-expanded]="isSectionOpen('s1')">
+
+          <div class="acc-head-left">
+
+            <div
+              class="acc-icon"
+              [class.acc-icon--active]="isSectionOpen('s1')">
+
+              <span
+                class="material-icons"
+                aria-hidden="true">
+
+                description
+
+              </span>
+
+            </div>
+
+            <div>
+
+              <div class="acc-title">
+                Basic information
+              </div>
+
+              <div class="acc-sub">
+                Identity and description
+              </div>
+
+            </div>
+
+          </div>
+
+          <span
+            class="material-icons acc-arr"
+            [class.open]="isSectionOpen('s1')"
+            aria-hidden="true">
+
+            expand_more
+
+          </span>
+
+        </div>
+
+        @if(isSectionOpen('s1')){
+
+        <div class="acc-body">
+
+          <div class="grid-2">
+
+            <!-- <div class="field">
+
+              <label for="shiftCode">
+                Shift code
+              </label>
+
+              <input
+                id="shiftCode"
+                type="text"
+                formControlName="shiftCode"
+                placeholder="e.g. MS-001"
+                [class.error]="hasError('shiftCode')" />
+
+              @if(hasError('shiftCode')){
+
+              <span class="field-error">
+                Shift code is required
+              </span>
+
+              }
+
+            </div> -->
+
+            <div class="field">
+
+              <label for="shiftName">
+                Shift name
+              </label>
+
+              <input class="form-control"
+                id="shiftName"
+                type="text"
+                formControlName="shiftName"
+                placeholder="e.g. Morning shift"
+                [class.error]="hasError('shiftName')" />
+
+              @if(hasError('shiftName')){
+
+              <span class="field-error">
+                Shift name is required
+              </span>
+
+              }
+
+            </div>
+
+            <div class="field full">
+
+              <label for="description">
+                Description
+              </label>
+
+              <textarea   class="form-control"
+                id="description"
+                formControlName="description"
+                placeholder="Brief description (optional)"
+                rows="3">
+
+              </textarea>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        }
+
+      </section>
+
+      <!-- 02 · Shift timing -->
+      <section
+        class="acc"
+        [class.acc--open]="isSectionOpen('s2')"
+        id="s2">
+
+        <div
+          class="acc-head"
+          (click)="toggleSection('s2')"
+          role="button"
+          [attr.aria-expanded]="isSectionOpen('s2')">
+
+          <div class="acc-head-left">
+
+            <div
+              class="acc-icon"
+              [class.acc-icon--active]="isSectionOpen('s2')">
+
+              <span
+                class="material-icons"
+                aria-hidden="true">
+
+                schedule
+
+              </span>
+
+            </div>
+
+            <div>
+
+              <div class="acc-title">
+                Shift timing
+              </div>
+
+              <div class="acc-sub">
+                Start and end times
+              </div>
+
+            </div>
+
+          </div>
+
+          <span
+            class="material-icons acc-arr"
+            [class.open]="isSectionOpen('s2')"
+            aria-hidden="true">
+
+            expand_more
+
+          </span>
+
+        </div>
+
+        @if(isSectionOpen('s2')){
+
+        <div class="acc-body">
+
+          <div class="grid-2">
+
+            <div class="field">
+
+              <label for="startTime">
+                Start time
+              </label>
+
+              <input class="form-control"
+                id="startTime"
+                type="time"
+                formControlName="startTime"
+                [class.error]="hasError('startTime')" />
+
+            </div>
+
+            <div class="field">
+
+              <label for="endTime">
+                End time
+              </label>
+
+              <input class="form-control"
+                id="endTime"
+                type="time"
+                formControlName="endTime"
+                [class.error]="hasError('endTime')" />
+
+            </div>
+
+          </div>
+
+          <div class="pills-row">
+
+            <span class="pill pill--purple">
+
+              <span
+                class="material-icons"
+                aria-hidden="true"
+                style="font-size:14px">
+
+                schedule
+
+              </span>
+
+              {{ calculatedHours }}
+
+            </span>
+
+            <span class="pill pill--green">
+
+              <span
+                class="material-icons"
+                aria-hidden="true"
+                style="font-size:14px">
+
+                wb_sunny
+
+              </span>
+
+              Day shift
+
+            </span>
+
+          </div>
+
+        </div>
+
+        }
+
+      </section>
+
+      <!-- 03 · Break schedule -->
+<section
+  class="acc"
+  [class.acc--open]="isSectionOpen('s3')"
+  id="s3">
+
+  <div
+    class="acc-head"
+    (click)="toggleSection('s3')"
+    role="button"
+    [attr.aria-expanded]="isSectionOpen('s3')">
+
+    <div class="acc-head-left">
+
+      <div
+        class="acc-icon"
+        [class.acc-icon--active]="isSectionOpen('s3')">
+
+        <span
+          class="material-icons"
+          aria-hidden="true">
+
+          free_breakfast
+
+        </span>
+
+      </div>
+
+      <div>
+
+        <div class="acc-title">
+          Break schedule
+        </div>
+
+        <div class="acc-sub">
+          Optional break window
+        </div>
+
+      </div>
+
+    </div>
+
+    <span
+      class="material-icons acc-arr"
+      [class.open]="isSectionOpen('s3')"
+      aria-hidden="true">
+
+      expand_more
+
+    </span>
+
+  </div>
+
+  @if(isSectionOpen('s3')){
+
+  <div class="acc-body">
+
+    <div class="grid-3">
+
+      <div class="field">
+
+        <label for="breakStartTime">
+          Break start
+        </label>
+
+        <input class="form-control"
+          id="breakStartTime"
+          type="time"
+          formControlName="breakStartTime" />
+
+      </div>
+
+      <div class="field">
+
+        <label for="breakEndTime">
+          Break end
+        </label>
+
+        <input class="form-control"
+          id="breakEndTime"
+          type="time"
+          formControlName="breakEndTime" />
+
+      </div>
+
+      <div class="field">
+
+        <label for="breakMinutes">
+          Break minutes
+        </label>
+
+        <div class="input-addon">
+
+          <input class="form-control"
+            id="breakMinutes"
+            type="number"
+            formControlName="breakMinutes"
+            placeholder="60"
+            min="0" />
+
+          <span class="addon-label">
+            min
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="hint">
+
+      <span
+        class="material-icons"
+        aria-hidden="true">
+
+        info
+
+      </span>
+
+      Break minutes are deducted from working hours for attendance calculation.
+
+    </div>
+
+  </div>
+
+  }
+
+</section>
+
+<!-- 04 · Attendance rules -->
+<section
+  class="acc"
+  [class.acc--open]="isSectionOpen('s4')"
+  id="s4">
+
+  <div
+    class="acc-head"
+    (click)="toggleSection('s4')"
+    role="button"
+    [attr.aria-expanded]="isSectionOpen('s4')">
+
+    <div class="acc-head-left">
+
+      <div
+        class="acc-icon"
+        [class.acc-icon--active]="isSectionOpen('s4')">
+
+        <span
+          class="material-icons"
+          aria-hidden="true">
+
+          bar_chart
+
+        </span>
+
+      </div>
+
+      <div>
+
+        <div class="acc-title">
+          Attendance rules
+        </div>
+
+        <div class="acc-sub">
+          Half day and full day thresholds
+        </div>
+
+      </div>
+
+    </div>
+
+    <span
+      class="material-icons acc-arr"
+      [class.open]="isSectionOpen('s4')"
+      aria-hidden="true">
+
+      expand_more
+
+    </span>
+
+  </div>
+
+  @if(isSectionOpen('s4')){
+
+  <div class="acc-body">
+
+    <div class="grid-3">
+
+      <div class="field">
+
+        <label for="workingHours">
+          Working hours
+        </label>
+
+        <div class="input-addon">
+
+          <input class="form-control"
+            id="workingHours"
+            type="number"
+            formControlName="workingHours"
+            placeholder="8"
+            step="0.5"
+            min="0" />
+
+          <span class="addon-label">
+            hrs
+          </span>
+
+        </div>
+
+      </div>
+
+      <div class="field">
+
+        <label for="minHalfDay">
+          Min. for half day
+        </label>
+
+        <div class="input-addon">
+
+          <input class="form-control"
+            id="minHalfDay"
+            type="number"
+            formControlName="minimumHoursForHalfDay"
+            placeholder="4"
+            step="0.5"
+            min="0" />
+
+          <span class="addon-label">
+            hrs
+          </span>
+
+        </div>
+
+      </div>
+
+      <div class="field">
+
+        <label for="minFullDay">
+          Min. for full day
+        </label>
+
+        <div class="input-addon">
+
+          <input class="form-control"
+            id="minFullDay"
+            type="number"
+            formControlName="minimumHoursForFullDay"
+            placeholder="7"
+            step="0.5"
+            min="0" />
+
+          <span class="addon-label">
+            hrs
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  }
+
+</section>
+
+<!-- 05 · Grace periods -->
+<section
+  class="acc"
+  [class.acc--open]="isSectionOpen('s5')"
+  id="s5">
+
+  <div
+    class="acc-head"
+    (click)="toggleSection('s5')"
+    role="button"
+    [attr.aria-expanded]="isSectionOpen('s5')">
+
+    <div class="acc-head-left">
+
+      <div
+        class="acc-icon"
+        [class.acc-icon--active]="isSectionOpen('s5')">
+
+        <span
+          class="material-icons"
+          aria-hidden="true">
+
+          tune
+
+        </span>
+
+      </div>
+
+      <div>
+
+        <div class="acc-title">
+          Grace periods
+        </div>
+
+        <div class="acc-sub">
+          Arrival and departure tolerance
+        </div>
+
+      </div>
+
+    </div>
+
+    <span
+      class="material-icons acc-arr"
+      [class.open]="isSectionOpen('s5')"
+      aria-hidden="true">
+
+      expand_more
+
+    </span>
+
+  </div>
+
+  @if(isSectionOpen('s5')){
+
+  <div class="acc-body">
+
+    <div class="grid-2">
+
+      <div class="field">
+
+        <label for="lateGrace">
+          Late grace
+        </label>
+
+        <div class="input-addon">
+
+          <input class="form-control"
+            id="lateGrace"
+            type="number"
+            formControlName="lateGraceMinutes"
+            placeholder="10"
+            min="0"
+            max="120" />
+
+          <span class="addon-label">
+            min
+          </span>
+
+        </div>
+
+      </div>
+
+      <div class="field">
+
+        <label for="earlyOutGrace">
+          Early out grace
+        </label>
+
+        <div class="input-addon">
+
+          <input class="form-control"
+            id="earlyOutGrace"
+            type="number"
+            formControlName="earlyOutGraceMinutes"
+            placeholder="10"
+            min="0"
+            max="120" />
+
+          <span class="addon-label">
+            min
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  }
+
+</section>
+
+<!-- 06 · Overtime -->
+<section
+  class="acc"
+  [class.acc--open]="isSectionOpen('s6')"
+  id="s6">
+
+  <div
+    class="acc-head"
+    (click)="toggleSection('s6')"
+    role="button"
+    [attr.aria-expanded]="isSectionOpen('s6')">
+
+    <div class="acc-head-left">
+
+      <div
+        class="acc-icon"
+        [class.acc-icon--active]="isSectionOpen('s6')">
+
+        <span
+          class="material-icons"
+          aria-hidden="true">
+
+          more_time
+
+        </span>
+
+      </div>
+
+      <div>
+
+        <div class="acc-title">
+          Overtime
+        </div>
+
+        <div class="acc-sub">
+          OT eligibility and threshold
+        </div>
+
+      </div>
+
+    </div>
+
+    <span
+      class="material-icons acc-arr"
+      [class.open]="isSectionOpen('s6')"
+      aria-hidden="true">
+
+      expand_more
+
+    </span>
+
+  </div>
+
+  @if(isSectionOpen('s6')){
+
+  <div class="acc-body">
+
+    <div class="toggle-row">
+
+      <div class="toggle-info">
+
+        <div class="toggle-label">
+          Allow overtime
+        </div>
+
+        <div class="toggle-desc">
+          Employees can log hours beyond shift end
+        </div>
+
+      </div>
+
+      <label class="toggle-switch">
+
+        <input
+          type="checkbox"
+          formControlName="allowOvertime" />
+
+        <span class="toggle-track"></span>
+
+      </label>
+
+    </div>
+
+    @if(allowOvertime){
+
+    <div class="field ot-threshold">
+
+      <label for="minOT">
+        Minimum OT minutes
+      </label>
+
+      <div
+        class="input-addon"
+        style="max-width: 180px">
+
+        <input
+          id="minOT"
+          type="number"
+          formControlName="minimumOvertimeMinutes"
+          placeholder="30"
+          min="0" />
+
+        <span class="addon-label">
+          min
+        </span>
+
+      </div>
+
+    </div>
+
+    }
+
+  </div>
+
+  }
+
+</section>
+
+<!-- 07 · Shift flags -->
+<section
+  class="acc"
+  [class.acc--open]="isSectionOpen('s7')"
+  id="s7">
+
+  <div
+    class="acc-head"
+    (click)="toggleSection('s7')"
+    role="button"
+    [attr.aria-expanded]="isSectionOpen('s7')">
+
+    <div class="acc-head-left">
+
+      <div
+        class="acc-icon"
+        [class.acc-icon--active]="isSectionOpen('s7')">
+
+        <span
+          class="material-icons"
+          aria-hidden="true">
+
+          toggle_on
+
+        </span>
+
+      </div>
+
+      <div>
+
+        <div class="acc-title">
+          Shift flags
+        </div>
+
+        <div class="acc-sub">
+          Special behavior and status
+        </div>
+
+      </div>
+
+    </div>
+
+    <span
+      class="material-icons acc-arr"
+      [class.open]="isSectionOpen('s7')"
+      aria-hidden="true">
+
+      expand_more
+
+    </span>
+
+  </div>
+
+  @if(isSectionOpen('s7')){
+
+  <div class="acc-body">
+
+    <div class="toggle-row">
+
+      <div class="toggle-info">
+
+        <div class="toggle-label">
+          Night shift
+        </div>
+
+        <div class="toggle-desc">
+          Shift spans across midnight
+        </div>
+
+      </div>
+
+      <label class="toggle-switch">
+
+        <input
+          type="checkbox"
+          formControlName="isNightShift" />
+
+        <span class="toggle-track"></span>
+
+      </label>
+
+    </div>
+
+    <div class="toggle-row">
+
+      <div class="toggle-info">
+
+        <div class="toggle-label">
+          Flexible shift
+        </div>
+
+        <div class="toggle-desc">
+          Employee can choose their start time
+        </div>
+
+      </div>
+
+      <label class="toggle-switch">
+
+        <input
+          type="checkbox"
+          formControlName="isFlexibleShift" />
+
+        <span class="toggle-track"></span>
+
+      </label>
+
+    </div>
+
+    <div class="toggle-row">
+
+      <div class="toggle-info">
+
+        <div class="toggle-label">
+          Active
+        </div>
+
+        <div class="toggle-desc">
+          Shift is available for assignment
+        </div>
+
+      </div>
+
+      <label class="toggle-switch">
+
+        <input
+          type="checkbox"
+          formControlName="isActive" />
+
+        <span class="toggle-track"></span>
+
+      </label>
+
+    </div>
+
+  </div>
+
+  }
+
+</section>
+
+<!-- 08 · Week off -->
+<section
+  class="acc"
+  [class.acc--open]="isSectionOpen('s8')"
+  id="s8">
+
+  <div
+    class="acc-head"
+    (click)="toggleSection('s8')"
+    role="button"
+    [attr.aria-expanded]="isSectionOpen('s8')">
+
+    <div class="acc-head-left">
+
+      <div
+        class="acc-icon"
+        [class.acc-icon--active]="isSectionOpen('s8')">
+
+        <span
+          class="material-icons"
+          aria-hidden="true">
+
+          event_busy
+
+        </span>
+
+      </div>
+
+      <div>
+
+        <div class="acc-title">
+          Week off days
+        </div>
+
+        <div class="acc-sub">
+          Select days employees are off
+        </div>
+
+      </div>
+
+    </div>
+
+    <span
+      class="material-icons acc-arr"
+      [class.open]="isSectionOpen('s8')"
+      aria-hidden="true">
+
+      expand_more
+
+    </span>
+
+  </div>
+
+  @if(isSectionOpen('s8')){
+
+  <div class="acc-body">
+
+    <div class="day-grid">
+
+      @for(
+        day of weekDays;
+        track day.label
+      ){
+
+      <div class="day-col">
+
+        <span class="day-label">
+
+          {{ day.label }}
+
+        </span>
+
+        <button
+          type="button"
+          class="day-btn"
+          [class.day-btn--off]="day.isOff"
+          (click)="toggleDay(day)">
+
+          {{ day.short }}
+
+        </button>
+
+      </div>
+
+      }
+
+    </div>
+
+    <div class="days-off-summary">
+
+      <span class="days-off-text">
+        Days off:
+      </span>
+
+      <span class="pill pill--purple">
+
+        {{ offDaysCount }}
+
+        {{
+
+          offDaysCount === 1
+
+            ?
+
+            'day'
+
+            :
+
+            'days'
+
+        }}
+
+      </span>
+
+    </div>
+
+  </div>
+
+  }
+
+</section>
+
+    <div class="text-end mb-5 gap-2 action-btn">
+        <button
+            class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3"
+            (click)="onDiscard()">Cancel</button>
+        <button
+            class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+            type="submit" (click)="onSave()">
+            {{ isEditMode()  ? 'Update' : 'Save' }}
+        </button>
+    </div>
+
+    </main>
+
+  </div>
+
+</div>
