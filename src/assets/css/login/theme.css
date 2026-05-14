@@ -11807,14 +11807,31 @@ accent-color: var(--color-primary);
 [data-bs-theme="dark"] .search-dropdown-menu{
  background:#111c2d !important; 
 }
-
+[data-bs-theme="dark"] .siv-document{
+   background:#111c2d !important; 
+   color: white;
+}
+[data-bs-theme="dark"] .siv-meta-card,[data-bs-theme="dark"] .siv-addr-chip{
+ background:#111c2d !important; 
+}
 [data-bs-theme="dark"] .sc-stepper,[data-bs-theme="dark"] .sc-card,[data-bs-theme="dark"] .sc-type-tile,[data-bs-theme="dark"] .sc-li-card--error,[data-bs-theme="dark"] .sc-cost-wrap,[data-bs-theme="dark"] .sc-cost-inp,[data-bs-theme="dark"] .sc-li-card--filled,
 [data-bs-theme="dark"] .sc-summary-box{
  background:#111c2d !important; 
  color: white;
 }
+[data-bs-theme="dark"] .quick-menu-popover{
+   background:#111c2d !important; 
+   color: white;
+}
+[data-bs-theme="dark"] .quick-menu-item span{
+  color: white;
+}
+
 [data-bs-theme="dark"] #sidebarnav > .sidebar-item > .first-level{
  background:#111c2d !important; 
+}
+[data-bs-theme="dark"] textarea{
+   background:#111c2d !important; 
 }
 [data-bs-theme="dark"] .menu-employee iconify-icon,[data-bs-theme="dark"] .menu-dashboard iconify-icon,[data-bs-theme="dark"] .menu-product iconify-icon
 ,[data-bs-theme="dark"] .menu-store iconify-icon,[data-bs-theme="dark"] .menu-purchase iconify-icon,[data-bs-theme="dark"] .menu-sales iconify-icon
