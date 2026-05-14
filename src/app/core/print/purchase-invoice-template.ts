@@ -1,6 +1,7 @@
 // ── Purchase Invoice Print Template ──────────────────────────
 // Generates the HTML content for printing a Purchase Invoice.
-// Layout matches the provided Invoice_Sample.jpg template.
+// Layout matches the provided purchase invoice sample template.
+// Meta block uses a 2-column grid layout with red border.
 
 import { PurchaseInvoice } from '../../feature/purchase/purchase-invoice/purchase-invoice';
 import { COMPANY_INFO } from './company-info';
@@ -118,7 +119,7 @@ export function buildPurchaseInvoicePrintHtml(inv: PurchaseInvoice): string {
     <div class="doc-title">Tax Invoice</div>
     <div class="doc-copy-label">(TRIPLICATE FOR SUPPLIER)</div>
 
-    <!-- ═══ Seller Info + Invoice Meta ═══ -->
+    <!-- ═══ Seller Info + Invoice Meta (2-Column Grid) ═══ -->
     <div class="header-section">
       <div class="company-block">
         <div class="company-name">${company.name}</div>
@@ -129,35 +130,37 @@ export function buildPurchaseInvoicePrintHtml(inv: PurchaseInvoice): string {
         </div>
       </div>
       <div class="meta-block">
-        <div class="meta-row">
-          <span class="meta-label">Invoice No.</span>
-          <span class="meta-value" style="color:#1a5276;">${inv.invoiceNo}</span>
+        <div class="meta-grid">
+          <div class="meta-cell">
+            <span class="meta-label">Invoice No.</span>
+            <span class="meta-value highlight">${inv.invoiceNo}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">Supplier Inv No.</span>
+            <span class="meta-value">${inv.supplierInvoiceNo || '—'}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">Invoice Date</span>
+            <span class="meta-value">${formatPrintDate(inv.invoiceDate)}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">Payment Due Date</span>
+            <span class="meta-value">${formatPrintDate(inv.paymentDueDate)}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">Invoice Status</span>
+            <span class="meta-value">${inv.invoiceStatus.charAt(0).toUpperCase() + inv.invoiceStatus.slice(1)}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">Payment Status</span>
+            <span class="meta-value">${inv.paymentStatus.charAt(0).toUpperCase() + inv.paymentStatus.slice(1)}</span>
+          </div>
+          ${inv.poRef ? `
+          <div class="meta-cell meta-cell--full">
+            <span class="meta-label">PO Reference</span>
+            <span class="meta-value">${inv.poRef}</span>
+          </div>` : ''}
         </div>
-        <div class="meta-row">
-          <span class="meta-label">Supplier Inv No.</span>
-          <span class="meta-value">${inv.supplierInvoiceNo || '—'}</span>
-        </div>
-        <div class="meta-row">
-          <span class="meta-label">Invoice Date</span>
-          <span class="meta-value">${formatPrintDate(inv.invoiceDate)}</span>
-        </div>
-        <div class="meta-row">
-          <span class="meta-label">Invoice Status</span>
-          <span class="meta-value">${inv.invoiceStatus.charAt(0).toUpperCase() + inv.invoiceStatus.slice(1)}</span>
-        </div>
-        <div class="meta-row">
-          <span class="meta-label">Payment Due Date</span>
-          <span class="meta-value">${formatPrintDate(inv.paymentDueDate)}</span>
-        </div>
-        <div class="meta-row">
-          <span class="meta-label">Payment Status</span>
-          <span class="meta-value">${inv.paymentStatus.charAt(0).toUpperCase() + inv.paymentStatus.slice(1)}</span>
-        </div>
-        ${inv.poRef ? `
-        <div class="meta-row">
-          <span class="meta-label">PO Reference</span>
-          <span class="meta-value">${inv.poRef}</span>
-        </div>` : ''}
       </div>
     </div>
 

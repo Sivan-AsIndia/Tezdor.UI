@@ -1,23 +1,22 @@
 <div id="main-wrapper" class="flex p-5 pt-0">
-  <app-vertical-sidebar ></app-vertical-sidebar>
-  <div class="page-wrapper w-full">
 
-    <app-horizontal-sidebar></app-horizontal-sidebar>
+    
+    <app-vertical-sidebar></app-vertical-sidebar>
 
-    <div class="body-wrapper">
-      <div  [class]="containerMode === 'fluid' ? 'container-fluid' : 'container'">
+    <div class="page-wrapper w-full">
+      <app-horizontal-sidebar></app-horizontal-sidebar>
 
+      <div class="body-wrapper">
+<div [class]="containerMode() === 'fluid' ? 'container-fluid px-0' : 'container px-0'">
         <app-top-header></app-top-header>
-<app-toast></app-toast>
-<router-outlet />
-
+        <app-toast></app-toast>
+        <router-outlet />
       </div>
+
+      <app-theme></app-theme>
     </div>
 
-    <app-theme></app-theme>
+    <div class="dark-transparent sidebartoggler"></div>
   </div>
-  <div class="dark-transparent sidebartoggler"></div>
+
 </div>
-
-
-

@@ -22,12 +22,7 @@ export class MainLayoutComponent implements OnInit, AfterViewInit{
 
   constructor(private router: Router) {}
   private themeService = inject(ThemeService);
-get containerMode(): 'fluid' | 'fixed' {
-  const mode = this.themeService.currentSettings()?.containerMode ?? 'fluid';
-  console.log('containerMode:', mode);  // ← என்ன வருதுன்னு பாருங்க
-  return mode;
-}
-
+containerMode = this.themeService.containerMode; 
   ngOnInit() {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)

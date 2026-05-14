@@ -191,9 +191,9 @@
         </li>
 
         <li class="sidebar-item">
-          <a class="sidebar-link before:bg-lightprimary hover:text-primary"
+          <a class="sidebar-link before:bg-lightdashboard hover:text-dashboard"
             routerLink="/dashboard"
-            routerLinkActive="active-link active text-primary"
+            routerLinkActive="active-link active text-dashboard"
             [routerLinkActiveOptions]="{ exact: true }">
             <span class="aside-icon p-2 bg-primary-subtle rounded-1">
               <iconify-icon icon="solar:screencast-2-line-duotone" class="fs-6"></iconify-icon>
@@ -210,9 +210,9 @@
 
         <li class="sidebar-item">
           <a routerLink="/products"
-            class="cursor-pointer sidebar-link before:bg-lightwarning hover:text-warning dark:hover:text-warning"
+            class="cursor-pointer sidebar-link before:bg-lightproduct hover:text-product dark:hover:text-product"
             [class.active]="openMenu() === 'productMenu'"
-            [class.text-warning]="openMenu() === 'productMenu'"
+            [class.text-product]="openMenu() === 'productMenu'"
             [class.activebg]="openMenu() === 'productMenu'"
             (click)="toggle('productMenu')">
             <span class="aside-icon p-2 bg-warning-subtle rounded-1">
@@ -224,9 +224,9 @@
 
         <li class="sidebar-item">
           <a routerLink="/store"
-            class="cursor-pointer sidebar-link before:bg-lightsuccess hover:text-success dark:hover:text-success"
+            class="cursor-pointer sidebar-link before:bg-lightstore hover:text-store dark:hover:text-store"
             [class.active]="openMenu() === 'storeMenu'"
-            [class.text-success]="openMenu() === 'storeMenu'"
+            [class.text-store]="openMenu() === 'storeMenu'"
             [class.activebg]="openMenu() === 'storeMenu'"
             (click)="toggle('storeMenu')">
             <span class="aside-icon p-2 bg-success-subtle rounded-1">
@@ -238,9 +238,9 @@
 
         <li class="sidebar-item">
           <a routerLink="/purchase-order"
-            class="cursor-pointer sidebar-link before:bg-lightinfo hover:text-info dark:hover:text-info"
+            class="cursor-pointer sidebar-link before:bg-lightpurchase hover:text-purchase dark:hover:text-purchase"
             [class.active]="openMenu() === 'purchaseMenu'"
-            [class.text-info]="openMenu() === 'purchaseMenu'"
+            [class.text-purchase]="openMenu() === 'purchaseMenu'"
             [class.activebg]="openMenu() === 'purchaseMenu'"
             (click)="toggle('purchaseMenu')">
             <span class="aside-icon p-2 bg-info-subtle rounded-1">
@@ -252,9 +252,9 @@
 
         <li class="sidebar-item">
           <a routerLink="/purchase-invoice"
-            class="cursor-pointer sidebar-link before:bg-lightsuccess hover:text-success dark:hover:text-success"
+            class="cursor-pointer sidebar-link before:bg-lightstore hover:text-store dark:hover:text-store"
             [class.active]="openMenu() === 'purchaseinvoice'"
-            [class.text-success]="openMenu() === 'purchaseinvoice'"
+            [class.text-store]="openMenu() === 'purchaseinvoice'"
             [class.activebg]="openMenu() === 'purchaseinvoice'"
             (click)="toggle('purchaseinvoice')">
             <span class="aside-icon p-2 bg-danger-subtle rounded-1">
@@ -286,9 +286,9 @@
 
         <li class="sidebar-item">
           <a routerLink="/employees"
-            class="cursor-pointer sidebar-link before:bg-lightwarning hover:text-warning dark:hover:text-warning"
+            class="cursor-pointer sidebar-link before:bg-lightemployee hover:text-employee dark:hover:text-employee"
             [class.active]="isHighlighted('viewEmployees')"
-            [class.text-warning]="isHighlighted('viewEmployees')"
+            [class.text-employee]="isHighlighted('viewEmployees')"
             [class.activebg]="isHighlighted('viewEmployees')"
             (click)="toggle('viewEmployees')">
             <span class="aside-icon p-2 bg-warning-subtle rounded-1">
@@ -300,9 +300,9 @@
 
         <li class="sidebar-item">
           <a routerLink="/attendance"
-            class="cursor-pointer sidebar-link before:bg-lightprimary hover:text-primary dark:hover:text-primary"
+            class="cursor-pointer sidebar-link before:bg-lightdashboard hover:text-dashboard dark:hover:text-dashboard"
             [class.active]="isHighlighted('attendance')"
-            [class.text-primary]="isHighlighted('attendance')"
+            [class.text-dashboard]="isHighlighted('attendance')"
             [class.activebg]="isHighlighted('attendance')"
             (click)="toggle('attendance')">
             <span class="aside-icon p-2 bg-success-subtle rounded-1">
@@ -314,9 +314,9 @@
 
         <li class="sidebar-item">
           <a routerLink="/salary"
-            class="cursor-pointer sidebar-link before:bg-lightsuccess hover:text-success dark:hover:text-success"
+            class="cursor-pointer sidebar-link before:bg-lightstore hover:text-store dark:hover:text-store"
             [class.active]="isHighlighted('salary')"
-            [class.text-success]="isHighlighted('salary')"
+            [class.text-store]="isHighlighted('salary')"
             [class.activebg]="isHighlighted('salary')"
             (click)="toggle('salary')">
             <span class="aside-icon p-2 bg-info-subtle rounded-1">
@@ -328,9 +328,9 @@
 
         <li class="sidebar-item">
           <a routerLink="/petty-cash"
-            class="cursor-pointer sidebar-link before:bg-lighterror hover:text-error dark:hover:text-error"
+            class="cursor-pointer sidebar-link before:bg-lightpetty hover:text-petty dark:hover:text-petty"
             [class.active]="isHighlighted('petty-cash')"
-            [class.text-error]="isHighlighted('petty-cash')"
+            [class.text-petty]="isHighlighted('petty-cash')"
             [class.activebg]="isHighlighted('petty-cash')"
             (click)="toggle('petty-cash')">
             <span class="aside-icon p-2 bg-danger-subtle rounded-1">
@@ -348,9 +348,9 @@
 
         <li class="sidebar-item">
           <a routerLink="/general-ledger-entries"
-            class="cursor-pointer sidebar-link before:bg-lighterror hover:text-error dark:hover:text-error"
+            class="cursor-pointer sidebar-link before:bg-lightentry hover:text-entry dark:hover:text-entry"
             [class.active]="isHighlighted('general-ledger')"
-            [class.text-error]="isHighlighted('general-ledger')"
+            [class.text-entry]="isHighlighted('general-ledger')"
             [class.activebg]="isHighlighted('general-ledger')"
             (click)="toggle('general-ledger')">
             <span class="aside-icon p-2 bg-warning-subtle rounded-1">

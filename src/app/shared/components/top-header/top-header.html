@@ -1,4 +1,4 @@
-      <header class="topbar sticky-top">
+      <header class="topbar sticky-top"> 
           <div class="with-vertical">
             <nav class="navbar navbar-expand-lg p-0">
               <ul class="navbar-nav">
@@ -539,7 +539,8 @@
               </nav>
             </div>
           </div>
-          <div class="app-header with-horizontal">
+          <div class="app-header with-horizontal"   [class.container-fluid]="containerMode() === 'fluid'"
+  [class.container]="containerMode() === 'fixed'">
             <nav class="navbar navbar-expand-xl container-fluid p-0">
               <ul class="navbar-nav">
                 <li class="nav-item d-none d-xl-block">

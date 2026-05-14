@@ -1,9 +1,7 @@
 // ── Sales Invoice Print Template ─────────────────────────────
 // Generates the HTML content for printing a Sales Invoice.
 // Layout matches the provided Invoice_Sample.jpg template.
-// Includes all details from the sales-invoice-view page:
-//   Company info, customer (Bill To / Ship To), line items,
-//   tax summary (CGST/SGST/IGST), payment info, notes, and signatures.
+// Meta block uses a 2-column grid layout with red border.
 
 import { SalesInvoice } from '../../feature/sales/sales-invoice';
 import { COMPANY_INFO } from './company-info';
@@ -13,9 +11,6 @@ import { amountToWords, formatIndianNumber, formatPrintDate } from './number-to-
 /**
  * Builds the full HTML document string for a Sales Invoice (Tax Invoice) print page.
  * Opens in a new browser window and triggers the native print dialog.
- *
- * @param inv - The SalesInvoice data object to print.
- * @returns   A complete HTML document string.
  */
 export function buildSalesInvoicePrintHtml(inv: SalesInvoice): string {
 
@@ -169,7 +164,7 @@ export function buildSalesInvoicePrintHtml(inv: SalesInvoice): string {
     <div class="doc-title">${docTitle}</div>
     <div class="doc-copy-label">(TRIPLICATE FOR SUPPLIER)</div>
 
-    <!-- ═══ Company Info + Invoice Meta ═══ -->
+    <!-- ═══ Company Info + Invoice Meta (2-Column Grid) ═══ -->
     <div class="header-section">
       <div class="company-block">
         <div class="company-name">${inv.companyName || company.name}</div>
@@ -186,38 +181,39 @@ export function buildSalesInvoicePrintHtml(inv: SalesInvoice): string {
         </div>` : ''}
       </div>
       <div class="meta-block">
-        <div class="meta-row">
-          <span class="meta-label">Invoice No.</span>
-          <span class="meta-value" style="color:#1a5276;">${inv.invoiceNumber}</span>
-        </div>
-        <div class="meta-row">
-          <span class="meta-label">Invoice Date</span>
-          <span class="meta-value">${formatPrintDate(inv.invoiceDate)}</span>
-        </div>
-        <div class="meta-row">
-          <span class="meta-label">Due Date</span>
-          <span class="meta-value">${formatPrintDate(inv.dueDate??undefined)}</span>
-        </div>
-        <div class="meta-row">
-          <span class="meta-label">Financial Year</span>
-          <span class="meta-value">${inv.financialYear || '—'}</span>
-        </div>
-        <div class="meta-row">
-          <span class="meta-label">Invoice Status</span>
-          <span class="meta-value">${capitalize(inv.status)}</span>
-        </div>
-        <div class="meta-row">
-          <span class="meta-label">Payment Status</span>
-          <span class="meta-value">${capitalize(inv.payment.paymentStatus)}</span>
-        </div>
-        ${inv.referencePONo ? `
-        <div class="meta-row">
-          <span class="meta-label">PO Reference</span>
-          <span class="meta-value">${inv.referencePONo}</span>
-        </div>` : ''}
-        <div class="meta-row">
-          <span class="meta-label">Payment Terms</span>
-          <span class="meta-value">${payTerms}</span>
+        <div class="meta-grid">
+          <div class="meta-cell">
+            <span class="meta-label">Invoice No.</span>
+            <span class="meta-value highlight">${inv.invoiceNumber}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">Financial Year</span>
+            <span class="meta-value">${inv.financialYear || '—'}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">Invoice Date</span>
+            <span class="meta-value">${formatPrintDate(inv.invoiceDate)}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">Due Date</span>
+            <span class="meta-value">${formatPrintDate(inv.dueDate ?? undefined)}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">Invoice Status</span>
+            <span class="meta-value">${capitalize(inv.status)}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">Payment Status</span>
+            <span class="meta-value">${capitalize(inv.payment.paymentStatus)}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">Payment Terms</span>
+            <span class="meta-value">${payTerms}</span>
+          </div>
+          <div class="meta-cell">
+            <span class="meta-label">PO Reference</span>
+            <span class="meta-value">${inv.referencePONo || '—'}</span>
+          </div>
         </div>
       </div>
     </div>

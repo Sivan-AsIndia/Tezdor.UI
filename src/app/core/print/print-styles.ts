@@ -27,31 +27,36 @@ export const PRINT_COMMON_CSS = `
     padding: 0;
   }
 
-  /* ── Document Title ─────────────────────────────────── */
+  /* ── Document Title (no borders – just centered text) ── */
   .doc-title {
     text-align: center;
     font-size: 18px;
     font-weight: 700;
     padding: 8px 0 4px;
     letter-spacing: 0.5px;
-    border-bottom: 2px solid #333;
     margin-bottom: 0;
   }
 
+  /* ── Copy Label (outside the border, top-right) ─────── */
   .doc-copy-label {
     text-align: right;
     font-style: italic;
     font-size: 11px;
     color: #555;
-    padding: 2px 4px 0 0;
+    padding: 0 2px 2px 0;
+    margin-bottom: 0;
   }
 
   /* ── Header Section (Company + Doc Meta) ────────────── */
+  /* Full border on all 4 sides – the thick top border     */
+  /* acts as the separator line below the title.            */
+  /* Left & right borders start here and continue through   */
+  /* all subsequent sections via border-top:none chaining.  */
   .header-section {
     display: flex;
     justify-content: space-between;
     border: 1px solid #333;
-    border-top: none;
+    border-top: 2px solid #333;
     padding: 0;
   }
 
@@ -72,38 +77,71 @@ export const PRINT_COMMON_CSS = `
     line-height: 1.5;
   }
 
+  /* ── Meta Block: 2-Column Grid (seamless borders) ───── */
   .meta-block {
     border-left: 1px solid #333;
     padding: 0;
-    min-width: 280px;
+    min-width: 380px;
+    max-width: 420px;
   }
 
-  .meta-row {
+  .meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    height: 100%;
+  }
+
+  .meta-cell {
     display: flex;
     justify-content: space-between;
-    padding: 4px 10px;
-    border-bottom: 1px solid #ddd;
-    font-size: 11.5px;
+    align-items: center;
+    padding: 5px 10px;
+    border-bottom: 1px solid #333;
+    border-right: 1px solid #333;
+    font-size: 11px;
+    min-height: 28px;
   }
 
-  .meta-row:last-child {
+  .meta-cell:nth-child(even) {
+    border-right: none;
+  }
+
+  .meta-cell--full {
+    grid-column: 1 / -1;
+    border-right: none;
+  }
+
+  /* Remove bottom border from the last row of cells */
+  .meta-grid > .meta-cell:nth-last-child(1),
+  .meta-grid > .meta-cell:nth-last-child(2):nth-child(odd) {
     border-bottom: none;
   }
 
   .meta-label {
     font-weight: 600;
     color: #333;
+    white-space: nowrap;
+    margin-right: 8px;
+    font-size: 10.5px;
   }
 
   .meta-value {
     font-weight: 700;
     color: #111;
     text-align: right;
+    font-size: 11px;
   }
 
   .meta-value.amount {
     color: #c0392b;
     font-size: 12px;
+    font-weight: 800;
+  }
+
+  .meta-value.highlight {
+    color: #1a5276;
+    font-weight: 800;
   }
 
   /* ── Party Section (Buyer / Consignee / Ship To) ────── */
