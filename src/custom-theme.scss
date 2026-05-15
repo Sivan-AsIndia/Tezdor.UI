@@ -34,7 +34,7 @@
       color: #333;
 
       &.ng-option-selected {
-        background-color: color-mix(in srgb, var(--color-primary) 10%, white) !important;
+        background-color: color-mix(in srgb, var(--color-primary) 10%, #ffffff1c) !important;
         color: var(--color-primary) !important;
         font-weight: 600;
       }
