@@ -342,6 +342,16 @@
               </a>
             </li>
             <li class="sidebar-item">
+              <a routerLink="/shifts"
+                routerLinkActive="active-submenu"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="sidebar-link menu-employee"
+                (click)="openMenu.set(null)">
+                <span class="sidebar-icon"></span>
+                <span class="hide-menu">Shifts</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
               <a routerLink="/salary"
                 routerLinkActive="active-submenu"
                 [routerLinkActiveOptions]="{ exact: true }"

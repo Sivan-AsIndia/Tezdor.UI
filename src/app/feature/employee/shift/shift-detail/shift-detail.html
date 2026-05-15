@@ -1,23 +1,23 @@
 <div class="shift-page">
 
-  <!-- HEADER -->
-<div class="d-flex justify-content-between align-items-center" id="TopHeading">
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center" id="TopHeading">
 
-    <div>
+        <div>
 
-      <h4 class="fw-bold mb-1 mainheading">
+            <h4 class="fw-bold mb-1 mainheading">
 
-        Shift Details
+                Shift Details
 
-      </h4>
+            </h4>
 
-      <small class="text-muted">
+            <small class="text-muted">
 
-        View complete shift configuration
+                View complete shift configuration
 
-      </small>
+            </small>
 
-    </div>
+        </div>
 
         <div class="arrow-steps d-none d-md-flex">
             <ul id="breadcrumb">
@@ -27,990 +27,1762 @@
             </ul>
         </div>
 
-  </div>
+    </div>
 
-  @if(shift()){
+    @if(shift()){
 
-  <!-- HERO -->
-  <div class="shift-hero">
+    <!-- HERO -->
+    <div class="shift-hero">
 
-    <div
-      class="
+        <div class="
         d-flex
         justify-content-between
         align-items-center
       ">
 
-      <div>
-
-        <div class="shift-name">
-
-          {{ shift()?.shiftName }}
-
-        </div>
-
-        <div class="shift-meta">
-
-          {{ shift()?.shiftCode }}
-
-          <span class="dot"></span>
-
-          {{ shift()?.startTime }}
-
-          -
-
-          {{ shift()?.endTime }}
-
-        </div>
-
-      </div>
-
-      <span
-        class="status-chip"
-        [class.active]="shift()?.isActive">
-
-        {{ shift()?.isActive ? 'Active' : 'Inactive' }}
-
-      </span>
-
-    </div>
-
-  </div>
-
-  <!-- KPI -->
-  <div class="row g-3 mb-4">
-
-    <div class="col-md-3">
-
-      <div class="shift-kpi">
-
-        <div class="kpi-title">
-
-          Working hours
-
-        </div>
-
-        <div class="kpi-value primary">
-
-          {{ getWorkingHours() }}
-
-        </div>
-
-        <div class="kpi-sub">
-
-          {{ shift()?.startTime }}
-          –
-          {{ shift()?.endTime }}
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="col-md-3">
-
-      <div class="shift-kpi">
-
-        <div class="kpi-title">
-
-          Break
-
-        </div>
-
-        <div class="kpi-value">
-
-          {{ shift()?.breakMinutes || 0 }}
-          min
-
-        </div>
-
-        <div class="kpi-sub">
-
-          {{ shift()?.breakStartTime || '-' }}
-          –
-          {{ shift()?.breakEndTime || '-' }}
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="col-md-3">
-
-      <div class="shift-kpi">
-
-        <div class="kpi-title">
-
-          Grace period
-
-        </div>
-
-        <div class="kpi-value">
-
-          {{ shift()?.lateGraceMinutes }}
-          min
-
-        </div>
-
-        <div class="kpi-sub">
-
-          Late & early-out
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="col-md-3">
-
-      <div class="shift-kpi">
-
-        <div class="kpi-title">
-
-          Week off
-
-        </div>
-
-        <div class="kpi-value">
-
-          {{ getWeekOffCount() }}
-          days
-
-        </div>
-
-        <div class="kpi-sub">
-
-          {{ getWeekOffText() }}
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- BODY -->
-  <div class="row g-4">
-
-    <!-- LEFT -->
-    <div class="col-lg-7">
-
-      <!-- SHIFT TIMING -->
-      <div class="detail-card">
-
-        <div class="detail-head">
-
-          <div class="head-icon">
-
-            <i class="ti ti-clock"></i>
-
-          </div>
-
-          <div>
-
-            <div class="head-title">
-
-              Shift timing
-
-            </div>
-
-            <div class="head-sub">
-
-              Start and end schedule
-
-            </div>
-
-          </div>
-
-        </div>
-
-<div class="detail-body">
-
-  <div class="info-grid">
-
-    <div>
-
-      <label>Start time</label>
-
-      <b>{{ shift()?.startTime }}</b>
-
-    </div>
-
-    <div>
-
-      <label>End time</label>
-
-      <b>{{ shift()?.endTime }}</b>
-
-    </div>
-
-    <div>
-
-      <label>Net working hours</label>
-
-      <b class="primary-text">
-
-        {{ getWorkingHours() }}
-
-      </b>
-
-    </div>
-
-  </div>
-
-  <!-- BREAK -->
-  <div class="shift-break-line">
-
-    <span class="work-pill">
-
-      {{ shift()?.startTime }}
-
-      — working —
-
-      {{ shift()?.breakStartTime }}
-
-    </span>
-
-    <span class="break-pill">
-
-      break
-
-    </span>
-
-    <span class="work-pill">
-
-      {{ shift()?.breakEndTime }}
-
-      — working —
-
-      {{ shift()?.endTime }}
-
-    </span>
-
-  </div>
-
-</div>
-
-      </div>
-
-      <!-- ATTENDANCE -->
-      <div class="detail-card">
-
-        <div class="detail-head">
-
-          <div class="head-icon">
-
-            <i class="ti ti-chart-bar"></i>
-
-          </div>
-
-          <div>
-
-            <div class="head-title">
-
-              Attendance rules
-
-            </div>
-
-            <div class="head-sub">
-
-              Attendance thresholds
-
-            </div>
-
-          </div>
-
-        </div>
-
-        <div class="detail-body">
-
-          <div class="rule-grid">
-
-            <div class="rule-box">
-
-              <label>Working hours</label>
-
-              <strong>
-
-                {{ shift()?.workingHours }}
-                hrs
-
-              </strong>
-
-            </div>
-
-            <div class="rule-box">
-
-              <label>Half day</label>
-
-              <strong>
-
-                {{ shift()?.minimumHoursForHalfDay }}
-                hrs
-
-              </strong>
-
-            </div>
-
-            <div class="rule-box">
-
-              <label>Full day</label>
-
-              <strong>
-
-                {{ shift()?.minimumHoursForFullDay }}
-                hrs
-
-              </strong>
-
-            </div>
-
-            <div class="rule-box">
-
-              <label>Late grace</label>
-
-              <strong>
-
-                {{ shift()?.lateGraceMinutes }}
-                min
-
-              </strong>
-
-            </div>
-
-            <div class="rule-box">
-
-              <label>Early-out</label>
-
-              <strong>
-
-                {{ shift()?.earlyOutGraceMinutes }}
-                min
-
-              </strong>
-
-            </div>
-
-            <div class="rule-box active">
-
-              <label>OT threshold</label>
-
-              <strong>
-
-                {{ shift()?.minimumOvertimeMinutes }}
-                min
-
-              </strong>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      <!-- FLAGS -->
-      <div class="detail-card">
-
-        <div class="detail-head">
-
-          <div class="head-icon">
-
-            <i class="ti ti-toggle-left"></i>
-
-          </div>
-
-          <div>
-
-            <div class="head-title">
-
-              Shift flags
-
-            </div>
-
-            <div class="head-sub">
-
-              Special shift behaviors
-
-            </div>
-
-          </div>
-
-        </div>
-
-        <div class="detail-body">
-
-          <div class="flag-row">
-
             <div>
 
-              <div class="flag-title">
+                <div class="shift-name">
 
-                Night shift
+                    {{ shift()?.shiftName }}
 
-              </div>
+                </div>
 
-              <div class="flag-sub">
+                <div class="shift-meta">
 
-                Shift spans across midnight
+                    {{ shift()?.shiftCode }}
 
-              </div>
+                    <span class="dot"></span>
+
+                    {{ shift()?.startTime }}
+
+                    -
+
+                    {{ shift()?.endTime }}
+
+                </div>
 
             </div>
 
-            <span
-              class="flag-chip"
-              [class.yes]="shift()?.isNightShift">
+            <span class="status-chip" [class.active]="shift()?.isActive">
 
-              {{ shift()?.isNightShift ? 'Yes' : 'No' }}
+                {{ shift()?.isActive ? 'Active' : 'Inactive' }}
 
             </span>
 
-          </div>
+        </div>
 
-          <div class="flag-row">
+    </div>
 
-            <div>
+    <!-- KPI -->
+    <div class="row g-3 mb-4">
 
-              <div class="flag-title">
+        <div class="col-md-3">
 
-                Flexible shift
+            <div class="shift-kpi">
 
-              </div>
+                <div class="kpi-title">
 
-              <div class="flag-sub">
+                    Working hours
 
-                Employees can choose timing
+                </div>
 
-              </div>
+                <div class="kpi-value primary">
+
+                    {{ getWorkingHours() }}
+
+                </div>
+
+                <div class="kpi-sub">
+
+                    {{ shift()?.startTime }}
+                    –
+                    {{ shift()?.endTime }}
+
+                </div>
 
             </div>
 
-            <span
-              class="flag-chip"
-              [class.yes]="shift()?.isFlexibleShift">
+        </div>
 
-              {{ shift()?.isFlexibleShift ? 'Yes' : 'No' }}
+        <div class="col-md-3">
 
-            </span>
+            <div class="shift-kpi">
 
-          </div>
+                <div class="kpi-title">
 
-          <div class="flag-row">
+                    Break
 
-            <div>
+                </div>
 
-              <div class="flag-title">
+                <div class="kpi-value">
 
-                Overtime
+                    {{ shift()?.breakMinutes || 0 }}
+                    min
 
-              </div>
+                </div>
 
-              <div class="flag-sub">
+                <div class="kpi-sub">
 
-                OT enabled for this shift
+                    {{ shift()?.breakStartTime || '-' }}
+                    –
+                    {{ shift()?.breakEndTime || '-' }}
 
-              </div>
+                </div>
 
             </div>
 
-            <span
-              class="flag-chip"
-              [class.yes]="shift()?.allowOvertime">
-
-              {{ shift()?.allowOvertime ? 'Yes' : 'No' }}
-
-            </span>
-
-          </div>
-
         </div>
 
-      </div>
+        <div class="col-md-3">
 
-      <!-- WEEK OFF -->
-<div class="detail-card">
+            <div class="shift-kpi">
 
-  <div class="detail-head">
+                <div class="kpi-title">
 
-    <div class="head-icon">
+                    Grace period
 
-      <i class="ti ti-calendar-off"></i>
+                </div>
 
-    </div>
+                <div class="kpi-value">
 
-    <div>
+                    {{ shift()?.lateGraceMinutes }}
+                    min
 
-      <div class="head-title">
+                </div>
 
-        Week off days
+                <div class="kpi-sub">
 
-      </div>
+                    Late & early-out
 
-    </div>
-
-    <div class="ms-auto">
-
-      <span class="weekoff-badge">
-
-        {{ getWeekOffCount() }} days off
-
-      </span>
-
-    </div>
-
-  </div>
-
-  <div class="detail-body">
-
-    <div class="week-grid">
-
-      <div class="week-item">
-
-        <small>SUN</small>
-
-        <button
-          class="week-btn"
-          [class.off]="shift()?.isSundayOff">
-
-          S
-
-        </button>
-
-      </div>
-
-      <div class="week-item">
-
-        <small>MON</small>
-
-        <button
-          class="week-btn"
-          [class.off]="shift()?.isMondayOff">
-
-          M
-
-        </button>
-
-      </div>
-
-      <div class="week-item">
-
-        <small>TUE</small>
-
-        <button
-          class="week-btn"
-          [class.off]="shift()?.isTuesdayOff">
-
-          T
-
-        </button>
-
-      </div>
-
-      <div class="week-item">
-
-        <small>WED</small>
-
-        <button
-          class="week-btn"
-          [class.off]="shift()?.isWednesdayOff">
-
-          W
-
-        </button>
-
-      </div>
-
-      <div class="week-item">
-
-        <small>THU</small>
-
-        <button
-          class="week-btn"
-          [class.off]="shift()?.isThursdayOff">
-
-          T
-
-        </button>
-
-      </div>
-
-      <div class="week-item">
-
-        <small>FRI</small>
-
-        <button
-          class="week-btn"
-          [class.off]="shift()?.isFridayOff">
-
-          F
-
-        </button>
-
-      </div>
-
-      <div class="week-item">
-
-        <small>SAT</small>
-
-        <button
-          class="week-btn"
-          [class.off]="shift()?.isSaturdayOff">
-
-          S
-
-        </button>
-
-      </div>
-
-    </div>
-
-    <div class="week-legend">
-
-  <span>
-    <i class="ti ti-square  text-primary"></i>
-    Day of
-  </span>
-
-      <span>
-
-        <i class="ti ti-square text-muted"></i>
-
-        Working day
-
-      </span>
-
-    </div>
-
-  </div>
-
-</div>
-
-    </div>
-
-    <!-- RIGHT -->
-    <div class="col-lg-5">
-
-      <!-- SUMMARY -->
-      <div class="detail-card">
-
-        <div class="detail-head">
-
-          <div class="head-icon">
-
-            <i class="ti ti-list-details"></i>
-
-          </div>
-
-          <div>
-
-            <div class="head-title">
-
-              Quick summary
+                </div>
 
             </div>
 
-          </div>
-
         </div>
 
-        <div class="summary-list">
+        <div class="col-md-3">
 
-          <div class="summary-row">
+            <div class="shift-kpi">
 
-            <span>Shift code</span>
+                <div class="kpi-title">
 
-            <b>{{ shift()?.shiftCode }}</b>
+                    Week off
 
-          </div>
+                </div>
 
-          <div class="summary-row">
+                <div class="kpi-value">
 
-            <span>Start – end</span>
+                    {{ getWeekOffCount() }}
+                    days
 
-            <b class="primary-text">
+                </div>
 
-              {{ shift()?.startTime }}
-              –
-              {{ shift()?.endTime }}
+                <div class="kpi-sub">
 
-            </b>
+                    {{ getWeekOffText() }}
 
-          </div>
+                </div>
 
-          <div class="summary-row">
-
-            <span>Break</span>
-
-            <b>
-
-              {{ shift()?.breakStartTime }}
-              –
-              {{ shift()?.breakEndTime }}
-
-            </b>
-
-          </div>
-
-          <div class="summary-row">
-
-            <span>Net hours</span>
-
-            <b class="primary-text">
-
-              {{ getWorkingHours() }}
-
-            </b>
-
-          </div>
-
-          <div class="summary-row">
-
-            <span>Half day ≥</span>
-
-            <b>
-
-              {{ shift()?.minimumHoursForHalfDay }}
-              hrs
-
-            </b>
-
-          </div>
-
-          <div class="summary-row">
-
-            <span>Full day ≥</span>
-
-            <b>
-
-              {{ shift()?.minimumHoursForFullDay }}
-              hrs
-
-            </b>
-
-          </div>
-
-          <div class="summary-row">
-
-            <span>Late grace</span>
-
-            <b>
-
-              {{ shift()?.lateGraceMinutes }}
-              min
-
-            </b>
-
-          </div>
-
-          <div class="summary-row">
-
-            <span>OT minimum</span>
-
-            <b>
-
-              {{ shift()?.minimumOvertimeMinutes }}
-              min
-
-            </b>
-
-          </div>
+            </div>
 
         </div>
-
-      </div>
-
-      <!-- AUDIT -->
-<div class="detail-card">
-
-  <div class="detail-head">
-
-    <div class="head-icon">
-
-      <i class="ti ti-history"></i>
 
     </div>
 
-    <div>
+    <!-- BODY -->
+    <div class="row g-4">
 
-      <div class="head-title">
+        <!-- LEFT -->
+        <div class="col-lg-7">
 
-        Audit trail
+            <!-- SHIFT TIMING -->
+            <div class="detail-card">
 
-      </div>
+                <div class="detail-head">
+
+                    <div class="head-icon">
+
+                        <i class="ti ti-clock"></i>
+
+                    </div>
+
+                    <div>
+
+                        <div class="head-title">
+
+                            Shift timing
+
+                        </div>
+
+                        <div class="head-sub">
+
+                            Start and end schedule
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="detail-body">
+
+                    <div class="info-grid">
+
+                        <div>
+
+                            <label>Start time</label>
+
+                            <b>{{ shift()?.startTime }}</b>
+
+                        </div>
+
+                        <div>
+
+                            <label>End time</label>
+
+                            <b>{{ shift()?.endTime }}</b>
+
+                        </div>
+
+                        <div>
+
+                            <label>Net working hours</label>
+
+                            <b class="primary-text">
+
+                                {{ getWorkingHours() }}
+
+                            </b>
+
+                        </div>
+
+                    </div>
+
+                    <!-- BREAK -->
+                    <div class="shift-break-line">
+
+                        <span class="work-pill">
+
+                            {{ shift()?.startTime }}
+
+                            — working —
+
+                            {{ shift()?.breakStartTime }}
+
+                        </span>
+
+                        <span class="break-pill">
+
+                            break
+
+                        </span>
+
+                        <span class="work-pill">
+
+                            {{ shift()?.breakEndTime }}
+
+                            — working —
+
+                            {{ shift()?.endTime }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ATTENDANCE -->
+            <div class="detail-card">
+
+                <div class="detail-head">
+
+                    <div class="head-icon">
+
+                        <i class="ti ti-chart-bar"></i>
+
+                    </div>
+
+                    <div>
+
+                        <div class="head-title">
+
+                            Attendance rules
+
+                        </div>
+
+                        <div class="head-sub">
+
+                            Attendance thresholds
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="detail-body">
+
+                    <div class="rule-grid">
+
+                        <div class="rule-box">
+
+                            <label>Working hours</label>
+
+                            <strong>
+
+                                {{ shift()?.workingHours }}
+                                hrs
+
+                            </strong>
+
+                        </div>
+
+                        <div class="rule-box">
+
+                            <label>Half day</label>
+
+                            <strong>
+
+                                {{ shift()?.minimumHoursForHalfDay }}
+                                hrs
+
+                            </strong>
+
+                        </div>
+
+                        <div class="rule-box">
+
+                            <label>Full day</label>
+
+                            <strong>
+
+                                {{ shift()?.minimumHoursForFullDay }}
+                                hrs
+
+                            </strong>
+
+                        </div>
+
+                        <div class="rule-box">
+
+                            <label>Late grace</label>
+
+                            <strong>
+
+                                {{ shift()?.lateGraceMinutes }}
+                                min
+
+                            </strong>
+
+                        </div>
+
+                        <div class="rule-box">
+
+                            <label>Early-out</label>
+
+                            <strong>
+
+                                {{ shift()?.earlyOutGraceMinutes }}
+                                min
+
+                            </strong>
+
+                        </div>
+
+                        <div class="rule-box active">
+
+                            <label>OT threshold</label>
+
+                            <strong>
+
+                                {{ shift()?.minimumOvertimeMinutes }}
+                                min
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- FLAGS -->
+            <div class="detail-card">
+
+                <div class="detail-head">
+
+                    <div class="head-icon">
+
+                        <i class="ti ti-toggle-left"></i>
+
+                    </div>
+
+                    <div>
+
+                        <div class="head-title">
+
+                            Shift flags
+
+                        </div>
+
+                        <div class="head-sub">
+
+                            Special shift behaviors
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="detail-body">
+
+                    <div class="flag-row">
+
+                        <div>
+
+                            <div class="flag-title">
+
+                                Night shift
+
+                            </div>
+
+                            <div class="flag-sub">
+
+                                Shift spans across midnight
+
+                            </div>
+
+                        </div>
+
+                        <span class="flag-chip" [class.yes]="shift()?.isNightShift">
+
+                            {{ shift()?.isNightShift ? 'Yes' : 'No' }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="flag-row">
+
+                        <div>
+
+                            <div class="flag-title">
+
+                                Flexible shift
+
+                            </div>
+
+                            <div class="flag-sub">
+
+                                Employees can choose timing
+
+                            </div>
+
+                        </div>
+
+                        <span class="flag-chip" [class.yes]="shift()?.isFlexibleShift">
+
+                            {{ shift()?.isFlexibleShift ? 'Yes' : 'No' }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="flag-row">
+
+                        <div>
+
+                            <div class="flag-title">
+
+                                Overtime
+
+                            </div>
+
+                            <div class="flag-sub">
+
+                                OT enabled for this shift
+
+                            </div>
+
+                        </div>
+
+                        <span class="flag-chip" [class.yes]="shift()?.allowOvertime">
+
+                            {{ shift()?.allowOvertime ? 'Yes' : 'No' }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- WEEK OFF -->
+            <div class="detail-card">
+
+                <div class="detail-head">
+
+                    <div class="head-icon">
+
+                        <i class="ti ti-calendar-off"></i>
+
+                    </div>
+
+                    <div>
+
+                        <div class="head-title">
+
+                            Week off days
+
+                        </div>
+
+                    </div>
+
+                    <div class="ms-auto">
+
+                        <span class="weekoff-badge">
+
+                            {{ getWeekOffCount() }} days off
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="detail-body">
+
+                    <div class="week-grid">
+
+                        <div class="week-item">
+
+                            <small>SUN</small>
+
+                            <button class="week-btn" [class.off]="shift()?.isSundayOff">
+
+                                S
+
+                            </button>
+
+                        </div>
+
+                        <div class="week-item">
+
+                            <small>MON</small>
+
+                            <button class="week-btn" [class.off]="shift()?.isMondayOff">
+
+                                M
+
+                            </button>
+
+                        </div>
+
+                        <div class="week-item">
+
+                            <small>TUE</small>
+
+                            <button class="week-btn" [class.off]="shift()?.isTuesdayOff">
+
+                                T
+
+                            </button>
+
+                        </div>
+
+                        <div class="week-item">
+
+                            <small>WED</small>
+
+                            <button class="week-btn" [class.off]="shift()?.isWednesdayOff">
+
+                                W
+
+                            </button>
+
+                        </div>
+
+                        <div class="week-item">
+
+                            <small>THU</small>
+
+                            <button class="week-btn" [class.off]="shift()?.isThursdayOff">
+
+                                T
+
+                            </button>
+
+                        </div>
+
+                        <div class="week-item">
+
+                            <small>FRI</small>
+
+                            <button class="week-btn" [class.off]="shift()?.isFridayOff">
+
+                                F
+
+                            </button>
+
+                        </div>
+
+                        <div class="week-item">
+
+                            <small>SAT</small>
+
+                            <button class="week-btn" [class.off]="shift()?.isSaturdayOff">
+
+                                S
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="week-legend">
+
+                        <span>
+                            <i class="ti ti-square  text-primary"></i>
+                            Day of
+                        </span>
+
+                        <span>
+
+                            <i class="ti ti-square text-muted"></i>
+
+                            Working day
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="col-lg-5">
+
+            <!-- SUMMARY -->
+            <div class="detail-card">
+
+                <div class="detail-head">
+
+                    <div class="head-icon">
+
+                        <i class="ti ti-list-details"></i>
+
+                    </div>
+
+                    <div>
+
+                        <div class="head-title">
+
+                            Quick summary
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="summary-list">
+
+                    <div class="summary-row">
+
+                        <span>Shift code</span>
+
+                        <b>{{ shift()?.shiftCode }}</b>
+
+                    </div>
+
+                    <div class="summary-row">
+
+                        <span>Start – end</span>
+
+                        <b class="primary-text">
+
+                            {{ shift()?.startTime }}
+                            –
+                            {{ shift()?.endTime }}
+
+                        </b>
+
+                    </div>
+
+                    <div class="summary-row">
+
+                        <span>Break</span>
+
+                        <b>
+
+                            {{ shift()?.breakStartTime }}
+                            –
+                            {{ shift()?.breakEndTime }}
+
+                        </b>
+
+                    </div>
+
+                    <div class="summary-row">
+
+                        <span>Net hours</span>
+
+                        <b class="primary-text">
+
+                            {{ getWorkingHours() }}
+
+                        </b>
+
+                    </div>
+
+                    <div class="summary-row">
+
+                        <span>Half day ≥</span>
+
+                        <b>
+
+                            {{ shift()?.minimumHoursForHalfDay }}
+                            hrs
+
+                        </b>
+
+                    </div>
+
+                    <div class="summary-row">
+
+                        <span>Full day ≥</span>
+
+                        <b>
+
+                            {{ shift()?.minimumHoursForFullDay }}
+                            hrs
+
+                        </b>
+
+                    </div>
+
+                    <div class="summary-row">
+
+                        <span>Late grace</span>
+
+                        <b>
+
+                            {{ shift()?.lateGraceMinutes }}
+                            min
+
+                        </b>
+
+                    </div>
+
+                    <div class="summary-row">
+
+                        <span>OT minimum</span>
+
+                        <b>
+
+                            {{ shift()?.minimumOvertimeMinutes }}
+                            min
+
+                        </b>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- AUDIT -->
+            <div class="detail-card">
+
+                <div class="detail-head">
+
+                    <div class="head-icon">
+
+                        <i class="ti ti-history"></i>
+
+                    </div>
+
+                    <div>
+
+                        <div class="head-title">
+
+                            Audit trail
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="audit-list">
+
+                    <div class="audit-item">
+
+                        <div class="audit-dot"></div>
+
+                        <div>
+
+                            <div class="audit-title">
+
+                                Shift updated
+
+                            </div>
+
+                            <div class="audit-sub">
+
+                                Grace period changed · Ravi K · 2 days ago
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="audit-item">
+
+                        <div class="audit-dot light"></div>
+
+                        <div>
+
+                            <div class="audit-title">
+
+                                Overtime enabled
+
+                            </div>
+
+                            <div class="audit-sub">
+
+                                Ravi K · 1 week ago
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="audit-item">
+
+                        <div class="audit-dot"></div>
+
+                        <div>
+
+                            <div class="audit-title">
+
+                                Shift created
+
+                            </div>
+
+                            <div class="audit-sub">
+
+                                Priya M · 14 Jan 2025
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ASSIGNMENTS -->
+            <div class="detail-card">
+
+                <div class="detail-head">
+
+                    <div class="head-icon">
+
+                        <i class="ti ti-users-group"></i>
+
+                    </div>
+
+                    <div>
+
+                        <div>
+
+                            <div class="head-title">
+
+                                Shift Assignments
+
+                            </div>
+
+                            @if(hasAssignments()){
+
+                            <div class="head-sub mt-1">
+
+                                <i class="ti ti-calendar-event me-1"></i>
+
+                                {{
+                                assignForm().effectiveFrom
+                                | date:'dd MMM yyyy'
+                                }}
+
+                                @if(assignForm().effectiveTo){
+
+                                <span>
+
+                                    →
+
+                                    {{
+                                    assignForm().effectiveTo
+                                    | date:'dd MMM yyyy'
+                                    }}
+
+                                </span>
+
+                                }
+
+                                @else {
+
+                                <span>
+
+                                    → Ongoing
+
+                                </span>
+
+                                }
+
+                            </div>
+
+                            }
+
+                        </div>
+
+                        <div class="head-sub">
+
+                            Employees, departments & designations
+
+                        </div>
+
+                    </div>
+
+                    <div class="ms-auto">
+
+                        <span class="employee-count">
+
+                            {{
+                            totalAssignments()
+                            }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="detail-body">
+
+                    <!-- EMPTY -->
+                    @if(
+                    totalAssignments() === 0
+                    ){
+
+                    <div class="empty-assignment">
+
+                        <div>
+
+                            <div class="empty-title">
+
+                                No assignments found
+
+                            </div>
+
+                            <div class="empty-sub">
+
+                                Assign employees, departments or designations
+
+                            </div>
+
+                        </div>
+
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#assignShiftModal"
+                            (click)="
+                                openAssignModal(
+                                    shift()!
+                                )
+                                ">
+
+                            <i class="ti ti-plus"></i>
+
+                            Assign Shift
+
+                        </button>
+
+                    </div>
+
+                    }
+
+                    <!-- HAS ASSIGNMENTS -->
+                    @else {
+
+                    <div class="assignment-list">
+
+                        <!-- EMPLOYEES -->
+                        @if(
+                        assignedEmployees().length
+                        ){
+
+                        <div class="assignment-group">
+
+                            <div class="assignment-group-title">
+
+                                <i class="ti ti-users"></i>
+
+                                Employees
+
+                                <span>
+
+                                    {{
+                                    assignedEmployees().length
+                                    }}
+
+                                </span>
+
+                            </div>
+
+                            <div class="assignment-chips">
+
+                                @for(
+                                emp of visibleAssignedEmployees();
+                                track emp.employeeId
+                                ){
+
+                                <div class="assign-chip">
+
+                                    <div class="emp-avatar sm">
+
+                                        {{
+                                        getInitials(
+                                        emp.firstName,
+                                        emp.lastName
+                                        )
+                                        }}
+
+                                    </div>
+
+                                    <div>
+
+                                        <div class="assigned-name">
+
+                                            {{
+                                            emp.firstName
+                                            }}
+
+                                            {{
+                                            emp.lastName
+                                            }}
+
+                                        </div>
+
+                                        <div class="assigned-role">
+
+                                            {{
+                                            getDesignation(
+                                            emp.designationId
+                                            )
+                                            }}
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                }
+
+                            </div>
+
+                        </div>
+
+                        }
+
+                        <!-- DEPARTMENTS -->
+                        @if(
+                        assignedDepartments().length
+                        ){
+
+                        <div class="assignment-group mt-3">
+
+                            <div class="assignment-group-title">
+
+                                <i class="ti ti-building"></i>
+
+                                Departments
+
+                                <span>
+
+                                    {{
+                                    assignedDepartments().length
+                                    }}
+
+                                </span>
+
+                            </div>
+
+                            <div class="assignment-chips">
+
+                                @for(
+                                dept of assignedDepartments();
+                                track dept.id
+                                ){
+
+                                <div class="assign-chip">
+
+                                    <div class="emp-avatar sm">
+
+                                        <i class="ti ti-building"></i>
+
+                                    </div>
+
+                                    <div>
+
+                                        <div class="assigned-name">
+
+                                            {{
+                                            dept.name
+                                            }}
+
+                                        </div>
+
+                                        <div class="assigned-role">
+
+                                            Department
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                }
+
+                            </div>
+
+                        </div>
+
+                        }
+
+                        <!-- DESIGNATIONS -->
+                        @if(
+                        assignedDesignations().length
+                        ){
+
+                        <div class="assignment-group mt-3">
+
+                            <div class="assignment-group-title">
+
+                                <i class="ti ti-user-star"></i>
+
+                                Designations
+
+                                <span>
+
+                                    {{
+                                    assignedDesignations().length
+                                    }}
+
+                                </span>
+
+                            </div>
+
+                            <div class="assignment-chips">
+
+                                @for(
+                                des of assignedDesignations();
+                                track des.id
+                                ){
+
+                                <div class="assign-chip">
+
+                                    <div class="emp-avatar sm">
+
+                                        <i class="ti ti-user"></i>
+
+                                    </div>
+
+                                    <div>
+
+                                        <div class="assigned-name">
+
+                                            {{
+                                            des.name
+                                            }}
+
+                                        </div>
+                                        <!-- 
+                                        <div class="assigned-role">
+
+                                            Designation
+
+                                        </div> -->
+
+                                    </div>
+
+                                </div>
+
+                                }
+
+                            </div>
+
+                        </div>
+
+                        }
+
+                    </div>
+
+                    <div class="d-flex gap-2 mt-3">
+
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#assignShiftModal"
+                            (click)="
+                                openAssignModal(
+                                    shift()!
+                                )
+                                ">
+
+                            <i class="ti ti-plus"></i>
+
+                            Add Assignment
+
+                        </button>
+
+                    </div>
+
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
-  </div>
-
-  <div class="audit-list">
-
-    <div class="audit-item">
-
-      <div class="audit-dot"></div>
-
-      <div>
-
-        <div class="audit-title">
-
-          Shift updated
-
-        </div>
-
-        <div class="audit-sub">
-
-          Grace period changed · Ravi K · 2 days ago
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="audit-item">
-
-      <div class="audit-dot light"></div>
-
-      <div>
-
-        <div class="audit-title">
-
-          Overtime enabled
-
-        </div>
-
-        <div class="audit-sub">
-
-          Ravi K · 1 week ago
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="audit-item">
-
-      <div class="audit-dot"></div>
-
-      <div>
-
-        <div class="audit-title">
-
-          Shift created
-
-        </div>
-
-        <div class="audit-sub">
-
-          Priya M · 14 Jan 2025
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
+    }
 
 </div>
 
-<!-- EMPLOYEES -->
-<div class="detail-card">
 
-  <div class="detail-head">
+<!--ASSIGN SHIFT MODAL -->
 
-    <div class="head-icon">
+<div class="modal fade" id="assignShiftModal" tabindex="-1" aria-hidden="true">
 
-      <i class="ti ti-users"></i>
+    <div class="modal-dialog modal-dialog-centered modal-lg assign-modal">
+
+        <div class="modal-content border-0">
+
+
+
+            <div class="modal-header assign-header border-0">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="assign-header-icon">
+
+                        <i class="ti ti-users-group"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h5 class="assign-title mb-0">
+
+                            Assign Shift
+
+                        </h5>
+
+                        <div class="assign-subtitle">
+
+                            {{
+                            selectedShift()?.shiftName
+                            }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <!-- TOP GRID -->
+                <div class="assign-top-grid">
+
+                    <!-- ASSIGN TYPE -->
+                    <div>
+
+                        <label class="form-label">
+
+                            Assign Type
+
+                        </label>
+
+                        <select class="form-select" [value]="
+                                assignForm().assignType
+                            " (change)="
+                                updateAssignForm(
+                                'assignType',
+                                $any($event.target).value
+                                )
+                            ">
+
+                            <option value="Employee">
+
+                                Employee
+
+                            </option>
+
+                            <option value="Department">
+
+                                Department
+
+                            </option>
+
+                            <option value="Designation">
+
+                                Designation
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- EFFECTIVE FROM -->
+                    <div>
+
+                        <label class="form-label required">
+
+                            Effective From
+
+                        </label>
+                        <div class="position-relative">
+                            <input class="form-control pe-5" [matDatepicker]="effectiveFromDatePicker" [readonly]="
+                        hasAssignments()
+                        " [class.bg-light]="
+                        hasAssignments()
+                        " [class.is-invalid]="
+                        assignFormErrors()
+                            .effectiveFrom
+                        " placeholder="Select date..." [value]="
+                        assignForm().effectiveFrom
+                        " (dateChange)="
+                        updateAssignForm(
+                            'effectiveFrom',
+                            $any($event.target).value
+                        )" (click)="effectiveFromDatePicker.open()" />
+                            <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                                style="font-size:18px; cursor:pointer;" (click)="effectiveFromDatePicker.open()">
+                            </i>
+                        </div>
+                        <mat-datepicker #effectiveFromDatePicker></mat-datepicker>
+
+
+                        @if(
+                        assignFormErrors()
+                        .effectiveFrom
+                        ){
+
+                        <div class="invalid-feedback d-block">
+
+                            Effective from date is required
+
+                        </div>
+
+                        }
+
+                        @if(
+                        hasAssignments()
+                        ){
+
+                        <div class="form-text text-warning mt-1">
+
+                            <i class="ti ti-lock fs-2"></i>
+
+                            Effective dates cannot be changed after assignment
+
+                        </div>
+
+                        }
+
+                    </div>
+
+                    <!-- EFFECTIVE TO -->
+                    <div>
+
+                        <label class="form-label">
+
+                            Effective To
+
+                        </label>
+                        <div class="position-relative">
+                            <input class="form-control pe-5" [matDatepicker]="effectiveToDatePicker" 
+                            min="assignForm().effectiveFrom"
+                            placeholder="Select date..." [value]="
+                            assignForm().effectiveTo
+                            " (dateChange)="
+                            updateAssignForm(
+                                'effectiveTo',
+                                $any($event.target).value
+                            )
+                            " (click)="effectiveToDatePicker.open()" />
+                            <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                                style="font-size:18px; cursor:pointer;" (click)="effectiveToDatePicker.open()">
+                            </i>
+                        </div>
+                        <mat-datepicker #effectiveToDatePicker></mat-datepicker>
+
+
+                    </div>
+
+                </div>
+
+                <!-- OPTIONS -->
+
+                <div class="assign-options">
+
+                    <!-- DEFAULT -->
+                    <div class="option-pill" [class.active]="
+                            assignForm().isDefaultShift
+                            " (click)="
+                            updateAssignForm(
+                                'isDefaultShift',
+                                !assignForm().isDefaultShift
+                            )
+                            ">
+
+                        <i class="ti ti-star"></i>
+
+                        Default Shift
+
+                    </div>
+
+                    <!-- OVERRIDE -->
+                    <div class="option-pill" [class.active]="
+                            assignForm().overrideExistingShift
+                            " (click)="
+                            updateAssignForm(
+                                'overrideExistingShift',
+                                !assignForm().overrideExistingShift
+                            )
+                            ">
+
+                        <i class="ti ti-refresh"></i>
+
+                        Override Existing
+
+                    </div>
+
+                    <!-- ACTIVE -->
+                    <div class="option-pill" [class.active]="
+                            assignForm().isActive
+                            " (click)="
+                            updateAssignForm(
+                                'isActive',
+                                !assignForm().isActive
+                            )
+                            ">
+
+                        <i class="ti ti-check"></i>
+
+                        Active
+
+                    </div>
+
+                </div>
+
+                <!-- EMPLOYEE-->
+
+                @if(
+                assignForm().assignType
+                ===
+                'Employee'
+                ){
+
+                <div class="selection-section">
+
+                    <div class="section-title">
+
+                        <i class="ti ti-users"></i>
+
+                        Select Employees
+
+                    </div>
+
+                    <div class="emp-chip-wrap">
+
+                        @for(
+                        emp of employees();
+                        track emp.employeeId
+                        ){
+
+                        <div class="emp-chip" [class.active]="
+
+                                    assignForm()
+                                    .employeeIds
+                                    .includes(
+                                        emp.employeeId!
+                                    )
+
+                                " (click)="
+                                    toggleEmployee(
+                                    emp.employeeId!
+                                    )
+                                ">
+
+                            <div class="avatar">
+
+                                {{
+                                emp.firstName[0]
+                                }}
+
+                            </div>
+
+                            <div>
+
+                                <div class="emp-name">
+
+                                    {{
+                                    emp.firstName
+                                    }}
+
+                                    {{
+                                    emp.lastName
+                                    }}
+
+                                </div>
+
+                                <div class="emp-role">
+
+                                    {{
+                                    getDesignation(
+                                    emp.designationId
+                                    )
+                                    }}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        }
+
+                    </div>
+
+                </div>
+
+                }
+
+                <!-- DEPARTMENT -->
+
+                @if(
+                assignForm().assignType
+                ===
+                'Department'
+                ){
+
+                <div class="selection-section">
+
+                    <div class="section-title">
+
+                        <i class="ti ti-building"></i>
+
+                        Select Departments
+
+                    </div>
+
+                    <div class="emp-chip-wrap">
+
+                        @for(
+                        dept of departmentDropdownItems();
+                        track dept.id
+                        ){
+
+                        <div class="emp-chip" [class.active]="
+
+                                    assignForm()
+                                    .departmentIds
+                                    .includes(
+                                        dept.id
+                                    )
+
+                                " (click)="
+                                    toggleDepartment(
+                                    dept.id
+                                    )
+                                ">
+
+                            <div class="avatar">
+
+                                <i class="ti ti-building"></i>
+
+                            </div>
+
+                            <div>
+
+                                <div class="emp-name">
+
+                                    {{
+                                    dept.name
+                                    }}
+
+                                </div>
+
+                                <div class="emp-role">
+
+                                    Department
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        }
+
+                    </div>
+
+                </div>
+
+                }
+
+                <!-- DESIGNATION -->
+
+                @if(
+                assignForm().assignType
+                ===
+                'Designation'
+                ){
+
+                <div class="selection-section">
+
+                    <div class="section-title">
+
+                        <i class="ti ti-user-star"></i>
+
+                        Select Designations
+
+                    </div>
+
+                    <div class="emp-chip-wrap">
+
+                        @for(
+                        designation of designationDropdownItems();
+                        track designation.id
+                        ){
+
+                        <div class="emp-chip" [class.active]="
+
+                                assignForm()
+                                .designationIds
+                                .includes(
+                                    designation.id
+                                )
+
+                            " (click)="
+                                toggleDesignation(
+                                designation.id
+                                )
+                            ">
+
+                            <div class="avatar">
+
+                                <i class="ti ti-user"></i>
+
+                            </div>
+
+                            <div>
+
+                                <div class="emp-name">
+
+                                    {{
+                                    designation.name
+                                    }}
+
+                                </div>
+
+
+
+                            </div>
+
+                        </div>
+
+                        }
+
+                    </div>
+
+                </div>
+
+                }
+
+                <!-- =====================================================
+        REMARKS
+        ===================================================== -->
+
+                <div class="mt-3">
+
+                    <label class="form-label">
+
+                        Remarks
+
+                    </label>
+
+                    <textarea class="form-control" rows="3" placeholder="Remarks..." [value]="
+                        assignForm().remarks
+                        " (input)="
+                        updateAssignForm(
+                            'remarks',
+                            $any($event.target).value
+                        )
+                        ">
+          </textarea>
+
+                </div>
+
+            </div>
+
+            <!-- =====================================================
+      FOOTER
+      ===================================================== -->
+
+
+            <div class="modal-footer">
+
+                <button
+                    class="btn-cancel-perm v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3"
+                    data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <button class=" v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
+                    " (click)="assignShift()">
+
+                    Save
+
+                </button>
+
+            </div>
+
+        </div>
 
     </div>
-
-    <div>
-
-      <div class="head-title">
-
-        Assigned employees
-
-      </div>
-
-    </div>
-
-    <div class="ms-auto">
-
-      <span class="employee-count">
-
-        24
-
-      </span>
-
-    </div>
-
-  </div>
-
-  <div class="detail-body">
-
-    <div class="employee-avatars">
-
-      <div class="emp-avatar purple">
-
-        RK
-
-      </div>
-
-      <div class="emp-avatar green">
-
-        PM
-
-      </div>
-
-      <div class="emp-avatar orange">
-
-        AJ
-
-      </div>
-
-      <div class="emp-avatar lime">
-
-        SK
-
-      </div>
-
-      <div class="emp-avatar pink">
-
-        NR
-
-      </div>
-
-      <div class="emp-avatar more">
-
-        +19
-
-      </div>
-
-    </div>
-
-    <button class="view-btn">
-
-      <i class="ti ti-users"></i>
-
-      View all employees
-
-    </button>
-
-  </div>
-
-</div>
-
-    </div>
-
-  </div>
-
-  }
 
 </div>

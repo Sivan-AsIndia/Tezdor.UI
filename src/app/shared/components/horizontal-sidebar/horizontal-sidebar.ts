@@ -23,7 +23,7 @@ export class HorizontalSidebarComponent implements OnInit {
   menuRoutes: Record<string, string[]> = {
     productMenu:   ['/products', '/productCreate', '/productEdit', '/product'],
     purchaseMenu:  ['/purchase-order', '/purchase-invoice'],
-    viewEmployees: ['/employees', '/employees/create', '/employee/edit', '/attendance', '/salary', '/petty-cash'],
+    viewEmployees: ['/employees', '/employees/create', '/employee/edit', '/attendance', '/shifts', '/salary', '/petty-cash'],
     ledgerMenu:    ['/general-ledger-entries'],
   };
 

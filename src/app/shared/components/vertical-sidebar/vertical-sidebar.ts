@@ -43,6 +43,7 @@ menuRoutes: Record<string, string[]> = {
   'purchaseinvoice':   ['/purchase-invoice'],
   'general-ledger' : ['/general-ledger-entries'],
   'salesinvoice':   ['/sales-invoice'],
+  'shifts': ['/shifts']
 };
 
    ngOnInit(): void {

@@ -2,7 +2,6 @@ import { Component, computed, inject, signal, viewChild } from '@angular/core';
 import { ConfirmModalComponent } from "../../../../shared/components/confirm-modal/confirm-modal";
 import { ToastNotifier } from '../../../../core/services/toast';
 import { Router } from '@angular/router';
-import { SHIFT_SEED_DATA } from '../shift.seed';
 import { Shift } from '../shift';
 import { ShiftDataClient } from '../shift-data-client';
 
@@ -25,9 +24,6 @@ export class ShiftListComponent {
     inject(Router);
   private readonly shiftService =
     inject(ShiftDataClient);
-  /* =====================================================
-     MODAL
-  ===================================================== */
 
   readonly modal =
     viewChild<ConfirmModalComponent>('modal');
@@ -499,6 +495,5 @@ delete(
   openRowDetails( shift: Shift) {
     this.selectedShift.set(shift);
   }
-
 
 }

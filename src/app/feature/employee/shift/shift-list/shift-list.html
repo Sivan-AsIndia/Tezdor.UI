@@ -428,159 +428,151 @@
 <!-- =====================================================
 ROW DETAILS MODAL
 ===================================================== -->
-<div class="modal fade"
-     id="rowDetailsModal"
-     tabindex="-1"
-     aria-labelledby="rowDetailsModalLabel"
-     aria-hidden="true">
+<div class="modal fade" id="rowDetailsModal" tabindex="-1" aria-labelledby="rowDetailsModalLabel" aria-hidden="true">
 
-  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-dialog modal-dialog-centered modal-md">
 
-    <div class="modal-content border-0 rounded-4 overflow-hidden">
+        <div class="modal-content border-0 rounded-4 overflow-hidden">
 
-      <!-- HEADER -->
-      <div class="modal-header border-0 pb-0">
+            <!-- HEADER -->
+            <div class="modal-header border-0 pb-0">
 
-        <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center gap-3">
 
-          <div class="details-avatar">
-            <i class="ti ti-clock"></i>
-          </div>
+                    <div class="details-avatar">
+                        <i class="ti ti-clock"></i>
+                    </div>
 
-          <div>
+                    <div>
 
-            <h5 class="modal-title fw-bold mb-0"
-                id="rowDetailsModalLabel">
+                        <h5 class="modal-title fw-bold mb-0" id="rowDetailsModalLabel">
 
-              {{ selectedShift()?.shiftName }}
+                            {{ selectedShift()?.shiftName }}
 
-            </h5>
+                        </h5>
 
-            <small class="text-muted">
+                        <small class="text-muted">
 
-              {{ selectedShift()?.shiftCode }}
+                            {{ selectedShift()?.shiftCode }}
 
-            </small>
+                        </small>
 
-          </div>
+                    </div>
+
+                </div>
+
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body pt-3">
+
+                <div class="details-grid">
+
+                    <!-- TIME -->
+                    <div class="detail-card">
+
+                        <div class="detail-label">
+                            Shift Time
+                        </div>
+
+                        <div class="detail-value">
+
+                            {{ selectedShift()?.startTime }}
+                            -
+                            {{ selectedShift()?.endTime }}
+
+                        </div>
+
+                    </div>
+
+                    <!-- HOURS -->
+                    <div class="detail-card">
+
+                        <div class="detail-label">
+                            Working Hours
+                        </div>
+
+                        <div class="detail-value">
+
+                            {{ selectedShift()?.workingHours }}
+                            hrs
+
+                        </div>
+
+                    </div>
+
+                    <!-- TYPE -->
+                    <div class="detail-card">
+
+                        <div class="detail-label">
+                            Shift Type
+                        </div>
+
+                        <div class="detail-value">
+
+                            @if(selectedShift()?.isNightShift){
+
+                            <span class="badge bg-dark">
+                                Night Shift
+                            </span>
+
+                            }
+
+                            @else if(selectedShift()?.isFlexibleShift){
+
+                            <span class="badge bg-info">
+                                Flexible Shift
+                            </span>
+
+                            }
+
+                            @else {
+
+                            <span class="badge bg-primary">
+                                Regular Shift
+                            </span>
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                    <!-- STATUS -->
+                    <div class="detail-card">
+
+                        <div class="detail-label">
+                            Status
+                        </div>
+
+                        <div class="detail-value">
+
+                            <span class="badge rounded-2" [class.active]="selectedShift()?.isActive"
+                                [class.inactive]="!selectedShift()?.isActive">
+
+                                {{
+                                selectedShift()?.isActive
+                                ? 'Active'
+                                : 'Inactive'
+                                }}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
 
         </div>
-
-        <button type="button"
-                class="btn-close shadow-none"
-                data-bs-dismiss="modal">
-        </button>
-
-      </div>
-
-      <!-- BODY -->
-      <div class="modal-body pt-3">
-
-        <div class="details-grid">
-
-          <!-- TIME -->
-          <div class="detail-card">
-
-            <div class="detail-label">
-              Shift Time
-            </div>
-
-            <div class="detail-value">
-
-              {{ selectedShift()?.startTime }}
-              -
-              {{ selectedShift()?.endTime }}
-
-            </div>
-
-          </div>
-
-          <!-- HOURS -->
-          <div class="detail-card">
-
-            <div class="detail-label">
-              Working Hours
-            </div>
-
-            <div class="detail-value">
-
-              {{ selectedShift()?.workingHours }}
-              hrs
-
-            </div>
-
-          </div>
-
-          <!-- TYPE -->
-          <div class="detail-card">
-
-            <div class="detail-label">
-              Shift Type
-            </div>
-
-            <div class="detail-value">
-
-              @if(selectedShift()?.isNightShift){
-
-              <span class="badge bg-dark">
-                Night Shift
-              </span>
-
-              }
-
-              @else if(selectedShift()?.isFlexibleShift){
-
-              <span class="badge bg-info">
-                Flexible Shift
-              </span>
-
-              }
-
-              @else {
-
-              <span class="badge bg-primary">
-                Regular Shift
-              </span>
-
-              }
-
-            </div>
-
-          </div>
-
-          <!-- STATUS -->
-          <div class="detail-card">
-
-            <div class="detail-label">
-              Status
-            </div>
-
-            <div class="detail-value">
-
-              <span class="badge rounded-2"
-                    [class.active]="selectedShift()?.isActive"
-                    [class.inactive]="!selectedShift()?.isActive">
-
-                {{
-                  selectedShift()?.isActive
-                  ? 'Active'
-                  : 'Inactive'
-                }}
-
-              </span>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
 
     </div>
-
-  </div>
 
 </div>

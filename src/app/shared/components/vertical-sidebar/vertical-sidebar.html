@@ -313,6 +313,20 @@
         </li>
 
         <li class="sidebar-item">
+          <a routerLink="/shifts"
+            class="cursor-pointer sidebar-link before:bg-lightsales hover:text-sales dark:hover:text-sales"
+            [class.active]="openMenu() === 'shifts'"
+            [class.text-sales]="openMenu() === 'shifts'"
+            [class.activebg]="openMenu() === 'shifts'"
+            (click)="toggle('shifts')">
+            <span class="aside-icon p-2 bg-danger-subtle rounded-1">
+              <iconify-icon icon="solar:clock-circle-line-duotone" class="fs-6"></iconify-icon>
+            </span>
+            <span class="hide-menu flex-shrink-0">Shifts</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
           <a routerLink="/salary"
             class="cursor-pointer sidebar-link before:bg-lightstore hover:text-store dark:hover:text-store"
             [class.active]="isHighlighted('salary')"

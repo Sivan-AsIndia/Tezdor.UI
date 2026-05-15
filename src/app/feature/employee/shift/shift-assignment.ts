@@ -1,49 +1,43 @@
 export interface ShiftAssignment {
 
-  shiftAssignmentId?: string;
+    shiftAssignmentId?: string;
 
-  shiftId: string;
+    shiftId: string;
 
-  employeeId?: string | null;
+employeeIds: string[];
 
-  departmentId?: string | null;
+departmentIds: string[];
 
-  designationId?: string | null;
+designationIds: string[];
 
-  branchId?: string | null;
+    branchIds?: string[];
 
-  effectiveFrom: string;
+    effectiveFrom: string;
 
-  effectiveTo?: string | null;
+    effectiveTo?: string | null;
 
-  applySunday: boolean;
+    applySunday?: boolean;
+    applyMonday?: boolean;
+    applyTuesday?: boolean;
+    applyWednesday?: boolean;
+    applyThursday?: boolean;
+    applyFriday?: boolean;
+    applySaturday?: boolean;
 
-  applyMonday: boolean;
+    overrideExistingShift: boolean;
 
-  applyTuesday: boolean;
+    isDefaultShift: boolean;
 
-  applyWednesday: boolean;
+    isActive: boolean;
 
-  applyThursday: boolean;
+    remarks?: string;
 
-  applyFriday: boolean;
+    createdOn?: string;
 
-  applySaturday: boolean;
+    createdBy?: string | null;
 
-  overrideExistingShift: boolean;
+    updatedOn?: string;
 
-  isDefaultShift: boolean;
-
-  isActive: boolean;
-
-  remarks?: string;
-
-  createdOn?: string;
-
-  createdBy?: string | null;
-
-  updatedOn?: string;
-
-  updatedBy?: string | null;
+    updatedBy?: string | null;
 
 }
