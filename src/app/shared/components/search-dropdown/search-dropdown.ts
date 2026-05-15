@@ -1,4 +1,4 @@
-import { Component, computed, input, output, signal } from '@angular/core';
+import { Component, computed, DestroyRef, ElementRef, inject, input, output, Renderer2, signal } from '@angular/core';
 
 export interface SearchDropdownItem {
 
@@ -14,9 +14,50 @@ export interface SearchDropdownItem {
 })
 export class SearchDropdownComponent {
 
-  // =====================================================
-  // INPUTS
-  // =====================================================
+
+  constructor() {
+
+  const removeListener =
+
+    this.renderer.listen(
+
+      'document',
+
+      'click',
+
+      (event: MouseEvent) => {
+
+        const clickedInside =
+
+          this.elementRef
+            .nativeElement
+            .contains(event.target);
+
+        if (!clickedInside) {
+
+          this.isOpen.set(false);
+
+        }
+
+      }
+
+    );
+
+  this.destroyRef.onDestroy(() => {
+
+    removeListener();
+
+  });
+
+}
+
+  private readonly elementRef =
+  inject(ElementRef);
+  private readonly renderer =
+  inject(Renderer2);
+
+private readonly destroyRef =
+  inject(DestroyRef);
 
   items =
     input<SearchDropdownItem[]>([]);
@@ -33,24 +74,17 @@ export class SearchDropdownComponent {
   invalid =
     input(false);
 
-  // =====================================================
-  // OUTPUTS
-  // =====================================================
+
 
   selectedIdChange =
     output<string>();
 
-  // =====================================================
-  // STATE
-  // =====================================================
+
 
   isOpen = signal(false);
 
   search = signal('');
 
-  // =====================================================
-  // FILTERED ITEMS
-  // =====================================================
 
   filteredItems = computed(() => {
 
@@ -84,9 +118,7 @@ export class SearchDropdownComponent {
       this.placeholder();
   });
 
-  // =====================================================
-  // TOGGLE
-  // =====================================================
+
 
   toggleDropdown() {
 
@@ -101,9 +133,6 @@ export class SearchDropdownComponent {
     }
   }
 
-  // =====================================================
-  // SELECT
-  // =====================================================
 
   selectItem(
     item: SearchDropdownItem
@@ -116,9 +145,6 @@ export class SearchDropdownComponent {
     this.search.set('');
   }
 
-  // =====================================================
-  // CLOSE
-  // =====================================================
 
   closeDropdown() {
 

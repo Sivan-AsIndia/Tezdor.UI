@@ -279,6 +279,18 @@ export const routes: Routes = [
           import('./feature/employee/shift/shift-create/shift-create')
             .then(m => m.ShiftCreateComponent),
       },
+                  {
+        path: 'shift/edit/:id',
+        loadComponent: () =>
+          import('./feature/employee/shift/shift-create/shift-create')
+            .then(m => m.ShiftCreateComponent),
+      },
+                        {
+        path: 'shift/:id',
+        loadComponent: () =>
+          import('./feature/employee/shift/shift-detail/shift-detail')
+            .then(m => m.ShiftDetailComponent),
+      },
     ],
   },
 

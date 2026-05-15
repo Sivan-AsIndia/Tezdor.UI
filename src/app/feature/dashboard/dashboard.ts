@@ -3,7 +3,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { GeneralLedgerEntryClient } from '../ledger/general-ledger-entry-client';
 import { EmployeeDataClient } from '../employee/employee-data-client';
 import { AttendanceDataClient } from '../employee/attendance/attendance-data-client';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { ToastNotifier } from '../../core/services/toast';
 import { AttendanceType } from '../employee/attendance/attendance-line';
 
@@ -32,7 +32,7 @@ export interface StatRow {
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink,RouterModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })

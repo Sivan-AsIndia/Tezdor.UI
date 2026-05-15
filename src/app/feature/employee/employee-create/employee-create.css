@@ -470,3 +470,417 @@ button.btn-outline-warning:hover {
     align-items: center;
     justify-content: space-between;
 }
+/* =========================================================
+   WRAPPER
+========================================================= */
+
+.ae-wrapper {
+  background: #fff;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
+.ae-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 14px;
+}
+
+.ae-title-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 7px 14px;
+
+  border-radius: 999px;
+
+  background:
+    rgba(var(--bs-primary-rgb), 0.08);
+
+  border:
+    1px solid rgba(var(--bs-primary-rgb), 0.14);
+
+  color: var(--bs-primary);
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ae-title-chip i {
+  font-size: 15px;
+}
+
+.ae-save-btn {
+  height: 38px;
+
+  padding: 0 14px;
+
+  border-radius: 10px;
+
+  border: 1px solid var(--bs-border-color);
+
+  background: #fff;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  transition: .18s ease;
+}
+
+.ae-save-btn:hover {
+  background:
+    rgba(var(--bs-primary-rgb), 0.03);
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.ae-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 20px;
+
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+
+  border-bottom:
+    1px solid var(--bs-border-color);
+}
+
+.ae-stat {
+  text-align: center;
+}
+
+.ae-stat h4 {
+  margin: 0;
+
+  font-size: 24px;
+  font-weight: 700;
+
+  line-height: 1;
+}
+
+.ae-stat span {
+  font-size: 12px;
+  color: #7b8190;
+}
+
+.ae-divider {
+  width: 1px;
+  height: 32px;
+  background: var(--bs-border-color);
+}
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.ae-section {
+  margin-bottom: 20px;
+}
+
+.ae-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 12px;
+}
+
+.ae-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  color: #4b5563;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.dot.purple {
+  background: #7c6cf1;
+}
+
+.dot.green {
+  background: #16a34a;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.ae-add-btn,
+.ae-done-btn {
+  height: 34px;
+
+  padding: 0 12px;
+
+  border-radius: 10px;
+
+  border: 1px solid var(--bs-border-color);
+
+  background: #fff;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  transition: .18s ease;
+}
+
+.ae-add-btn:hover,
+.ae-done-btn:hover {
+  background:
+    rgba(var(--bs-primary-rgb), 0.03);
+}
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.ae-empty {
+  border: 1px dashed #d7dce4;
+
+  border-radius: 12px;
+
+  padding: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  color: #7b8190;
+
+  font-size: 13px;
+}
+
+.ae-empty i {
+  font-size: 16px;
+}
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.ae-card {
+  border: 1px solid var(--bs-border-color);
+
+  border-radius: 14px;
+
+  padding: 14px;
+
+  background: #fff;
+
+  margin-bottom: 12px;
+
+  transition: .18s ease;
+}
+
+.ae-card:hover {
+  border-color:
+    rgba(var(--bs-primary-rgb), 0.18);
+}
+
+/* =========================================================
+   CARD TOP
+========================================================= */
+
+.ae-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  margin-bottom: 10px;
+}
+
+.ae-card-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ae-icon {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+.ae-icon i {
+  font-size: 17px;
+}
+
+.ae-icon.green {
+  background: #e8f8ef;
+  color: #0f9f58;
+}
+
+.ae-icon.mint {
+  background: #e6faf7;
+  color: #0f766e;
+}
+
+.ae-card-title {
+  font-size: 16px;
+  font-weight: 700;
+
+  line-height: 1.1;
+}
+
+.ae-card-sub {
+  margin-top: 2px;
+
+  font-size: 12px;
+  color: #7b8190;
+}
+
+/* =========================================================
+   CLOSE BTN
+========================================================= */
+
+.ae-close-btn {
+  width: 34px;
+  height: 34px;
+
+  border-radius: 10px;
+
+  border: 1px solid var(--bs-border-color);
+
+  background: #fff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: .18s ease;
+}
+
+.ae-close-btn:hover {
+  background: #fff5f5;
+  color: #dc2626;
+}
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.form-label {
+  font-size: 10px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: .4px;
+
+  color: #6b7280;
+
+  margin-bottom: 5px;
+}
+
+.form-control,
+.form-select {
+  min-height: 40px;
+
+  border-radius: 10px;
+
+  border-color: #d7dce4;
+
+  font-size: 13px;
+
+  box-shadow: none !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color:
+    rgba(var(--bs-primary-rgb), 0.35);
+
+  box-shadow:
+    0 0 0 3px rgba(var(--bs-primary-rgb), 0.07)
+    !important;
+}
+
+/* =========================================================
+   DATE ICON
+========================================================= */
+
+.ti-calendar {
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* =========================================================
+   GRID SPACING
+========================================================= */
+
+.row.g-3 {
+  --bs-gutter-x: 12px;
+  --bs-gutter-y: 12px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .ae-wrapper {
+    padding: 12px;
+  }
+
+  .ae-topbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .ae-save-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ae-stats {
+    gap: 14px;
+  }
+
+  .ae-stat h4 {
+    font-size: 20px;
+  }
+
+  .ae-card {
+    padding: 12px;
+  }
+
+}

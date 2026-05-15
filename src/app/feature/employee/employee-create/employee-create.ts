@@ -726,8 +726,8 @@ copyAddress() {
     this.educations.clear();
     this.workExperiences.clear();
 
-    this.addEducation();
-    this.addWork();
+    // this.addEducation();
+    // this.addWork();
 
     this.mode.set('create');
     this.selectedId.set(null);

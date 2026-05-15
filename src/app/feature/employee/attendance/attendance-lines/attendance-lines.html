@@ -56,8 +56,8 @@
                                 <div class="position-relative">
                                     <input class="form-control pe-5" [matDatepicker]="permissionDatePicker"
                                         [value]="filterDate()" (dateChange)="filterDate.set($any($event.target).value)"
-                                        (dateChange)="setFilterDate($event.value)" 
-                                        placeholder="Select date..." readonly (click)="permissionDatePicker.open()" />
+                                        (dateChange)="setFilterDate($event.value)" placeholder="Select date..." readonly
+                                        (click)="permissionDatePicker.open()" />
 
                                     @if(filterDate()){
                                     <button class="icon-clear" (click)="clearDate($event)">
@@ -492,12 +492,26 @@
                         (click)="toggleEmployee(emp.employeeId!)">
 
                         <div class="avatar">
+
                             {{ emp.firstName[0] }}
+
                         </div>
 
-                        <span>
-                            {{ emp.firstName }}
-                        </span>
+                        <div class="emp-info">
+
+                            <span class="emp-name">
+
+                                {{ emp.firstName }}
+
+                            </span>
+
+                            <small class="emp-designation">
+
+                                {{ getDesignation(emp.designationId) || 'Employee' }}
+
+                            </small>
+
+                        </div>
 
                     </div>
 

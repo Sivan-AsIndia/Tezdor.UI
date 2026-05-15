@@ -15,6 +15,7 @@ import { Leave, LeaveStatus } from '../../leave/leave';
 import { CommonModule } from '@angular/common';
 import { SearchDropdownComponent } from '../../../../shared/components/search-dropdown/search-dropdown';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MasterDataClient } from '../../../../core/services/master-data';
 
 @Component({
   selector: 'app-attendance-lines',
@@ -31,6 +32,8 @@ export class AttendanceLinesComponent {
   private readonly permissionService = inject(PermissionDataClient);
   private readonly leaveTypeService = inject(LeaveTypeDataClient);
   private readonly leaveService = inject(LeaveDataClient);
+  private readonly masterDataClient =
+  inject(MasterDataClient);
 
 
   private readonly route = inject(ActivatedRoute);
@@ -1810,4 +1813,35 @@ setPermissionDate(
     return `${year}-${month}-${day}`;
 
   }
+
+  /* =====================================================
+   DESIGNATION
+===================================================== */
+
+getDesignation(
+  designationId?: string
+): string {
+
+  if (!designationId)
+    return '-';
+
+  return (
+
+    this.masterDataClient
+      .designations()
+      .find(x =>
+
+        x.id === designationId
+
+      )
+
+      ?.name
+
+    ||
+
+    '-'
+
+  );
+
+}
 }

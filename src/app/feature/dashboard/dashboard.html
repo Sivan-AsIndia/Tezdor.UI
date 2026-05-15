@@ -27,7 +27,7 @@
 
           <h4 class="widget-title">Employee Attendance</h4>
           <p class="widget-meta">{{ attendance().present }} out of {{ attendance().total }} present today</p>
-          <button class="btn btn--outline-primary w-full mt-auto">View Data</button>
+          <button routerLink="/attendance" class="btn btn--outline-primary w-full mt-auto">View Data</button>
         </div>
       </div>
 
@@ -147,7 +147,7 @@
             }
           </div>
 
-          <div class="product-alert-badge">
+          <div class="product-alert-badge" routerLink="/store">
             <i class="fas fa-triangle-exclamation product-alert-icon"></i>
             {{ product.alertCount }} items low
           </div>
@@ -182,7 +182,7 @@
               }
             </div>
 
-            <button class="btn--dashed w-full mt-md">Create PO</button>
+            <button routerLink="/purchase-order/create" class="btn--dashed w-full mt-md">Create PO</button>
           </div>
         </div>
       </div>
@@ -199,7 +199,7 @@
           </div>
 
           <h3 class="card-value-md">{{ 10 }}%</h3>
-          <p class="card-sub mb-sm">{{ 15}}</p>
+          <p class="card-sub mb-md">{{ 15}}</p>
 
           <div class="progress-bar mb-lg">
             <div class="progress-bar__fill progress-bar__fill--blue" [style.width.%]="10"></div>
@@ -425,7 +425,7 @@
               </div>
 
               <!-- DEBIT -->
-              <div class="text-success fw-semibold text-end">
+              <div class="text-success fw-semibold">
 
                 @if(l.debitAmount > 0){
 
@@ -440,7 +440,7 @@
               </div>
 
               <!-- CREDIT -->
-              <div class="text-danger fw-semibold text-end">
+              <div class="text-danger fw-semibold">
 
                 @if(l.creditAmount > 0){
 
@@ -455,7 +455,7 @@
               </div>
 
               <!-- SOURCE -->
-              <div class="d-flex justify-content-center">
+              <div>
 
                 @if(l.sourceType === 'JournalEntry'){
 

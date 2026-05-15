@@ -1,0 +1,1016 @@
+<div class="shift-page">
+
+  <!-- HEADER -->
+<div class="d-flex justify-content-between align-items-center" id="TopHeading">
+
+    <div>
+
+      <h4 class="fw-bold mb-1 mainheading">
+
+        Shift Details
+
+      </h4>
+
+      <small class="text-muted">
+
+        View complete shift configuration
+
+      </small>
+
+    </div>
+
+        <div class="arrow-steps d-none d-md-flex">
+            <ul id="breadcrumb">
+                <li><a routerLink="/dashboard"><span class="fa fa-home"></span>&nbsp; Home</a></li>
+                <li><a routerLink="/shifts"><span class="fa fa-users"></span>&nbsp; Shift</a></li>
+                <li><a href="javascript:void(0)"><span class="fa fa-eye"></span>&nbsp; View</a></li>
+            </ul>
+        </div>
+
+  </div>
+
+  @if(shift()){
+
+  <!-- HERO -->
+  <div class="shift-hero">
+
+    <div
+      class="
+        d-flex
+        justify-content-between
+        align-items-center
+      ">
+
+      <div>
+
+        <div class="shift-name">
+
+          {{ shift()?.shiftName }}
+
+        </div>
+
+        <div class="shift-meta">
+
+          {{ shift()?.shiftCode }}
+
+          <span class="dot"></span>
+
+          {{ shift()?.startTime }}
+
+          -
+
+          {{ shift()?.endTime }}
+
+        </div>
+
+      </div>
+
+      <span
+        class="status-chip"
+        [class.active]="shift()?.isActive">
+
+        {{ shift()?.isActive ? 'Active' : 'Inactive' }}
+
+      </span>
+
+    </div>
+
+  </div>
+
+  <!-- KPI -->
+  <div class="row g-3 mb-4">
+
+    <div class="col-md-3">
+
+      <div class="shift-kpi">
+
+        <div class="kpi-title">
+
+          Working hours
+
+        </div>
+
+        <div class="kpi-value primary">
+
+          {{ getWorkingHours() }}
+
+        </div>
+
+        <div class="kpi-sub">
+
+          {{ shift()?.startTime }}
+          –
+          {{ shift()?.endTime }}
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+      <div class="shift-kpi">
+
+        <div class="kpi-title">
+
+          Break
+
+        </div>
+
+        <div class="kpi-value">
+
+          {{ shift()?.breakMinutes || 0 }}
+          min
+
+        </div>
+
+        <div class="kpi-sub">
+
+          {{ shift()?.breakStartTime || '-' }}
+          –
+          {{ shift()?.breakEndTime || '-' }}
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+      <div class="shift-kpi">
+
+        <div class="kpi-title">
+
+          Grace period
+
+        </div>
+
+        <div class="kpi-value">
+
+          {{ shift()?.lateGraceMinutes }}
+          min
+
+        </div>
+
+        <div class="kpi-sub">
+
+          Late & early-out
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+      <div class="shift-kpi">
+
+        <div class="kpi-title">
+
+          Week off
+
+        </div>
+
+        <div class="kpi-value">
+
+          {{ getWeekOffCount() }}
+          days
+
+        </div>
+
+        <div class="kpi-sub">
+
+          {{ getWeekOffText() }}
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- BODY -->
+  <div class="row g-4">
+
+    <!-- LEFT -->
+    <div class="col-lg-7">
+
+      <!-- SHIFT TIMING -->
+      <div class="detail-card">
+
+        <div class="detail-head">
+
+          <div class="head-icon">
+
+            <i class="ti ti-clock"></i>
+
+          </div>
+
+          <div>
+
+            <div class="head-title">
+
+              Shift timing
+
+            </div>
+
+            <div class="head-sub">
+
+              Start and end schedule
+
+            </div>
+
+          </div>
+
+        </div>
+
+<div class="detail-body">
+
+  <div class="info-grid">
+
+    <div>
+
+      <label>Start time</label>
+
+      <b>{{ shift()?.startTime }}</b>
+
+    </div>
+
+    <div>
+
+      <label>End time</label>
+
+      <b>{{ shift()?.endTime }}</b>
+
+    </div>
+
+    <div>
+
+      <label>Net working hours</label>
+
+      <b class="primary-text">
+
+        {{ getWorkingHours() }}
+
+      </b>
+
+    </div>
+
+  </div>
+
+  <!-- BREAK -->
+  <div class="shift-break-line">
+
+    <span class="work-pill">
+
+      {{ shift()?.startTime }}
+
+      — working —
+
+      {{ shift()?.breakStartTime }}
+
+    </span>
+
+    <span class="break-pill">
+
+      break
+
+    </span>
+
+    <span class="work-pill">
+
+      {{ shift()?.breakEndTime }}
+
+      — working —
+
+      {{ shift()?.endTime }}
+
+    </span>
+
+  </div>
+
+</div>
+
+      </div>
+
+      <!-- ATTENDANCE -->
+      <div class="detail-card">
+
+        <div class="detail-head">
+
+          <div class="head-icon">
+
+            <i class="ti ti-chart-bar"></i>
+
+          </div>
+
+          <div>
+
+            <div class="head-title">
+
+              Attendance rules
+
+            </div>
+
+            <div class="head-sub">
+
+              Attendance thresholds
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="detail-body">
+
+          <div class="rule-grid">
+
+            <div class="rule-box">
+
+              <label>Working hours</label>
+
+              <strong>
+
+                {{ shift()?.workingHours }}
+                hrs
+
+              </strong>
+
+            </div>
+
+            <div class="rule-box">
+
+              <label>Half day</label>
+
+              <strong>
+
+                {{ shift()?.minimumHoursForHalfDay }}
+                hrs
+
+              </strong>
+
+            </div>
+
+            <div class="rule-box">
+
+              <label>Full day</label>
+
+              <strong>
+
+                {{ shift()?.minimumHoursForFullDay }}
+                hrs
+
+              </strong>
+
+            </div>
+
+            <div class="rule-box">
+
+              <label>Late grace</label>
+
+              <strong>
+
+                {{ shift()?.lateGraceMinutes }}
+                min
+
+              </strong>
+
+            </div>
+
+            <div class="rule-box">
+
+              <label>Early-out</label>
+
+              <strong>
+
+                {{ shift()?.earlyOutGraceMinutes }}
+                min
+
+              </strong>
+
+            </div>
+
+            <div class="rule-box active">
+
+              <label>OT threshold</label>
+
+              <strong>
+
+                {{ shift()?.minimumOvertimeMinutes }}
+                min
+
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- FLAGS -->
+      <div class="detail-card">
+
+        <div class="detail-head">
+
+          <div class="head-icon">
+
+            <i class="ti ti-toggle-left"></i>
+
+          </div>
+
+          <div>
+
+            <div class="head-title">
+
+              Shift flags
+
+            </div>
+
+            <div class="head-sub">
+
+              Special shift behaviors
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="detail-body">
+
+          <div class="flag-row">
+
+            <div>
+
+              <div class="flag-title">
+
+                Night shift
+
+              </div>
+
+              <div class="flag-sub">
+
+                Shift spans across midnight
+
+              </div>
+
+            </div>
+
+            <span
+              class="flag-chip"
+              [class.yes]="shift()?.isNightShift">
+
+              {{ shift()?.isNightShift ? 'Yes' : 'No' }}
+
+            </span>
+
+          </div>
+
+          <div class="flag-row">
+
+            <div>
+
+              <div class="flag-title">
+
+                Flexible shift
+
+              </div>
+
+              <div class="flag-sub">
+
+                Employees can choose timing
+
+              </div>
+
+            </div>
+
+            <span
+              class="flag-chip"
+              [class.yes]="shift()?.isFlexibleShift">
+
+              {{ shift()?.isFlexibleShift ? 'Yes' : 'No' }}
+
+            </span>
+
+          </div>
+
+          <div class="flag-row">
+
+            <div>
+
+              <div class="flag-title">
+
+                Overtime
+
+              </div>
+
+              <div class="flag-sub">
+
+                OT enabled for this shift
+
+              </div>
+
+            </div>
+
+            <span
+              class="flag-chip"
+              [class.yes]="shift()?.allowOvertime">
+
+              {{ shift()?.allowOvertime ? 'Yes' : 'No' }}
+
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- WEEK OFF -->
+<div class="detail-card">
+
+  <div class="detail-head">
+
+    <div class="head-icon">
+
+      <i class="ti ti-calendar-off"></i>
+
+    </div>
+
+    <div>
+
+      <div class="head-title">
+
+        Week off days
+
+      </div>
+
+    </div>
+
+    <div class="ms-auto">
+
+      <span class="weekoff-badge">
+
+        {{ getWeekOffCount() }} days off
+
+      </span>
+
+    </div>
+
+  </div>
+
+  <div class="detail-body">
+
+    <div class="week-grid">
+
+      <div class="week-item">
+
+        <small>SUN</small>
+
+        <button
+          class="week-btn"
+          [class.off]="shift()?.isSundayOff">
+
+          S
+
+        </button>
+
+      </div>
+
+      <div class="week-item">
+
+        <small>MON</small>
+
+        <button
+          class="week-btn"
+          [class.off]="shift()?.isMondayOff">
+
+          M
+
+        </button>
+
+      </div>
+
+      <div class="week-item">
+
+        <small>TUE</small>
+
+        <button
+          class="week-btn"
+          [class.off]="shift()?.isTuesdayOff">
+
+          T
+
+        </button>
+
+      </div>
+
+      <div class="week-item">
+
+        <small>WED</small>
+
+        <button
+          class="week-btn"
+          [class.off]="shift()?.isWednesdayOff">
+
+          W
+
+        </button>
+
+      </div>
+
+      <div class="week-item">
+
+        <small>THU</small>
+
+        <button
+          class="week-btn"
+          [class.off]="shift()?.isThursdayOff">
+
+          T
+
+        </button>
+
+      </div>
+
+      <div class="week-item">
+
+        <small>FRI</small>
+
+        <button
+          class="week-btn"
+          [class.off]="shift()?.isFridayOff">
+
+          F
+
+        </button>
+
+      </div>
+
+      <div class="week-item">
+
+        <small>SAT</small>
+
+        <button
+          class="week-btn"
+          [class.off]="shift()?.isSaturdayOff">
+
+          S
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="week-legend">
+
+  <span>
+    <i class="ti ti-square  text-primary"></i>
+    Day of
+  </span>
+
+      <span>
+
+        <i class="ti ti-square text-muted"></i>
+
+        Working day
+
+      </span>
+
+    </div>
+
+  </div>
+
+</div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="col-lg-5">
+
+      <!-- SUMMARY -->
+      <div class="detail-card">
+
+        <div class="detail-head">
+
+          <div class="head-icon">
+
+            <i class="ti ti-list-details"></i>
+
+          </div>
+
+          <div>
+
+            <div class="head-title">
+
+              Quick summary
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="summary-list">
+
+          <div class="summary-row">
+
+            <span>Shift code</span>
+
+            <b>{{ shift()?.shiftCode }}</b>
+
+          </div>
+
+          <div class="summary-row">
+
+            <span>Start – end</span>
+
+            <b class="primary-text">
+
+              {{ shift()?.startTime }}
+              –
+              {{ shift()?.endTime }}
+
+            </b>
+
+          </div>
+
+          <div class="summary-row">
+
+            <span>Break</span>
+
+            <b>
+
+              {{ shift()?.breakStartTime }}
+              –
+              {{ shift()?.breakEndTime }}
+
+            </b>
+
+          </div>
+
+          <div class="summary-row">
+
+            <span>Net hours</span>
+
+            <b class="primary-text">
+
+              {{ getWorkingHours() }}
+
+            </b>
+
+          </div>
+
+          <div class="summary-row">
+
+            <span>Half day ≥</span>
+
+            <b>
+
+              {{ shift()?.minimumHoursForHalfDay }}
+              hrs
+
+            </b>
+
+          </div>
+
+          <div class="summary-row">
+
+            <span>Full day ≥</span>
+
+            <b>
+
+              {{ shift()?.minimumHoursForFullDay }}
+              hrs
+
+            </b>
+
+          </div>
+
+          <div class="summary-row">
+
+            <span>Late grace</span>
+
+            <b>
+
+              {{ shift()?.lateGraceMinutes }}
+              min
+
+            </b>
+
+          </div>
+
+          <div class="summary-row">
+
+            <span>OT minimum</span>
+
+            <b>
+
+              {{ shift()?.minimumOvertimeMinutes }}
+              min
+
+            </b>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- AUDIT -->
+<div class="detail-card">
+
+  <div class="detail-head">
+
+    <div class="head-icon">
+
+      <i class="ti ti-history"></i>
+
+    </div>
+
+    <div>
+
+      <div class="head-title">
+
+        Audit trail
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="audit-list">
+
+    <div class="audit-item">
+
+      <div class="audit-dot"></div>
+
+      <div>
+
+        <div class="audit-title">
+
+          Shift updated
+
+        </div>
+
+        <div class="audit-sub">
+
+          Grace period changed · Ravi K · 2 days ago
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="audit-item">
+
+      <div class="audit-dot light"></div>
+
+      <div>
+
+        <div class="audit-title">
+
+          Overtime enabled
+
+        </div>
+
+        <div class="audit-sub">
+
+          Ravi K · 1 week ago
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="audit-item">
+
+      <div class="audit-dot"></div>
+
+      <div>
+
+        <div class="audit-title">
+
+          Shift created
+
+        </div>
+
+        <div class="audit-sub">
+
+          Priya M · 14 Jan 2025
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- EMPLOYEES -->
+<div class="detail-card">
+
+  <div class="detail-head">
+
+    <div class="head-icon">
+
+      <i class="ti ti-users"></i>
+
+    </div>
+
+    <div>
+
+      <div class="head-title">
+
+        Assigned employees
+
+      </div>
+
+    </div>
+
+    <div class="ms-auto">
+
+      <span class="employee-count">
+
+        24
+
+      </span>
+
+    </div>
+
+  </div>
+
+  <div class="detail-body">
+
+    <div class="employee-avatars">
+
+      <div class="emp-avatar purple">
+
+        RK
+
+      </div>
+
+      <div class="emp-avatar green">
+
+        PM
+
+      </div>
+
+      <div class="emp-avatar orange">
+
+        AJ
+
+      </div>
+
+      <div class="emp-avatar lime">
+
+        SK
+
+      </div>
+
+      <div class="emp-avatar pink">
+
+        NR
+
+      </div>
+
+      <div class="emp-avatar more">
+
+        +19
+
+      </div>
+
+    </div>
+
+    <button class="view-btn">
+
+      <i class="ti ti-users"></i>
+
+      View all employees
+
+    </button>
+
+  </div>
+
+</div>
+
+    </div>
+
+  </div>
+
+  }
+
+</div>

@@ -777,193 +777,529 @@
             </div>
 
 
-            <form [formGroup]="form">
+<form [formGroup]="form">
 
-                <div class="content-card">
-                    <div class="card-body-inner">
+  <div class="ae-wrapper">
 
-                        <!-- ================= EDUCATION ================= -->
-                        <div class="section-block">
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
-                            <div class="sections-header">
-                                <div class="section-left">
-                                    <i class="ti ti-school text-success"></i>
-                                    <span>Education</span>
-                                </div>
+    <div class="ae-topbar">
 
-                                <button type="button" class="btn bg-primary btn-sm" (click)="addEducation()">
-                                    + Add Education
-                                </button>
-                            </div>
+      <!-- <div class="ae-title-chip">
 
-                            <div class="section-box">
+        <i class="ti ti-briefcase"></i>
 
-                                @if(educations.length === 0){
+        Academic & Experience
 
-                                <div class="empty-state">
-                                    <i class="ti ti-school"></i>
-                                    <p>No Education Added</p>
-                                </div>
+      </div>
 
-                                } @else {
+      <button
+        type="button"
+        class="ae-save-btn">
 
-                                @for (edu of educations.controls; let i = $index; track i) {
+        Save
 
-                                <div class="row g-2 align-items-end mb-2">
+        <i class="ti ti-check"></i>
 
+      </button> -->
 
-                                    <div class="col-md-3">
-                                        <label>Degree</label>
-                                        <app-search-dropdown [items]="degreeDropdownItems()"
-                                            [selectedId]="edu.controls.degree.value" placeholder="-- Select Degree --"
-                                            (selectedIdChange)="
-                                          edu.controls.degree.setValue($event)">
+    </div>
 
-                                        </app-search-dropdown>
-                                    </div>
+    <!-- =====================================================
+         STATS
+    ====================================================== -->
 
-                                    <div class="col-md-3">
-                                        <label class="form-label">Specialization</label>
-                                        <input class="form-control" placeholder="Enter Specialization"
-                                            [formControl]="edu.controls.specialization">
-                                    </div>
+    <!-- <div class="ae-stats">
 
-                                    <div class="col-md-3">
-                                        <label class="form-label">Institute</label>
-                                        <input class="form-control" placeholder="Enter Institute Name"
-                                            [formControl]="edu.controls.instituteName">
-                                    </div>
+      <div class="ae-stat">
 
-                                    <div class="col-md-2">
-                                        <label class="form-label">Completion</label>
+        <h4>
 
-                                        <div class="position-relative">
-                                            <input class="form-control pe-5" [matDatepicker]="dateOfCompletionPicker"
-                                                [formControl]="edu.controls.dateOfCompletion"
-                                                placeholder="Select date..." readonly
-                                                (click)="dateOfCompletionPicker.open()" />
-                                            <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
-                                                style="font-size:18px; cursor:pointer;"
-                                                (click)="dateOfCompletionPicker.open()">
-                                            </i>
-                                        </div>
-                                        <mat-datepicker #dateOfCompletionPicker></mat-datepicker>
-                                    </div>
+          {{ educations.length }}
 
-                                    <div class="col-md-1">
-                                        <button type="button" class="icon-btn delete" (click)="removeEducation(i)">
-                                            <i class="ti ti-trash"></i>
-                                        </button>
-                                    </div>
+        </h4>
 
-                                </div>
+        <span>
 
-                                }
+          Education
 
-                                }
+        </span>
 
-                            </div>
-                        </div>
+      </div>
 
-                        <!-- ================= WORK EXPERIENCE ================= -->
-                        <div class="section-block mt-3">
+      <div class="ae-divider"></div>
 
-                            <div class="sections-header">
-                                <div class="section-left">
-                                    <i class="ti ti-briefcase text-success"></i>
-                                    <span>Work Experience</span>
-                                </div>
+      <div class="ae-stat">
 
-                                <button type="button" class="btn bg-primary btn-sm" (click)="addWork()">
-                                    + Add Work Experience
-                                </button>
-                            </div>
+        <h4>
 
-                            <div class="section-box">
+          {{ workExperiences.length }}
 
-                                @if(workExperiences.length === 0){
+        </h4>
 
-                                <div class="empty-state">
-                                    <i class="ti ti-briefcase"></i>
-                                    <p>No Work Experience Added</p>
-                                </div>
+        <span>
 
-                                } @else {
+          Experience
 
-                                @for (work of workExperiences.controls; let i = $index; track i) {
+        </span>
 
-                                <div class="row g-2 align-items-end mb-2">
+      </div>
 
-                                    <div class="col-md-4">
-                                        <label class="form-label">Company</label>
-                                        <input class="form-control" [formControl]="work.controls.companyName"
-                                            placeholder="XYZ Company">
-                                    </div>
+      <div class="ae-divider"></div>
 
+      <div class="ae-stat">
 
-                                    <div class="col-md-3">
-                                        <label>Role</label>
-                                        <app-search-dropdown [items]="roleDropdownItems()"
-                                            [selectedId]="work.controls.jobTitle.value" placeholder="-- Select Role --"
-                                            (selectedIdChange)="
-                                         work.controls.jobTitle.setValue($event)">
+        <h4>
 
-                                        </app-search-dropdown>
-                                    </div>
+          0
 
-                                    <div class="col-md-2">
-                                        <label class="form-label">From</label>
-                                        <div class="position-relative">
-                                            <input class="form-control pe-5" [matDatepicker]="fromDatePicker"
-                                                [formControl]="work.controls.fromDate" placeholder="Select date..."
-                                                readonly (click)="fromDatePicker.open()" />
-                                            <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
-                                                style="font-size:18px; cursor:pointer;" (click)="fromDatePicker.open()">
-                                            </i>
-                                        </div>
-                                        <mat-datepicker #fromDatePicker></mat-datepicker>
-                                    </div>
+        </h4>
 
-                                    <div class="col-md-2">
-                                        <label class="form-label">To</label>
-                                        <div class="position-relative">
-                                            <input class="form-control pe-5" [matDatepicker]="toDatePicker"
-                                                [formControl]="work.controls.toDate" placeholder="Select date..."
-                                                      [min]="work.controls.fromDate.value"
-                                                readonly (click)="toDatePicker.open()" />
-                                            <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
-                                                style="font-size:18px; cursor:pointer;" (click)="toDatePicker.open()">
-                                            </i>
-                                        </div>
-                                        <mat-datepicker #toDatePicker></mat-datepicker>
-                                    </div>
+        <span>
 
-                                    <div class="col-md-1">
-                                        <button type="button" class="icon-btn delete" (click)="removeWork(i)">
-                                            <i class="ti ti-trash"></i>
-                                        </button>
-                                    </div>
+          Years exp.
 
-                                </div>
+        </span>
 
-                                }
+      </div>
 
-                                }
-
-                            </div>
-                        </div>
-
-                        <!-- ACTION -->
-                        <!-- <div class="text-start mt-4">
-      <button type="button" (click)="save()" class="btn btn-primary px-4">
-        Save Employee
-      </button>
     </div> -->
 
-                    </div>
-                </div>
+    <!-- =====================================================
+         EDUCATION
+    ====================================================== -->
 
-            </form>
+    <div class="ae-section">
+
+      <!-- HEADER -->
+      <div class="ae-section-head">
+
+        <div class="ae-section-title">
+
+          <span class="dot purple"></span>
+
+          EDUCATION
+
+        </div>
+
+        <button
+          type="button"
+          class="ae-add-btn"
+          (click)="addEducation()">
+
+          <i class="ti ti-plus"></i>
+
+          Add
+
+        </button>
+
+      </div>
+
+      <!-- EMPTY -->
+      @if(educations.length === 0){
+
+      <div class="ae-empty" (click)="addEducation()">
+
+        <i class="ti ti-school"></i>
+
+        Tap to add your first degree
+
+      </div>
+
+      }
+
+      <!-- ITEMS -->
+      @for (
+        edu of educations.controls;
+        let i = $index;
+        track i
+      ) {
+
+      <div class="ae-card">
+
+        <!-- TOP -->
+        <div class="ae-card-top">
+
+          <div class="ae-card-left">
+
+            <div class="ae-icon green">
+
+              <i class="ti ti-school"></i>
+
+            </div>
+
+            <div>
+
+              <div class="ae-card-title">
+
+                Education #{{ i + 1 }}
+
+              </div>
+
+              <div class="ae-card-sub">
+
+                Fill education details
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <button
+            type="button"
+            class="ae-close-btn"
+            (click)="removeEducation(i)">
+
+            <i class="ti ti-x"></i>
+
+          </button>
+
+        </div>
+
+        <!-- BODY -->
+        <div class="row g-3 mt-1">
+
+          <div class="col-md-3">
+
+            <label class="form-label">
+
+              Degree
+
+            </label>
+
+            <app-search-dropdown
+              [items]="degreeDropdownItems()"
+              [selectedId]="edu.controls.degree.value"
+              placeholder="Select degree"
+              (selectedIdChange)="
+                edu.controls.degree.setValue($event)
+              ">
+
+            </app-search-dropdown>
+
+          </div>
+
+          <div class="col-md-3">
+
+            <label class="form-label">
+
+              Specialization
+
+            </label>
+
+            <input
+              class="form-control"
+              placeholder="e.g. Computer Science"
+              [formControl]="
+                edu.controls.specialization
+              ">
+
+          </div>
+
+          <div class="col-md-4">
+
+            <label class="form-label">
+
+              Institute
+
+            </label>
+
+            <input
+              class="form-control"
+              placeholder="e.g. Anna University"
+              [formControl]="
+                edu.controls.instituteName
+              ">
+
+          </div>
+
+          <div class="col-md-2">
+
+            <label class="form-label">
+
+              Completion
+
+            </label>
+
+            <div class="position-relative">
+
+              <input
+                class="form-control pe-5"
+                [matDatepicker]="eduPicker"
+                [formControl]="
+                  edu.controls.dateOfCompletion
+                "
+                placeholder="Select date..."
+                readonly
+                (click)="eduPicker.open()" />
+
+              <i
+                class="
+                  ti ti-calendar
+                  position-absolute
+                  top-50
+                  end-0
+                  translate-middle-y
+                  me-3
+                  text-muted
+                "
+                (click)="eduPicker.open()">
+
+              </i>
+
+            </div>
+
+            <mat-datepicker #eduPicker>
+            </mat-datepicker>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      }
+
+    </div>
+
+    <!-- =====================================================
+         EXPERIENCE
+    ====================================================== -->
+
+    <div class="ae-section mt-4">
+
+      <!-- HEADER -->
+      <div class="ae-section-head">
+
+        <div class="ae-section-title">
+
+          <span class="dot green"></span>
+
+          WORK EXPERIENCE
+
+        </div>
+
+        <button
+          type="button"
+          class="ae-add-btn"
+          (click)="addWork()">
+
+          <i class="ti ti-plus"></i>
+
+          Add
+
+        </button>
+
+      </div>
+
+      <!-- EMPTY -->
+      @if(workExperiences.length === 0){
+
+      <div class="ae-empty" (click)="addWork()">
+
+        <i class="ti ti-briefcase"></i>
+
+        Tap to add your work experience
+
+      </div>
+
+      }
+
+      <!-- ITEMS -->
+      @for (
+        work of workExperiences.controls;
+        let i = $index;
+        track i
+      ) {
+
+      <div class="ae-card">
+
+        <!-- TOP -->
+        <div class="ae-card-top">
+
+          <div class="ae-card-left">
+
+            <div class="ae-icon mint">
+
+              <i class="ti ti-building"></i>
+
+            </div>
+
+            <div>
+
+              <div class="ae-card-title">
+
+                Experience #{{ i + 1 }}
+
+              </div>
+
+              <div class="ae-card-sub">
+
+                Fill in details below
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="d-flex gap-2">
+
+            <button
+              type="button"
+              class="ae-close-btn"
+              (click)="removeWork(i)">
+
+              <i class="ti ti-x"></i>
+
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- BODY -->
+        <div class="row g-3 mt-1">
+
+          <div class="col-md-5">
+
+            <label class="form-label">
+
+              Company
+
+            </label>
+
+            <input
+              class="form-control"
+              placeholder="e.g. Infosys"
+              [formControl]="
+                work.controls.companyName
+              ">
+
+          </div>
+
+          <div class="col-md-3">
+
+            <label class="form-label">
+
+              Job title
+
+            </label>
+
+            <app-search-dropdown
+              [items]="roleDropdownItems()"
+              [selectedId]="
+                work.controls.jobTitle.value
+              "
+              placeholder="Select role"
+              (selectedIdChange)="
+                work.controls.jobTitle.setValue($event)
+              ">
+
+            </app-search-dropdown>
+
+          </div>
+
+          <div class="col-md-2">
+
+            <label class="form-label">
+
+              From
+
+            </label>
+
+            <div class="position-relative">
+
+              <input
+                class="form-control pe-5"
+                [matDatepicker]="fromPicker"
+                [formControl]="
+                  work.controls.fromDate
+                "
+                placeholder="Select date..."
+                readonly
+                (click)="fromPicker.open()" />
+
+              <i
+                class="
+                  ti ti-calendar
+                  position-absolute
+                  top-50
+                  end-0
+                  translate-middle-y
+                  me-3
+                  text-muted
+                "
+                (click)="fromPicker.open()">
+
+              </i>
+
+            </div>
+
+            <mat-datepicker #fromPicker>
+            </mat-datepicker>
+
+          </div>
+
+          <div class="col-md-2">
+
+            <label class="form-label">
+
+              To
+
+            </label>
+
+            <div class="position-relative">
+
+              <input
+                class="form-control pe-5"
+                [matDatepicker]="toPicker"
+                [formControl]="
+                  work.controls.toDate
+                "
+                [min]="
+                  work.controls.fromDate.value
+                "
+                placeholder="Select date..."
+                readonly
+                (click)="toPicker.open()" />
+
+              <i
+                class="
+                  ti ti-calendar
+                  position-absolute
+                  top-50
+                  end-0
+                  translate-middle-y
+                  me-3
+                  text-muted
+                "
+                (click)="toPicker.open()">
+
+              </i>
+
+            </div>
+
+            <mat-datepicker #toPicker>
+            </mat-datepicker>
+
+          </div>
+
+        </div>
+
+
+      </div>
+
+      }
+
+    </div>
+
+  </div>
+
+</form>
 
         </div>
     </div>

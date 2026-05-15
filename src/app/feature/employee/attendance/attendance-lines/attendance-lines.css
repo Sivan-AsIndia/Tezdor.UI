@@ -915,12 +915,31 @@ input {
 .emp-chip {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   padding: 8px;
   border-radius: 10px;
   border: 1px solid #eee;
   cursor: pointer;
   transition: 0.2s;
+      font-size: 15px
+}
+
+
+
+.emp-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.emp-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.emp-designation {
+  font-size: 11px;
+  color: #8b93a7;
 }
 
 .emp-chip:hover {

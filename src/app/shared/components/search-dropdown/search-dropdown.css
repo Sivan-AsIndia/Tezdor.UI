@@ -195,6 +195,7 @@
   max-height: 240px;
 
   overflow-y: auto;
+  scrollbar-width: none;
 }
 
 .dropdown-item {
