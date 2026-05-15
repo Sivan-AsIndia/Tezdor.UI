@@ -179,31 +179,43 @@
                                             </td>
                                             <!-- SHIFT -->
                                             <td>
+<div class="d-flex align-items-center gap-2">
 
-                                                <div class="d-flex align-items-center gap-2">
+  <div
+    class="avatar"
+    style="
+      background:#eef2ff;
+      color:#4f46e5;
+    ">
 
-                                                    <div class="avatar" style="
-                              background:#eef2ff;
-                              color:#4f46e5;
-                            ">
+    <i class="ti ti-clock"></i>
 
-                                                        <i class="ti ti-clock"></i>
+  </div>
 
-                                                    </div>
+  <div>
 
-                                                    <div>
+    <div
+      class="fw-semibold d-flex align-items-center gap-2">
 
-                                                        <div class="fw-semibold">
-                                                            {{ shift.shiftName }}
-                                                        </div>
+      {{ shift.shiftName }}
 
-                                                        <small class="text-muted">
-                                                            {{ shift.shiftCode }}
-                                                        </small>
 
-                                                    </div>
 
-                                                </div>
+    </div>
+
+      @if(shift.isDefault){
+
+<span class="status-badge default-badge">
+
+  Default
+
+</span>
+
+      }
+
+  </div>
+
+</div>
 
                                             </td>
 

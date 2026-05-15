@@ -42,6 +42,8 @@ export interface Shift {
 
   isFlexibleShift: boolean;
 
+  isDefault: boolean;
+
   isActive: boolean;
 
   // WEEK OFF

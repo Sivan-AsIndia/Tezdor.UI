@@ -17,7 +17,7 @@ export class AttendanceDataClient {
   private readonly _attendance = signal<Attendance | null>(null);
 
   private readonly _attendanceList = signal<Attendance[]>(ATTENDANCE_SEED);
-private readonly _components = signal<SalaryComponent[]>(SALARY_COMPONENT_SEED);
+  private readonly _components = signal<SalaryComponent[]>(SALARY_COMPONENT_SEED);
 
 
 
@@ -29,15 +29,15 @@ private readonly _components = signal<SalaryComponent[]>(SALARY_COMPONENT_SEED);
   attendanceList = this._attendanceList.asReadonly();
   loading = this._loading.asReadonly();
 
- periods = computed<PayrollPeriod[]>(() =>
-  this._attendanceList().map(p => ({
-    id: p.attendancePeriodId,
-    name: p.attendancePeriodName,
-    fromDate: p.fromDate,
-    toDate: p.toDate,
-    status: p.status
-  }))
-);
+  periods = computed<PayrollPeriod[]>(() =>
+    this._attendanceList().map(p => ({
+      id: p.attendancePeriodId,
+      name: p.attendancePeriodName,
+      fromDate: p.fromDate,
+      toDate: p.toDate,
+      status: p.status
+    }))
+  );
 
 
   lines = computed(() => this._attendance()?.attendanceLines ?? []);
@@ -68,85 +68,85 @@ private readonly _components = signal<SalaryComponent[]>(SALARY_COMPONENT_SEED);
     this._attendance.set(null);
   }
 
-getByEmployee(empId: string) {
-  return this.lines().filter(a => a.employeeId === empId);
-}
+  getByEmployee(empId: string) {
+    return this.lines().filter(a => a.employeeId === empId);
+  }
 
-getComponents() {
-  return this._components();
-}
+  getComponents() {
+    return this._components();
+  }
 
-getByEmployeeAndDate(empId: string, from: string, to: string) {
+  getByEmployeeAndDate(empId: string, from: string, to: string) {
 
-  return ATTENDANCE_LINES_SEED.filter(a =>
-    a.employeeId === empId &&
-    a.attendanceDate >= from &&
-    a.attendanceDate <= to
-  );
+    return ATTENDANCE_LINES_SEED.filter(a =>
+      a.employeeId === empId &&
+      a.attendanceDate >= from &&
+      a.attendanceDate <= to
+    );
 
-}
+  }
 
   // ===== HEADER CRUD 
-addAttendance(item: Attendance) {
+  addAttendance(item: Attendance) {
 
-  const list = this._attendanceList();
+    const list = this._attendanceList();
 
-  if (this.isOverlappingPeriod(item, list)) {
-    throw new Error('Attendance period overlaps with existing record');
+    if (this.isOverlappingPeriod(item, list)) {
+      throw new Error('Attendance period overlaps with existing record');
+    }
+
+    const attendanceId = crypto.randomUUID();
+
+    const count = list.length + 1;
+
+    const year = new Date().getFullYear();
+
+    const month = new Date(item.fromDate || new Date())
+      .toLocaleString('default', { month: 'short' })
+      .toUpperCase();
+
+    const attendanceNumber = `ATT-${year}-${month}-${count
+      .toString()
+      .padStart(3, '0')}`;
+
+    const attendancePeriodName =
+      item.attendancePeriodName?.trim().toUpperCase() ?? '';
+
+    const newItem: Attendance = {
+      ...item,
+      attendanceId,
+      attendanceNumber,
+      attendancePeriodName,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    this._attendanceList.update(list => [...list, newItem]);
   }
 
-  const attendanceId = crypto.randomUUID();
-
-  const count = list.length + 1;
-
-  const year = new Date().getFullYear();
-
-  const month = new Date(item.fromDate || new Date())
-    .toLocaleString('default', { month: 'short' })
-    .toUpperCase();
-
-  const attendanceNumber = `ATT-${year}-${month}-${count
-    .toString()
-    .padStart(3, '0')}`;
-
-  const attendancePeriodName =
-    item.attendancePeriodName?.trim().toUpperCase() ?? '';
-
-  const newItem: Attendance = {
-    ...item,
-    attendanceId,
-    attendanceNumber,
-    attendancePeriodName,
-    createdAt: new Date(),
-    updatedAt: new Date()
-  };
-
-  this._attendanceList.update(list => [...list, newItem]);
-}
 
 
+  updateAttendance(updated: Attendance) {
 
-updateAttendance(updated: Attendance) {
+    const list = this._attendanceList();
 
-  const list = this._attendanceList();
+    if (this.isOverlappingPeriod(updated, list, updated.attendanceId)) {
+      throw new Error('Attendance period overlaps with existing record');
+    }
 
-  if (this.isOverlappingPeriod(updated, list, updated.attendanceId)) {
-    throw new Error('Attendance period overlaps with existing record');
+    const normalized: Attendance = {
+      ...updated,
+      attendancePeriodName:
+        updated.attendancePeriodName?.trim().toUpperCase(),
+      updatedAt: new Date()
+    };
+
+    this._attendanceList.update(list =>
+      list.map(x =>
+        x.attendanceId === updated.attendanceId ? normalized : x
+      )
+    );
   }
-
-  const normalized: Attendance = {
-    ...updated,
-    attendancePeriodName:
-      updated.attendancePeriodName?.trim().toUpperCase(),
-    updatedAt: new Date()
-  };
-
-  this._attendanceList.update(list =>
-    list.map(x =>
-      x.attendanceId === updated.attendanceId ? normalized : x
-    )
-  );
-}
 
   deleteAttendance(id: string) {
     this._attendanceList.update(list =>
@@ -156,67 +156,67 @@ updateAttendance(updated: Attendance) {
 
 
   private isOverlappingPeriod(
-  item: Attendance,
-  list: Attendance[],
-  excludeId?: string
-): boolean {
+    item: Attendance,
+    list: Attendance[],
+    excludeId?: string
+  ): boolean {
 
-  const newFrom = new Date(item.fromDate);
-  const newTo = new Date(item.toDate);
+    const newFrom = new Date(item.fromDate);
+    const newTo = new Date(item.toDate);
 
-  return list.some(x => {
+    return list.some(x => {
 
-    // skip same record during update
-    if (excludeId && x.attendanceId === excludeId) return false;
+      // skip same record during update
+      if (excludeId && x.attendanceId === excludeId) return false;
 
 
 
-    const existingFrom = new Date(x.fromDate);
-    const existingTo = new Date(x.toDate);
+      const existingFrom = new Date(x.fromDate);
+      const existingTo = new Date(x.toDate);
 
-    // overlap condition
-    return newFrom <= existingTo && newTo >= existingFrom;
-  });
-}
+      // overlap condition
+      return newFrom <= existingTo && newTo >= existingFrom;
+    });
+  }
 
   // ===== LINE CRUD =====
 
-loadLinesByAttendanceId(id: string) {
-  const current = this._attendance();
-  if (!current) return;
+  loadLinesByAttendanceId(id: string) {
+    const current = this._attendance();
+    if (!current) return;
 
-  const lines = ATTENDANCE_LINES_SEED
-    .filter(x => x.attendanceId === id);
+    const lines = ATTENDANCE_LINES_SEED
+      .filter(x => x.attendanceId === id);
 
-  this._attendance.set({
-    ...current,
-    attendanceLines: lines
-  });
-}
-
-addLine(line: AttendanceLine) {
-
-  const current = this._attendance();
-  if (!current) return;
-
-  const lines = current.attendanceLines ?? [];
-
-  // VALIDATION: same employee + same date
-  const exists = lines.some(x =>
-    x.employeeId === line.employeeId &&
-    x.attendanceDate === line.attendanceDate
-  );
-
-  if (exists) {
-    throw new Error('Attendance already exists for this employee on this date');
+    this._attendance.set({
+      ...current,
+      attendanceLines: lines
+    });
   }
 
-  //  Add line
-  this._attendance.set({
-    ...current,
-    attendanceLines: [...lines, line]
-  });
-}
+  addLine(line: AttendanceLine) {
+
+    const current = this._attendance();
+    if (!current) return;
+
+    const lines = current.attendanceLines ?? [];
+
+    // VALIDATION: same employee + same date
+    const exists = lines.some(x =>
+      x.employeeId === line.employeeId &&
+      x.attendanceDate === line.attendanceDate
+    );
+
+    if (exists) {
+      throw new Error('Attendance already exists for this employee on this date');
+    }
+
+    //  Add line
+    this._attendance.set({
+      ...current,
+      attendanceLines: [...lines, line]
+    });
+  }
 
   updateLine(updated: AttendanceLine) {
     const current = this._attendance();
@@ -331,46 +331,88 @@ addLine(line: AttendanceLine) {
     return Promise.resolve(this._attendance()!);
   }
 
-removeByAttendanceId(
-  attendanceId: string
-) {
+  removeByAttendanceId(
+    attendanceId: string
+  ) {
 
-  const current = this._attendance();
+    const current = this._attendance();
 
-  if (!current) return;
+    if (!current) return;
 
-  this._attendance.set({
+    this._attendance.set({
 
-    ...current,
+      ...current,
 
-    attendanceLines:
+      attendanceLines:
+        (current.attendanceLines ?? [])
+          .filter(x =>
+
+            x.attendanceId !== attendanceId
+          )
+    });
+  }
+
+  // ===== CHECK ATTENDANCE EXISTS =====
+
+  hasAttendance(
+    employeeId: string,
+    fromDate: string,
+    toDate: string,
+    excludeAttendanceId?: string
+  ): boolean {
+
+    return this.lines().some(x =>
+
+      x.employeeId === employeeId &&
+
+      x.attendanceId !== excludeAttendanceId &&
+
+      (
+        fromDate <= x.attendanceDate &&
+        toDate >= x.attendanceDate
+      )
+    );
+  }
+
+  /* ==== UPDATE ATTENDANCE LINE BY EMPLOYEE ========= */
+
+  updateLineByEmployee(
+    employeeId: string,
+    updater: (
+      line: AttendanceLine
+    ) => AttendanceLine
+  ) {
+
+    const current =
+      this._attendance();
+
+    if (!current) {
+      return;
+    }
+
+    const updatedLines =
+
       (current.attendanceLines ?? [])
-        .filter(x =>
+        .map(line =>
 
-          x.attendanceId !== attendanceId
-        )
-  });
-}
+          line.employeeId === employeeId
 
-// ===== CHECK ATTENDANCE EXISTS =====
+            ?
 
-hasAttendance(
-  employeeId: string,
-  fromDate: string,
-  toDate: string,
-  excludeAttendanceId?: string
-): boolean {
+            updater(line)
 
-  return this.lines().some(x =>
+            :
 
-    x.employeeId === employeeId &&
+            line
+        );
 
-    x.attendanceId !== excludeAttendanceId &&
+    this._attendance.set({
 
-    (
-      fromDate <= x.attendanceDate &&
-      toDate >= x.attendanceDate
-    )
-  );
-}
+      ...current,
+
+      attendanceLines:
+        updatedLines
+
+    });
+  }
 }

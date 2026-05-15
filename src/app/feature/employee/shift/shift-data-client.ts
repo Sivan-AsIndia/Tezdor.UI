@@ -60,6 +60,28 @@ export class ShiftDataClient {
 
   add(shift: Shift) {
 
+    /* ONLY ONE DEFAULT SHIFT */
+    if (shift.isDefault) {
+
+      const alreadyExists =
+
+        this._shifts()
+          .some(x =>
+
+            x.isDefault
+
+          );
+
+      if (alreadyExists) {
+
+        throw new Error(
+          'Only one default shift is allowed'
+        );
+
+      }
+
+    }
+
     const maxCode =
 
       this._shifts()
@@ -90,14 +112,12 @@ export class ShiftDataClient {
         crypto.randomUUID(),
 
       shiftCode:
-        `SHIFT${
+        `SHIFT${(
+          maxCode + 1
+        )
 
-          (
-            maxCode + 1
-          )
-
-            .toString()
-            .padStart(3, '0')
+          .toString()
+          .padStart(3, '0')
 
         }`,
 
@@ -126,12 +146,40 @@ export class ShiftDataClient {
 
   update(updated: Shift) {
 
+    /* ONLY ONE DEFAULT SHIFT */
+    if (updated.isDefault) {
+
+      const alreadyExists =
+
+        this._shifts()
+
+          .some(x =>
+
+            x.isDefault
+
+            &&
+
+            x.shiftId !==
+            updated.shiftId
+
+          );
+
+      if (alreadyExists) {
+
+        throw new Error(
+          'Only one default shift is allowed'
+        );
+
+      }
+
+    }
+
     this._shifts.update(list =>
 
       list.map(x =>
 
         x.shiftId ===
-        updated.shiftId
+          updated.shiftId
 
           ?
 

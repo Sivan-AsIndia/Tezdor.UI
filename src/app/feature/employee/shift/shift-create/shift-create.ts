@@ -155,7 +155,8 @@ private readonly route =
       shift.isFridayOff,
 
     isSaturdayOff:
-      shift.isSaturdayOff
+      shift.isSaturdayOff,
+      isDefault:shift.isDefault
 
   });
 
@@ -411,7 +412,9 @@ private readonly route =
 
       isFridayOff: [false],
 
-      isSaturdayOff: [true]
+      isSaturdayOff: [true],
+
+      isDefault:[false]
 
     });
 
@@ -745,6 +748,8 @@ onSave() {
     isSaturdayOff:
       value.isSaturdayOff,
 
+      isDefault:value.isDefault,
+
     /* AUDIT */
     createdOn:
       new Date()
@@ -757,11 +762,11 @@ onSave() {
   };
 
   /* EDIT */
+try {
+
   if (this.isEditMode()) {
 
-    this.service.update(
-      payload
-    );
+    this.service.update(payload);
 
     this.toast.success(
       'Shift updated successfully'
@@ -769,18 +774,26 @@ onSave() {
 
   }
 
-  /* CREATE */
   else {
 
-    this.service.add(
-      payload
-    );
+    this.service.add(payload);
 
     this.toast.success(
       'Shift created successfully'
     );
 
   }
+
+}
+catch (error: any) {
+
+  this.toast.error(
+    error.message
+  );
+
+  return;
+
+}
 
   /* NAVIGATE */
   this.router.navigate([

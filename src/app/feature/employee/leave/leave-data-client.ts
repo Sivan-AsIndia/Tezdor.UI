@@ -88,214 +88,218 @@ export class LeaveDataClient {
 
   // ADD
 
-add(data: Leave) {
+  add(data: Leave) {
 
-  const leave: Leave = {
+    const leave: Leave = {
 
-    ...data,
+      ...data,
 
-    leaveId:
-      data.leaveId ??
-      crypto.randomUUID(),
-
-    leaveNumber:
-      data.leaveNumber ??
-      this.generateLeaveNumber(),
-
-    totalDays:
-      this.calculateDays(
-        data.fromDate,
-        data.toDate
-      ),
-
-    appliedOn:
-      data.appliedOn ??
-      new Date(),
-
-    createdAt: new Date(),
-
-    updatedAt: new Date()
-  };
-
-  // SAVE LEAVE
-  this._leaves.update(list => [
-
-    ...list,
-
-    leave
-  ]);
-
-  // =========================
-  // ADD ATTENDANCE LINES
-  // =========================
-
-  const dates = this.getDateRange(
-    leave.fromDate,
-    leave.toDate
-  );
-
-  dates.forEach(date => {
-
-    const line: AttendanceLine = {
-
-      attendanceLineId:
+      leaveId:
+        data.leaveId ??
         crypto.randomUUID(),
 
-      attendanceId:
-        leave.leaveId!,
+      leaveNumber:
+        data.leaveNumber ??
+        this.generateLeaveNumber(),
 
-      employeeId:
-        leave.employeeId,
+      totalDays:
+        this.calculateDays(
+          data.fromDate,
+          data.toDate
+        ),
 
-      attendanceDate: date,
-
-      attendanceType:
-        AttendanceType.Leave,
-
-      leaveTypeId:
-        leave.leaveTypeId,
-
-      workingHours: 0,
-
-      overtimeHours: 0,
-
-      isLate: false,
-
-      isEarlyExit: false,
-
-      isHalfDay: false,
-
-      remarks:
-        leave.reason,
-
-      timeLogs: [],
-
-      createdAt: new Date()
-    };
-
-    this.attendanceLineService
-      .addLine(line);
-  });
-}
-
-  // UPDATE
-
-update(data: Leave) {
-
-  const updated: Leave = {
-
-    ...data,
-
-    totalDays:
-      this.calculateDays(
-        data.fromDate,
-        data.toDate
-      ),
-
-    updatedAt: new Date()
-  };
-
-  // UPDATE LEAVE
-  this._leaves.update(list =>
-
-    list.map(x =>
-
-      x.leaveId === updated.leaveId
-        ? updated
-        : x
-    )
-  );
-
-  // =========================
-  // REMOVE OLD LEAVE LINES
-  // =========================
-
-  this.attendanceLineService
-    .removeByAttendanceId(updated.leaveId!);
-
-  // =========================
-  // RECREATE ATTENDANCE LINES
-  // =========================
-
-  const dates = this.getDateRange(
-    updated.fromDate,
-    updated.toDate
-  );
-
-  dates.forEach(date => {
-
-    const line: AttendanceLine = {
-
-      attendanceLineId:
-        crypto.randomUUID(),
-
-      attendanceId:
-        updated.leaveId!,
-
-      employeeId:
-        updated.employeeId,
-
-      attendanceDate: date,
-
-      attendanceType:
-        AttendanceType.Leave,
-
-      leaveTypeId:
-        updated.leaveTypeId,
-
-      workingHours: 0,
-
-      overtimeHours: 0,
-
-      isLate: false,
-
-      isEarlyExit: false,
-
-      isHalfDay: false,
-
-      remarks:
-        updated.reason,
-
-      timeLogs: [],
+      appliedOn:
+        data.appliedOn ??
+        new Date(),
 
       createdAt: new Date(),
 
       updatedAt: new Date()
     };
 
-    this.attendanceLineService
-      .addLine(line);
-  });
-}
+    // SAVE LEAVE
+    this._leaves.update(list => [
 
-getDateRange(
-  fromDate: string,
-  toDate: string
-): string[] {
+      ...list,
 
-  const dates: string[] = [];
+      leave
+    ]);
 
-  const current =
-    new Date(fromDate);
+    // =========================
+    // ADD ATTENDANCE LINES
+    // =========================
 
-  const end =
-    new Date(toDate);
-
-  while (current <= end) {
-
-    dates.push(
-      current
-        .toISOString()
-        .split('T')[0]
+    const dates = this.getDateRange(
+      leave.fromDate,
+      leave.toDate
     );
 
-    current.setDate(
-      current.getDate() + 1
-    );
+    dates.forEach(date => {
+
+      const line: AttendanceLine = {
+
+        attendanceLineId:
+          crypto.randomUUID(),
+
+        attendanceId:
+          leave.leaveId!,
+
+        employeeId:
+          leave.employeeId,
+
+        attendanceDate: date,
+
+        attendanceType:
+          AttendanceType.Leave,
+
+        leaveTypeId:
+          leave.leaveTypeId,
+
+        workingHours: 0,
+
+        overtimeHours: 0,
+
+        isLate: false,
+
+        isEarlyExit: false,
+
+        isHalfDay: false,
+
+        remarks:
+          leave.reason,
+
+        timeLogs: [],
+
+        otRejectReason: '',
+
+        createdAt: new Date()
+      };
+
+      this.attendanceLineService
+        .addLine(line);
+    });
   }
 
-  return dates;
-}
+  // UPDATE
+
+  update(data: Leave) {
+
+    const updated: Leave = {
+
+      ...data,
+
+      totalDays:
+        this.calculateDays(
+          data.fromDate,
+          data.toDate
+        ),
+
+      updatedAt: new Date()
+    };
+
+    // UPDATE LEAVE
+    this._leaves.update(list =>
+
+      list.map(x =>
+
+        x.leaveId === updated.leaveId
+          ? updated
+          : x
+      )
+    );
+
+    // =========================
+    // REMOVE OLD LEAVE LINES
+    // =========================
+
+    this.attendanceLineService
+      .removeByAttendanceId(updated.leaveId!);
+
+    // =========================
+    // RECREATE ATTENDANCE LINES
+    // =========================
+
+    const dates = this.getDateRange(
+      updated.fromDate,
+      updated.toDate
+    );
+
+    dates.forEach(date => {
+
+      const line: AttendanceLine = {
+
+        attendanceLineId:
+          crypto.randomUUID(),
+
+        attendanceId:
+          updated.leaveId!,
+
+        employeeId:
+          updated.employeeId,
+
+        attendanceDate: date,
+
+        attendanceType:
+          AttendanceType.Leave,
+
+        leaveTypeId:
+          updated.leaveTypeId,
+
+        workingHours: 0,
+
+        overtimeHours: 0,
+
+        isLate: false,
+
+        isEarlyExit: false,
+
+        isHalfDay: false,
+
+        remarks:
+          updated.reason,
+
+        timeLogs: [],
+
+        otRejectReason: '',
+
+        createdAt: new Date(),
+
+        updatedAt: new Date()
+      };
+
+      this.attendanceLineService
+        .addLine(line);
+    });
+  }
+
+  getDateRange(
+    fromDate: string,
+    toDate: string
+  ): string[] {
+
+    const dates: string[] = [];
+
+    const current =
+      new Date(fromDate);
+
+    const end =
+      new Date(toDate);
+
+    while (current <= end) {
+
+      dates.push(
+        current
+          .toISOString()
+          .split('T')[0]
+      );
+
+      current.setDate(
+        current.getDate() + 1
+      );
+    }
+
+    return dates;
+  }
   // DELETE
 
   delete(id: string) {
@@ -324,16 +328,16 @@ getDateRange(
 
           ? {
 
-              ...x,
+            ...x,
 
-              status: LeaveStatus.Approved,
+            status: LeaveStatus.Approved,
 
-              approvedBy,
+            approvedBy,
 
-              approvedOn: new Date(),
+            approvedOn: new Date(),
 
-              updatedAt: new Date()
-            }
+            updatedAt: new Date()
+          }
 
           : x
       )
@@ -356,18 +360,18 @@ getDateRange(
 
           ? {
 
-              ...x,
+            ...x,
 
-              status: LeaveStatus.Rejected,
+            status: LeaveStatus.Rejected,
 
-              rejectionReason: reason,
+            rejectionReason: reason,
 
-              rejectedBy,
+            rejectedBy,
 
-              rejectedOn: new Date(),
+            rejectedOn: new Date(),
 
-              updatedAt: new Date()
-            }
+            updatedAt: new Date()
+          }
 
           : x
       )
@@ -386,12 +390,12 @@ getDateRange(
 
           ? {
 
-              ...x,
+            ...x,
 
-              status: LeaveStatus.Cancelled,
+            status: LeaveStatus.Cancelled,
 
-              updatedAt: new Date()
-            }
+            updatedAt: new Date()
+          }
 
           : x
       )

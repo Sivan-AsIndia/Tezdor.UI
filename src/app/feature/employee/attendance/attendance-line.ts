@@ -22,7 +22,6 @@ export interface AttendanceLine {
 
   // Derived
   workingHours: number;
-  overtimeHours: number;
 
   // Flags
   isLate: boolean;
@@ -35,7 +34,37 @@ export interface AttendanceLine {
   // Navigation
   timeLogs: AttendanceTimeLog[];
 
-    // ===== AUDIT =====
+  overtimeHours: number;
+
+  /* OT APPROVAL */
+
+  isOtEligible?: boolean;
+
+  isOtApproved?: boolean;
+
+  isOtRejected?: boolean;
+
+  approvedOtHours?: number;
+
+  approvedOtMinutes?: number;
+
+  otApprovedOn?: string;
+
+  otApprovedBy?: string;
+
+  otRejectReason?: string;
+
+  /* OT EDIT */
+
+  isOtEdited?: boolean;
+
+  originalOtHours?: number;
+
+  originalOtMinutes?: number;
+
+  otEditReason?: string;
+
+  // ===== AUDIT =====
   createdAt?: Date;
   createdBy?: string;
   updatedAt?: Date;

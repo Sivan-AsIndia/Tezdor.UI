@@ -82,7 +82,8 @@ export const SHIFT_SEED_DATA: Shift[] = [
       false,
 
     isSaturdayOff:
-      false
+      false,
+    isDefault: true
   },
 
   /* =====================================================
@@ -165,7 +166,8 @@ export const SHIFT_SEED_DATA: Shift[] = [
       false,
 
     isSaturdayOff:
-      false
+      false,
+    isDefault: false
   },
 
   /* =====================================================
@@ -248,7 +250,8 @@ export const SHIFT_SEED_DATA: Shift[] = [
       false,
 
     isSaturdayOff:
-      false
+      false,
+    isDefault: false
   },
 
   /* =====================================================
@@ -331,7 +334,8 @@ export const SHIFT_SEED_DATA: Shift[] = [
       false,
 
     isSaturdayOff:
-      false
+      false,
+    isDefault: false
   },
 
   /* =====================================================
@@ -414,7 +418,8 @@ export const SHIFT_SEED_DATA: Shift[] = [
       false,
 
     isSaturdayOff:
-      false
+      false,
+    isDefault: false
   }
 
 ];

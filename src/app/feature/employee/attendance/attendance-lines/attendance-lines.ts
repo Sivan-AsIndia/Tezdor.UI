@@ -16,6 +16,8 @@ import { CommonModule } from '@angular/common';
 import { SearchDropdownComponent } from '../../../../shared/components/search-dropdown/search-dropdown';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MasterDataClient } from '../../../../core/services/master-data';
+import { ShiftDataClient } from '../../shift/shift-data-client';
+import { ShiftAssignmentDataClient } from '../../shift/shift-assignment-data-client';
 
 @Component({
   selector: 'app-attendance-lines',
@@ -33,7 +35,12 @@ export class AttendanceLinesComponent {
   private readonly leaveTypeService = inject(LeaveTypeDataClient);
   private readonly leaveService = inject(LeaveDataClient);
   private readonly masterDataClient =
-  inject(MasterDataClient);
+    inject(MasterDataClient);
+  private readonly shiftService =
+    inject(ShiftDataClient);
+
+  private readonly shiftAssignmentService =
+    inject(ShiftAssignmentDataClient);
 
 
   private readonly route = inject(ActivatedRoute);
@@ -109,6 +116,93 @@ export class AttendanceLinesComponent {
     signal(false);
 
   showPermissionDetailsPopup =
+    signal(false);
+
+  editingOtEmployeeId =
+    signal<string | null>(null);
+
+  editingOtHours =
+    signal<number>(0);
+
+  editingOtReason =
+    signal('');
+
+  rejectingOtEmployeeId =
+    signal<string | null>(null);
+
+  rejectOtReason =
+    signal('');
+
+  showRejectOtPopup =
+    signal(false);
+
+  showOtEditPopup =
+    signal(false);
+
+  editingOtEmployee =
+    signal<any | null>(null);
+
+  editOtForm = signal({
+
+    otHours: 0,
+
+    reason: ''
+
+  });
+
+  showRejectAllOtPopup =
+    signal(false);
+
+  rejectAllOtReason =
+    signal('');
+
+  selectedFailedEmployees =
+    signal<string[]>([]);
+
+
+
+  /* =========================================================
+ ATTENDANCE RESULT
+========================================================= */
+
+  attendanceFailedList = signal<{
+
+    employeeId: string;
+
+    employeeName: string;
+
+    reason: string;
+
+  }[]>([]);
+
+  attendanceOtList = signal<
+    {
+      employeeId: string;
+
+      employeeName: string;
+
+      shiftName: string;
+
+      otMinutes: number;
+
+      otHours: number;
+
+      approved: boolean;
+
+      rejected: boolean;
+
+      otRejectReason?: string;
+
+      /* NEW */
+
+      isOtEdited?: boolean;
+
+      otEditReason?: string;
+
+    }[]
+  >([]);
+
+  showAttendanceResultPopup =
     signal(false);
 
 
@@ -293,7 +387,7 @@ export class AttendanceLinesComponent {
       }
 
       item.totalWorkingHours += a.workingHours || 0;
-      item.totalOtMinutes += a.overtimeHours || 0;
+      item.totalOtMinutes += a.approvedOtMinutes || 0;
     });
 
     return Array.from(map.values());
@@ -391,9 +485,31 @@ export class AttendanceLinesComponent {
   empTotalHours = computed(() =>
     this.employeeAttendanceLine().reduce((sum, x) => sum + (x.workingHours || 0), 0)
   );
-
   empTotalOT = computed(() =>
-    this.employeeAttendanceLine().reduce((sum, x) => sum + (x.overtimeHours || 0), 0)
+
+    this.employeeAttendanceLine()
+
+      .reduce(
+
+        (sum, x) =>
+
+          sum +
+
+          (
+
+            x.approvedOtMinutes
+
+            ||
+
+
+            0
+
+          ),
+
+        0
+
+      )
+
   );
 
   empFromDate = computed(() => this.employeeAttendanceLine()[0]?.attendanceDate);
@@ -488,35 +604,293 @@ export class AttendanceLinesComponent {
     this.editingLineId.set(null);
   }
 
-  saveEdit(row: AttendanceLine) {
-    const f = this.editForm();
+  saveEdit(
+    row: AttendanceLine
+  ) {
 
-    if (!f.inTime || !f.outTime) return;
-    if (f.inTime >= f.outTime) {
-      this.toast.error('Out time must be greater');
+    const f =
+      this.editForm();
+
+    /* =========================
+       BASIC VALIDATION
+    ========================= */
+
+    if (
+      !f.inTime
+      ||
+      !f.outTime
+    ) {
+
+      this.toast.error(
+        'Enter in & out time'
+      );
+
       return;
     }
 
-    const inT = new Date(`1970-01-01T${f.inTime}`);
-    const outT = new Date(`1970-01-01T${f.outTime}`);
+    if (
+      f.inTime >=
+      f.outTime
+    ) {
 
-    const totalMinutes = (outT.getTime() - inT.getTime()) / 60000;
-    const workingHours = totalMinutes / 60;
+      this.toast.error(
+        'Out time must be greater'
+      );
 
-    const updated: AttendanceLine = {
+      return;
+    }
+
+    /* =========================
+       GET EMPLOYEE SHIFT
+    ========================= */
+
+    const shift =
+      this.getEmployeeShift(
+        row.employeeId
+      );
+
+    if (!shift) {
+
+      this.toast.error(
+        'No shift assigned'
+      );
+
+      return;
+    }
+
+    /* =========================
+       TIME CONVERSION
+    ========================= */
+
+    const shiftStart =
+      this.timeToMinutes(
+        shift.startTime
+      );
+
+    const shiftEnd =
+      this.timeToMinutes(
+        shift.endTime
+      );
+
+    const inMinutes =
+      this.timeToMinutes(
+        f.inTime
+      );
+
+    const outMinutes =
+      this.timeToMinutes(
+        f.outTime
+      );
+
+    /* =========================
+       GRACE VALIDATION
+    ========================= */
+
+    const lateGrace =
+      shift.lateGraceMinutes || 0;
+
+    const earlyGrace =
+      shift.earlyOutGraceMinutes || 0;
+
+    const allowedIn =
+      shiftStart + lateGrace;
+
+    const allowedOut =
+      shiftEnd - earlyGrace;
+
+    const isLate =
+      inMinutes > allowedIn;
+
+    const isEarlyExit =
+      outMinutes < allowedOut;
+
+    /* STRICT VALIDATION */
+
+    if (isLate) {
+
+      this.toast.error(
+
+        `Late entry exceeded grace period (${lateGrace} mins)`
+
+      );
+
+      return;
+    }
+
+    if (isEarlyExit) {
+
+      this.toast.error(
+
+        `Early exit exceeded grace period (${earlyGrace} mins)`
+
+      );
+
+      return;
+    }
+
+    /* =========================
+       WORKING HOURS
+    ========================= */
+
+    const totalMinutes =
+      outMinutes - inMinutes;
+
+    const workingHours =
+      this.minutesToHours(
+        totalMinutes
+      );
+
+    /* =========================
+       OT CALCULATION
+    ========================= */
+
+    let overtimeMinutes = 0;
+
+    const shiftDuration =
+      shiftEnd - shiftStart;
+
+    const extraMinutes =
+      totalMinutes - shiftDuration;
+
+    const eligibleForOt =
+
+      shift.allowOvertime
+
+      &&
+
+      extraMinutes >=
+      (
+        shift.minimumOvertimeMinutes
+        || 0
+      );
+
+    if (eligibleForOt) {
+
+      overtimeMinutes =
+        extraMinutes;
+
+    }
+
+    /* =========================
+       UPDATE LINE
+    ========================= */
+
+    const updated:
+      AttendanceLine = {
+
       ...row,
-      inTime: f.inTime,
-      outTime: f.outTime,
-      workingHours: Math.round(workingHours * 100) / 100,
-      overtimeHours: totalMinutes > 480 ? Math.round(totalMinutes - 480) : 0,
-      isLate: f.inTime > '09:00',
-      isEarlyExit: f.outTime < '18:00',
-      isHalfDay: workingHours < 5
+
+      inTime:
+        f.inTime,
+
+      outTime:
+        f.outTime,
+
+      workingHours,
+
+      overtimeHours: 0,
+
+
+      originalOtHours:
+        this.minutesToHours(
+          overtimeMinutes
+        ),
+
+      originalOtMinutes:
+        overtimeMinutes,
+
+      approvedOtHours:
+        row.approvedOtHours || 0,
+
+      approvedOtMinutes:
+        row.approvedOtMinutes || 0,
+
+      isOtEligible:
+        eligibleForOt,
+
+      isLate: false,
+
+      isEarlyExit: false,
+
+      isHalfDay:
+        workingHours < 5
     };
 
-    this.service.updateLine(updated);
+    this.service.updateLine(
+      updated
+    );
 
-    this.editingLineId.set(null);
+    /* =========================
+       PUSH TO OT APPROVAL
+    ========================= */
+
+    if (
+      eligibleForOt
+      &&
+      overtimeMinutes > 0
+    ) {
+
+      const emp =
+        this.employees()
+          .find(x =>
+
+            x.employeeId ===
+            row.employeeId
+          );
+
+      this.attendanceOtList.update(list => [
+
+        ...list.filter(x =>
+
+          x.employeeId !==
+          row.employeeId
+        ),
+
+        {
+
+          employeeId:
+            row.employeeId,
+
+          employeeName:
+            emp
+              ?
+
+              `${emp.firstName} ${emp.lastName}`
+
+              :
+
+              'Employee',
+
+          shiftName:
+            shift.shiftName,
+
+          otMinutes:
+            overtimeMinutes,
+
+          otHours:
+            this.minutesToHours(
+              overtimeMinutes
+            ),
+
+          approved: false,
+
+          rejected: false
+        }
+
+      ]);
+
+      this.showAttendanceResultPopup.set(
+        true
+      );
+    }
+
+    this.toast.success(
+      'Attendance updated'
+    );
+
+    this.editingLineId.set(
+      null
+    );
   }
 
   onEdit(line: AttendanceLine) {
@@ -661,152 +1035,711 @@ export class AttendanceLinesComponent {
 
 
   saveAttendance() {
-    const f = this.form();
 
-    // ===== VALIDATION =====
+    const f =
+      this.form();
+
     this.errors.set({});
+
+    this.attendanceFailedList.set([]);
+    this.attendanceOtList.set([]);
+
+    /* =====================================================
+       VALIDATION
+    ===================================================== */
+
     if (!f.attendanceDate) {
-      this.setError('attendanceDate', 'Select date');
+
+      this.setError(
+        'attendanceDate',
+        'Select date'
+      );
     }
 
-    if (!f.employeeIds) {
-      this.setError('employeeId', 'Select employee');
-    }
-    if (!f.inTime) { this.setError('inTime', 'Enter in time'); }
-    if (!f.inTime && f.outTime) {
-      this.setError('inTime', 'Enter in time first');
-    }
-
-    if (f.inTime && f.outTime && f.inTime >= f.outTime) {
-      this.setError('outTime', 'Out time must be greater than In time');
-    }
-
-    if (f.inTime && f.outTime && f.inTime >= f.outTime) {
-      this.setError('outTime', 'Out time must be greater than In time');
-    }
     if (f.employeeIds.length === 0) {
-      this.toast.error("Please select at least one employee to mark attendance.")
+
+      this.toast.error(
+        'Select employees'
+      );
+
       return;
     }
 
-    // CHECK LEAVE EXISTS
+    if (!f.inTime) {
 
-    const leaveEmployees =
-      f.employeeIds.filter(empId =>
+      this.setError(
+        'inTime',
+        'Enter in time'
+      );
+    }
+
+    // if (!f.outTime) {
+
+    //   this.setError(
+    //     'outTime',
+    //     'Enter out time'
+    //   );
+    // }
+
+    if (
+
+      f.inTime
+      &&
+
+      f.outTime
+      &&
+
+      f.inTime >= f.outTime
+
+    ) {
+
+      this.setError(
+        'outTime',
+        'Out time must be greater'
+      );
+    }
+
+    if (
+      Object.keys(
+        this.errors()
+      ).length > 0
+    ) {
+
+      return;
+
+    }
+
+    /* =====================================================
+       PROCESS EMPLOYEE
+    ===================================================== */
+
+    f.employeeIds.forEach(empId => {
+
+      const emp =
+        this.employees()
+          .find(x =>
+            x.employeeId === empId
+          );
+
+      if (!emp) {
+        return;
+      }
+
+      /* =====================================================
+         LEAVE CHECK
+      ===================================================== */
+
+      const hasLeave =
 
         this.leaveService
           .leaves()
+
           .some(l =>
 
-            l.employeeId === empId &&
+            l.employeeId === empId
 
-            l.status !== LeaveStatus.Cancelled &&
+            &&
 
-            f.attendanceDate >= l.fromDate &&
+            l.status !== LeaveStatus.Cancelled
+
+            &&
+
+            f.attendanceDate >= l.fromDate
+
+            &&
 
             f.attendanceDate <= l.toDate
-          )
-      );
+          );
 
+      if (hasLeave) {
 
-    // SHOW ERROR
-    if (leaveEmployees.length > 0) {
+        this.attendanceFailedList.update(list => [
 
-      const names = leaveEmployees
-        .map(id => this.getEmployeeName(id))
-        .join(', ');
+          ...list,
 
-      this.toast.error(
-        `Attendance cannot be marked because leave is already applied for ${names} on this date`
-      );
+          {
 
-      return;
-    }
-    // stop if any error
-    if (Object.keys(this.errors()).length > 0) return;
-
-
-    // ===== CALCULATE WORKING HOURS =====
-    let workingHours = 0;
-    let totalMinutes = 0;
-    if (f.inTime && f.outTime) {
-      const inT = new Date(`1970-01-01T${f.inTime}`);
-      const outT = new Date(`1970-01-01T${f.outTime}`);
-      const data = (outT.getTime() - inT.getTime()) / 3600000;
-      totalMinutes = (outT.getTime() - inT.getTime()) / 60000;
-
-      workingHours = Math.round(data * 100) / 100;
-    }
-    // ===== BUILD ATTENDANCE LINE =====
-    try {
-      if (this.selectedLine()) {
-
-        //UPDATE EXISTING
-        const updated: AttendanceLine = {
-          ...this.selectedLine()!,
-          inTime: f.inTime,
-          outTime: f.outTime,
-          workingHours,
-          overtimeHours: totalMinutes > 480
-            ? Math.round(totalMinutes - 480)
-            : 0,
-          isLate: f.inTime > '09:00',
-          isEarlyExit: f.outTime < '18:00',
-          isHalfDay: workingHours < 5
-        };
-
-        this.service.updateLine(updated);
-        this.toast.success("Updated Successfully");
-
-        this.selectedLine.set(null); // reset edit mode
-
-      } else {
-
-        // CREATE NEW
-        f.employeeIds.forEach(empId => {
-
-          const line: AttendanceLine = {
-            attendanceLineId: crypto.randomUUID(),
-            attendanceId: this.service.attendance()?.attendanceId!,
             employeeId: empId,
-            attendanceDate: f.attendanceDate,
-            attendanceType: AttendanceType.Present,
-            inTime: f.inTime,
-            outTime: f.outTime,
-            workingHours,
-            overtimeHours: totalMinutes > 480 ? Math.round(totalMinutes - 480) : 0,
-            isLate: f.inTime > '09:00',
-            isEarlyExit: f.outTime < '18:00',
-            isHalfDay: workingHours < 5,
-            timeLogs: []
-          };
 
-          this.service.addLine(line);
+            employeeName:
+              `${emp.firstName} ${emp.lastName}`,
 
-        });
+            reason:
+              'Employee already on leave'
 
-        this.toast.success("Attendance added for selected employees");
+          }
+
+        ]);
+
+        return;
       }
-    } catch (err: any) {
-      this.toast.error(err.message);
-      return;
-    }
 
+      /* =====================================================
+         GET SHIFT
+      ===================================================== */
 
+      const shift =
+        this.getEmployeeShift(
+          empId
+        );
 
-    // ===== OPTIONAL: RECALCULATE SUMMARY =====
+      if (!shift) {
+
+        this.attendanceFailedList.update(list => [
+
+          ...list,
+
+          {
+
+            employeeId: empId,
+
+            employeeName:
+              `${emp.firstName} ${emp.lastName}`,
+
+            reason:
+              'No shift assigned'
+
+          }
+
+        ]);
+
+        return;
+      }
+
+      /* =====================================================
+         TIME CONVERSION
+      ===================================================== */
+
+      const shiftStart =
+        this.timeToMinutes(
+          shift.startTime
+        );
+
+      const shiftEnd =
+        this.timeToMinutes(
+          shift.endTime
+        );
+
+      const inMinutes =
+        this.timeToMinutes(
+          f.inTime
+        );
+
+      const outMinutes =
+        this.timeToMinutes(
+          f.outTime
+        );
+
+      /* =====================================================
+         GRACE PERIOD
+      ===================================================== */
+
+      const lateGrace =
+        shift.lateGraceMinutes || 0;
+
+      const earlyGrace =
+        shift.earlyOutGraceMinutes || 0;
+
+      const allowedInTime =
+        shiftStart + lateGrace;
+
+      const allowedOutTime =
+        shiftEnd - earlyGrace;
+
+      const isLate =
+        inMinutes > allowedInTime;
+
+      const isEarlyExit =
+        outMinutes < allowedOutTime;
+
+      /* =====================================================
+         STRICT LATE VALIDATION
+      ===================================================== */
+
+      if (isLate) {
+
+        this.attendanceFailedList.update(list => [
+
+          ...list,
+
+          {
+
+            employeeId: empId,
+
+            employeeName:
+              `${emp.firstName} ${emp.lastName}`,
+
+            reason:
+              `Late entry exceeded grace period (${lateGrace} mins)`
+
+          }
+
+        ]);
+
+        return;
+      }
+
+      /* =====================================================
+         STRICT EARLY EXIT VALIDATION
+      ===================================================== */
+
+      if (isEarlyExit) {
+
+        this.attendanceFailedList.update(list => [
+
+          ...list,
+
+          {
+
+            employeeId: empId,
+
+            employeeName:
+              `${emp.firstName} ${emp.lastName}`,
+
+            reason:
+              `Early exit exceeded grace period (${earlyGrace} mins)`
+
+          }
+
+        ]);
+
+        return;
+      }
+
+      /* =====================================================
+         WORKING HOURS
+      ===================================================== */
+      let totalMinutes = 0;
+
+      let workingHours = 0;
+
+      /* ONLY IF OUT TIME EXISTS */
+
+      if (f.outTime) {
+
+        totalMinutes =
+
+          outMinutes - inMinutes;
+
+        workingHours =
+
+          this.minutesToHours(
+            totalMinutes
+          );
+
+      }
+
+      /* =====================================================
+         OT CALCULATION
+      ===================================================== */
+
+      let overtimeMinutes = 0;
+
+      const shiftDuration =
+        shiftEnd - shiftStart;
+
+      const extraMinutes =
+        totalMinutes - shiftDuration;
+
+      const eligibleForOt =
+
+        shift.allowOvertime
+
+        &&
+
+        extraMinutes >=
+        (
+          shift.minimumOvertimeMinutes
+          || 0
+        );
+
+      if (eligibleForOt) {
+
+        overtimeMinutes =
+          extraMinutes;
+
+        this.attendanceOtList.update(list => [
+
+          ...list,
+
+          {
+
+            employeeId: empId,
+
+            employeeName:
+              `${emp.firstName} ${emp.lastName}`,
+
+            shiftName:
+              shift.shiftName,
+
+            otMinutes:
+              overtimeMinutes,
+
+            otHours:
+              this.minutesToHours(
+                overtimeMinutes
+              ),
+
+            approved:
+              true,
+
+            rejected:
+              false,
+
+            otRejectReason:
+              ''
+
+          }
+
+        ]);
+      }
+
+      /* =====================================================
+         SAVE ATTENDANCE
+      ===================================================== */
+
+      const line: AttendanceLine = {
+
+        attendanceLineId:
+          crypto.randomUUID(),
+
+        attendanceId:
+          this.service
+            .attendance()
+            ?.attendanceId!,
+
+        employeeId:
+          empId,
+
+        attendanceDate:
+          f.attendanceDate,
+
+        attendanceType:
+          AttendanceType.Present,
+
+        inTime:
+          f.inTime,
+
+        outTime:
+          f.outTime,
+
+        workingHours,
+
+        overtimeHours: 0,
+
+        isOtEligible:
+          eligibleForOt,
+
+        isOtApproved:
+          false,
+
+        isOtRejected:
+          false,
+
+        approvedOtHours:
+          0,
+
+        approvedOtMinutes:
+          0,
+
+        originalOtHours:
+          this.minutesToHours(
+            overtimeMinutes
+          ),
+
+        originalOtMinutes:
+          overtimeMinutes,
+        isLate:
+          false,
+
+        isEarlyExit:
+          false,
+
+        isHalfDay:
+          workingHours < 5,
+
+        timeLogs: [],
+
+        otRejectReason:
+          ''
+
+      };
+
+      try {
+
+        this.service.addLine(
+          line
+        );
+
+      }
+
+      catch (err: any) {
+
+        this.attendanceFailedList.update(list => [
+
+          ...list,
+
+          {
+
+            employeeId: empId,
+
+            employeeName:
+              `${emp.firstName} ${emp.lastName}`,
+
+            reason:
+              err.message
+
+          }
+
+        ]);
+
+      }
+
+    });
+
+    /* =====================================================
+       SUMMARY
+    ===================================================== */
+
     this.service.recalculateSummary();
 
-    // ===== RESET FORM =====
-    this.form.set({
-      employeeIds: [],
-      attendanceDate: new Date().toISOString().split('T')[0], // 🔥 today
-      inTime: '',
-      outTime: ''
-    });
-    // ===== CLOSE MODAL =====
+    this.toast.success(
+      'Attendance processed'
+    );
+
+    /* =====================================================
+       CLOSE MAIN MODAL
+    ===================================================== */
+
     this.closeModal();
+
+    /* =====================================================
+       OPEN RESULT POPUP
+    ===================================================== */
+
+    /* OPEN RESULT POPUP ONLY IF NEEDED */
+
+    const hasFailedAttendance =
+
+      this.attendanceFailedList()
+        .length > 0;
+
+    const hasOtEmployees =
+
+      this.attendanceOtList()
+        .length > 0;
+
+    if (
+      hasFailedAttendance
+      ||
+      hasOtEmployees
+    ) {
+
+      this.showAttendanceResultPopup.set(
+        true
+      );
+
+    }
+    /* =====================================================
+       RESET FORM
+    ===================================================== */
+
+    this.form.set({
+
+      employeeIds: [],
+
+      attendanceDate:
+        new Date()
+          .toISOString()
+          .split('T')[0],
+
+      inTime: '',
+
+      outTime: ''
+
+    });
+
   }
+
+
+
+  rejectOtPopup(
+    employeeId: string
+  ) {
+
+    this.rejectingOtEmployeeId.set(
+      employeeId
+    );
+
+    this.rejectOtReason.set('');
+
+    this.showRejectOtPopup.set(
+      true
+    );
+  }
+
+  approveOt(
+    employeeId: string,
+    showToast = true
+  ) {
+
+    const ot =
+
+      this.attendanceOtList()
+        .find(x =>
+
+          x.employeeId === employeeId
+        );
+
+    if (!ot) {
+      return;
+    }
+
+    this.service
+      .updateLineByEmployee(
+
+        employeeId,
+
+        line => ({
+
+          ...line,
+
+          overtimeHours:
+            ot.otHours,
+          overtimeMinutes:
+            ot.otMinutes,
+
+
+          approvedOtHours:
+            ot.otHours,
+
+          approvedOtMinutes:
+            ot.otMinutes,
+
+          isOtApproved: true,
+
+          isOtRejected: false,
+
+          otApprovedOn:
+            new Date()
+              .toISOString()
+
+        })
+      );
+
+    /* REMOVE FROM LIST */
+
+    this.attendanceOtList.update(list =>
+
+      list.filter(x =>
+
+        x.employeeId !== employeeId
+      )
+    );
+
+    if (showToast) {
+
+      this.toast.success(
+        'OT approved'
+      );
+
+    }
+    this.closeAttendanceSummaryIfEmpty();
+  }
+
+  rejectOt(
+    employeeId: string,
+    reason: string,
+    showToast = true
+  ) {
+
+    this.service
+      .updateLineByEmployee(
+
+        employeeId,
+
+        line => ({
+
+          ...line,
+
+          overtimeHours: 0,
+
+          approvedOtHours: 0,
+
+          approvedOtMinutes: 0,
+
+          isOtApproved: false,
+
+          isOtRejected: true,
+
+          otRejectReason:
+            reason
+
+        })
+      );
+
+    /* REMOVE FROM LIST */
+
+    this.attendanceOtList.update(list =>
+
+      list.filter(x =>
+
+        x.employeeId !== employeeId
+      )
+    );
+
+    if (showToast) {
+
+      this.toast.success(
+        'OT rejected'
+      );
+
+    }
+
+    this.closeAttendanceSummaryIfEmpty();
+  }
+
+
+  confirmRejectOt() {
+
+    const employeeId =
+      this.rejectingOtEmployeeId();
+
+    if (!employeeId) {
+      return;
+    }
+
+    const reason =
+      this.rejectOtReason()
+        .trim();
+
+    if (!reason) {
+
+      this.toast.error(
+        'Enter reject reason'
+      );
+
+      return;
+    }
+
+    this.rejectOt(
+      employeeId,
+      reason,
+      true
+    );
+
+    this.showRejectOtPopup.set(
+      false
+    );
+
+    this.rejectingOtEmployeeId.set(
+      null
+    );
+
+    this.rejectOtReason.set('');
+  }
+
+
 
   toggleSelectAll() {
     const all = this.selectAll();
@@ -912,40 +1845,40 @@ export class AttendanceLinesComponent {
   }
 
   setFilterDate(
-  value: Date | null
-) {
+    value: Date | null
+  ) {
 
-  if (!value) {
+    if (!value) {
 
-    this.filterDate.set('');
+      this.filterDate.set('');
 
-    return;
+      return;
+    }
+
+    const day =
+
+      String(
+        value.getDate()
+      ).padStart(2, '0');
+
+    const month =
+
+      String(
+        value.getMonth() + 1
+      ).padStart(2, '0');
+
+    const year =
+      value.getFullYear();
+
+    const formattedDate =
+
+      `${year}-${month}-${day}`;
+
+    this.filterDate.set(
+      formattedDate
+    );
+
   }
-
-  const day =
-
-    String(
-      value.getDate()
-    ).padStart(2, '0');
-
-  const month =
-
-    String(
-      value.getMonth() + 1
-    ).padStart(2, '0');
-
-  const year =
-    value.getFullYear();
-
-  const formattedDate =
-
-    `${year}-${month}-${day}`;
-
-  this.filterDate.set(
-    formattedDate
-  );
-
-}
 
   clearDate(event: Event) {
     event.stopPropagation(); // prevent opening picker
@@ -1031,43 +1964,43 @@ export class AttendanceLinesComponent {
     }));
   }
 
-setPermissionDate(
-  value: Date | null
-) {
+  setPermissionDate(
+    value: Date | null
+  ) {
 
-  if (!value) {
-    return;
+    if (!value) {
+      return;
+    }
+
+    const day =
+
+      String(
+        value.getDate()
+      ).padStart(2, '0');
+
+    const month =
+
+      String(
+        value.getMonth() + 1
+      ).padStart(2, '0');
+
+    const year =
+      value.getFullYear();
+
+    const formattedDate =
+
+      `${year}-${month}-${day}`;
+
+    this.permissionForm.update(f => ({
+
+      ...f,
+
+      permissionDate:
+        formattedDate
+
+    }));
+
   }
-
-  const day =
-
-    String(
-      value.getDate()
-    ).padStart(2, '0');
-
-  const month =
-
-    String(
-      value.getMonth() + 1
-    ).padStart(2, '0');
-
-  const year =
-    value.getFullYear();
-
-  const formattedDate =
-
-    `${year}-${month}-${day}`;
-
-  this.permissionForm.update(f => ({
-
-    ...f,
-
-    permissionDate:
-      formattedDate
-
-  }));
-
-}
 
   setFromTime(value: string) {
     this.permissionForm.update(f => ({
@@ -1793,6 +2726,282 @@ setPermissionDate(
     this.showPermissionDetailsPopup.set(false);
   }
 
+  openOtEdit(
+    item: any
+  ) {
+
+    this.editingOtEmployee.set(
+      item
+    );
+
+    this.editOtForm.set({
+
+      otHours:
+        item.otHours || 0,
+
+      reason: ''
+
+    });
+
+    this.showOtEditPopup.set(
+      true
+    );
+  }
+
+  confirmOtEditApprove() {
+
+    const employee =
+
+      this.editingOtEmployee();
+
+    if (!employee) {
+      return;
+    }
+
+    const form =
+      this.editOtForm();
+
+    if (
+
+      !form.otHours
+      ||
+
+      form.otHours < 0
+
+    ) {
+
+      this.toast.error(
+        'Enter valid OT hours'
+      );
+
+      return;
+    }
+
+    if (
+
+      !form.reason
+        .trim()
+
+    ) {
+
+      this.toast.error(
+        'Enter edit reason'
+      );
+
+      return;
+    }
+
+    /* UPDATE OT LIST */
+
+    this.attendanceOtList.update(list =>
+
+      list.map(x =>
+
+        x.employeeId ===
+          employee.employeeId
+
+          ?
+
+          {
+
+            ...x,
+
+            otHours:
+              form.otHours,
+
+            otMinutes:
+              Math.round(
+                form.otHours * 60
+              ),
+
+            isOtEdited:
+              true,
+
+            otEditReason:
+              form.reason
+
+          }
+
+          :
+
+          x
+      )
+    );
+
+    /* AUTO APPROVE */
+
+    this.approveOt(
+      employee.employeeId,
+      true
+    );
+
+    this.toast.success(
+      'OT updated & approved'
+    );
+
+    this.showOtEditPopup.set(
+      false
+    );
+
+    this.editingOtEmployee.set(
+      null
+    );
+  }
+
+  closeOtEditPopup() {
+
+    this.showOtEditPopup.set(
+      false
+    );
+
+    this.editingOtEmployee.set(
+      null
+    );
+  }
+
+  closeAttendanceSummaryIfEmpty() {
+
+    if (
+
+      this.attendanceOtList()
+        .length === 0
+
+      &&
+
+      this.attendanceFailedList()
+        .length === 0
+
+    ) {
+
+      this.showAttendanceResultPopup.set(
+        false
+      );
+
+    }
+  }
+
+  saveOtEdit() {
+
+    this.attendanceOtList.update(list =>
+
+      list.map(x =>
+
+        x.employeeId ===
+          this.editingOtEmployeeId()
+
+          ?
+
+          {
+
+            ...x,
+
+            otHours:
+              this.editingOtHours(),
+
+            isOtEdited:
+              true,
+
+            otEditReason:
+              this.editingOtReason()
+
+          }
+
+          :
+
+          x
+      )
+    );
+
+  }
+
+
+  approveAllOt() {
+
+    const items =
+      [...this.attendanceOtList()];
+
+    items.forEach(item => {
+
+      this.approveOt(
+        item.employeeId,
+        false
+      );
+
+    });
+
+    this.toast.success(
+      'All OT approved'
+    );
+  }
+
+  rejectAllOt() {
+
+    this.rejectAllOtReason.set(
+      ''
+    );
+
+    this.showRejectAllOtPopup.set(
+      true
+    );
+  }
+
+  confirmRejectAllOt() {
+
+    const reason =
+
+      this.rejectAllOtReason()
+        .trim();
+
+    if (!reason) {
+
+      this.toast.error(
+        'Enter reject reason'
+      );
+
+      return;
+    }
+
+    const items =
+      [...this.attendanceOtList()];
+
+    items.forEach(item => {
+
+      this.rejectOt(
+
+        item.employeeId,
+
+        reason,
+        false
+
+      );
+
+    });
+
+    this.showRejectAllOtPopup.set(
+      false
+    );
+
+    this.rejectAllOtReason.set(
+      ''
+    );
+
+    this.toast.success(
+      'All OT rejected'
+    );
+  }
+
+  closeRejectAllOtPopup() {
+
+    this.showRejectAllOtPopup.set(
+      false
+    );
+
+    this.rejectAllOtReason.set(
+      ''
+    );
+  }
+
+
   formatDate(
     date: Date
   ): string {
@@ -1818,30 +3027,332 @@ setPermissionDate(
    DESIGNATION
 ===================================================== */
 
-getDesignation(
-  designationId?: string
-): string {
+  getDesignation(
+    designationId?: string
+  ): string {
 
-  if (!designationId)
-    return '-';
+    if (!designationId)
+      return '-';
 
-  return (
+    return (
 
-    this.masterDataClient
-      .designations()
+      this.masterDataClient
+        .designations()
+        .find(x =>
+
+          x.id === designationId
+
+        )
+
+        ?.name
+
+      ||
+
+      '-'
+
+    );
+
+  }
+
+  /* =========================================================
+     GET EMPLOYEE SHIFT
+  ========================================================= */
+
+  getEmployeeShift(
+    empId: string
+  ) {
+
+    const emp =
+      this.employees()
+        .find(x =>
+          x.employeeId === empId
+        );
+
+    if (!emp) {
+      return null;
+    }
+
+    const assignments =
+
+      this.shiftAssignmentService
+        .assignments()
+
+        .filter(x => {
+
+          if (!x.isActive) {
+            return false;
+          }
+
+          /* EMPLOYEE */
+          if (
+            x.employeeIds?.includes(empId)
+          ) {
+            return true;
+          }
+
+          /* DEPARTMENT */
+          if (
+            x.departmentIds?.includes(
+              emp.departmentId!
+            )
+          ) {
+            return true;
+          }
+
+          /* DESIGNATION */
+          if (
+            x.designationIds?.includes(
+              emp.designationId!
+            )
+          ) {
+            return true;
+          }
+
+          return false;
+        });
+
+    /* PRIORITY
+       Employee
+       Department
+       Designation
+    */
+
+    const employeeAssignment =
+      assignments.find(x =>
+        x.employeeIds?.includes(empId)
+      );
+
+    if (employeeAssignment) {
+
+      return this.shiftService
+        .shifts()
+        .find(s =>
+          s.shiftId ===
+          employeeAssignment.shiftId
+        );
+    }
+
+    const departmentAssignment =
+      assignments.find(x =>
+        x.departmentIds?.includes(
+          emp.departmentId!
+        )
+      );
+
+    if (departmentAssignment) {
+
+      return this.shiftService
+        .shifts()
+        .find(s =>
+          s.shiftId ===
+          departmentAssignment.shiftId
+        );
+    }
+
+    const designationAssignment =
+      assignments.find(x =>
+        x.designationIds?.includes(
+          emp.designationId!
+        )
+      );
+
+    if (designationAssignment) {
+
+      return this.shiftService
+        .shifts()
+        .find(s =>
+          s.shiftId ===
+          designationAssignment.shiftId
+        );
+    }
+
+    /* DEFAULT SHIFT */
+    return this.shiftService
+      .shifts()
       .find(x =>
 
-        x.id === designationId
+        x.isDefault
+        &&
 
+        x.isActive
+      );
+  }
+
+  /* =========================================================
+     TIME HELPERS
+  ========================================================= */
+
+  timeToMinutes(
+    value: string
+  ): number {
+
+    const [h, m] =
+      value.split(':').map(Number);
+
+    return (h * 60) + m;
+  }
+
+  minutesToHours(
+    mins: number
+  ): number {
+
+    return Math.round(
+      (mins / 60) * 100
+    ) / 100;
+  }
+
+
+  toggleSelectAllFailed(
+    checked: boolean
+  ) {
+
+    if (checked) {
+
+      this.selectedFailedEmployees.set(
+
+        this.attendanceFailedList()
+          .map(x => x.employeeId)
+
+      );
+
+    }
+
+    else {
+
+      this.selectedFailedEmployees.set([]);
+
+    }
+  }
+
+  toggleFailedEmployee(
+    employeeId: string
+  ) {
+
+    this.selectedFailedEmployees.update(list =>
+
+      list.includes(employeeId)
+
+        ?
+
+        list.filter(x => x !== employeeId)
+
+        :
+
+        [...list, employeeId]
+
+    );
+  }
+
+  approveFailedAttendance() {
+
+    const selected =
+      this.selectedFailedEmployees();
+
+    if (selected.length === 0) {
+
+      this.toast.error(
+        'Select employees'
+      );
+
+      return;
+    }
+
+    const form =
+      this.form();
+
+    selected.forEach(empId => {
+
+      const inMinutes =
+        this.timeToMinutes(
+          form.inTime
+        );
+
+      const outMinutes =
+        this.timeToMinutes(
+          form.outTime
+        );
+
+      const totalMinutes =
+        outMinutes - inMinutes;
+
+      const workingHours =
+        this.minutesToHours(
+          totalMinutes
+        );
+
+      const line: AttendanceLine = {
+
+        attendanceLineId:
+          crypto.randomUUID(),
+
+        attendanceId:
+          this.service
+            .attendance()
+            ?.attendanceId!,
+
+        employeeId:
+          empId,
+
+        attendanceDate:
+          form.attendanceDate,
+
+        attendanceType:
+          AttendanceType.Present,
+
+        inTime:
+          form.inTime,
+
+        outTime:
+          form.outTime,
+
+        workingHours,
+
+        overtimeHours: 0,
+
+        approvedOtHours: 0,
+
+        approvedOtMinutes: 0,
+
+        isOtApproved: false,
+
+        isOtRejected: false,
+
+        isLate: true,
+
+        isEarlyExit: false,
+
+        isHalfDay:
+          workingHours < 5,
+
+        remarks:
+          'Attendance overridden by admin',
+
+        timeLogs: []
+
+      };
+
+      this.service.addLine(line);
+
+    });
+
+    /* REMOVE SAVED FAILED */
+
+    this.attendanceFailedList.update(list =>
+
+      list.filter(x =>
+
+        !selected.includes(
+          x.employeeId
+        )
       )
+    );
 
-      ?.name
+    this.selectedFailedEmployees.set([]);
 
-    ||
+    this.toast.success(
+      'Attendance saved successfully'
+    );
 
-    '-'
-
-  );
-
-}
+    this.closeAttendanceSummaryIfEmpty();
+  }
 }

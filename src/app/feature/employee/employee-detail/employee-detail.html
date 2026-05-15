@@ -1,69 +1,73 @@
 <div class="emp-page">
 
-    <!-- 🔷 HEADER -->
-    <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+  <!-- 🔷 HEADER -->
+  <div class="d-flex justify-content-between align-items-center" id="TopHeading">
 
-        <div>
-            <h4 class="fw-bold mb-1 mainheading">Employee Details</h4>
-            <small class="text-muted subdescription">
-                View and manage employee information
-            </small>
+    <div>
+      <h4 class="fw-bold mb-1 mainheading">Employee Details</h4>
+      <small class="text-muted subdescription">
+        View and manage employee information
+      </small>
+    </div>
+
+    <div class="arrow-steps d-none d-md-flex">
+      <ul id="breadcrumb">
+        <li><a routerLink="/dashboard"><span class="fa fa-home"></span>&nbsp; Home</a></li>
+        <li><a routerLink="/employees"><span class="fa fa-users"></span>&nbsp; Employees</a></li>
+        <li><a href="javascript:void(0)"><span class="fa fa-eye"></span>&nbsp; View</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  @if(employee()) {
+
+  <!-- 🔷 HERO -->
+  <div class="emp-hero-header d-flex justify-content-between align-items-center">
+
+    <div class="d-flex align-items-center gap-3">
+
+      <div class="emp-avatar">
+        {{ employee()?.firstName?.[0] }}{{ employee()?.lastName?.[0] }}
+      </div>
+
+      <div>
+        <div class="emp-name">
+          {{ employee()?.firstName }} {{ employee()?.lastName }}
         </div>
 
-        <div class="arrow-steps d-none d-md-flex">
-            <ul id="breadcrumb">
-                <li><a routerLink="/dashboard"><span class="fa fa-home"></span>&nbsp; Home</a></li>
-                <li><a routerLink="/employees"><span class="fa fa-users"></span>&nbsp; Employees</a></li>
-                <li><a href="javascript:void(0)"><span class="fa fa-eye"></span>&nbsp; View</a></li>
-            </ul>
+        <div class="emp-meta">
+          <span>{{ employee()?.employeeCode }}</span>
+          <span class="dot"></span>
+          <span>{{ employee()?.employmentType }}</span>
         </div>
+      </div>
 
     </div>
 
-    @if(employee()) {
+    <button class="btn-print" (click)="print()">
+      <!-- <i class="ti ti-printer"></i> -->
+      <span class="d-none d-md-inline">Print</span>
+    </button>
 
-    <!-- 🔷 HERO -->
-    <div class="emp-hero-header d-flex justify-content-between align-items-center">
+  </div>
 
-        <div class="d-flex align-items-center gap-3">
+  <!-- 🔷 TABS -->
+  <div class="emp-tabs mb-3">
 
-            <div class="emp-avatar">
-                {{ employee()?.firstName?.[0] }}{{ employee()?.lastName?.[0] }}
-            </div>
+    <span class="tab" [class.active]="activeTab()==='personal'" (click)="setTab('personal')">
+      Personal details
+    </span>
 
-            <div>
-                <div class="emp-name">
-                    {{ employee()?.firstName }} {{ employee()?.lastName }}
-                </div>
+    <span class="tab" [class.active]="activeTab()==='job'" (click)="setTab('job')">
+      Job information
+    </span>
 
-                <div class="emp-meta">
-                    <span>{{ employee()?.employeeCode }}</span>
-                    <span class="dot"></span>
-                    <span>{{ employee()?.employmentType }}</span>
-                </div>
-            </div>
+    <span class="tab" [class.active]="activeTab()==='shift'" (click)="setTab('shift')">
+      Shift details
+    </span>
 
-        </div>
-
-        <button class="btn-print" (click)="print()">
-            <!-- <i class="ti ti-printer"></i> -->
-            <span class="d-none d-md-inline">Print</span>
-        </button>
-
-    </div>
-
-    <!-- 🔷 TABS -->
-    <div class="emp-tabs mb-3">
-
-        <span class="tab" [class.active]="activeTab()==='personal'" (click)="setTab('personal')">
-            Personal details
-        </span>
-
-        <span class="tab" [class.active]="activeTab()==='job'" (click)="setTab('job')">
-            Job information
-        </span>
-
-        <!-- <span class="tab" [class.active]="activeTab()==='salary'" (click)="setTab('salary')">
+    <!-- <span class="tab" [class.active]="activeTab()==='salary'" (click)="setTab('salary')">
       Salary details
     </span>
 
@@ -71,296 +75,743 @@
       Pay history
     </span> -->
 
+  </div>
+
+  <!-- ================= PERSONAL ================= -->
+  @if(activeTab()==='personal'){
+
+  <!-- KPI -->
+  <div class="row g-3 mb-4">
+
+    <div class="col-md-3">
+      <div class="kpi-modern">
+        <div class="kpi-icon"><i class="ti ti-user"></i></div>
+        <div>
+          <div class="kpi-value">{{ employee()?.firstName }} {{ employee()?.lastName }}</div>
+          <div class="kpi-label">Employee Name</div>
+        </div>
+      </div>
     </div>
 
-    <!-- ================= PERSONAL ================= -->
-    @if(activeTab()==='personal'){
-
-    <!-- KPI -->
-    <div class="row g-3 mb-4">
-
-        <div class="col-md-3">
-            <div class="kpi-modern">
-                <div class="kpi-icon"><i class="ti ti-user"></i></div>
-                <div>
-                    <div class="kpi-value">{{ employee()?.firstName }} {{ employee()?.lastName }}</div>
-                    <div class="kpi-label">Employee Name</div>
-                </div>
-            </div>
+    <div class="col-md-3">
+      <div class="kpi-modern">
+        <div class="kpi-icon"><i class="ti ti-calendar"></i></div>
+        <div>
+          <div class="kpi-value">{{ getAge(employee()?.dateOfBirth) }}</div>
+          <div class="kpi-label">Age</div>
         </div>
-
-        <div class="col-md-3">
-            <div class="kpi-modern">
-                <div class="kpi-icon"><i class="ti ti-calendar"></i></div>
-                <div>
-                    <div class="kpi-value">{{ getAge(employee()?.dateOfBirth) }}</div>
-                    <div class="kpi-label">Age</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="kpi-modern">
-                <div class="kpi-icon"><i class="ti ti-phone"></i></div>
-                <div>
-                    <div class="kpi-value">{{ employee()?.personalmobileNumber }}</div>
-                    <div class="kpi-label">Mobile</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="kpi-modern">
-                <div class="kpi-icon"><i class="ti ti-mail"></i></div>
-                <div>
-                    <div class="kpi-value">{{ employee()?.personalEmail || '-' }}</div>
-                    <div class="kpi-label">Email</div>
-                </div>
-            </div>
-        </div>
-
+      </div>
     </div>
 
-    <div class="pf-page">
-        <div class="pf-layout">
+    <div class="col-md-3">
+      <div class="kpi-modern">
+        <div class="kpi-icon"><i class="ti ti-phone"></i></div>
+        <div>
+          <div class="kpi-value">{{ employee()?.personalmobileNumber }}</div>
+          <div class="kpi-label">Mobile</div>
+        </div>
+      </div>
+    </div>
 
-            <!-- LEFT -->
-            <div class="pf-left">
+    <div class="col-md-3">
+      <div class="kpi-modern">
+        <div class="kpi-icon"><i class="ti ti-mail"></i></div>
+        <div>
+          <div class="kpi-value">{{ employee()?.personalEmail || '-' }}</div>
+          <div class="kpi-label">Email</div>
+        </div>
+      </div>
+    </div>
 
-                <!-- PERSONAL -->
-                <div class="pf-card">
-                    <div class="pf-head">Personal Details</div>
+  </div>
 
-                    <div class="pf-grid">
-                        <div><label>First Name</label><b>{{ employee()?.firstName }}</b></div>
-                        <div><label>Last Name</label><b>{{ employee()?.lastName }}</b></div>
-                        <div>
-                            <label>Display Name</label>
-                            <b>{{ employee()?.displayName || '-' }}</b>
-                        </div>
-                        <div><label>DOB</label><b>{{ formatDate(employee()?.dateOfBirth)  | date:'dd MMM yyyy' }}</b></div>
-                        <div><label>Gender</label><span class="pf-chip blue">{{ employee()?.gender }}</span></div>
+  <div class="pf-page">
+    <div class="pf-layout">
 
+      <!-- LEFT -->
+      <div class="pf-left">
 
-                        <!-- ✅ NEW -->
-                        <div>
-                            <label>Marital Status</label>
-                            <span class="pf-chip orange">
-                                {{ employee()?.maritalStatus || '-' }}
-                            </span>
-                        </div>
+        <!-- PERSONAL -->
+        <div class="pf-card">
+          <div class="pf-head">Personal Details</div>
 
-                        <div>
-                            <label>Father / Spouse</label>
-                            <b>{{ employee()?.fatherOrSpouseOrGuardianName || '-' }}</b>
-                        </div>
-
-
-                        <div>
-                            <label>Blood Group</label>
-                            <span class="pf-chip red">
-                                {{ employee()?.bloodGroup || '-' }}
-                            </span>
-                        </div>
+          <div class="pf-grid">
+            <div><label>First Name</label><b>{{ employee()?.firstName }}</b></div>
+            <div><label>Last Name</label><b>{{ employee()?.lastName }}</b></div>
+            <div>
+              <label>Display Name</label>
+              <b>{{ employee()?.displayName || '-' }}</b>
+            </div>
+            <div><label>DOB</label><b>{{ formatDate(employee()?.dateOfBirth) | date:'dd MMM yyyy' }}</b></div>
+            <div><label>Gender</label><span class="pf-chip blue">{{ employee()?.gender }}</span></div>
 
 
-                    </div>
-                </div>
-                <div class="pf-card">
-                    <div class="pf-head">Address</div>
+            <!-- ✅ NEW -->
+            <div>
+              <label>Marital Status</label>
+              <span class="pf-chip orange">
+                {{ employee()?.maritalStatus || '-' }}
+              </span>
+            </div>
 
-                    <div class="pf-grid">
+            <div>
+              <label>Father / Spouse</label>
+              <b>{{ employee()?.fatherOrSpouseOrGuardianName || '-' }}</b>
+            </div>
 
-                        <div>
-                            <label>Address Line</label>
-                            <b>{{ employee()?.permanentAddress?.addressLine1 || '-' }}</b>
-                        </div>
 
-                        <div>
-                            <label>City</label>
-                            <b>{{ employee()?.permanentAddress?.city || '-' }}</b>
-                        </div>
+            <div>
+              <label>Blood Group</label>
+              <span class="pf-chip red">
+                {{ employee()?.bloodGroup || '-' }}
+              </span>
+            </div>
 
-                        <div>
-                            <label>State</label>
-                            <b>{{ employee()?.permanentAddress?.stateId || '-' }}</b>
-                        </div>
 
-                        <div>
-                            <label>Country</label>
-                            <b>{{ employee()?.permanentAddress?.countryId || '-' }}</b>
-                        </div>
+          </div>
+        </div>
+        <div class="pf-card">
+          <div class="pf-head">Address</div>
 
-                        <div>
-                            <label>Postal Code</label>
-                            <b>{{ employee()?.permanentAddress?.postalCode || '-' }}</b>
-                        </div>
+          <div class="pf-grid">
 
-                    </div>
-                    <!-- <div>
+            <div>
+              <label>Address Line</label>
+              <b>{{ employee()?.permanentAddress?.addressLine1 || '-' }}</b>
+            </div>
+
+            <div>
+              <label>City</label>
+              <b>{{ employee()?.permanentAddress?.city || '-' }}</b>
+            </div>
+
+            <div>
+              <label>State</label>
+              <b>{{ employee()?.permanentAddress?.stateId || '-' }}</b>
+            </div>
+
+            <div>
+              <label>Country</label>
+              <b>{{ employee()?.permanentAddress?.countryId || '-' }}</b>
+            </div>
+
+            <div>
+              <label>Postal Code</label>
+              <b>{{ employee()?.permanentAddress?.postalCode || '-' }}</b>
+            </div>
+
+          </div>
+          <!-- <div>
                         <label>Current Address</label>
                         <b>
                             {{ employee()?.currentAddress?.addressLine1 || '-' }},
                             {{ employee()?.currentAddress?.city || '-' }}
                         </b>
                     </div> -->
-                </div>
-
-                <!-- EDUCATION -->
-                <div class="pf-card">
-                    <div class="pf-head">Education</div>
-
-                    @for (edu of employee()?.educations ?? []; track edu) {
-                    <div class="pf-item">
-                        <b>{{ edu.degree }}</b>
-                        <span>{{ edu.instituteName }}</span>
-                        <small>{{ formatDate(edu.dateOfCompletion) }}</small>
-                    </div>
-                    }
-                </div>
-
-            </div>
-
-            <!-- RIGHT -->
-            <div class="pf-right">
-
-                <!-- BANK -->
-                <div class="pf-bank">
-                    <div class="pf-bank-name">
-                        {{ employee()?.firstName }} {{ employee()?.lastName }}
-                    </div>
-
-                    <div class="pf-bank-num">
-                        •••• {{ employee()?.bankAccountNumber?.slice(-4) }}
-                    </div>
-
-                    <div class="pf-bank-row">
-                        <div><span>Bank:</span><b> {{ employee()?.bankName }}</b></div>
-                        <div><span>IFSC:</span><b> {{ employee()?.ifscCode }}</b></div>
-                    </div>
-
-                    <!-- ✅ NEW -->
-                    <div class="pf-bank-row">
-                        <div><span>PAN:</span><b> {{ employee()?.panNumber }}</b></div>
-                        <div><span>Aadhaar:</span><b> {{ employee()?.aadhaarNumber }}</b></div>
-                    </div>
-                    <!-- ADD BELOW -->
-                    <div class="pf-bank-row">
-                        <div><span>Branch:</span><b> {{ employee()?.branchName || '-' }}</b></div>
-                        <div><span>MICR:</span><b> {{ employee()?.micrNumber || '-' }}</b></div>
-                    </div>
-                </div>
-
-                <div class="pf-card">
-                    <div class="pf-head">UPI IDs</div>
-
-                    @if((employee()?.upiIds?.length ?? 0) === 0){
-                    <div class="empty-upi">
-                        <i class="ti ti-qrcode"></i>
-                        <p>No UPI IDs</p>
-                    </div>
-                    } @else {
-
-                    <div class="upi-list">
-                        @for (upi of employee()?.upiIds ?? []; track upi) {
-                        <span class="upi-chip">
-                            <i class="ti ti-qrcode"></i> {{ upi }}
-                        </span>
-                        }
-                    </div>
-
-                    }
-                </div>
-
-                <!-- WORK -->
-                <div class="pf-card">
-                    <div class="pf-head">Work Experience</div>
-
-                    @for (work of employee()?.workExperiences ?? []; track work) {
-                    <div class="pf-item">
-                        <b>{{ work.jobTitle }}</b>
-                        <span>{{ work.companyName }}</span>
-                        <small>{{ formatDate(work.fromDate) }} - {{ formatDate(work.toDate) }}</small>
-                    </div>
-                    }
-                </div>
-
-            </div>
-
         </div>
+
+        <!-- EDUCATION -->
+        <div class="pf-card">
+          <div class="pf-head">Education</div>
+
+          @for (edu of employee()?.educations ?? []; track edu) {
+          <div class="pf-item">
+            <b>{{ edu.degree }}</b>
+            <span>{{ edu.instituteName }}</span>
+            <small>{{ formatDate(edu.dateOfCompletion) }}</small>
+          </div>
+          }
+        </div>
+
+      </div>
+
+      <!-- RIGHT -->
+      <div class="pf-right">
+
+        <!-- BANK -->
+        <div class="pf-bank">
+          <div class="pf-bank-name">
+            {{ employee()?.firstName }} {{ employee()?.lastName }}
+          </div>
+
+          <div class="pf-bank-num">
+            •••• {{ employee()?.bankAccountNumber?.slice(-4) }}
+          </div>
+
+          <div class="pf-bank-row">
+            <div><span>Bank:</span><b> {{ employee()?.bankName }}</b></div>
+            <div><span>IFSC:</span><b> {{ employee()?.ifscCode }}</b></div>
+          </div>
+
+          <!-- ✅ NEW -->
+          <div class="pf-bank-row">
+            <div><span>PAN:</span><b> {{ employee()?.panNumber }}</b></div>
+            <div><span>Aadhaar:</span><b> {{ employee()?.aadhaarNumber }}</b></div>
+          </div>
+          <!-- ADD BELOW -->
+          <div class="pf-bank-row">
+            <div><span>Branch:</span><b> {{ employee()?.branchName || '-' }}</b></div>
+            <div><span>MICR:</span><b> {{ employee()?.micrNumber || '-' }}</b></div>
+          </div>
+        </div>
+
+        <div class="pf-card">
+          <div class="pf-head">UPI IDs</div>
+
+          @if((employee()?.upiIds?.length ?? 0) === 0){
+          <div class="empty-upi">
+            <i class="ti ti-qrcode"></i>
+            <p>No UPI IDs</p>
+          </div>
+          } @else {
+
+          <div class="upi-list">
+            @for (upi of employee()?.upiIds ?? []; track upi) {
+            <span class="upi-chip">
+              <i class="ti ti-qrcode"></i> {{ upi }}
+            </span>
+            }
+          </div>
+
+          }
+        </div>
+
+        <!-- WORK -->
+        <div class="pf-card">
+          <div class="pf-head">Work Experience</div>
+
+          @for (work of employee()?.workExperiences ?? []; track work) {
+          <div class="pf-item">
+            <b>{{ work.jobTitle }}</b>
+            <span>{{ work.companyName }}</span>
+            <small>{{ formatDate(work.fromDate) }} - {{ formatDate(work.toDate) }}</small>
+          </div>
+          }
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  }
+
+  <!-- ================= JOB ================= -->
+  @if(activeTab()==='job'){
+  <div class="infos-card">
+
+    <div class="section-header">Job Information</div>
+
+    <div class="info-grid">
+
+      <div class="info-tile">
+        <span>Employee Code</span>
+        <strong>{{ employee()?.employeeCode }}</strong>
+      </div>
+
+      <div class="info-tile">
+        <span>Department</span>
+        <strong>{{ employee()?.departmentId }}</strong>
+      </div>
+
+      <div class="info-tile">
+        <span>Designation</span>
+        <strong>{{ employee()?.designationId }}</strong>
+      </div>
+      <div class="info-tile">
+        <span>Work Phone Number</span>
+        <strong>{{ employee()?.workPhoneNumber }}</strong>
+      </div>
+
+      <div class="info-tile">
+        <span>Official Email</span>
+        <strong>{{ employee()?.officialEmail }}</strong>
+      </div>
+
+      <div class="info-tile">
+        <span>Employment Type</span>
+        <strong>{{ employee()?.employmentType }}</strong>
+      </div>
+
+      <div class="info-tile">
+        <span>Joining Date</span>
+        <strong>{{ formatDate(employee()?.dateOfJoining) }}</strong>
+      </div>
+
+      <div class="info-tile status">
+        <span>Status</span>
+        <strong class="active">{{ employee()?.status }}</strong>
+      </div>
+
+    </div>
+
+  </div>
+  }
+
+  <!-- ================= SHIFT ================= -->
+
+  @if(activeTab()==='shift'){
+
+  <div class="infos-card">
+
+    <div class="section-header">
+
+      Shift Details
+
+    </div>
+
+    <!-- EMPTY -->
+    @if(
+    employeeShiftAssignments()
+    .length === 0
+    ){
+
+    <div class="empty-shift">
+
+      <div class="empty-shift-icon">
+
+        <i class="ti ti-clock"></i>
+
+      </div>
+
+      <div class="empty-shift-title">
+
+        No Shift Assigned
+
+      </div>
+
+      <div class="empty-shift-sub">
+
+        This employee is not assigned to any shift
+
+      </div>
+
     </div>
 
     }
 
-    <!-- ================= JOB ================= -->
-    @if(activeTab()==='job'){
-    <div class="infos-card">
+    <!-- HAS SHIFT -->
+    @else {
 
-        <div class="section-header">Job Information</div>
+    <div class="shift-list">
 
-        <div class="info-grid">
+      @for(
+      assignment of employeeShiftAssignments();
+      track assignment.shiftAssignmentId
+      ){
 
-            <div class="info-tile">
-                <span>Employee Code</span>
-                <strong>{{ employee()?.employeeCode }}</strong>
+      @let shift =
+      getShift(
+      assignment.shiftId
+      );
+
+      <div class="shift-card">
+
+        <!-- HEADER -->
+        <div class="shift-card-head">
+
+          <div>
+
+            <div class="shift-name-wrap">
+
+              <div class="shift-name">
+
+                {{
+                shift?.shiftName
+                }}
+
+              </div>
+
+              @if(
+              assignment.isDefaultShift
+              ){
+
+              <span class="default-badge">
+
+                Default
+
+              </span>
+
+              }
+
+              @if(
+              shift?.isNightShift
+              ){
+
+              <span class="night-badge">
+
+                Night Shift
+
+              </span>
+
+              }
+
             </div>
 
-            <div class="info-tile">
-                <span>Department</span>
-                <strong>{{ employee()?.departmentId }}</strong>
+            <div class="shift-code">
+
+              {{
+              shift?.shiftCode
+              }}
+
             </div>
 
-            <div class="info-tile">
-                <span>Designation</span>
-                <strong>{{ employee()?.designationId }}</strong>
-            </div>
-            <div class="info-tile">
-                <span>Work Phone Number</span>
-                <strong>{{ employee()?.workPhoneNumber }}</strong>
-            </div>
+          </div>
 
-            <div class="info-tile">
-                <span>Official Email</span>
-                <strong>{{ employee()?.officialEmail }}</strong>
-            </div>
+          <span class="shift-status" [class.inactive]="
+          !assignment.isActive
+        ">
 
-            <div class="info-tile">
-                <span>Employment Type</span>
-                <strong>{{ employee()?.employmentType }}</strong>
-            </div>
+            {{
 
-            <div class="info-tile">
-                <span>Joining Date</span>
-                <strong>{{ formatDate(employee()?.dateOfJoining) }}</strong>
-            </div>
+            assignment.isActive
 
-            <div class="info-tile status">
-                <span>Status</span>
-                <strong class="active">{{ employee()?.status }}</strong>
-            </div>
+            ?
+
+            'Active'
+
+            :
+
+            'Inactive'
+
+            }}
+
+          </span>
 
         </div>
+
+        <!-- DATE -->
+        <div class="shift-period">
+
+          <i class="ti ti-calendar-event"></i>
+
+          {{
+          assignment.effectiveFrom
+          | date:'dd MMM yyyy'
+          }}
+
+          →
+
+          @if(
+          assignment.effectiveTo
+          ){
+
+          {{
+          assignment.effectiveTo
+          | date:'dd MMM yyyy'
+          }}
+
+          }
+
+          @else {
+
+          Ongoing
+
+          }
+
+        </div>
+
+        <!-- GRID -->
+        <div class="shift-info-grid">
+
+          <!-- START -->
+          <div class="shift-info-item">
+
+            <div class="info-icon blue">
+
+              <i class="ti ti-clock-play"></i>
+
+            </div>
+
+            <div>
+
+              <div class="info-label">
+
+                Start Time
+
+              </div>
+
+              <div class="info-value">
+
+                {{
+                shift?.startTime || '-'
+                }}
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- END -->
+          <div class="shift-info-item">
+
+            <div class="info-icon red">
+
+              <i class="ti ti-clock-stop"></i>
+
+            </div>
+
+            <div>
+
+              <div class="info-label">
+
+                End Time
+
+              </div>
+
+              <div class="info-value">
+
+                {{
+                shift?.endTime || '-'
+                }}
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- WORK HOURS -->
+          <div class="shift-info-item">
+
+            <div class="info-icon green">
+
+              <i class="ti ti-hourglass"></i>
+
+            </div>
+
+            <div>
+
+              <div class="info-label">
+
+                Working Hours
+
+              </div>
+
+              <div class="info-value">
+
+                {{
+                shift?.workingHours || 0
+                }} hrs
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- BREAK -->
+          <div class="shift-info-item">
+
+            <div class="info-icon orange">
+
+              <i class="ti ti-coffee"></i>
+
+            </div>
+
+            <div>
+
+              <div class="info-label">
+
+                Break
+
+              </div>
+
+              <div class="info-value">
+
+                {{
+                shift?.breakMinutes || 0
+                }} mins
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- OT -->
+          <div class="shift-info-item">
+
+            <div class="info-icon purple">
+
+              <i class="ti ti-clock"></i>
+
+            </div>
+
+            <div>
+
+              <div class="info-label">
+
+                Overtime
+
+              </div>
+
+              <div class="info-value">
+
+                {{
+
+                shift?.allowOvertime
+
+                ?
+
+                'Allowed'
+
+                :
+
+                'Not Allowed'
+
+                }}
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- FLEXIBLE -->
+          <div class="shift-info-item">
+
+            <div class="info-icon dark">
+
+              <i class="ti ti-adjustments"></i>
+
+            </div>
+
+            <div>
+
+              <div class="info-label">
+
+                Shift Type
+
+              </div>
+
+              <div class="info-value">
+
+                {{
+
+                shift?.isFlexibleShift
+
+                ?
+
+                'Flexible'
+
+                :
+
+                'Fixed'
+
+                }}
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- WEEK OFF -->
+        <div class="weekoff-wrap">
+
+          <div class="weekoff-title">
+
+            Week Off
+
+          </div>
+
+          <div class="weekoff-days">
+
+            <span class="weekoff-pill" [class.active]="shift?.isSundayOff">
+
+              Sun
+
+            </span>
+
+            <span class="weekoff-pill" [class.active]="shift?.isMondayOff">
+
+              Mon
+
+            </span>
+
+            <span class="weekoff-pill" [class.active]="shift?.isTuesdayOff">
+
+              Tue
+
+            </span>
+
+            <span class="weekoff-pill" [class.active]="shift?.isWednesdayOff">
+
+              Wed
+
+            </span>
+
+            <span class="weekoff-pill" [class.active]="shift?.isThursdayOff">
+
+              Thu
+
+            </span>
+
+            <span class="weekoff-pill" [class.active]="shift?.isFridayOff">
+
+              Fri
+
+            </span>
+
+            <span class="weekoff-pill" [class.active]="shift?.isSaturdayOff">
+
+              Sat
+
+            </span>
+
+          </div>
+
+        </div>
+
+        <!-- REMARK -->
+        @if(
+        assignment.remarks
+        ){
+
+        <div class="shift-remarks">
+
+          <i class="ti ti-message-circle"></i>
+
+          {{
+          assignment.remarks
+          }}
+
+        </div>
+
+        }
+
+      </div>
+
+      }
 
     </div>
+
     }
+  </div>
 
-    <!-- ================= SALARY ================= -->
-    @if(activeTab()==='salary'){
-    <div class="salary-grid">
+  }
 
-        <div class="salary-row">
-            <span>Basic Salary</span>
-            <strong>₹{{ employee()?.basicSalary }}</strong>
-        </div>
+  <!-- ================= SALARY ================= -->
+  @if(activeTab()==='salary'){
+  <div class="salary-grid">
 
-        <div class="salary-row">
-            <span>Payment Mode</span>
-            <strong>{{ employee()?.paymentMode }}</strong>
-        </div>
-
+    <div class="salary-row">
+      <span>Basic Salary</span>
+      <strong>₹{{ employee()?.basicSalary }}</strong>
     </div>
-    }
 
-    }
+    <div class="salary-row">
+      <span>Payment Mode</span>
+      <strong>{{ employee()?.paymentMode }}</strong>
+    </div>
+
+  </div>
+  }
+
+  }
 
 </div>
