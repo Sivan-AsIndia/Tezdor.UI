@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit, inject, signal, computed, ChangeDetectorRef, afterNextRender } from "@angular/core";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router, ActivatedRoute, RouterLink } from "@angular/router";
 import { FormsModule, ReactiveFormsModule, FormControl } from "@angular/forms";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
@@ -22,7 +22,7 @@ import { Editor, NgxEditorModule, Toolbar } from "ngx-editor";
     MatDatepickerModule,
     MatNativeDateModule,
     SearchDropdownComponent,
-    NgxEditorModule
+    NgxEditorModule,RouterLink
   ],
   templateUrl: './purchase-invoice-create.html',
   styleUrl: './purchase-invoice-create.css',

@@ -10,7 +10,7 @@ import {
   ISelectOption, IStatusOption, Product, PRODUCT_TYPE_OPTIONS,
   STATUS_OPTIONSPRODUCT, TabId, TAX_OPTIONS, TEMPLATE_OPTIONS, UNIT_OPTIONS,
 } from '../product';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ProductDataClient } from '../product-data-client';
 import { SearchDropdownComponent } from "../../../shared/components/search-dropdown/search-dropdown";
 import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
@@ -20,7 +20,7 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-product-create',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, SearchDropdownComponent,NgxEditorModule,ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule, SearchDropdownComponent,NgxEditorModule,ReactiveFormsModule,RouterLink],
   templateUrl: './product-create.html',
   styleUrl: './product-create.css',
 })

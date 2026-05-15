@@ -48,7 +48,20 @@ periods = computed(() =>
   [...new Set(this.salaryList().map(s => s.salaryMonth))]
 );
 // ================= ROW DETAILS =================
+visiblePages = computed(() => {
+  const current = this.page();
+  const total = this.totalPages();
+  if (total <= 1) return [1];
 
+  const start = current;                        // current page
+  const end = Math.min(total, current + 1);     // next page
+
+  const pages: number[] = [];
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+  return pages;
+});
 selectedRow = signal<Salary | null>(null);
 
 openRowDetails(row: Salary) {

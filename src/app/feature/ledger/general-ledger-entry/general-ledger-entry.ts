@@ -21,7 +21,20 @@ export class GeneralLedgerEntryComponent {
   private readonly router = inject(Router);
 
   modal = viewChild<ConfirmModalComponent>('modal');
+visiblePages = computed(() => {
+  const current = this.page();
+  const total = this.totalPages();
+  if (total <= 1) return [1];
 
+  const start = current;                        // current page
+  const end = Math.min(total, current + 1);     // next page
+
+  const pages: number[] = [];
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+  return pages;
+});
   // ===== STATE =====
   entries = this.gleService.activeEntries;
   selectedEntry = signal<GeneralLedgerEntry | null>(null);

@@ -1,10 +1,11 @@
 import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule],
+  imports: [CommonModule,RouterLink],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

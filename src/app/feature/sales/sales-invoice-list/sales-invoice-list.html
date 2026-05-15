@@ -12,7 +12,7 @@
         </div>
         <div class="arrow-steps d-none d-md-flex">
           <ul id="breadcrumb">
-            <li><a href="#"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a></li>
+            <li><a routerLink="/dashboard"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a></li>
             <!-- <li><a href="#"><span class="fa fa-list"></span>&nbsp;&nbsp;Sales</a></li> -->
             <li><a><span class="fa fa-file"></span>&nbsp;&nbsp;Invoices</a></li>
           </ul>
@@ -327,14 +327,11 @@
                 </li>
 
                 <!-- Page numbers -->
-                @for (p of pageNumbers(); track $index) {
+                @for (p of visiblePages(); track $index) {
                   <li>
-                    @if (p === '...') {
-                      <span class="page-ellipsis">…</span>
-                    } @else {
                       <button class="page-btn" [class.active]="currentPage() === p"
                         (click)="goPage(p)">{{ p }}</button>
-                    }
+                    
                   </li>
                 }
 

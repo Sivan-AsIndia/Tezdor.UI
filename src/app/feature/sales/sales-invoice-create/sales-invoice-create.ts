@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal, OnInit, ChangeDetectorRef, afterNextRender } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   CUSTOMER_OPTIONS, DEMO_PRODUCTS,
   INVOICE_STATUS_OPTIONS, INVOICE_TYPE_OPTIONS, PAYMENT_MODE_OPTIONS,
@@ -27,7 +27,7 @@ export interface SILineItemEx extends SILineItem {
 @Component({
   selector: 'app-sales-invoice-create',
   standalone: true,
-  imports: [CommonModule, SearchDropdownComponent,NgxEditorModule,ReactiveFormsModule,MatDatepickerModule],
+  imports: [CommonModule, SearchDropdownComponent,NgxEditorModule,ReactiveFormsModule,MatDatepickerModule,RouterLink],
   templateUrl: './sales-invoice-create.html',
   styleUrl: './sales-invoice-create.css',
 })

@@ -31,7 +31,7 @@
 .pf-tab--active {
   color: var(--color-primary);
   border-bottom-color: var(--color-primary);
-  background: color-mix(in srgb, var(--color-primary) 7%, white);
+  background: color-mix(in srgb, var(--color-primary) 7%, #ffffff1c);
 }
 
 
@@ -332,12 +332,12 @@
 
 .pf-status-option:hover {
   border-color: var(--color-primary);
-  background: color-mix(in srgb, var(--color-primary) 7%, white);
+  background: color-mix(in srgb, var(--color-primary) 7%, #ffffff1c);
 }
 
 .pf-status-option--active {
   border-color: var(--color-primary);
-  background: color-mix(in srgb, var(--color-primary) 7%, white);
+  background: color-mix(in srgb, var(--color-primary) 7%, #ffffff1c);
 }
 
 .pf-status-radio {

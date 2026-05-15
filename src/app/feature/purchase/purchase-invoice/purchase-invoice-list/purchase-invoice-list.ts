@@ -22,7 +22,20 @@ export class PurchaseInvoiceListComponent {
   pageSize    = signal(10);
   filterTop   = 0;
   filterRight = 0;
+visiblePages = computed(() => {
+  const current = this.currentPage();
+  const total = this.totalPages();
+  if (total <= 1) return [1];
 
+  const start = current;                        // current page
+  const end = Math.min(total, current + 1);     // next page
+
+  const pages: number[] = [];
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+  return pages;
+});
   filters = signal<{
     invoiceStatus: InvoiceStatus | null;
     paymentStatus: PaymentStatus | null;
