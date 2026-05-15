@@ -11671,8 +11671,9 @@ color: white !important;
 [data-bs-theme="dark"] .info-box div{
    color: white !important;
 }
-[data-bs-theme="dark"] .table thead th{
+[data-bs-theme="dark"] .table thead th,[data-bs-theme="dark"] .table tbody td{
 background:#111c2d !important; 
+color: white !important;
 }
 [data-bs-theme="dark"] .audit-item .content .title{
   color: white !important;
@@ -11947,6 +11948,199 @@ color:white !important
 [data-bs-theme="dark"] label{
   color:white !important
 }
+
+[data-bs-theme="dark"] .emp-tabs{
+   background:rgba(31, 31, 31, 0.178) !important; 
+   color: white;
+}
+[data-bs-theme="dark"] .emp-tabs .tab {
+     color: white !important;
+}
+
+[data-bs-theme="dark"] .emp-tabs .tab.active {
+  background:rgba(163, 163, 163, 0.178) !important; 
+}
+
+[data-bs-theme="dark"] .info-tile,[data-bs-theme="dark"] .notes-box{
+   background:rgba(163, 163, 163, 0.178) !important; 
+   color: white;
+}
+[data-bs-theme="dark"] .notes-box-text{
+ color: white !important;
+}
+[data-bs-theme="dark"] .notes-box-title{
+  color:#9fb3e1 ;
+}
+[data-bs-theme="dark"] .info-tile span{
+    color:#9fb3e1  !important;
+}
+[data-bs-theme="dark"] .btn-print.solid{
+color:white !important
+}
+[data-bs-theme="dark"] .kpi-card-modern{
+     background:rgba(163, 163, 163, 0.178) !important; 
+}
+[data-bs-theme="dark"] .kpi-label{
+    color:#9fb3e1  !important;
+}
+[data-bs-theme="dark"] .card-header{
+  color:white
+}
+[data-bs-theme="dark"]th,[data-bs-theme="dark"]td{
+  color:white !important
+}
+[data-bs-theme="dark"] .os-cell,[data-bs-theme="dark"] .os-strip{
+       background:rgba(0, 0, 0, 0.178) !important; 
+}
+[data-bs-theme="dark"] .os-lbl,[data-bs-theme="dark"] .os-val{
+  color: white !important;
+}
+[data-bs-theme="dark"] .os-bcard{
+       background:rgba(0, 0, 0, 0.178) !important; 
+       color: white !important;
+
+}
+[data-bs-theme="dark"] .os-bcard-lbl,[data-bs-theme="dark"] .os-bcard-val{
+   color: white !important;
+
+}
+ [data-bs-theme="dark"] table th, [data-bs-theme="dark"] table td
+ {
+   color: white !important;
+ }
+ [data-bs-theme="dark"] .os-table-wrap{
+  background:rgba(0, 0, 0, 0.178) !important; 
+  color:white
+ }
+ [data-bs-theme="dark"] .si-slbl, [data-bs-theme="dark"] .si-sval{
+  color: white !important;
+}
+  [data-bs-theme="dark"] .os-table-title,  [data-bs-theme="dark"] .si-slbl-grand,  [data-bs-theme="dark"] .si-sval-grand,[data-bs-theme="dark"] .si-chip-lbl,
+    [data-bs-theme="dark"] .si-chip-val, [data-bs-theme="dark"] .si-rules-list li{
+color:white !important;
+ }
+  [data-bs-theme="dark"] .ae-close-btn,  [data-bs-theme="dark"] .ae-add-btn{
+  background:rgba(0, 0, 0, 0.178) !important; 
+
+}
+    [data-bs-theme="dark"] .mat-calendar{
+         background:rgb(17 28 45) !important ;
+         box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+  [data-bs-theme="dark"] .shift-kpi,  [data-bs-theme="dark"] .detail-card{
+  background:rgb(17 28 45) !important ;
+}
+  [data-bs-theme="dark"] .kpi-title, [data-bs-theme="dark"] .kpi-value, [data-bs-theme="dark"] .kpi-sub, [data-bs-theme="dark"] .head-title{
+color: white !important;
+}
+ [data-bs-theme="dark"] .mat-calendar-header{
+background:rgb(17 28 45) !important 
+}
+ [data-bs-theme="dark"] .info-grid b, [data-bs-theme="dark"] .flag-title, [data-bs-theme="dark"] .summary-row span,[data-bs-theme="dark"] .audit-title,[data-bs-theme="dark"] .empty-title,
+  [data-bs-theme="dark"] .employee-count
+{
+color: white !important;
+}
+[data-bs-theme="dark"] .rule-box strong{
+color: white !important;
+}
+ [data-bs-theme="dark"] .mat-focus-indicator{
+color:white !important
+}
+ [data-bs-theme="dark"] .mat-mdc-icon-button img, .mat-mdc-icon-button svg{
+ color:white !important 
+}
+ [data-bs-theme="dark"]  .mdc-button__label, [data-bs-theme="dark"] .mat-calendar-arrow{
+  color:white
+}
+ [data-bs-theme="dark"] .week-legend{
+ color:white
+}
+.quick-menu-item:hover{
+  background:rgba(0, 0, 0, 0.322) !important;
+}
+  [data-bs-theme="dark"] .ae-wrapper,  [data-bs-theme="dark"] .ae-card{
+  background:rgba(0, 0, 0, 0.178) !important; 
+ }
+  [data-bs-theme="dark"] .summary-row, [data-bs-theme="dark"] .inv-hb-title,[data-bs-theme="dark"] .inv-hb-sub{
+  color:white !important;
+ }
+   [data-bs-theme="dark"] .si-srow.si-srow--grand{
+  background:rgba(0, 0, 0, 0.178) !important; 
+ }
+  [data-bs-theme="dark"] .inv-header-band{
+      background:rgba(0, 0, 0, 0.178) !important; 
+  }
+
+   [data-bs-theme="dark"] .sf,[data-bs-theme="dark"] .sf-sidebar,[data-bs-theme="dark"] .acc {
+    background:rgb(17 28 45) !important 
+  }
+
+   [data-bs-theme="dark"] .sf-nav,[data-bs-theme="dark"] .acc-title{
+  color:white !important;
+  }
+ [data-bs-theme="dark"] .sf-nav.active {
+    background: rgba(var(--bs-primary-rgb), 0.10);
+    color: var(--bs-primary) !important;
+}
+[data-bs-theme="dark"] .sf-wh-value{
+ color:white !important;
+}
+[data-bs-theme="dark"] .acc-head:hover{
+ background:rgba(113, 113, 114, 0.205) !important 
+}
+[data-bs-theme="dark"] input[type=text],[data-bs-theme="dark"] .input-addon{
+   background:rgba(113, 113, 114, 0.075) !important ;
+   color:white !important
+}
+[data-bs-theme="dark"] input[type=number]{
+ color:white !important
+}
+[data-bs-theme="dark"] .hint,[data-bs-theme="dark"] .addon-label,[data-bs-theme="dark"] .day-btn,[data-bs-theme="dark"] .week-btn{
+   background:rgba(113, 113, 114, 0.404) !important ;
+   color: white !important;
+}
+
+[data-bs-theme="dark"]  .day-btn.day-btn--off {
+    background: rgba(var(--bs-primary-rgb), 0.08) !important;
+    border-color: rgba(var(--bs-primary-rgb), 0.18) !important;
+    color: var(--bs-primary) !important;
+}
+[data-bs-theme="dark"] .week-btn.off{
+    background: rgba(var(--bs-primary-rgb), 0.10) !important;
+    color: var(--bs-primary) !important;
+    border-color: rgba(var(--bs-primary-rgb), 0.18) !important;
+}
+[data-bs-theme="dark"] .assign-modal .modal-content{
+   background:rgb(0, 0, 0) !important ;
+}
+[data-bs-theme="dark"] #assignShiftModal{
+   background:rgba(255, 255, 255, 0.123) !important ;
+}
+[data-bs-theme="dark"] .selection-section,[data-bs-theme="dark"] .emp-chip{
+   background:rgba(255, 255, 255, 0.123) !important ;
+}
+[data-bs-theme="dark"] .toggle-label,[data-bs-theme="dark"] .days-off-text,[data-bs-theme="dark"] .emp-name{
+color: white !important;
+}
+[data-bs-theme="dark"] .emp-role{
+color: rgb(112, 157, 255) !important;
+}
+[data-bs-theme="dark"] .option-pill{
+     background:rgba(255, 255, 255, 0.123) !important ;
+     color: white;
+}
+[data-bs-theme="dark"] .emp-chip.active{
+    background: rgba(var(--bs-primary-rgb), .08) !important;
+    border-color: rgba(var(--bs-primary-rgb), .25);
+}
+[data-bs-theme="dark"] .action-btn.info{
+  background:rgba(255, 255, 255, 0.123) !important ;
+}
+[data-bs-theme="dark"]  #deleteModal{
+background: rgba(255, 255, 255, 0.199);
+}
+
 input[type="checkbox"] {
 accent-color: var(--color-primary);
     background: transparent;

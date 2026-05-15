@@ -1,6 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 import {
   PurchaseOrder,
   POStatus,
@@ -15,7 +15,7 @@ import { PrintService } from '../../../../core/print/print.service';
 @Component({
   selector: 'app-purchaseorderview',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule,RouterLink],
   templateUrl: './purchase-order-view.html',
   styleUrl: './purchase-order-view.css',
 })

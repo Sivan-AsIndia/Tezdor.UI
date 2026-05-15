@@ -53467,7 +53467,7 @@ body .connect-sorting-content {
 }
 [data-bs-theme=dark] .content-card,[data-bs-theme=dark] table tr th,[data-bs-theme=dark] table td{
     background: #111c2d !important;
-    color:#ffffff4f !important;
+    color:white !important;
 }
 [data-bs-theme=dark] .border-table .v-table .v-table__wrapper>table>thead>tr:last-child>th{
         color: white !important;
@@ -53568,4 +53568,15 @@ color:white
 }
 [data-bs-theme=dark] .info-value{
     color:white !important
+}
+
+
+.page-ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  color: var(--txt-muted, #8fa0b5);
+  font-size: 14px;
+  user-select: none;
 }

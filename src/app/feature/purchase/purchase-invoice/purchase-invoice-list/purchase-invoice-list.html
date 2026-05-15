@@ -14,7 +14,7 @@
           </div>
           <div class="arrow-steps d-none d-md-flex">
             <ul id="breadcrumb">
-              <li><a href="#"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a></li>
+              <li><a routerLink="/dashboard"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a></li>
               <li><a><span class="fa fa-file"></span>&nbsp;&nbsp;Invoices</a></li>
             </ul>
           </div>
@@ -70,7 +70,7 @@
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
                       <h5 class="fw-bold mb-0">Filter</h5>
-                      <button class="btn btn-sm bg-secondary" (click)="resetFilters()">Reset</button>
+                      <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated bg-secondary px-3 btn-sm " (click)="resetFilters()">Reset</button>
                     </div>
 
                     <!-- Invoice Status -->
@@ -338,7 +338,7 @@
                         <span class="mdi mdi-chevron-left" style="font-size:26px;"></span>
                       </button>
                     </li>
-                    @for (page of pageNumbers(); track page) {
+                    @for (page of visiblePages(); track page) {
                       <li>
                         <button
                           class="page-btn"

@@ -16,7 +16,7 @@
           <!-- Breadcrumb -->
           <div class="arrow-steps d-none d-md-flex">
             <ul id="breadcrumb">
-              <li><a href="#"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a></li>
+              <li><a routerLink="/dashboard"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a></li>
               <li><a><span class="fa fa-warehouse"></span>&nbsp;&nbsp;Store</a></li>
               <!-- <li><a><span class="fa fa-list"></span>&nbsp;&nbsp;List</a></li> -->
             </ul>
@@ -73,7 +73,7 @@
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
                       <h5 class="fw-bold mb-0">Filter</h5>
-                      <button class="btn btn-sm bg-secondary" (click)="resetFilters()">Reset</button>
+                      <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated bg-secondary px-3 btn-sm " (click)="resetFilters()">Reset</button>
                     </div>
 
                     <!-- Vendor filter -->
@@ -98,14 +98,14 @@
                 }
 
                 <!-- Add button -->
-                <button type="button"
+                <!-- <button type="button"
                   class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-primary v-btn--density-default v-btn--size-default v-btn--variant-elevated"
                   style="text-transform:capitalize; letter-spacing:0; padding:0 10px;"
                   routerLink="/store/create">
                   <span class="v-btn__content">
                     <i class="mdi mdi-plus-circle-outline v-icon mr-2"></i>Add
                   </span>
-                </button>
+                </button> -->
 
               </div>
             </div>
@@ -250,7 +250,7 @@
                         <span class="mdi mdi-chevron-left" style="font-size:26px;"></span>
                       </button>
                     </li>
-                    @for (page of pageNumbers(); track page) {
+                    @for (page of visiblePages(); track page) {
                       <li>
                         <button class="page-btn" [class.active]="page === currentPage()"
                           (click)="goToPage(page)">{{ page }}</button>

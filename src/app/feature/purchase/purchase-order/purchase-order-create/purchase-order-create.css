@@ -801,7 +801,7 @@ clip-path: polygon(0% 0%, calc(100% - 18px) 0%, 92% 50%, calc(100% - 18px) 100%,
   width:34px;
   height:34px;
   border-radius:10px;
-  background:#f3f4f6;
+  background:var(--color-primary);
   display:flex;
   align-items:center;
   justify-content:center;

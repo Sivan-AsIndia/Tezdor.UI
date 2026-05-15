@@ -19,6 +19,20 @@ export class ProductListComponent {
   selectedProduct = signal<Product | null>(null);
   currentPage     = signal(1);
   pageSize        = signal(10);
+visiblePages = computed(() => {
+  const current = this.currentPage();
+  const total = this.totalPages();
+  if (total <= 1) return [1];
+
+  const start = current;                        // current page
+  const end = Math.min(total, current + 1);     // next page
+
+  const pages: number[] = [];
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+  return pages;
+});
 
   filters = signal<{ status: string | null; category: string | null }>({
     status: null,

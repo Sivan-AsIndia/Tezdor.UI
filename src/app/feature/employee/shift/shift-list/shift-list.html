@@ -389,26 +389,43 @@
                         </div>
 
                         <!-- Controls -->
-                        <div class="pagination-controls">
+                  <div class="pagination-controls">
+  <nav class="v-pagination v-theme--BLUE_THEME text-subtitle-1 text-grey100"
+    role="navigation" aria-label="Pagination Navigation" data-test="v-pagination-root">
+    <ul class="pagination-list">
 
-                            <nav class="v-pagination v-theme--BLUE_THEME text-subtitle-1 text-grey100" role="navigation"
-                                aria-label="Pagination Navigation" data-test="v-pagination-root">
-                                <ul class="pagination-list">
-                                    <li><button class="page-btn" (click)="changePage(page()-1)"
-                                            [disabled]="page() === 1"><span class="mdi mdi-chevron-left"
-                                                style="font-size: 26px;"></span></button></li>
-                                    @for(p of [].constructor(totalPages()); let i = $index; track i){
-                                    <button class="page-btn" (click)="changePage(i+1)" [class.active]="page() === i+1">
-                                        {{ i+1 }}
-                                    </button>
-                                    }
-                                    <li><button class="page-btn" (click)="changePage(page()+1)"
-                                            [disabled]="page() === totalPages()"><span class="mdi mdi-chevron-right"
-                                                style="font-size: 26px;"></span></button></li>
-                                </ul>
-                            </nav>
+      <!-- Previous -->
+      <li>
+        <button class="page-btn"
+          [disabled]="page() === 1"
+          (click)="changePage(page() - 1)">
+          <span class="mdi mdi-chevron-left" style="font-size:26px;"></span>
+        </button>
+      </li>
 
-                        </div>
+      <!-- Page Numbers -->
+      @for (p of visiblePages(); track p) {
+        <li>
+          <button class="page-btn"
+            [class.active]="page() === p"
+            (click)="changePage(p)">
+            {{ p }}
+          </button>
+        </li>
+      }
+
+      <!-- Next -->
+      <li>
+        <button class="page-btn"
+          [disabled]="page() === totalPages()"
+          (click)="changePage(page() + 1)">
+          <span class="mdi mdi-chevron-right" style="font-size:26px;"></span>
+        </button>
+      </li>
+
+    </ul>
+  </nav>
+</div>
 
                     </div>
 

@@ -24,7 +24,20 @@ export class StoreListComponent {
   showFilter   = signal(false);
   filterTop    = 0;
   filterRight  = 0;
+visiblePages = computed(() => {
+  const current = this.currentPage();
+  const total = this.totalPages();
+  if (total <= 1) return [1];
 
+  const start = current;                        // current page
+  const end = Math.min(total, current + 1);     // next page
+
+  const pages: number[] = [];
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+  return pages;
+});
   filters = signal<{ vendor: string | null }>({ vendor: null });
   tempFilters = signal<{ vendor: string | null }>({ vendor: null });
   vendors = computed(() => {
