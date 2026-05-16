@@ -159,6 +159,12 @@ export class AttendanceLinesComponent {
   selectedFailedEmployees =
     signal<string[]>([]);
 
+  selectedOtReasonRow =
+    signal<any>(null);
+
+  showOtReasonPopup =
+    signal(false);
+
 
 
   /* =========================================================
@@ -3354,5 +3360,25 @@ export class AttendanceLinesComponent {
     );
 
     this.closeAttendanceSummaryIfEmpty();
+  }
+
+  openOtReasonPopup(
+    row: any
+  ) {
+
+    this.selectedOtReasonRow.set({
+
+      ...row,
+
+      employeeName:
+        this.getEmployeeName(
+          row.employeeId
+        )
+
+    });
+
+    this.showOtReasonPopup.set(
+      true
+    );
   }
 }

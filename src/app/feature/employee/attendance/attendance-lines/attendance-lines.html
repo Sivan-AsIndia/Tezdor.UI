@@ -721,7 +721,44 @@
                                             }
                                         </td>
                                         <td>{{ formatHours(row.workingHours) }}</td>
-                                        <td>{{ formatHours(row.overtimeHours) }}</td>
+<td>
+
+  <div class="d-flex align-items-center gap-2">
+
+    <span>
+
+      {{
+        formatHours(
+          row.overtimeHours
+        )
+      }}
+
+    </span>
+
+    @if(
+      row.otRejectReason
+      ||
+      row.otEditReason
+    ){
+
+    <button
+      class="ot-info-btn"
+
+      (click)="
+        openOtReasonPopup(
+          row
+        )
+      ">
+
+      <i class="ti ti-info-circle"></i>
+
+    </button>
+
+    }
+
+  </div>
+
+</td>
                                         <td> <span class="badge status-pill"
                                                 [class.present]="row.attendanceType === AttendanceType.Present"
                                                 [class.absent]="row.attendanceType === AttendanceType.Absent"
@@ -1286,8 +1323,7 @@
 
             </button>
 
-            <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
-" (click)="saveLeave()">
+            <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated" (click)="saveLeave()">
 
 
                 Save
@@ -2217,7 +2253,7 @@
 
         <div class="d-flex justify-content-end gap-2">
 
-            <button class="btn btn-light" (click)="
+            <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="
           showRejectOtPopup.set(false)
         ">
 
@@ -2225,7 +2261,7 @@
 
             </button>
 
-            <button class="btn btn-danger" (click)="
+            <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated" (click)="
           confirmRejectOt()
         ">
 
@@ -2331,7 +2367,7 @@
 
             <div class="modal-footer border-0">
 
-                <button class="btn btn-light" (click)="
+                <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="
             closeOtEditPopup()
           ">
 
@@ -2339,7 +2375,7 @@
 
                 </button>
 
-                <button class="btn btn-primary" (click)="
+                <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated" (click)="
             confirmOtEditApprove()
           ">
 
@@ -2420,7 +2456,7 @@
 
         <div class="reject-popup-footer">
 
-            <button class="btn btn-light" (click)="
+            <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="
           closeRejectAllOtPopup()
         ">
 
@@ -2428,7 +2464,7 @@
 
             </button>
 
-            <button class="btn btn-danger" (click)="
+            <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated" (click)="
           confirmRejectAllOt()
         ">
 
@@ -2441,5 +2477,143 @@
     </div>
 
 </div>
+
+}
+<!-- =====================================================
+   OT REASON POPUP
+===================================================== -->
+
+@if(showOtReasonPopup()){
+
+<div class="modal fade show d-block">
+
+  <div class="modal-dialog modal-dialog-centered">
+
+    <div class="modal-content ot-reason-modal border-0">
+
+      <!-- HEADER -->
+
+      <div class="ot-reason-header">
+
+        <div>
+
+          <div class="ot-reason-title">
+
+            Overtime Details
+
+          </div>
+
+          <div class="ot-reason-sub">
+
+            {{
+              selectedOtReasonRow()?.employeeName
+            }}
+
+          </div>
+
+        </div>
+
+        <button
+          class="ot-close-btn"
+
+          (click)="
+            showOtReasonPopup.set(false)
+          ">
+
+          <i class="ti ti-x"></i>
+
+        </button>
+
+      </div>
+
+      <!-- BODY -->
+
+      <div class="ot-reason-body">
+
+        <!-- EDIT -->
+
+        @if(
+          selectedOtReasonRow()
+            ?.otEditReason
+        ){
+
+        <div class="reason-card edit">
+
+          <div class="reason-badge edit">
+
+            <i class="ti ti-edit"></i>
+
+          </div>
+
+          <div>
+
+            <div class="reason-title">
+
+              OT Edited
+
+            </div>
+
+            <div class="reason-text">
+
+              {{
+                selectedOtReasonRow()
+                  ?.otEditReason
+              }}
+
+            </div>
+
+          </div>
+
+        </div>
+
+        }
+
+        <!-- REJECT -->
+
+        @if(
+          selectedOtReasonRow()
+            ?.otRejectReason
+        ){
+
+        <div class="reason-card reject">
+
+          <div class="reason-badge reject">
+
+            <i class="ti ti-x"></i>
+
+          </div>
+
+          <div>
+
+            <div class="reason-title">
+
+              OT Rejected
+
+            </div>
+
+            <div class="reason-text">
+
+              {{
+                selectedOtReasonRow()
+                  ?.otRejectReason
+              }}
+
+            </div>
+
+          </div>
+
+        </div>
+
+        }
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="modal-backdrop fade show"></div>
 
 }

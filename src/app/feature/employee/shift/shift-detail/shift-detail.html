@@ -1008,8 +1008,7 @@
                         </div>
 
                         <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
-" data-bs-toggle="modal" data-bs-target="#assignShiftModal"
-                            (click)="
+                         " data-bs-toggle="modal" data-bs-target="#assignShiftModal" (click)="
                                 openAssignModal(
                                     shift()!
                                 )
@@ -1053,57 +1052,90 @@
 
                             </div>
 
-                            <div class="assignment-chips">
+<div class="assignment-chips">
 
-                                @for(
-                                emp of visibleAssignedEmployees();
-                                track emp.employeeId
-                                ){
+    @for(
+      emp of visibleAssignedEmployees();
+      track emp.employeeId
+    ){
 
-                                <div class="assign-chip">
+    <div class="assign-chip">
 
-                                    <div class="emp-avatar sm">
+        <div class="emp-avatar sm">
 
-                                        {{
-                                        getInitials(
-                                        emp.firstName,
-                                        emp.lastName
-                                        )
-                                        }}
+            {{
+              getInitials(
+                emp.firstName,
+                emp.lastName
+              )
+            }}
 
-                                    </div>
+        </div>
 
-                                    <div>
+        <div>
 
-                                        <div class="assigned-name">
+            <div class="assigned-name">
 
-                                            {{
-                                            emp.firstName
-                                            }}
+                {{
+                  emp.firstName
+                }}
 
-                                            {{
-                                            emp.lastName
-                                            }}
+                {{
+                  emp.lastName
+                }}
 
-                                        </div>
+            </div>
 
-                                        <div class="assigned-role">
+            <div class="assigned-role">
 
-                                            {{
-                                            getDesignation(
-                                            emp.designationId
-                                            )
-                                            }}
+                {{
+                  getDesignation(
+                    emp.designationId
+                  )
+                }}
 
-                                        </div>
+            </div>
 
-                                    </div>
+        </div>
 
-                                </div>
+    </div>
 
-                                }
+    }
 
-                            </div>
+</div>
+
+<!-- VIEW ALL -->
+
+@if(
+  assignedEmployees().length > 5
+){
+
+<div class="view-all-wrap">
+
+    <button
+      class="view-all-btn"
+
+      data-bs-toggle="modal"
+
+      data-bs-target="#viewAllEmployeesModal">
+
+      <i class="ti ti-users"></i>
+
+      View All
+
+      <span>
+
+        {{
+          assignedEmployees().length
+        }}
+
+      </span>
+
+    </button>
+
+</div>
+
+}
 
                         </div>
 
@@ -1434,9 +1466,8 @@
 
                         </label>
                         <div class="position-relative">
-                            <input class="form-control pe-5" [matDatepicker]="effectiveToDatePicker" 
-                            min="assignForm().effectiveFrom"
-                            placeholder="Select date..." [value]="
+                            <input class="form-control pe-5" [matDatepicker]="effectiveToDatePicker"
+                                min="assignForm().effectiveFrom" placeholder="Select date..." [value]="
                             assignForm().effectiveTo
                             " (dateChange)="
                             updateAssignForm(
@@ -1526,6 +1557,35 @@
                         Select Employees
 
                     </div>
+                    <div class="selection-toolbar">
+
+                        <label class="custom-check">
+
+                            <input type="checkbox" [checked]="
+                assignForm().employeeIds.length
+                ===
+                employees().length
+            " (change)="
+                toggleAllEmployees(
+                    $any($event.target).checked
+                )
+            " />
+
+                            <span class="checkmark">
+
+                                <i class="ti ti-check"></i>
+
+                            </span>
+
+                            <span class="check-label">
+
+                                Select All Employees
+
+                            </span>
+
+                        </label>
+
+                    </div>
 
                     <div class="emp-chip-wrap">
 
@@ -1609,6 +1669,35 @@
                         Select Departments
 
                     </div>
+                    <div class="selection-toolbar">
+
+                        <label class="custom-check">
+
+                            <input type="checkbox" [checked]="
+                assignForm().departmentIds.length
+                ===
+                departmentDropdownItems().length
+            " (change)="
+                toggleAllDepartments(
+                    $any($event.target).checked
+                )
+            " />
+
+                            <span class="checkmark">
+
+                                <i class="ti ti-check"></i>
+
+                            </span>
+
+                            <span class="check-label">
+
+                                Select All Departments
+
+                            </span>
+
+                        </label>
+
+                    </div>
 
                     <div class="emp-chip-wrap">
 
@@ -1682,7 +1771,35 @@
                         Select Designations
 
                     </div>
+                    <div class="selection-toolbar">
 
+                        <label class="custom-check">
+
+                            <input type="checkbox" [checked]="
+                assignForm().designationIds.length
+                ===
+                designationDropdownItems().length
+            " (change)="
+                toggleAllDesignations(
+                    $any($event.target).checked
+                )
+            " />
+
+                            <span class="checkmark">
+
+                                <i class="ti ti-check"></i>
+
+                            </span>
+
+                            <span class="check-label">
+
+                                Select All Designations
+
+                            </span>
+
+                        </label>
+
+                    </div>
                     <div class="emp-chip-wrap">
 
                         @for(
@@ -1785,5 +1902,196 @@
         </div>
 
     </div>
+
+</div>
+
+
+<!-- ==== VIEW ALL EMPLOYEES====== -->
+
+<div
+  class="modal fade"
+
+  id="viewAllEmployeesModal"
+
+  tabindex="-1"
+
+  aria-hidden="true">
+
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+
+    <div class="modal-content employee-premium-modal border-0">
+
+      <!-- =====================================================
+         HEADER
+      ===================================================== -->
+
+      <div class="employee-modal-header">
+
+        <div>
+
+          <div class="employee-modal-title">
+
+            Assigned Employees
+
+          </div>
+
+          <div class="employee-modal-sub">
+
+            {{
+              assignedEmployees().length
+            }}
+
+            Employees Assigned
+
+          </div>
+
+        </div>
+
+        <button
+          type="button"
+
+          class="employee-close-btn"
+
+          data-bs-dismiss="modal">
+
+          <i class="ti ti-x"></i>
+
+        </button>
+
+      </div>
+
+      <!-- =====================================================
+         SEARCH
+      ===================================================== -->
+
+      <div class="employee-search-wrap">
+
+        <div class="employee-search">
+
+          <i class="ti ti-search"></i>
+
+          <input
+            type="text"
+
+            class="form-control"
+
+            placeholder="Search employees..."
+
+            [value]="
+              employeeSearch()
+            "
+
+            (input)="
+              employeeSearch.set(
+                $any($event.target).value
+              )
+            " />
+
+        </div>
+
+      </div>
+
+      <!-- =====================================================
+         BODY
+      ===================================================== -->
+
+      <div class="employee-modal-body">
+
+        <div class="employee-modern-grid">
+
+          @for(
+            emp of filteredAssignedEmployees();
+            track emp.employeeId
+          ){
+
+<div class="compact-employee-row">
+
+    <!-- LEFT -->
+
+    <div class="compact-left">
+
+        <div class="compact-avatar">
+
+            {{
+              getInitials(
+                emp.firstName,
+                emp.lastName
+              )
+            }}
+
+        </div>
+
+        <div class="compact-info">
+
+            <div class="compact-name">
+
+                {{
+                  emp.firstName
+                }}
+
+                {{
+                  emp.lastName
+                }}
+
+            </div>
+
+            <div class="compact-meta">
+
+                <span>
+
+                    {{
+                      getDesignation(
+                        emp.designationId
+                      )
+                    }}
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT -->
+
+    <div class="compact-status">
+
+        <span class="online-dot"></span>
+
+    </div>
+
+</div>
+
+          }
+
+        </div>
+
+        <!-- EMPTY -->
+
+        @if(
+          filteredAssignedEmployees()
+            .length === 0
+        ){
+
+        <div class="employee-empty">
+
+          <i class="ti ti-users-off"></i>
+
+          <div>
+
+            No employees found
+
+          </div>
+
+        </div>
+
+        }
+
+      </div>
+
+    </div>
+
+  </div>
 
 </div>

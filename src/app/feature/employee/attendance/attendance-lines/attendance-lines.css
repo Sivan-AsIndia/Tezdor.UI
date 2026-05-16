@@ -2441,14 +2441,6 @@ input {
   margin-bottom: 8px;
 }
 
-.reason-text {
-
-  font-size: 13px;
-
-  line-height: 1.6;
-
-  color: #475569;
-}
 
 /* =====================================================
    FOOTER
@@ -3292,6 +3284,213 @@ input {
   font-size: 12px;
 
   font-weight: 600;
+
+  color: #475569;
+}
+
+/* =====================================================
+   INFO BUTTON
+===================================================== */
+
+.ot-info-btn {
+
+  width: 22px;
+
+  height: 22px;
+
+  border: 0;
+
+  border-radius: 999px;
+
+  background: #eef2ff;
+
+  color: #4f46e5;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  transition: .2s ease;
+}
+
+.ot-info-btn:hover {
+
+  background: #e0e7ff;
+}
+
+.ot-info-btn i {
+
+  font-size: 14px;
+}
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.ot-reason-modal {
+
+  border-radius: 22px;
+
+  overflow: hidden;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.ot-reason-header {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 22px 24px;
+
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.ot-reason-title {
+
+  font-size: 18px;
+
+  font-weight: 800;
+
+  color: #0f172a;
+}
+
+.ot-reason-sub {
+
+  margin-top: 3px;
+
+  font-size: 13px;
+
+  color: #64748b;
+}
+
+/* =====================================================
+   CLOSE
+===================================================== */
+
+.ot-close-btn {
+
+  width: 38px;
+
+  height: 38px;
+
+  border: 0;
+
+  border-radius: 12px;
+
+  background: #f8fafc;
+
+  color: #64748b;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+/* =====================================================
+   BODY
+===================================================== */
+
+.ot-reason-body {
+
+  padding: 22px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.reason-card {
+
+  display: flex;
+
+  gap: 14px;
+
+  padding: 16px;
+
+  border-radius: 16px;
+}
+
+.reason-card.edit {
+
+  background: #eef2ff;
+}
+
+.reason-card.reject {
+
+  background: #fef2f2;
+}
+
+/* =====================================================
+   BADGE
+===================================================== */
+
+.reason-badge {
+
+  width: 42px;
+
+  height: 42px;
+
+  border-radius: 14px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+.reason-badge.edit {
+
+  background: #c7d2fe;
+
+  color: #4338ca;
+}
+
+.reason-badge.reject {
+
+  background: #fecaca;
+
+  color: #dc2626;
+}
+
+/* =====================================================
+   TEXT
+===================================================== */
+
+.reason-title {
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  color: #0f172a;
+}
+
+.reason-text {
+
+  margin-top: 4px;
+
+  font-size: 13px;
+
+  line-height: 1.6;
 
   color: #475569;
 }

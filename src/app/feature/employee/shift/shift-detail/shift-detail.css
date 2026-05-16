@@ -1163,3 +1163,501 @@ RESPONSIVE
   }
 
 }
+
+.selection-toolbar{
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  margin-bottom: 14px;
+}
+
+/* =========================================
+   PREMIUM CHECKBOX
+========================================= */
+
+.custom-check{
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  cursor: pointer;
+
+  user-select: none;
+}
+
+.custom-check input{
+
+  display: none;
+}
+
+.checkmark{
+
+  width: 22px;
+
+  height: 22px;
+
+  border-radius: 7px;
+
+  border: 1.5px solid #dbe2ea;
+
+  background: #fff;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  transition: .2s ease;
+
+  color: transparent;
+}
+
+.checkmark i{
+
+  font-size: 14px;
+}
+
+.custom-check input:checked + .checkmark{
+
+  background: var(--bs-primary);
+
+  border-color:  var(--bs-primary);
+
+  color: #fff;
+}
+
+.check-label{
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: #475569;
+}
+
+/* =====================================================
+   VIEW ALL
+===================================================== */
+
+.view-all-wrap{
+
+  margin-top: 14px;
+
+  display: flex;
+
+  justify-content: center;
+}
+
+.view-all-btn{
+
+  height: 38px;
+
+  border: 0;
+
+  border-radius: 12px;
+
+  padding: 0 16px;
+
+  background: #eef2ff;
+
+  color: var(--bs-primary);
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  transition: .2s ease;
+}
+
+.view-all-btn:hover{
+
+  background: #e0e7ff;
+}
+
+.view-all-btn span{
+
+  min-width: 22px;
+
+  height: 22px;
+
+  border-radius: 999px;
+
+  background: var(--bs-primary);
+
+  color: #fff;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 11px;
+}
+
+
+
+
+
+
+
+
+
+
+/* =====================================================
+   PREMIUM MODAL
+===================================================== */
+
+.employee-premium-modal{
+
+  border-radius: 28px;
+
+  overflow: hidden;
+
+  background: #fff;
+
+  box-shadow:
+    0 24px 80px
+    rgba(15,23,42,.18);
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.employee-modal-header{
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 26px 30px 18px;
+
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.employee-modal-title{
+
+  font-size: 22px;
+
+  font-weight: 800;
+
+  color: #0f172a;
+
+  letter-spacing: -.5px;
+}
+
+.employee-modal-sub{
+
+  margin-top: 4px;
+
+  color: #64748b;
+
+  font-size: 13px;
+
+  font-weight: 500;
+}
+
+/* =====================================================
+   CLOSE BTN
+===================================================== */
+
+.employee-close-btn{
+
+  width: 42px;
+
+  height: 42px;
+
+  border: 0;
+
+  border-radius: 14px;
+
+  background: #f8fafc;
+
+  color: #64748b;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  transition: .2s ease;
+}
+
+.employee-close-btn:hover{
+
+  background: #eef2ff;
+
+  color: var(--bs-primary);;
+}
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.employee-search-wrap{
+
+  padding: 20px 30px 0;
+}
+
+.employee-search{
+
+  position: relative;
+}
+
+.employee-search i{
+
+  position: absolute;
+
+  top: 50%;
+
+  left: 18px;
+
+  transform: translateY(-50%);
+
+  color: #94a3b8;
+
+  font-size: 18px;
+}
+
+.employee-search .form-control{
+
+  height: 52px;
+
+  border-radius: 16px;
+
+  border: 1px solid #e2e8f0;
+
+  padding-left: 50px;
+
+  font-size: 14px;
+
+  box-shadow: none;
+}
+
+.employee-search .form-control:focus{
+
+  border-color: #c7d2fe;
+
+  box-shadow:
+    0 0 0 4px
+    rgba(99,102,241,.08);
+}
+
+
+.employee-modal-body{
+
+  padding: 24px 30px 30px;
+
+  max-height: 65vh;
+
+  overflow: auto;
+}
+
+
+
+.employee-modern-grid{
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fill,minmax(220px,1fr));
+
+  gap: 10px;
+}
+
+
+.compact-employee-row{
+
+  height: 74px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 0 16px;
+
+  border-radius: 16px;
+
+  border: 1px solid #edf2f7;
+
+  background: #fff;
+
+  transition: .18s ease;
+}
+
+.compact-employee-row:hover{
+
+  border-color: #dbeafe;
+
+  background: #fbfdff;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 4px 14px
+    rgba(15,23,42,.04);
+}
+
+/* =====================================================
+   LEFT
+===================================================== */
+
+.compact-left{
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  min-width: 0;
+}
+
+/* =====================================================
+   AVATAR
+===================================================== */
+
+.compact-avatar{
+
+  width: 42px;
+
+  height: 42px;
+
+  border-radius: 14px;
+
+  background: linear-gradient(
+    135deg,
+    #eef2ff 0%,
+    #e0e7ff 100%
+  );
+
+  color: var(--bs-primary);;
+
+  font-size: 15px;
+
+  font-weight: 800;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+/* =====================================================
+   INFO
+===================================================== */
+
+.compact-info{
+
+  min-width: 0;
+}
+
+.compact-name{
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  color: #0f172a;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.compact-meta{
+
+  margin-top: 2px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  font-size: 12px;
+
+  color: #64748b;
+
+  font-weight: 500;
+}
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.compact-status{
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  flex-shrink: 0;
+}
+
+.online-dot{
+
+  width: 9px;
+
+  height: 9px;
+
+  border-radius: 999px;
+
+  background: #22c55e;
+}
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.employee-empty{
+
+  height: 300px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  color: #94a3b8;
+
+  font-size: 15px;
+
+  font-weight: 600;
+}
+
+.employee-empty i{
+
+  font-size: 42px;
+}

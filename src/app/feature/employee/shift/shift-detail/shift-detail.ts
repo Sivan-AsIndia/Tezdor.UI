@@ -69,6 +69,9 @@ export class ShiftDetailComponent {
       null
     );
 
+    employeeSearch =
+  signal('');
+
   activeTab =
     signal<
       'overview' |
@@ -476,7 +479,7 @@ export class ShiftDetailComponent {
     computed(() =>
 
       this.assignedEmployees()
-        .slice(0, 5)
+        .slice(0, 6)
 
     );
 
@@ -948,5 +951,118 @@ export class ShiftDetailComponent {
 
   }
 
+
+  toggleAllEmployees(
+  checked: boolean
+) {
+
+  this.assignForm.update(form => ({
+
+    ...form,
+
+    employeeIds:
+
+      checked
+
+        ?
+
+        this.employees()
+          .map(x => x.employeeId!)
+
+        :
+
+        []
+
+  }));
+  
+
+}
+
+
+toggleAllDepartments(
+  checked: boolean
+) {
+
+  this.assignForm.update(form => ({
+
+    ...form,
+
+    departmentIds:
+
+      checked
+
+        ?
+
+        this.departmentDropdownItems()
+          .map(x => x.id)
+
+        :
+
+        []
+
+  }));
+
+}
+
+readonly filteredAssignedEmployees =
+  computed(() => {
+
+    const keyword =
+
+      this.employeeSearch()
+        .toLowerCase()
+        .trim();
+
+    if (!keyword) {
+
+      return this
+        .assignedEmployees();
+
+    }
+
+    return this
+      .assignedEmployees()
+
+      .filter(emp =>
+
+        (
+
+          `${emp.firstName} ${emp.lastName}`
+
+        )
+
+          .toLowerCase()
+
+          .includes(keyword)
+
+      );
+
+  });
+
+
+toggleAllDesignations(
+  checked: boolean
+) {
+
+  this.assignForm.update(form => ({
+
+    ...form,
+
+    designationIds:
+
+      checked
+
+        ?
+
+        this.designationDropdownItems()
+          .map(x => x.id)
+
+        :
+
+        []
+
+  }));
+
+}
 
 }
