@@ -7,7 +7,7 @@ import {
 
 export type ProductStatus = 'active' | 'inactive' | 'discontinued';
 export type DiscountType  = 'none' | 'percentage' | 'fixed';
-export type TabId         = 'general' | 'advanced';
+export type TabId         = 'general' | 'advanced'| 'bom';
 export type ProductType         = 'Goods' | 'Service (labour, delivery)';
 
 export interface ProductImage {
@@ -25,6 +25,8 @@ CompanyId :string;
   images: ProductImage[]; 
   categoryId: number;  
   categoryName:string;
+  subCategoryId:number;
+  subCategoryName:string;
   brandId?: number;  
   unitId: number;     
   barcode?: string;  
