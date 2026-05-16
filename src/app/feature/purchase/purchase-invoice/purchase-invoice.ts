@@ -1,4 +1,8 @@
 import { DropdownOption } from "../../product/product";
+import {
+  MASTER_VENDORS, MASTER_VENDOR_MAP, MASTER_UNITS,
+  SelectOption, VendorOption, UnitOption
+} from '../../../core/services/master-data';
 
 export type InvoiceStatus = 'draft' | 'posted' | 'cancelled';
 export type PaymentStatus = 'unpaid' | 'partial' | 'paid';
@@ -53,11 +57,9 @@ export interface ISelectOption {
   ];
 
 
-  export const  poOptions: DropdownOption[] = [
-    { value: 'PO-2026-0021', label: 'PO-2026-0021 — Krishna Timber' },
-    { value: 'PO-2026-0019', label: 'PO-2026-0019 — Ramco Cements' },
-    { value: 'PO-2026-0017', label: 'PO-2026-0017 — Tata Steel' },
-  ];
+  // NOTE: PO options are now loaded dynamically from PurchaseOrderDataClient
+  // in the purchase-invoice-create component instead of being hardcoded here.
+  export const  poOptions: DropdownOption[] = [];
 
 
   export const  taxOptions: DropdownOption[] = [
@@ -70,32 +72,20 @@ export interface ISelectOption {
 
 
 
-export const SUPPLIER_OPTIONS: ISelectOption[] = [
-  { value: '1', label: 'Krishna Timber (VEN001)' },
-  { value: '2', label: 'Metro Steel (VEN002)' },
-  { value: '3', label: 'PipeMart Co (VEN003)' },
-  { value: '4', label: 'Apex Hardware (VEN004)' },
-  { value: '5', label: 'Global Supplies (VEN005)' },
-  { value: '6', label: 'Sun Electricals (VEN006)' },
-];
+// ═══════════════════════════════════════════════════════
+// Re-exported from centralized master-data.ts
+// ═══════════════════════════════════════════════════════
+export const SUPPLIER_OPTIONS: ISelectOption[] = MASTER_VENDORS.map((v: VendorOption) => ({
+  value: v.id,
+  label: `${v.name} (${v.code})`
+}));
 
-export const SUPPLIER_MAP: Record<string, { code: string; name: string }> = {
-  '1': { code: 'VEN001', name: 'Krishna Timber' },
-  '2': { code: 'VEN002', name: 'Metro Steel' },
-  '3': { code: 'VEN003', name: 'PipeMart Co' },
-  '4': { code: 'VEN004', name: 'Apex Hardware' },
-  '5': { code: 'VEN005', name: 'Global Supplies' },
-  '6': { code: 'VEN006', name: 'Sun Electricals' },
-};
+export const SUPPLIER_MAP: Record<string, { code: string; name: string }> = MASTER_VENDOR_MAP;
 
-export const UNIT_OPTIONS: ISelectOption[] = [
-  { value: '1', label: 'Pcs' },
-  { value: '2', label: 'Kg' },
-  { value: '3', label: 'Litre' },
-  { value: '4', label: 'Box' },
-  { value: '5', label: 'Dozen' },
-  { value: '6', label: 'Mtr' },
-];
+export const UNIT_OPTIONS: ISelectOption[] = MASTER_UNITS.map((u: UnitOption) => ({
+  value: String(u.value),
+  label: u.label
+}));
 
 
 
@@ -105,15 +95,9 @@ export const INVOICE_STATUS_OPTIONS: ISelectOption[] = [
   { value: 'cancelled', label: 'Cancelled' },
 ];
 
-export const PO_OPTIONS: ISelectOption[] = [
-  { value: '', label: '-- None --' },
-  { value: 'PO-2026-001', label: 'PO-2026-001 · Krishna Timber' },
-  { value: 'PO-2026-002', label: 'PO-2026-002 · Metro Steel' },
-  { value: 'PO-2026-003', label: 'PO-2026-003 · PipeMart Co' },
-  { value: 'PO-2026-004', label: 'PO-2026-004 · Krishna Timber' },
-  { value: 'PO-2026-006', label: 'PO-2026-006 · Metro Steel' },
-  { value: 'PO-2026-007', label: 'PO-2026-007 · Global Supplies' },
-];
+// NOTE: PO reference options are now loaded dynamically from
+// PurchaseOrderDataClient.orders() in the purchase-invoice-create component.
+export const PO_OPTIONS: ISelectOption[] = [];
 export interface LineItem {
   id: number;
   productCode: string;

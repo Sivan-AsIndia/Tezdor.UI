@@ -1,4 +1,10 @@
 
+import {
+  MASTER_CATEGORIES, MASTER_BRANDS, MASTER_UNITS, MASTER_TAX_OPTIONS,
+  MASTER_TAX_MAP, MASTER_PRODUCT_TYPES, MASTER_DISCOUNT_OPTIONS,
+  MASTER_TEMPLATE_OPTIONS, SelectOption
+} from '../../core/services/master-data';
+
 export type ProductStatus = 'active' | 'inactive' | 'discontinued';
 export type DiscountType  = 'none' | 'percentage' | 'fixed';
 export type TabId         = 'general' | 'advanced';
@@ -57,49 +63,21 @@ export interface IDiscountOption extends ISelectOption {
   value: DiscountType;
 }
 
-export const CATEGORY_OPTIONS: ISelectOption[] = [
-  { value: '1', label: 'Electronics' },
-  { value: '2', label: 'Clothing' },
-  { value: '3', label: 'Food & Beverages' },
-  { value: '4', label: 'Hardware' },
-  { value: '5', label: 'Stationery' },
-];
+// ═══════════════════════════════════════════════════════
+// Re-exported from centralized master-data.ts
+// ═══════════════════════════════════════════════════════
+export const CATEGORY_OPTIONS: ISelectOption[] = MASTER_CATEGORIES as ISelectOption[];
 
-export const BRAND_OPTIONS: ISelectOption[] = [
-  { value: '1', label: 'Dell' },
-  { value: '2', label: 'HP' },
-  { value: '3', label: 'Apple' },
-];
+export const BRAND_OPTIONS: ISelectOption[] = MASTER_BRANDS as ISelectOption[];
 
-export const PRODUCT_TYPE_OPTIONS: ISelectOption[] = [
-  { value: '1', label: 'Goods' },
-  { value: '2', label: 'Service (labour, delivery)' }
-];
+export const PRODUCT_TYPE_OPTIONS: ISelectOption[] = MASTER_PRODUCT_TYPES as ISelectOption[];
 
+export const UNIT_OPTIONS: { value: number; label: string }[] = MASTER_UNITS;
 
-export const UNIT_OPTIONS:{ value: number; label: string }[] = [
-  { value: 1, label: 'Pcs' },
-  { value: 2, label: 'Kg' },
-  { value: 3, label: 'Litre' },
-  { value: 4, label: 'Box' },
-  { value:5, label: 'Dozen' },
-  { value:5, label: 'Mtr' }
+export const TAX_OPTIONS: ISelectOption[] = MASTER_TAX_OPTIONS as ISelectOption[];
+export const TAX_MAP: Record<number, number> = MASTER_TAX_MAP;
 
-];
-export const TAX_OPTIONS: ISelectOption[] = [
-  { value: '0', label: 'None (0%)' },
-  { value: '5', label: 'GST 5%' },
-  { value: '12', label: 'GST 12%' },
-  { value: '18', label: 'GST 18%' },
-  { value: '28', label: 'GST 28%' },
-];
-export const TAX_MAP: Record<number, number> = { 1: 18, 2: 12, 3: 5, 4: 0 };
-
-export const DISCOUNT_OPTIONS: IDiscountOption[] = [
-  { value: 'none',       label: 'No Discount' },
-  { value: 'percentage', label: 'Percentage %' },
-  { value: 'fixed',      label: 'Fixed Price' },
-];
+export const DISCOUNT_OPTIONS: IDiscountOption[] = MASTER_DISCOUNT_OPTIONS as IDiscountOption[];
 
 export const STATUS_OPTIONS: IStatusOption[] = [
   { value: 'draft', label: 'Draft', hint: 'Selectable in Invoice & PO' },
@@ -115,11 +93,7 @@ export const STATUS_OPTIONSPRODUCT: IStatusOption[] = [
   { value: 'discontinued', label: 'Discontinued', hint: 'Historical reference only' },
 ];
 
-export const TEMPLATE_OPTIONS: ISelectOption[] = [
-  { value: '',        label: 'Default template' },
-  { value: 'minimal', label: 'Minimal' },
-  { value: 'detailed', label: 'Detailed' },
-];
+export const TEMPLATE_OPTIONS: ISelectOption[] = MASTER_TEMPLATE_OPTIONS as ISelectOption[];
 export interface ProductSummary {
   productCode: string;
   productName: string;
