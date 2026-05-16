@@ -69,11 +69,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./feature/store/store-list/store-list').then(m => m.StoreListComponent),
       },
-      {
-        path: 'store/create',
-        loadComponent: () =>
-          import('./feature/store/store-create/store-create').then(m => m.StoreCreateComponent),
-      },
+      // {
+      //   path: 'store/create',
+      //   loadComponent: () =>
+      //     import('./feature/store/store-create/store-create').then(m => m.StoreCreateComponent),
+      // },
       {
         path: 'store/:productCode',
         loadComponent: () =>
