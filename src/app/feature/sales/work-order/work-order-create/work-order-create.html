@@ -1,0 +1,646 @@
+<div class="max-w-full">
+
+    <div class="full-container">
+
+        <div class="v-container v-container--fluid v-locale--is-ltr rounded-xl p-0">
+
+            <div class="wo-page">
+
+                <!-- =====================================================
+             HEADER
+        ====================================================== -->
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3" id="TopHeading">
+
+                    <div>
+
+                        <h4 class="fw-bold mb-1 mainheading">
+
+                            {{ isEdit ? 'Edit Work Order' : 'Create Work Order' }}
+
+                        </h4>
+
+                        <small class="text-muted subdescription">
+
+                            Authorise production of a finished good against demand or stock replenishment
+
+                        </small>
+
+                    </div>
+
+                    <!-- =====================================================
+               BREADCRUMB
+          ====================================================== -->
+
+                    <div class="arrow-steps d-none d-md-flex">
+
+                        <ul id="breadcrumb">
+
+                            <li>
+
+                                <a routerLink="/dashboard">
+
+                                    <span class="fa fa-home me-1"></span>
+
+                                    Home
+
+                                </a>
+
+                            </li>
+
+                            <li>
+
+                                <a href="javascript:void(0)">
+
+                                    <span class="fa fa-industry me-1"></span>
+
+                                    Work Orders
+
+                                </a>
+
+                            </li>
+
+                            <li>
+
+                                <a href="javascript:void(0)">
+
+                                    <span class="fa fa-plus-circle me-1"></span>
+
+                                    {{ isEdit ? 'Edit' : 'Create' }}
+
+                                </a>
+
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="wo-card">
+
+
+                    <div class="wo-card-header">
+
+                        <div>
+
+                            <h5 class="wo-section-title">
+
+                                Work Order details
+
+                            </h5>
+
+                            <div class="wo-section-desc">
+
+                                A unique WO number is generated when you save
+
+                            </div>
+
+                        </div>
+
+                        <div class="wo-status-chip">
+
+                            Status:
+                            {{ form.value.status }}
+
+                        </div>
+
+                    </div>
+
+                    <!-- FORM -->
+
+                    <form [formGroup]="form" class="form-padding">
+
+                        <div class="row g-4">
+
+
+
+                            <div class="col-xl-3 col-lg-4 col-md-6">
+
+                                <label class="form-label wo-label required">
+
+                                    Work Order Date
+
+                                </label>
+
+
+                                <div class="position-relative">
+                                    <input class="form-control pe-5" [matDatepicker]="WODatePicker"
+                                        formControlName="workOrderDate" placeholder="Select date..."
+                                        (click)="WODatePicker.open()" />
+                                    <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                                        style="font-size:18px; cursor:pointer;" (click)="WODatePicker.open()">
+                                    </i>
+                                </div>
+                                <mat-datepicker #WODatePicker></mat-datepicker>
+
+                            </div>
+
+
+                            <div class="col-xl-3 col-lg-4 col-md-6">
+
+                                <label class="form-label wo-label required">
+
+                                    Priority
+
+                                </label>
+
+                                <select class="form-select wo-input" formControlName="priority">
+
+                                    @for(
+                                    item of priorityOptions;
+                                    track item
+                                    ){
+
+                                    <option [value]="item">
+
+                                        {{ item }}
+
+                                    </option>
+
+                                    }
+
+                                </select>
+
+                            </div>
+
+
+
+                            <div class="col-xl-3 col-lg-4 col-md-6">
+
+                                <label class="form-label wo-label">
+
+                                    Sales Order Ref
+
+                                </label>
+
+                                <input type="text" class="form-control wo-input" formControlName="salesOrderId">
+
+                            </div>
+
+
+
+                            <div class="col-xl-6 col-lg-6 col-md-12">
+
+                                <label class="form-label wo-label required">
+
+                                    Product
+
+                                </label>
+
+
+                                <app-search-dropdown [items]="productDropdownItems()" bindLabel="displayName"
+                                    bindValue="productId" placeholder="Select Product" [selectedId]="
+                                            form.controls.productId.value
+                                        " (selectedIdChange)="
+                                            form.controls.productId.setValue($event)
+                                        ">
+
+                                </app-search-dropdown>
+
+                            </div>
+
+
+
+                            <div class="col-xl-3 col-lg-3 col-md-6">
+
+                                <label class="form-label wo-label required">
+
+                                    Ordered Quantity
+
+                                </label>
+
+                                <input type="number" class="form-control wo-input" formControlName="orderedQuantity">
+
+                            </div>
+
+
+
+                            <div class="col-xl-3 col-lg-3 col-md-6">
+
+                                <label class="form-label wo-label">
+
+                                    Target Warehouse
+
+                                </label>
+
+                                <select class="form-select wo-input" formControlName="warehouseId">
+
+                                    <option value="">
+
+                                        Select Warehouse
+
+                                    </option>
+
+                                    @for(
+                                    item of warehouseOptions;
+                                    track item
+                                    ){
+
+                                    <option [value]="item.id">
+
+                                        {{ item.name }}
+
+                                    </option>
+
+                                    }
+
+                                </select>
+
+                            </div>
+
+                            <!-- CUSTOMER  -->
+
+                            <div class="col-xl-3 col-lg-3 col-md-6">
+
+                                <label class="form-label wo-label">
+
+                                    Customer
+
+                                </label>
+
+
+
+                                <app-search-dropdown [items]="customerDropdownItems()" bindLabel="displayName"
+                                    bindValue="customerId" placeholder="Select Customer" [selectedId]="
+                                            form.controls.customerId.value
+                                        " (selectedIdChange)="
+                                            form.controls.customerId.setValue($event)
+                                        ">
+
+                                </app-search-dropdown>
+
+                            </div>
+
+
+
+                            <div class="col-xl-3 col-lg-3 col-md-6">
+
+                                <label class="form-label wo-label required">
+
+                                    Planned Start
+
+                                </label>
+
+                                <div class="position-relative">
+                                    <input class="form-control pe-5" [matDatepicker]="plannedStartDatePicker"
+                                        formControlName="plannedStartDate" placeholder="Select date..."
+                                        (dateChange)="calculateLeadTime()" (click)="plannedStartDatePicker.open()" />
+                                    <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                                        style="font-size:18px; cursor:pointer;" (click)="plannedStartDatePicker.open()">
+                                    </i>
+                                </div>
+                                <mat-datepicker #plannedStartDatePicker></mat-datepicker>
+
+                            </div>
+
+
+                            <div class="col-xl-3 col-lg-3 col-md-6">
+
+                                <label class="form-label wo-label required">
+
+                                    Planned End
+
+                                </label>
+
+
+
+                                <div class="position-relative">
+                                    <input class="form-control pe-5" [matDatepicker]="plannedEndDatePicker"
+                                        formControlName="plannedEndDate" placeholder="Select date..."
+                                        [min]="form.controls.plannedStartDate.value" (dateChange)="calculateLeadTime()"
+                                        (click)="plannedEndDatePicker.open()" />
+                                    <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                                        style="font-size:18px; cursor:pointer;" (click)="plannedEndDatePicker.open()">
+                                    </i>
+                                </div>
+                                <mat-datepicker #plannedEndDatePicker></mat-datepicker>
+
+                            </div>
+
+
+                            <div class="col-xl-3 col-lg-3 col-md-6">
+
+                                <label class="form-label wo-label">
+
+                                    Estimated Lead Time
+
+                                </label>
+
+                                <input type="text" class="form-control wo-input" [value]="
+      estimatedLeadTime() > 0
+        ? estimatedLeadTime() + ' days'
+        : ''
+    " readonly>
+
+                            </div>
+
+
+
+                            <div class="col-12">
+
+                                <label class="form-label wo-label">
+
+                                    Remarks
+
+                                </label>
+
+                                <div class="rich-editor-wrapper">
+                                    <form [formGroup]="editorForm">
+
+                                        @if (showEditor()) {
+                                        <!-- TOOLBAR -->
+                                        <ngx-editor-menu [editor]="editor" [toolbar]="toolbar">
+                                        </ngx-editor-menu>
+
+                                        <!-- EDITOR -->
+                                        <div class="ngx-overflow">
+                                            <ngx-editor [editor]="editor" formControlName="remarks"
+                                                placeholder="Add additional remarks...">
+                                            </ngx-editor>
+                                        </div>
+
+                                        }
+
+                                    </form>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+
+                <div class="card wo-card mt-4">
+
+
+
+                    <div class="wo-bom-header">
+
+                        <div>
+
+                            <h5 class="wo-section-title mb-1">
+
+                                BOM Snapshot — Frozen On Confirmation
+
+                            </h5>
+
+                            <div class="wo-section-desc">
+
+                                Required quantities = BOM Qty × Ordered Qty × (1 + Wastage)
+
+                            </div>
+
+                        </div>
+
+                        <div class="d-flex gap-2">
+
+                            <button type="button" class="btn btn-outline-secondary wo-btn" (click)="generateBom()"
+                                [disabled]="!form.value.productId">
+
+                                {{ isBomGenerated()
+                                ? 'Recalculate'
+                                : 'Generate BOM'
+                                }}
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-responsive">
+
+                        <table class="table wo-table align-middle mb-0">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Item / Component</th>
+                                    <th>Code</th>
+                                    <th>Raw Material</th>
+                                    <th>Required</th>
+                                    <th>Consumed</th>
+                                    <th>Pending</th>
+                                    <th>Wastage</th>
+                                    <th>UOM</th>
+                                    <th>Cost</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @for(
+                                line of bomLines();
+                                track line.workOrderBomLineId
+                                ){
+
+                                <tr>
+
+
+
+                                    <td>
+
+                                        <div class="d-flex align-items-center gap-2" [style.padding-left.px]="
+                        line.level * 20
+                      ">
+
+                                            <span class="wo-level-chip" [ngClass]="
+                          getLevelClass(
+                            line.level
+                          )
+                        ">
+
+                                                L{{ line.level }}
+
+                                            </span>
+
+                                            <span class="fw-medium">
+
+                                                {{ line.itemName }}
+
+                                            </span>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        {{ line.productStructureId }}
+
+                                    </td>
+
+
+
+                                    <td>
+
+                                        {{ line.rawMaterialId || '-' }}
+
+                                    </td>
+
+
+
+                                    <td class="fw-semibold">
+
+                                        {{ line.requiredQuantity }}
+
+                                    </td>
+
+
+
+                                    <td>
+
+                                        {{ line.consumedQuantity }}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span [class]="
+                        line.pendingQuantity > 0
+                        ? 'text-warning'
+                        : 'text-success'
+                      ">
+
+                                            {{ line.pendingQuantity }}
+
+                                        </span>
+
+                                    </td>
+
+
+
+                                    <td>
+
+                                        {{ line.wastagePercentage || 0 }}%
+
+                                    </td>
+
+
+
+                                    <td>
+
+                                        {{ getUom(
+                                        line.unitOfMeasureId
+                                        ) }}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        {{ formatCurrency(
+                                        line.requiredQuantity * 100
+                                        ) }}
+
+                                    </td>
+
+                                </tr>
+
+                                }
+
+                                @if(
+                                bomLines().length === 0
+                                ){
+
+                                <tr>
+
+                                    <td colspan="9" class="text-center py-5 text-muted">
+
+                                        No BOM Lines Available
+
+                                    </td>
+
+                                </tr>
+
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+
+                    <div class="wo-alert-row">
+
+                        <div class="text-warning-emphasis">
+
+                            @if(
+                            bomLines().length
+                            ){
+
+                            ⚠ Material availability should be verified before production starts.
+
+                            }
+
+                        </div>
+
+                        <div class="wo-total-cost">
+
+                            Total Material Cost:
+
+                            <span>
+
+                                {{ formatCurrency(
+                                totalMaterialCost()
+                                ) }}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ACTIONS -->
+
+                <div class="wo-actions d-flex justify-content-end mt-4 gap-2">
+
+                    <button type="button"
+                        class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3"
+                        (click)="onCancel()">
+                        Cancel
+                    </button>
+
+
+
+                    <button type="button"
+                        class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                        (click)="saveDraft()">
+                        {{ isEdit ? 'Update' : 'Save Draft' }}
+                    </button>
+
+                    <button
+                        class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                        (click)="saveConfirm()">
+
+                        Save & Confirm
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

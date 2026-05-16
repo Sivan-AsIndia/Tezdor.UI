@@ -3,7 +3,7 @@ import { Product } from './product';
 export const INITIAL_PRODUCTS: Product[] = [
   {
     id: 1,
-    ProductId: crypto.randomUUID(),
+    ProductId: 'prod-001',
     TenantId: crypto.randomUUID(),
     CompanyId: crypto.randomUUID(),
     productCode: 'ELEC001',
@@ -41,7 +41,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: 2,
-    ProductId: crypto.randomUUID(),
+    ProductId: 'prod-002',
     TenantId: crypto.randomUUID(),
     CompanyId: crypto.randomUUID(),
     productCode: 'ELEC002',
@@ -79,7 +79,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: 3,
-    ProductId: crypto.randomUUID(),
+    ProductId: 'prod-003',
     TenantId: crypto.randomUUID(),
     CompanyId: crypto.randomUUID(),
     productCode: 'CLOTH001',
@@ -117,7 +117,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: 4,
-    ProductId: crypto.randomUUID(),
+    ProductId: 'prod-004',
     TenantId: crypto.randomUUID(),
     CompanyId: crypto.randomUUID(),
     productCode: 'FOOD001',
@@ -155,7 +155,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: 5,
-    ProductId: crypto.randomUUID(),
+    ProductId: 'prod-005',
     TenantId: crypto.randomUUID(),
     CompanyId: crypto.randomUUID(),
     productCode: 'HARD001',
@@ -193,7 +193,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: 6,
-    ProductId: crypto.randomUUID(),
+    ProductId: 'prod-006',
     TenantId: crypto.randomUUID(),
     CompanyId: crypto.randomUUID(),
     productCode: 'STAT001',
@@ -231,7 +231,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: 7,
-    ProductId: crypto.randomUUID(),
+    ProductId: 'prod-007',
     TenantId: crypto.randomUUID(),
     CompanyId: crypto.randomUUID(),
     productCode: 'ELEC003',
@@ -269,7 +269,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: 8,
-    ProductId: crypto.randomUUID(),
+    ProductId: 'prod-008',
     TenantId: crypto.randomUUID(),
     CompanyId: crypto.randomUUID(),
     productCode: 'SERV001',
@@ -301,7 +301,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: 9,
-    ProductId: crypto.randomUUID(),
+    ProductId: 'prod-009',
     TenantId: crypto.randomUUID(),
     CompanyId: crypto.randomUUID(),
     productCode: 'CLOTH002',
@@ -339,7 +339,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: 10,
-    ProductId: crypto.randomUUID(),
+    ProductId: 'prod-0010',
     TenantId: crypto.randomUUID(),
     CompanyId: crypto.randomUUID(),
     productCode: 'HARD002',
@@ -377,7 +377,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: 11,
-    ProductId: crypto.randomUUID(),
+    ProductId: 'prod-0011',
     TenantId: crypto.randomUUID(),
     CompanyId: crypto.randomUUID(),
     productCode: 'FOOD002',
@@ -415,7 +415,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: 12,
-    ProductId: crypto.randomUUID(),
+    ProductId: 'prod-0012',
     TenantId: crypto.randomUUID(),
     CompanyId: crypto.randomUUID(),
     productCode: 'STAT002',

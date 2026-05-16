@@ -1,0 +1,1145 @@
+<div class="max-w-full">
+
+    <div class="full-container">
+
+        <div class="v-container v-container--fluid rounded-xl p-0">
+
+            <!-- =====================================================
+           HEADER
+      ===================================================== -->
+
+            <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+
+                <div>
+
+                    <h4 class="fw-bold mb-1 mainheading">
+
+                        Work Orders
+
+                    </h4>
+
+                    <small class="text-muted subdescription">
+
+                        Manage production planning,
+                        material consumption,
+                        and manufacturing execution.
+
+                    </small>
+
+                </div>
+
+                <!-- BREADCRUMB -->
+
+                <div class="arrow-steps d-none d-md-flex">
+
+                    <ul id="breadcrumb">
+
+                        <li>
+                            <a routerLink="/dashboard">
+
+                                <span class="fa fa-home me-1"></span>
+
+                                Home
+
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="javascript:void(0)">
+
+                                <span class="fa fa-industry me-1"></span>
+
+                                Work Orders
+
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <!-- =====================================================
+           CARD
+      ===================================================== -->
+
+            <div class="content-card">
+
+                <div class="card-body-inner">
+
+                    <!-- =====================================================
+               TOPBAR
+          ===================================================== -->
+
+                    <div class="table-topbar">
+
+                        <div class="table-title-badge">
+
+                            <h5 class="tableheading">
+
+                                Work Orders
+
+                            </h5>
+
+                            <span class="count-badge">
+
+                                {{ total() }}
+
+                            </span>
+
+                        </div>
+
+                        <div class="topbar-actions">
+
+                            <!-- SEARCH -->
+
+                            <div class="search-box">
+
+                                <input type="text" placeholder="Search work order..." [value]="searchValue()" (input)="
+                    onSearch(
+                      $any($event.target).value
+                    )
+                  " />
+
+                                @if(!searchValue()){
+
+                                <button class="icon-clear">
+
+                                    <i class="bi bi-search"></i>
+
+                                </button>
+
+                                }
+
+                                @if(searchValue()){
+
+                                <button class="icon-clear" (click)="clearSearch()">
+
+                                    <i class="bi bi-x"></i>
+
+                                </button>
+
+                                }
+
+                            </div>
+
+                            <!-- FILTER -->
+
+                            <button class="filter-btn" [class.active]="
+                  filters().status
+                " (click)="toggleFilter()">
+
+                                <i class="ti ti-filter fs-5"></i>
+
+                            </button>
+
+                            <!-- ADD BUTTON -->
+                            <button (click)="onAddNewWO()"
+                                class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-primary v-btn--density-default  v-btn--size-default v-btn--variant-elevated ml-auto">
+                                <i class="mdi mdi-plus-circle-outline v-icon mr-2" aria-hidden="true"></i> New WO
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <!-- =====================================================
+               FILTER PANEL
+          ===================================================== -->
+
+                    @if(showFilter()){
+
+                    <div class="filter-overlay" (click)="closeFilter()">
+                    </div>
+
+                    <!-- PANEL -->
+
+                    <div class="filter-panel" [style.top.px]="filterTop" [style.right.px]="filterRight">
+
+                        <!-- HEADER -->
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+
+                            <h5 class="fw-bold mb-0">
+
+                                Filter
+
+                            </h5>
+
+                            <button
+                                class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3"
+                                (click)="resetFilters()">
+
+                                Reset
+
+                            </button>
+
+                        </div>
+
+                        <!-- STATUS -->
+
+                        <div class="mb-3">
+
+                            <label class="fw-semibold mb-2">
+
+                                Status
+
+                            </label>
+
+                            <select class="form-select" [value]="filters().status ?? ''" (change)="
+        selectStatus(
+          $any($event.target).value
+        )
+      ">
+
+                                <option value="">
+
+                                    All
+
+                                </option>
+
+                                @for(
+                                s of statusOptions;
+                                track s
+                                ){
+
+                                <option [value]="s">
+
+                                    {{ s }}
+
+                                </option>
+
+                                }
+
+                            </select>
+
+                        </div>
+
+                        <!-- PRIORITY -->
+
+                        <div class="mb-3">
+
+                            <label class="fw-semibold mb-2">
+
+                                Priority
+
+                            </label>
+
+                            <select class="form-select" [value]="filters().priority ?? ''" (change)="
+        selectPriority(
+          $any($event.target).value
+        )
+      ">
+
+                                <option value="">
+
+                                    All
+
+                                </option>
+
+                                @for(
+                                p of priorityOptions;
+                                track p
+                                ){
+
+                                <option [value]="p">
+
+                                    {{ p }}
+
+                                </option>
+
+                                }
+
+                            </select>
+
+                        </div>
+
+                        <!-- WO DATE -->
+
+                        <div class="mb-3">
+
+                            <label class="fw-semibold mb-2">
+
+                                WO Date
+
+                            </label>
+
+                            <div class="position-relative">
+
+                                <input class="form-control pe-5" [matDatepicker]="woDatePicker"
+                                    [value]="filters().workOrderDate ?? ''" (dateChange)="
+          setWorkOrderDate(
+            $any($event.target).value
+          )
+        " placeholder="Select date..." readonly (click)="woDatePicker.open()" />
+
+                                <i class="ti ti-calendar position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+                                    style="
+          font-size:18px;
+          cursor:pointer;
+        " (click)="woDatePicker.open()">
+                                </i>
+
+                            </div>
+
+                            <mat-datepicker #woDatePicker>
+                            </mat-datepicker>
+
+                        </div>
+
+                        <!-- FOOTER -->
+
+                        <div class="d-flex gap-2 mt-4">
+
+                            <button
+                                class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3"
+                                (click)="closeFilter()">
+
+                                Cancel
+
+                            </button>
+
+                            <button
+                                class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                                (click)="closeFilter()">
+
+                                Apply
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    }
+
+                    <!-- =====================================================
+               TABLE
+          ===================================================== -->
+
+                    <div class="border-table">
+                        <div class="v-table v-theme--BLUE_THEME v-table--density-default">
+                            <div class="v-table__wrapper">
+
+                                <table>
+
+                                    <thead>
+
+                                        <tr style="background: #8080800d;">
+                                            <th class="d-xl-none" style="width:40px"></th>
+                                            <!-- WO DATE -->
+
+                                            <th class="sortable" (click)="sort('workOrderDate')">
+
+                                                <div class="th-inner">
+
+                                                    WO Date
+
+                                                    <i class="ti" [class.ti-arrow-up]="
+                                                        sortField() === 'workOrderDate'
+                                                        &&
+                                                        sortDirection() === 'asc'
+                                                        " [class.ti-arrow-down]="
+                                                        sortField() === 'workOrderDate'
+                                                        &&
+                                                        sortDirection() === 'desc'
+                                                        " [class.ti-selector]="
+                                                        sortField() !== 'workOrderDate'
+                                                        ">
+                                                    </i>
+
+                                                </div>
+
+                                            </th>
+
+                                            <!-- PRODUCT -->
+
+                                            <th class="sortable d-none d-md-table-cell" (click)="sort('product')">
+
+                                                <div class="th-inner">
+
+                                                    Product
+
+                                                    <i class="ti" [class.ti-arrow-up]="
+                                                            sortField() === 'product'
+                                                            &&
+                                                            sortDirection() === 'asc'
+                                                            " [class.ti-arrow-down]="
+                                                            sortField() === 'product'
+                                                            &&
+                                                            sortDirection() === 'desc'
+                                                            " [class.ti-selector]="
+                                                            sortField() !== 'product'
+                                                            ">
+                                                    </i>
+
+                                                </div>
+
+                                            </th>
+
+                                            <!-- CUSTOMER -->
+
+                                            <th class="d-none d-md-table-cell sortable" (click)="sort('customer')">
+
+                                                <div class="th-inner">
+
+                                                    Customer
+
+                                                    <i class="ti" [class.ti-arrow-up]="
+                                                            sortField() === 'customer'
+                                                            &&
+                                                            sortDirection() === 'asc'
+                                                            " [class.ti-arrow-down]="
+                                                            sortField() === 'customer'
+                                                            &&
+                                                            sortDirection() === 'desc'
+                                                            " [class.ti-selector]="
+                                                            sortField() !== 'customer'
+                                                            ">
+                                                    </i>
+
+                                                </div>
+
+                                            </th>
+
+                                            <!-- QTY -->
+
+                                            <th class="sortable d-none d-lg-table-cell"  (click)="sort('qty')">
+
+                                                <div class="th-inner">
+
+                                                    Qty
+
+                                                    <i class="ti" [class.ti-arrow-up]="
+                                                            sortField() === 'qty'
+                                                            &&
+                                                            sortDirection() === 'asc'
+                                                            " [class.ti-arrow-down]="
+                                                            sortField() === 'qty'
+                                                            &&
+                                                            sortDirection() === 'desc'
+                                                            " [class.ti-selector]="
+                                                            sortField() !== 'qty'
+                                                            ">
+                                                    </i>
+
+                                                </div>
+
+                                            </th>
+
+                                            <!-- PLANNED END -->
+
+                                            <th class="d-none d-lg-table-cell sortable"
+                                                (click)="sort('plannedEndDate')">
+
+                                                <div class="th-inner">
+
+                                                    Planned End
+
+                                                    <i class="ti" [class.ti-arrow-up]="
+                                                            sortField() === 'plannedEndDate'
+                                                            &&
+                                                            sortDirection() === 'asc'
+                                                            " [class.ti-arrow-down]="
+                                                            sortField() === 'plannedEndDate'
+                                                            &&
+                                                            sortDirection() === 'desc'
+                                                            " [class.ti-selector]="
+                                                            sortField() !== 'plannedEndDate'
+                                                            ">
+                                                    </i>
+
+                                                </div>
+
+                                            </th>
+
+                                            <!-- STATUS -->
+
+                                            <th class="sortable d-none d-xl-table-cell" (click)="sort('status')">
+
+                                                <div class="th-inner">
+
+                                                    Status
+
+                                                    <i class="ti" [class.ti-arrow-up]="
+                                                            sortField() === 'status'
+                                                            &&
+                                                            sortDirection() === 'asc'
+                                                            " [class.ti-arrow-down]="
+                                                            sortField() === 'status'
+                                                            &&
+                                                            sortDirection() === 'desc'
+                                                            " [class.ti-selector]="
+                                                            sortField() !== 'status'
+                                                            ">
+                                                    </i>
+
+                                                </div>
+
+                                            </th>
+
+                                            <!-- PROGRESS -->
+
+                                            <th class="d-none d-xl-table-cell">
+
+                                                Progress
+
+                                            </th>
+
+                                            <!-- ACTION -->
+
+                                            <th>
+
+                                                Actions
+
+                                            </th>
+
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody>
+
+                                        @for(
+                                        wo of paginatedWorkOrders();
+                                        track wo.workOrderId
+                                        ){
+
+                                        <tr>
+
+                                            <!-- MOBILE EXPAND -->
+                                            <td class="d-xl-none text-center" style="padding-left:15px;">
+                                                <a href="javascript:void(0);" class="TablePlus" data-bs-toggle="modal"
+                                                    data-bs-target="#rowDetailsModal" (click)="openRowDetails(wo)">
+                                                    <i class="ti ti-plus"></i>
+                                                </a>
+                                            </td>
+
+                                            <!-- WO -->
+
+                                            <td>
+
+                                                <div class="fw-semibold">
+
+                                                    {{
+                                                    wo.workOrderDate
+                                                    | date:'dd MMM yyyy'
+                                                    }}
+
+                                                </div>
+
+                                            </td>
+
+                                            <!-- PRODUCT -->
+
+                                            <td class="d-none d-md-table-cell">
+
+                                                <div class="fw-semibold">
+
+                                                    {{
+                                                    getProductName(
+                                                    wo.productId
+                                                    )
+                                                    }}
+
+                                                </div>
+
+                                            </td>
+
+                                            <!-- CUSTOMER -->
+
+                                            <td class="d-none d-md-table-cell">
+
+                                                {{
+                                                getCustomerName(
+                                                wo.customerId
+                                                )
+                                                }}
+
+                                            </td>
+
+                                            <!-- QTY -->
+
+                                            <td class="d-none d-lg-table-cell">
+
+                                                <div class="fw-semibold">
+
+                                                    {{
+                                                    wo.orderedQuantity
+                                                    }}
+
+                                                </div>
+
+                                                <small class="text-muted">
+
+                                                    Pending:
+                                                    {{
+                                                    wo.pendingQuantity
+                                                    }}
+
+                                                </small>
+
+                                            </td>
+
+                                            <!-- PLANNED END -->
+
+                                            <td class="d-none d-lg-table-cell">
+
+                                                <div class="fw-semibold">
+
+                                                    {{
+                                                    wo.plannedEndDate
+                                                    | date:'dd MMM yyyy'
+                                                    }}
+
+                                                </div>
+
+                                                <div class="priority-chip" [class.low]="
+                                                            wo.priority === 'Low'
+                                                        " [class.normal]="
+                                                            wo.priority === 'Normal'
+                                                        " [class.high]="
+                                                            wo.priority === 'High'
+                                                        " [class.urgent]="
+                                                            wo.priority === 'Urgent'
+                                                        ">
+
+                                                    <span class="priority-dot"></span>
+
+                                                    {{ wo.priority }}
+
+                                                </div>
+
+                                            </td>
+
+                                            <!-- STATUS -->
+
+                                            <td class="d-none d-xl-table-cell">
+
+                                                <span class="wo-status" [class.draft]="
+                                                            wo.status === 'Draft'
+                                                        " [class.confirmed]="
+                                                            wo.status === 'Confirmed'
+                                                        " [class.InProgress]="
+                                                            wo.status === 'InProgress'
+                                                        " [class.completed]="
+                                                            wo.status === 'Completed'
+                                                        " [class.cancelled]="
+                                                            wo.status === 'Cancelled'
+                                                        ">
+
+                                                    {{ wo.status }}
+
+                                                </span>
+
+                                            </td>
+
+                                            <!-- PROGRESS -->
+
+                                            <td class="d-none d-xl-table-cell">
+
+                                                <div class="progress modern-progress">
+
+                                                    <div class="progress-bar" [style.width.%]="
+                                                        getProgress(wo)
+                                                        ">
+                                                    </div>
+
+                                                </div>
+
+                                            </td>
+
+                                            <!-- ACTION -->
+
+                                            <td>
+
+                                                <div class="action-icons">
+
+                                                        <a title="View" (click)="onView(wo)" style="cursor: pointer;"
+                                                            class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated">
+                                                            <span class="v-btn__content">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="icon-tabler icon-tabler-eye text-info"
+                                                                    width="20" height="20" viewBox="0 0 24 24"
+                                                                    stroke-width="1.5" stroke="currentColor" fill="none"
+                                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                                    <path
+                                                                        d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                                                </svg>
+                                                            </span>
+                                                        </a>
+
+
+                                                        <!-- Edit -->
+                                                        <a (click)="onEdit(wo)" style="cursor: pointer;"
+                                                            class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                                                            title="Edit">
+                                                            <span class="v-btn__content">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="icon-tabler icon-tabler-pencil text-primary"
+                                                                    width="20" height="20" viewBox="0 0 24 24"
+                                                                    stroke-width="1.5" stroke="currentColor" fill="none"
+                                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                    <path
+                                                                        d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
+                                                                    <path d="M13.5 6.5l4 4" />
+                                                                </svg>
+                                                            </span>
+                                                        </a>
+
+                                                        @if(wo.status=== WorkOrderStatus.Draft){
+                                                        <button type="button" title="Delete" (click)="onDelete(wo)"
+                                                            class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated">
+                                                            <span class="v-btn__content">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="icon-tabler icon-tabler-trash text-error"
+                                                                    width="20" height="20" viewBox="0 0 24 24"
+                                                                    stroke-width="1.5" stroke="currentColor" fill="none"
+                                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                    <path d="M4 7l16 0" />
+                                                                    <path d="M10 11l0 6" />
+                                                                    <path d="M14 11l0 6" />
+                                                                    <path
+                                                                        d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                                                    <path
+                                                                        d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                                                </svg>
+                                                            </span>
+                                                        </button>
+                                                        }
+
+
+
+                                                </div>
+
+                                            </td>
+
+                                        </tr>
+
+                                        }
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- 🔹 PAGINATION -->
+                    <div class="pagination-bar Pagination">
+
+                        <!-- Page Size -->
+                        <div class="d-flex align-items-center fs-13"><!--!--><span class="me-2"
+                                style="font-size: 12px;">Rows Per Page</span>
+                            <select class="form-select form-select-sm w-auto"
+                                (change)="changePageSize($any($event.target).value)">
+                                <option [selected]="pageSize() === 5">5</option>
+                                <option [selected]="pageSize() === 10">10</option>
+                                <option [selected]="pageSize() === 25">25</option>
+                            </select><!--!-->
+                            <!--!--><span class="ms-2" style="font-size: 12px;">Entries</span>
+                        </div>
+
+                        <!-- Controls -->
+                        <div class="pagination-controls">
+                            <nav role="navigation" aria-label="Pagination Navigation">
+                                <ul class="pagination-list">
+
+                                    <!-- Prev -->
+                                    <li>
+                                        <button class="page-btn" (click)="changePage(page()-1)"
+                                            [disabled]="page() === 1">
+                                            <span class="mdi mdi-chevron-left" style="font-size: 26px;"></span>
+                                        </button>
+                                    </li>
+
+                                    <!-- ONLY visiblePages — no first/last/ellipsis logic -->
+                                    @for (p of visiblePages(); track p) {
+                                    <li>
+                                        <button class="page-btn" [class.active]="page() === p" (click)="changePage(p)">
+                                            {{ p }}
+                                        </button>
+                                    </li>
+                                    }
+
+                                    <!-- Next -->
+                                    <li>
+                                        <button class="page-btn" (click)="changePage(page()+1)"
+                                            [disabled]="page() === totalPages()">
+                                            <span class="mdi mdi-chevron-right" style="font-size: 26px;"></span>
+                                        </button>
+                                    </li>
+
+                                </ul>
+                            </nav>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     ROW DETAILS MODAL
+===================================================== -->
+
+<div
+  class="modal fade"
+  id="rowDetailsModal"
+  tabindex="-1">
+
+  <div
+    class="modal-dialog modal-dialog-centered modal-md">
+
+    <div
+      class="modal-content wo-modal border-0">
+
+      <!-- HEADER -->
+
+      <div class="modal-header wo-header">
+
+        <div>
+
+          <div class="wo-title">
+
+            Work Order Details
+
+          </div>
+
+          <div class="wo-subtitle">
+
+            {{
+              selectedRow()?.workOrderNo
+            }}
+
+          </div>
+
+        </div>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal">
+        </button>
+
+      </div>
+
+      <!-- BODY -->
+
+      <div class="modal-body pt-2">
+
+        @if(selectedRow()){
+
+        <div class="compact-grid">
+
+          <!-- PRODUCT -->
+
+          <div class="compact-card full">
+
+            <div class="compact-label">
+
+              Product
+
+            </div>
+
+            <div class="compact-value">
+
+              {{
+                getProductName(
+                  selectedRow()?.productId!
+                )
+              }}
+
+            </div>
+
+          </div>
+
+          <!-- CUSTOMER -->
+
+          <div class="compact-card">
+
+            <div class="compact-label">
+
+              Customer
+
+            </div>
+
+            <div class="compact-value">
+
+              {{
+                getCustomerName(
+                  selectedRow()?.customerId
+                )
+              }}
+
+            </div>
+
+          </div>
+
+          <!-- WO DATE -->
+
+          <div class="compact-card">
+
+            <div class="compact-label">
+
+              WO Date
+
+            </div>
+
+            <div class="compact-value">
+
+              {{
+                selectedRow()?.workOrderDate
+                  | date:'dd MMM yyyy'
+              }}
+
+            </div>
+
+          </div>
+
+          <!-- PLANNED END -->
+
+          <div class="compact-card">
+
+            <div class="compact-label">
+
+              Planned End
+
+            </div>
+
+            <div class="compact-value">
+
+              {{
+                selectedRow()?.plannedEndDate
+                  | date:'dd MMM yyyy'
+              }}
+
+            </div>
+
+          </div>
+
+          <!-- QTY -->
+
+          <div class="compact-card qty-card">
+
+            <div class="compact-label">
+
+              Qty
+
+            </div>
+
+            <div class="qty-row">
+
+              <div>
+
+                <small>Ordered</small>
+
+                <strong>
+                  {{
+                    selectedRow()?.orderedQuantity
+                  }}
+                </strong>
+
+              </div>
+
+              <div>
+
+                <small>Pending</small>
+
+                <strong class="text-danger">
+                  {{
+                    selectedRow()?.pendingQuantity
+                  }}
+                </strong>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- PRIORITY -->
+
+          <div class="compact-card">
+
+            <div class="compact-label">
+
+              Priority
+
+            </div>
+
+            <div>
+
+              <span
+                class="priority-chip"
+
+                [class.low]="
+                  selectedRow()?.priority === 'Low'
+                "
+
+                [class.normal]="
+                  selectedRow()?.priority === 'Normal'
+                "
+
+                [class.high]="
+                  selectedRow()?.priority === 'High'
+                "
+
+                [class.urgent]="
+                  selectedRow()?.priority === 'Urgent'
+                ">
+
+                <span class="priority-dot"></span>
+
+                {{
+                  selectedRow()?.priority
+                }}
+
+              </span>
+
+            </div>
+
+          </div>
+
+          <!-- STATUS -->
+
+          <div class="compact-card">
+
+            <div class="compact-label">
+
+              Status
+
+            </div>
+
+            <div>
+
+              <span
+                class="wo-status"
+
+                [class.draft]="
+                  selectedRow()?.status === 'Draft'
+                "
+
+                [class.confirmed]="
+                  selectedRow()?.status === 'Confirmed'
+                "
+
+                [class.InProgress]="
+                  selectedRow()?.status === 'InProgress'
+                "
+
+                [class.completed]="
+                  selectedRow()?.status === 'Completed'
+                "
+
+                [class.cancelled]="
+                  selectedRow()?.status === 'Cancelled'
+                ">
+
+                {{
+                  selectedRow()?.status
+                }}
+
+              </span>
+
+            </div>
+
+          </div>
+
+          <!-- PROGRESS -->
+
+          <div class="compact-card full">
+
+            <div
+              class="d-flex justify-content-between align-items-center mb-1">
+
+              <div class="compact-label mb-0">
+
+                Progress
+
+              </div>
+
+              <strong>
+
+                {{
+                  getProgress(
+                    selectedRow()!
+                  )
+                }}%
+
+              </strong>
+
+            </div>
+
+            <div class="progress compact-progress">
+
+              <div
+                class="progress-bar"
+
+                [style.width.%]="
+                  getProgress(
+                    selectedRow()!
+                  )
+                ">
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- REMARKS -->
+
+          @if(selectedRow()?.remarks){
+
+          <div class="compact-card full">
+
+            <div class="compact-label">
+
+              Remarks
+
+            </div>
+
+            <div class="compact-remarks">
+
+              {{
+                selectedRow()?.remarks
+              }}
+
+            </div>
+
+          </div>
+
+          }
+
+        </div>
+
+        }
+
+      </div>
+
+
+
+    </div>
+
+  </div>
+
+</div>
+
+<app-confirm-modal #modal></app-confirm-modal>

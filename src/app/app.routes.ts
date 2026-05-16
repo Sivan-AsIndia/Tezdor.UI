@@ -273,23 +273,42 @@ export const routes: Routes = [
           import('./feature/employee/shift/shift-list/shift-list')
             .then(m => m.ShiftListComponent),
       },
-            {
+      {
         path: 'shift/create',
         loadComponent: () =>
           import('./feature/employee/shift/shift-create/shift-create')
             .then(m => m.ShiftCreateComponent),
       },
-                  {
+      {
         path: 'shift/edit/:id',
         loadComponent: () =>
           import('./feature/employee/shift/shift-create/shift-create')
             .then(m => m.ShiftCreateComponent),
       },
-                        {
+      {
         path: 'shift/:id',
         loadComponent: () =>
           import('./feature/employee/shift/shift-detail/shift-detail')
             .then(m => m.ShiftDetailComponent),
+      },
+
+      {
+        path: 'work-orders',
+        loadComponent: () =>
+          import('./feature/sales/work-order/work-order-list/work-order-list')
+            .then(m => m.WorkOrderListComponent),
+      },
+      {
+        path: 'work-order/create',
+        loadComponent: () =>
+          import('./feature/sales/work-order/work-order-create/work-order-create')
+            .then(m => m.WorkOrderCreateComponent),
+      },
+      {
+        path: 'work-order/edit/:id',
+        loadComponent: () =>
+          import('./feature/sales/work-order/work-order-create/work-order-create')
+            .then(m => m.WorkOrderCreateComponent),
       },
     ],
   },
