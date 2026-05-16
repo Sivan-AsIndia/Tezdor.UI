@@ -4,12 +4,13 @@ import { Router, ActivatedRoute, RouterLink } from "@angular/router";
 import { FormsModule, ReactiveFormsModule, FormControl } from "@angular/forms";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
-import { InvoiceStatus, LineItem, PaymentStatus, poOptions, SUPPLIER_OPTIONS } from "../purchase-invoice";
+import { InvoiceStatus, LineItem, PaymentStatus, SUPPLIER_OPTIONS } from "../purchase-invoice";
 import { ToastNotifier } from "../../../../core/services/toast";
 import { PurchaseInvoiceDataClient } from "../purchase-invoice-data-client";
 import { ProductDataClient } from "../../../product/product-data-client";
 import { DropdownOption, UNIT_OPTIONS } from "../../../product/product";
 import { TAX_OPTIONS } from "../../purchase-order/purchase-order";
+import { PurchaseOrderDataClient } from "../../purchase-order/purchase-order-data-client";
 import { SearchDropdownComponent } from "../../../../shared/components/search-dropdown/search-dropdown";
 import { Editor, NgxEditorModule, Toolbar } from "ngx-editor";
 
@@ -195,7 +196,15 @@ readonly notesControl =
   ];
 
   supplierOptions = SUPPLIER_OPTIONS;
-  poOptions = poOptions;
+  // PO Reference dropdown now dynamically loaded from PurchaseOrderDataClient seed data
+  private poClient = inject(PurchaseOrderDataClient);
+  poOptions = computed(() => {
+    const orders = this.poClient.orders();
+    return [
+      { value: '', label: '-- None --' },
+      ...orders.map(o => ({ value: o.poNumber, label: `${o.poNumber} · ${o.vendorName}` }))
+    ];
+  });
   unitOptions = UNIT_OPTIONS;
   taxOptions = TAX_OPTIONS;
 
@@ -444,7 +453,7 @@ readonly notesControl =
 
   poDropdownItems = computed(() =>
 
-    this.poOptions.map(x => ({
+    this.poOptions().map(x => ({
 
       id: String(x.value),
 

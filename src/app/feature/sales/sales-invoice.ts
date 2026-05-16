@@ -1,3 +1,8 @@
+import {
+  MASTER_CUSTOMERS, MASTER_PAYMENT_TERMS, MASTER_PLACE_OF_SUPPLY,
+  MASTER_DEMO_PRODUCTS, SelectOption
+} from '../../core/services/master-data';
+
 export type SalesInvoiceStatus =
   | 'draft'
   | 'sent'
@@ -280,13 +285,10 @@ export const INVOICE_STATUS_OPTIONS: ISelectOption[] = [
   { value: 'overdue', label: 'Overdue' },
 ];
 
-export const PAYMENT_TERMS_OPTIONS: ISelectOption[] = [
-  { value: 'net30', label: 'Net 30 Days' },
-  { value: 'net15', label: 'Net 15 Days' },
-  { value: 'net60', label: 'Net 60 Days' },
-  { value: 'advance', label: 'Advance' },
-  { value: 'cod', label: 'Cash on Delivery' },
-];
+// ═══════════════════════════════════════════════════════
+// Re-exported from centralized master-data.ts
+// ═══════════════════════════════════════════════════════
+export const PAYMENT_TERMS_OPTIONS: ISelectOption[] = MASTER_PAYMENT_TERMS as ISelectOption[];
 
 export const PAYMENT_MODE_OPTIONS: ISelectOption[] = [
   { value: 'neft', label: 'NEFT' },
@@ -296,75 +298,11 @@ export const PAYMENT_MODE_OPTIONS: ISelectOption[] = [
   { value: 'card', label: 'Card' },
 ];
 
-export const DEMO_PRODUCTS: ProductOption[] = [
-  {
-    value: 'P001',
-    label: 'Plywood 18mm BWP Grade',
-    price: 1850,
-    taxPct: 18,
-    unitId: 4,
-  },
-  {
-    value: 'P002',
-    label: 'Teak Wood Prime Grade',
-    price: 12500,
-    taxPct: 18,
-    unitId: 3,
-  },
-  {
-    value: 'P003',
-    label: 'MDF Board 12mm',
-    price: 950,
-    taxPct: 12,
-    unitId: 4,
-  },
-  {
-    value: 'P004',
-    label: 'Hardwood Flooring Strip',
-    price: 3200,
-    taxPct: 18,
-    unitId: 3,
-  },
-  {
-    value: 'P005',
-    label: 'Veneer Sheet Natural Oak',
-    price: 580,
-    taxPct: 12,
-    unitId: 4,
-  },
-];
+export const DEMO_PRODUCTS: ProductOption[] = MASTER_DEMO_PRODUCTS as ProductOption[];
 
-export const CUSTOMER_OPTIONS: ISelectOption[] = [
-  {
-    value: 'C001',
-    label: 'Arjun Traders Pvt Ltd',
-    gstin: '33ABCDE1234F1Z5',
-    address: 'T Nagar, Chennai',
-    mobile: '9876543210',
-    email: 'arjun@traders.com',
-  },
-  {
-    value: 'C002',
-    label: 'Lakshmi Constructions',
-    gstin: '33FGHIJ5678K1Z2',
-    address: 'Anna Nagar, Chennai',
-    mobile: '9876543211',
-    email: 'lakshmi@constructions.com',
-  },
-  {
-    value: 'C003',
-    label: 'Sri Balaji Enterprises',
-    gstin: '33LMNOP9012Q1Z7',
-    address: 'Velachery, Chennai',
-    mobile: '9876543212',
-    email: 'balaji@enterprises.com',
-  },
-];
+// ═══════════════════════════════════════════════════════
+// Customers and Place of Supply from master-data
+// ═══════════════════════════════════════════════════════
+export const CUSTOMER_OPTIONS: ISelectOption[] = MASTER_CUSTOMERS as ISelectOption[];
 
-export const PLACE_OF_SUPPLY_OPTIONS: ISelectOption[] = [
-  { value: 'TN', label: 'Tamil Nadu' },
-  { value: 'KA', label: 'Karnataka' },
-  { value: 'MH', label: 'Maharashtra' },
-  { value: 'DL', label: 'Delhi' },
-  { value: 'GJ', label: 'Gujarat' },
-];
+export const PLACE_OF_SUPPLY_OPTIONS: ISelectOption[] = MASTER_PLACE_OF_SUPPLY as ISelectOption[];
