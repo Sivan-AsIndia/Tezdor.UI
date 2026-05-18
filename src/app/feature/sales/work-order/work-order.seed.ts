@@ -7,7 +7,7 @@ import {
 export const WORK_ORDER_SEED: WorkOrder[] = [
 
   /* =====================================================
-     LAPTOP ASSEMBLY
+     YASHIKA 3+1+1 SOFA SET
   ===================================================== */
 
   {
@@ -58,7 +58,7 @@ export const WORK_ORDER_SEED: WorkOrder[] = [
       'WH-FG-001',
 
     remarks:
-      'Corporate laptop bulk production.',
+      'Bulk production for Sundaram Furnishings order.',
 
     status:
       WorkOrderStatus.InProgress,
@@ -101,7 +101,7 @@ export const WORK_ORDER_SEED: WorkOrder[] = [
   },
 
   /* =====================================================
-     MOUSE
+     ROYAL SINGLE RECLINER
   ===================================================== */
 
   {
@@ -152,7 +152,7 @@ export const WORK_ORDER_SEED: WorkOrder[] = [
       'WH-FG-001',
 
     remarks:
-      'Wireless mouse export batch completed.',
+      'Recliner batch for Deepa Interiors completed.',
 
     status:
       WorkOrderStatus.Completed,
@@ -192,7 +192,7 @@ export const WORK_ORDER_SEED: WorkOrder[] = [
   },
 
   /* =====================================================
-     TSHIRT
+     MILANO L-SHAPE SOFA
   ===================================================== */
 
   {
@@ -240,10 +240,10 @@ export const WORK_ORDER_SEED: WorkOrder[] = [
       'CUST-003',
 
     warehouseId:
-      'WH-GARMENT-001',
+      'WH-FG-001',
 
     remarks:
-      'Summer collection urgent production.',
+      'Urgent L-shape sofa production for Sri Balaji order.',
 
     status:
       WorkOrderStatus.Confirmed,

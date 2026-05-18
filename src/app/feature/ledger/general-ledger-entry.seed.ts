@@ -7,7 +7,7 @@ const COMPANY_BASE = {
   companyName: 'SofaCraft Furnishings Pvt Ltd',
   branchId: 'branch-001',
   branchCode: 'BR01',
-  branchName: 'Chennai',
+  branchName: 'Coimbatore',
   fiscalYearId: 'fy-2026',
   fiscalYearCode: 'FY26',
   fiscalYearName: 'FY 2025-26',
@@ -15,7 +15,7 @@ const COMPANY_BASE = {
   baseCurrencyCode: 'INR',
   baseCurrencyName: 'Indian Rupee',
   branchCodeSnapshot: 'BR01',
-  branchNameSnapshot: 'Chennai',
+  branchNameSnapshot: 'Coimbatore',
   isReversal: false,
   isDeleted: false,
   createdBy: 'admin',
@@ -24,7 +24,7 @@ const COMPANY_BASE = {
 export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
 
   // ────────────────────────────────────────────────────────────────────
-  // PINV-2026-001 · Purchase Invoice from Krishna Timber (10 Laptop Pro 15)
+  // PINV-2026-001 · Purchase Invoice from Krishna Timber & Plywood (Teak Wood + Plywood)
   // Purchases Dr ₹480,000 / AP Cr ₹480,000 + GST Input Dr ₹86,400 / AP Cr ₹86,400
   // ────────────────────────────────────────────────────────────────────
   {
@@ -38,7 +38,7 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     sourceType: 'PurchaseInvoice', sourceDocumentId: 'PINV-2026-001', sourceDocumentNumber: 'PINV-2026-001',
     journalEntryId: 'je-pi-001', journalEntryNumber: 'JE-PI-001',
     journalLineId: 'jl-pi-001', journalLineNumber: 1,
-    narration: 'Purchase of 10 Laptop Pro 15 from Krishna Timber',
+    narration: 'Purchase of Teak Wood & Plywood from Krishna Timber & Plywood',
     lineNarration: 'Purchases account debited',
     accountCodeSnapshot: 'PURCH', accountNameSnapshot: 'Purchases Account',
     createdAt: '2026-01-10T10:00:00',
@@ -54,7 +54,7 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     sourceType: 'PurchaseInvoice', sourceDocumentId: 'PINV-2026-001', sourceDocumentNumber: 'PINV-2026-001',
     journalEntryId: 'je-pi-001', journalEntryNumber: 'JE-PI-001',
     journalLineId: 'jl-pi-002', journalLineNumber: 2,
-    narration: 'Purchase of 10 Laptop Pro 15 from Krishna Timber',
+    narration: 'Purchase of Teak Wood & Plywood from Krishna Timber & Plywood',
     lineNarration: 'GST input credit on purchase',
     accountCodeSnapshot: 'GSTIN', accountNameSnapshot: 'GST Input Credit',
     createdAt: '2026-01-10T10:01:00',
@@ -70,15 +70,15 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     sourceType: 'PurchaseInvoice', sourceDocumentId: 'PINV-2026-001', sourceDocumentNumber: 'PINV-2026-001',
     journalEntryId: 'je-pi-001', journalEntryNumber: 'JE-PI-001',
     journalLineId: 'jl-pi-003', journalLineNumber: 3,
-    narration: 'Purchase of 10 Laptop Pro 15 from Krishna Timber',
-    lineNarration: 'Accounts payable credited - Krishna Timber',
+    narration: 'Purchase of Teak Wood & Plywood from Krishna Timber & Plywood',
+    lineNarration: 'Accounts payable credited - Krishna Timber & Plywood',
     accountCodeSnapshot: 'AP', accountNameSnapshot: 'Accounts Payable',
     createdAt: '2026-01-10T10:02:00',
   },
 
   // ────────────────────────────────────────────────────────────────────
-  // INV-2026-001 · Sales Invoice to Arjun Traders (5 Laptop Pro 15)
-  // AR Dr ₹324,500 / Sales Cr ₹275,000 + GST Output Cr ₹49,500
+  // INV-2026-001 · Sales Invoice to Sundaram Furnishings (3 Yashika 3+1+1 Sofa Set)
+  // AR Dr ₹318,597 / Sales Cr ₹269,997 + GST Output Cr ₹48,600
   // ────────────────────────────────────────────────────────────────────
   {
     ...COMPANY_BASE,
@@ -87,11 +87,11 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     accountId: 'acc-007', accountCode: 'AR', accountName: 'Accounts Receivable',
     accountingPeriodId: 'jan-2026', accountingPeriodCode: 'JAN', accountingPeriodName: 'January 2026',
     entryDate: '2026-01-10', postingDate: '2026-01-10', postingSequenceNumber: 4,
-    debitAmount: 324500, creditAmount: 0,
+    debitAmount: 318597, creditAmount: 0,
     sourceType: 'SalesInvoice', sourceDocumentId: 'INV-2026-001', sourceDocumentNumber: 'INV-2026-001',
     journalEntryId: 'je-si-001', journalEntryNumber: 'JE-SI-001',
     journalLineId: 'jl-si-001', journalLineNumber: 1,
-    narration: 'Sale of 5 Laptop Pro 15 to Arjun Traders Pvt Ltd',
+    narration: 'Sale of 3 Yashika 3+1+1 Sofa Set to Sundaram Furnishings',
     lineNarration: 'Accounts receivable debited',
     accountCodeSnapshot: 'AR', accountNameSnapshot: 'Accounts Receivable',
     createdAt: '2026-01-10T11:00:00',
@@ -103,11 +103,11 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     accountId: 'acc-009', accountCode: 'SALES', accountName: 'Sales Revenue Account',
     accountingPeriodId: 'jan-2026', accountingPeriodCode: 'JAN', accountingPeriodName: 'January 2026',
     entryDate: '2026-01-10', postingDate: '2026-01-10', postingSequenceNumber: 5,
-    debitAmount: 0, creditAmount: 275000,
+    debitAmount: 0, creditAmount: 269997,
     sourceType: 'SalesInvoice', sourceDocumentId: 'INV-2026-001', sourceDocumentNumber: 'INV-2026-001',
     journalEntryId: 'je-si-001', journalEntryNumber: 'JE-SI-001',
     journalLineId: 'jl-si-002', journalLineNumber: 2,
-    narration: 'Sale of 5 Laptop Pro 15 to Arjun Traders Pvt Ltd',
+    narration: 'Sale of 3 Yashika 3+1+1 Sofa Set to Sundaram Furnishings',
     lineNarration: 'Sales revenue credited',
     accountCodeSnapshot: 'SALES', accountNameSnapshot: 'Sales Revenue Account',
     createdAt: '2026-01-10T11:01:00',
@@ -119,19 +119,19 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     accountId: 'acc-019', accountCode: 'GSTOUT', accountName: 'GST Output Liability',
     accountingPeriodId: 'jan-2026', accountingPeriodCode: 'JAN', accountingPeriodName: 'January 2026',
     entryDate: '2026-01-10', postingDate: '2026-01-10', postingSequenceNumber: 6,
-    debitAmount: 0, creditAmount: 49500,
+    debitAmount: 0, creditAmount: 48600,
     sourceType: 'SalesInvoice', sourceDocumentId: 'INV-2026-001', sourceDocumentNumber: 'INV-2026-001',
     journalEntryId: 'je-si-001', journalEntryNumber: 'JE-SI-001',
     journalLineId: 'jl-si-003', journalLineNumber: 3,
-    narration: 'Sale of 5 Laptop Pro 15 to Arjun Traders Pvt Ltd',
+    narration: 'Sale of 3 Yashika 3+1+1 Sofa Set to Sundaram Furnishings',
     lineNarration: 'GST output liability credited',
     accountCodeSnapshot: 'GSTOUT', accountNameSnapshot: 'GST Output Liability',
     createdAt: '2026-01-10T11:02:00',
   },
 
   // ────────────────────────────────────────────────────────────────────
-  // Payment received from Arjun Traders for INV-2026-001
-  // Bank Dr ₹324,500 / AR Cr ₹324,500
+  // Payment received from Sundaram Furnishings for INV-2026-001
+  // Bank Dr ₹318,597 / AR Cr ₹318,597
   // ────────────────────────────────────────────────────────────────────
   {
     ...COMPANY_BASE,
@@ -140,11 +140,11 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     accountId: 'acc-005', accountCode: 'BANK', accountName: 'Bank Account',
     accountingPeriodId: 'jan-2026', accountingPeriodCode: 'JAN', accountingPeriodName: 'January 2026',
     entryDate: '2026-01-15', postingDate: '2026-01-15', postingSequenceNumber: 7,
-    debitAmount: 324500, creditAmount: 0,
+    debitAmount: 318597, creditAmount: 0,
     sourceType: 'CustomerPayment', sourceDocumentId: 'CP-001', sourceDocumentNumber: 'CP-001',
     journalEntryId: 'je-cp-001', journalEntryNumber: 'JE-CP-001',
     journalLineId: 'jl-cp-001', journalLineNumber: 1,
-    narration: 'Payment received from Arjun Traders Pvt Ltd for INV-2026-001',
+    narration: 'Payment received from Sundaram Furnishings for INV-2026-001',
     lineNarration: 'Bank debited on customer receipt',
     accountCodeSnapshot: 'BANK', accountNameSnapshot: 'Bank Account',
     createdAt: '2026-01-15T10:00:00',
@@ -156,18 +156,18 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     accountId: 'acc-007', accountCode: 'AR', accountName: 'Accounts Receivable',
     accountingPeriodId: 'jan-2026', accountingPeriodCode: 'JAN', accountingPeriodName: 'January 2026',
     entryDate: '2026-01-15', postingDate: '2026-01-15', postingSequenceNumber: 8,
-    debitAmount: 0, creditAmount: 324500,
+    debitAmount: 0, creditAmount: 318597,
     sourceType: 'CustomerPayment', sourceDocumentId: 'CP-001', sourceDocumentNumber: 'CP-001',
     journalEntryId: 'je-cp-001', journalEntryNumber: 'JE-CP-001',
     journalLineId: 'jl-cp-002', journalLineNumber: 2,
-    narration: 'Payment received from Arjun Traders Pvt Ltd for INV-2026-001',
+    narration: 'Payment received from Sundaram Furnishings for INV-2026-001',
     lineNarration: 'AR cleared on receipt',
     accountCodeSnapshot: 'AR', accountNameSnapshot: 'Accounts Receivable',
     createdAt: '2026-01-15T10:01:00',
   },
 
   // ────────────────────────────────────────────────────────────────────
-  // Payment to Krishna Timber for PINV-2026-001
+  // Payment to Krishna Timber & Plywood for PINV-2026-001
   // AP Dr ₹566,400 / Bank Cr ₹566,400
   // ────────────────────────────────────────────────────────────────────
   {
@@ -181,7 +181,7 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     sourceType: 'VendorPayment', sourceDocumentId: 'VP-001', sourceDocumentNumber: 'VP-001',
     journalEntryId: 'je-vp-001', journalEntryNumber: 'JE-VP-001',
     journalLineId: 'jl-vp-001', journalLineNumber: 1,
-    narration: 'Payment to Krishna Timber for PINV-2026-001',
+    narration: 'Payment to Krishna Timber & Plywood for PINV-2026-001',
     lineNarration: 'AP cleared on vendor payment',
     accountCodeSnapshot: 'AP', accountNameSnapshot: 'Accounts Payable',
     createdAt: '2026-01-18T14:00:00',
@@ -197,15 +197,15 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     sourceType: 'VendorPayment', sourceDocumentId: 'VP-001', sourceDocumentNumber: 'VP-001',
     journalEntryId: 'je-vp-001', journalEntryNumber: 'JE-VP-001',
     journalLineId: 'jl-vp-002', journalLineNumber: 2,
-    narration: 'Payment to Krishna Timber for PINV-2026-001',
+    narration: 'Payment to Krishna Timber & Plywood for PINV-2026-001',
     lineNarration: 'Bank credited for vendor payment',
     accountCodeSnapshot: 'BANK', accountNameSnapshot: 'Bank Account',
     createdAt: '2026-01-18T14:01:00',
   },
 
   // ────────────────────────────────────────────────────────────────────
-  // INV-2026-002 · Sales to Lakshmi Constructions (15 Screwdriver Set)
-  // AR Dr ₹7,550 / Sales Cr ₹6,398.25 + GST Output Cr ₹1,151.68
+  // INV-2026-002 · Sales to Deepa Interiors & Decor (5 Royal Single Recliner)
+  // AR Dr ₹196,170 / Sales Cr ₹166,245 + GST Output Cr ₹29,924
   // ────────────────────────────────────────────────────────────────────
   {
     ...COMPANY_BASE,
@@ -214,11 +214,11 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     accountId: 'acc-007', accountCode: 'AR', accountName: 'Accounts Receivable',
     accountingPeriodId: 'jan-2026', accountingPeriodCode: 'JAN', accountingPeriodName: 'January 2026',
     entryDate: '2026-01-15', postingDate: '2026-01-15', postingSequenceNumber: 11,
-    debitAmount: 7550, creditAmount: 0,
+    debitAmount: 196170, creditAmount: 0,
     sourceType: 'SalesInvoice', sourceDocumentId: 'INV-2026-002', sourceDocumentNumber: 'INV-2026-002',
     journalEntryId: 'je-si-002', journalEntryNumber: 'JE-SI-002',
     journalLineId: 'jl-si-004', journalLineNumber: 1,
-    narration: 'Sale of 15 Screwdriver Set 6pc to Lakshmi Constructions',
+    narration: 'Sale of 5 Royal Single Recliner to Deepa Interiors & Decor',
     lineNarration: 'AR debited',
     accountCodeSnapshot: 'AR', accountNameSnapshot: 'Accounts Receivable',
     createdAt: '2026-01-15T14:00:00',
@@ -230,11 +230,11 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     accountId: 'acc-009', accountCode: 'SALES', accountName: 'Sales Revenue Account',
     accountingPeriodId: 'jan-2026', accountingPeriodCode: 'JAN', accountingPeriodName: 'January 2026',
     entryDate: '2026-01-15', postingDate: '2026-01-15', postingSequenceNumber: 12,
-    debitAmount: 0, creditAmount: 6398.25,
+    debitAmount: 0, creditAmount: 166245,
     sourceType: 'SalesInvoice', sourceDocumentId: 'INV-2026-002', sourceDocumentNumber: 'INV-2026-002',
     journalEntryId: 'je-si-002', journalEntryNumber: 'JE-SI-002',
     journalLineId: 'jl-si-005', journalLineNumber: 2,
-    narration: 'Sale of 15 Screwdriver Set 6pc to Lakshmi Constructions',
+    narration: 'Sale of 5 Royal Single Recliner to Deepa Interiors & Decor',
     lineNarration: 'Sales revenue credited',
     accountCodeSnapshot: 'SALES', accountNameSnapshot: 'Sales Revenue Account',
     createdAt: '2026-01-15T14:01:00',
@@ -246,18 +246,18 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     accountId: 'acc-019', accountCode: 'GSTOUT', accountName: 'GST Output Liability',
     accountingPeriodId: 'jan-2026', accountingPeriodCode: 'JAN', accountingPeriodName: 'January 2026',
     entryDate: '2026-01-15', postingDate: '2026-01-15', postingSequenceNumber: 13,
-    debitAmount: 0, creditAmount: 1151.68,
+    debitAmount: 0, creditAmount: 29924,
     sourceType: 'SalesInvoice', sourceDocumentId: 'INV-2026-002', sourceDocumentNumber: 'INV-2026-002',
     journalEntryId: 'je-si-002', journalEntryNumber: 'JE-SI-002',
     journalLineId: 'jl-si-006', journalLineNumber: 3,
-    narration: 'Sale of 15 Screwdriver Set 6pc to Lakshmi Constructions',
+    narration: 'Sale of 5 Royal Single Recliner to Deepa Interiors & Decor',
     lineNarration: 'GST output liability credited',
     accountCodeSnapshot: 'GSTOUT', accountNameSnapshot: 'GST Output Liability',
     createdAt: '2026-01-15T14:02:00',
   },
 
   // ────────────────────────────────────────────────────────────────────
-  // JE-003 · Rent Expense Paid (Feb 2026)
+  // JE-003 · Factory Rent Expense Paid (Feb 2026)
   // Rent Dr ₹25,000 / Bank Cr ₹25,000
   // ────────────────────────────────────────────────────────────────────
   {
@@ -271,7 +271,7 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     sourceType: 'JournalEntry', sourceDocumentId: 'doc-003', sourceDocumentNumber: 'JV-003',
     journalEntryId: 'je-003', journalEntryNumber: 'JE-003',
     journalLineId: 'jl-003', journalLineNumber: 1,
-    narration: 'Rent paid for February 2026',
+    narration: 'Factory rent paid for February 2026',
     lineNarration: 'Rent expense debited',
     accountCodeSnapshot: 'RENT', accountNameSnapshot: 'Rent Expense Account',
     createdAt: '2026-02-05T09:00:00',
@@ -287,15 +287,15 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     sourceType: 'JournalEntry', sourceDocumentId: 'doc-003', sourceDocumentNumber: 'JV-003',
     journalEntryId: 'je-003', journalEntryNumber: 'JE-003',
     journalLineId: 'jl-004', journalLineNumber: 2,
-    narration: 'Rent paid for February 2026',
+    narration: 'Factory rent paid for February 2026',
     lineNarration: 'Bank credited for rent payment',
     accountCodeSnapshot: 'BANK', accountNameSnapshot: 'Bank Account',
     createdAt: '2026-02-05T09:01:00',
   },
 
   // ────────────────────────────────────────────────────────────────────
-  // INV-2026-004 · Sales to Arjun Traders (50 USB Cable Type-C)
-  // AR Dr ₹8,791 / Sales Cr ₹7,450 + GST Output Cr ₹1,341
+  // INV-2026-004 · Sales to Sundaram Furnishings (4 Executive High-Back Chair)
+  // AR Dr ₹89,675 / Sales Cr ₹75,996 + GST Output Cr ₹13,679
   // ────────────────────────────────────────────────────────────────────
   {
     ...COMPANY_BASE,
@@ -304,11 +304,11 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     accountId: 'acc-007', accountCode: 'AR', accountName: 'Accounts Receivable',
     accountingPeriodId: 'feb-2026', accountingPeriodCode: 'FEB', accountingPeriodName: 'February 2026',
     entryDate: '2026-02-15', postingDate: '2026-02-15', postingSequenceNumber: 16,
-    debitAmount: 8791, creditAmount: 0,
+    debitAmount: 89675, creditAmount: 0,
     sourceType: 'SalesInvoice', sourceDocumentId: 'INV-2026-004', sourceDocumentNumber: 'INV-2026-004',
     journalEntryId: 'je-si-004', journalEntryNumber: 'JE-SI-004',
     journalLineId: 'jl-si-010', journalLineNumber: 1,
-    narration: 'Sale of 50 USB Cable Type-C to Arjun Traders Pvt Ltd',
+    narration: 'Sale of 4 Executive High-Back Chair to Sundaram Furnishings',
     lineNarration: 'AR debited',
     accountCodeSnapshot: 'AR', accountNameSnapshot: 'Accounts Receivable',
     createdAt: '2026-02-15T15:00:00',
@@ -320,11 +320,11 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     accountId: 'acc-009', accountCode: 'SALES', accountName: 'Sales Revenue Account',
     accountingPeriodId: 'feb-2026', accountingPeriodCode: 'FEB', accountingPeriodName: 'February 2026',
     entryDate: '2026-02-15', postingDate: '2026-02-15', postingSequenceNumber: 17,
-    debitAmount: 0, creditAmount: 7450,
+    debitAmount: 0, creditAmount: 75996,
     sourceType: 'SalesInvoice', sourceDocumentId: 'INV-2026-004', sourceDocumentNumber: 'INV-2026-004',
     journalEntryId: 'je-si-004', journalEntryNumber: 'JE-SI-004',
     journalLineId: 'jl-si-011', journalLineNumber: 2,
-    narration: 'Sale of 50 USB Cable Type-C to Arjun Traders Pvt Ltd',
+    narration: 'Sale of 4 Executive High-Back Chair to Sundaram Furnishings',
     lineNarration: 'Sales revenue credited',
     accountCodeSnapshot: 'SALES', accountNameSnapshot: 'Sales Revenue Account',
     createdAt: '2026-02-15T15:01:00',
@@ -336,11 +336,11 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     accountId: 'acc-019', accountCode: 'GSTOUT', accountName: 'GST Output Liability',
     accountingPeriodId: 'feb-2026', accountingPeriodCode: 'FEB', accountingPeriodName: 'February 2026',
     entryDate: '2026-02-15', postingDate: '2026-02-15', postingSequenceNumber: 18,
-    debitAmount: 0, creditAmount: 1341,
+    debitAmount: 0, creditAmount: 13679,
     sourceType: 'SalesInvoice', sourceDocumentId: 'INV-2026-004', sourceDocumentNumber: 'INV-2026-004',
     journalEntryId: 'je-si-004', journalEntryNumber: 'JE-SI-004',
     journalLineId: 'jl-si-012', journalLineNumber: 3,
-    narration: 'Sale of 50 USB Cable Type-C to Arjun Traders Pvt Ltd',
+    narration: 'Sale of 4 Executive High-Back Chair to Sundaram Furnishings',
     lineNarration: 'GST output liability credited',
     accountCodeSnapshot: 'GSTOUT', accountNameSnapshot: 'GST Output Liability',
     createdAt: '2026-02-15T15:02:00',
@@ -384,7 +384,7 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
   },
 
   // ────────────────────────────────────────────────────────────────────
-  // PC-007 · Petty Cash Expense - Stationery (Posted)
+  // PC-007 · Petty Cash Expense - Factory Supplies (Posted)
   // Office Supplies Dr ₹1,200 / Petty Cash Cr ₹1,200
   // ────────────────────────────────────────────────────────────────────
   {
@@ -398,8 +398,8 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     sourceType: 'PettyCash', sourceDocumentId: 'PC007', sourceDocumentNumber: 'PC-007',
     journalEntryId: 'je-pc-001', journalEntryNumber: 'JE-PC-001',
     journalLineId: 'jl-pc-001', journalLineNumber: 1,
-    narration: 'Petty cash stationery expense – Priya Sharma (EMP002)',
-    lineNarration: 'Office supplies expense debited',
+    narration: 'Petty cash factory supplies expense – Priya Sharma (EMP002)',
+    lineNarration: 'Factory supplies expense debited',
     accountCodeSnapshot: 'OFFSUP', accountNameSnapshot: 'Office Supplies Expense',
     createdAt: '2026-04-03T09:00:00',
   },
@@ -414,7 +414,7 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     sourceType: 'PettyCash', sourceDocumentId: 'PC007', sourceDocumentNumber: 'PC-007',
     journalEntryId: 'je-pc-001', journalEntryNumber: 'JE-PC-001',
     journalLineId: 'jl-pc-002', journalLineNumber: 2,
-    narration: 'Petty cash stationery expense – Priya Sharma (EMP002)',
+    narration: 'Petty cash factory supplies expense – Priya Sharma (EMP002)',
     lineNarration: 'Petty cash account credited',
     accountCodeSnapshot: 'PC', accountNameSnapshot: 'Petty Cash Account',
     createdAt: '2026-04-03T09:01:00',
@@ -527,7 +527,7 @@ export const GENERAL_LEDGER_ENTRIES_SEED: GeneralLedgerEntry[] = [
     journalLineId: 'jl-pc-006', journalLineNumber: 2,
     narration: 'Petty cash replenishment – Arun Kumar (EMP001)',
     lineNarration: 'Bank credited for petty cash replenishment',
-    accountCodeSnapshot: 'BANK', accountNameSnapshot: 'Bank Account',
+    accountCodeSnapshot: 'PC', accountNameSnapshot: 'Petty Cash Account',
     createdAt: '2026-06-01T09:01:00',
   },
 ];

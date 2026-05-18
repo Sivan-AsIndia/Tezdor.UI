@@ -15,6 +15,7 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { ProductDataClient } from '../product-data-client';
 import { BomDataClient } from '../bom-data-client';         // ← NEW
+import { MasterDataClient } from '../../../core/services/master-data';
 import { SearchDropdownComponent } from '../../../shared/components/search-dropdown/search-dropdown';
 import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 import { BomNode } from '../bom';
@@ -59,6 +60,7 @@ export class ProductCreateComponent {
   private cdr        = inject(ChangeDetectorRef);
   service            = inject(ProductDataClient);
   private bomService = inject(BomDataClient);   // ← NEW
+  masterData         = inject(MasterDataClient);
 
   id       = input<string>();
   editMode = computed(() => !!this.id());
@@ -362,6 +364,18 @@ export class ProductCreateComponent {
     this.bomNodes.update(arr => [...arr, node]);
     this.updateBomNode(pid, { isExpanded: true });
     this.selectedBomNodeId.set(node.id);
+  }
+
+  onRawMaterialChange(nodeId: number, rmId: string): void {
+    if (!rmId) {
+      this.updateBomNode(nodeId, { rawMaterialId: null, rawMaterialName: null });
+      return;
+    }
+    const rm = this.masterData.rawMaterials().find(r => r.id === rmId);
+    this.updateBomNode(nodeId, {
+      rawMaterialId: rmId,
+      rawMaterialName: rm?.name ?? null
+    });
   }
 
   updateBomNode(id: number, changes: Partial<BomNode>): void {

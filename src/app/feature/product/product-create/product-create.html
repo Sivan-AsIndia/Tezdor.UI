@@ -729,12 +729,17 @@
                           <!-- Raw Material -->
                           <td class="bom-td">
                             @if (node.isEditing) {
-                              <input type="text" class="bom-inline-input" placeholder="Material name"
-                                [value]="node.rawMaterialId"
-                                (input)="updateBomNode(node.id, { rawMaterialId: $any($event.target).value })"
-                                (click)="$event.stopPropagation()" style="width: 130px;" />
+                              <select class="bom-inline-input bom-select"
+                                [value]="node.rawMaterialId || ''"
+                                (change)="onRawMaterialChange(node.id, $any($event.target).value)"
+                                (click)="$event.stopPropagation()" style="width: 160px;">
+                                <option value="">--Select--</option>
+                                @for (rm of masterData.rawMaterials(); track rm.id) {
+                                  <option [value]="rm.id">{{ rm.name }}</option>
+                                }
+                              </select>
                             } @else {
-                              <span>{{ node.rawMaterialId || '—' }}</span>
+                              <span>{{ node.rawMaterialName || '—' }}</span>
                             }
                           </td>
 

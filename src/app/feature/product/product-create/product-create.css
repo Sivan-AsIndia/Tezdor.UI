@@ -712,55 +712,62 @@ padding-top: 6px;
 .bom-table-wrap {
   overflow-x: auto;
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  border-radius: 10px;
   margin-top: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .bom-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13.5px;
-  min-width: 900px;
+  font-size: 13px;
+  min-width: 960px;
+  table-layout: auto;
 }
 
 /* ── Table header ── */
 .bom-th {
-  padding: 9px 12px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  padding: 11px 14px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
   color: #6b7280;
   text-align: left;
-  background: #f9fafb;
-  border-bottom: 1px solid #e5e7eb;
+  background: #f8fafc;
+  border-bottom: 2px solid #e5e7eb;
   white-space: nowrap;
   user-select: none;
 }
-.bom-th--item    { min-width: 240px; }
-.bom-th--num     { text-align: right; }
-.bom-th--actions { width: 90px; }
+.bom-th--item    { min-width: 260px; width: 28%; }
+.bom-th--code    { width: 12%; }
+.bom-th--raw     { width: 16%; }
+.bom-th--num     { text-align: right; width: 8%; }
+.bom-th--actions { width: 96px; text-align: center; }
 
 /* ── Table rows ── */
 .bom-row {
   border-bottom: 1px solid #f1f5f9;
   cursor: pointer;
-  transition: background 0.1s;
+  transition: background 0.12s ease;
 }
 .bom-row:last-child    { border-bottom: none; }
 .bom-row:hover         { background: #f8fafc; }
-.bom-row--selected     { background: #eff6ff !important; }
-.bom-row--error        { background: #fff5f5 !important; }
+.bom-row--selected     { background: #eff6ff !important; box-shadow: inset 3px 0 0 #5d87ff; }
+.bom-row--error        { background: #fff5f5 !important; box-shadow: inset 3px 0 0 #f87171; }
 .bom-row--error:hover  { background: #fee2e2 !important; }
 
 /* ── Table cells ── */
 .bom-td {
-  padding: 9px 12px;
+  padding: 10px 14px;
   color: #1f2937;
   vertical-align: middle;
+  font-size: 13px;
+  line-height: 1.45;
 }
-.bom-td--item    { min-width: 240px; }
-.bom-td--num     { text-align: right; }
-.bom-td--actions { text-align: right; padding-right: 8px; }
+.bom-td--item    { min-width: 260px; }
+.bom-td--num     { text-align: right; white-space: nowrap; }
+.bom-td--actions { text-align: center; padding-right: 8px; }
 
 /* ── Level badges ── */
 .bom-level-badge {
@@ -835,6 +842,15 @@ padding-top: 6px;
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
 }
 .bom-inline-input--num { text-align: right; }
+
+.bom-select {
+  appearance: auto;
+  cursor: pointer;
+  padding-right: 22px;
+  max-width: 180px;
+  background-image: none;
+}
+.bom-select option { font-size: 13px; }
 
 .bom-inline-select {
   padding: 3px 6px;
