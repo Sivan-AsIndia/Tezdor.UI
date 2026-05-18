@@ -22,7 +22,7 @@ export const PETTY_CASH_SEED_FULL: PettyCash[] = [
     effectiveFromDate: '2026-01-15',
 
     branchId: 'B1',
-    departmentId: 'D1',
+    departmentId: 'IT',
 
     custodianEmployeeId: 'EMP001',
 
@@ -135,7 +135,7 @@ export const PETTY_CASH_SEED_FULL: PettyCash[] = [
     effectiveFromDate: '2026-03-05',
 
     branchId: 'B1',
-    departmentId: 'D2',
+    departmentId: 'HR',
 
     custodianEmployeeId: 'EMP003',
     duplicateReceiptSuspected: false,
@@ -328,7 +328,7 @@ export const PETTY_CASH_SEED_FULL: PettyCash[] = [
     effectiveToDate: '2026-12-31',
 
     branchId: 'B1',
-    departmentId: 'D1',
+    departmentId: 'IT',
     costCenterId: 'CC1',
     projectId: 'P1',
 
@@ -439,7 +439,7 @@ export const PETTY_CASH_SEED_FULL: PettyCash[] = [
     effectiveFromDate: '2026-04-02',
 
     branchId: 'B1',
-    departmentId: 'D2',
+    departmentId: 'HR',
 
     custodianEmployeeId: 'EMP002',
     duplicateReceiptSuspected: false,
@@ -757,7 +757,7 @@ export const PETTY_CASH_SEED_FULL: PettyCash[] = [
     effectiveFromDate: '2026-06-10',
 
     branchId: 'B1',
-    departmentId: 'D2',
+    departmentId: 'HR',
 
     custodianEmployeeId: 'EMP002',
     duplicateReceiptSuspected: false,

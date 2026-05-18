@@ -144,6 +144,7 @@
                                         <thead>
                                             <tr style="background: #8080800d;">
                                                 <th class="d-xl-none" style="width:40px"></th>
+                                                <th style="width:50px">#</th>
 
                                                 <th (click)="sortBy('postingDate')"
                                                     class="d-none d-md-table-cell sortable">
@@ -185,7 +186,7 @@
                                         </thead>
 
                                         <tbody>
-                                            @for(e of paginatedEntries(); track e.id){
+                                            @for(e of paginatedEntries(); track e.id; let idx = $index){
 
                                             <tr>
 
@@ -197,6 +198,7 @@
                                                         <i class="ti ti-plus"></i>
                                                     </a>
                                                 </td>
+                                                    <td class="text-center">{{ (page() - 1) * pageSize() + idx + 1 }}</td>
 
                                                 <!-- DATE -->
                                                 <td class="d-none d-md-table-cell">

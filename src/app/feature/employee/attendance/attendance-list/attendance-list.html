@@ -131,6 +131,7 @@
                                     <thead>
                                         <tr style="background: #8080800d;">
                                             <th class="d-xl-none" style="width:40px"></th>
+                                                <th style="width:50px">#</th>
                                             <!-- <th (click)="sortBy('attendanceNumber')"
                                                 class="sortable d-none d-md-table-cell">
                                                 Attendance No
@@ -163,7 +164,7 @@
 
                                     <tbody>
 
-                                        @for(a of paginated(); track a.attendanceId){
+                                        @for(a of paginated(); track a.attendanceId; let idx = $index){
 
                                         <tr>
                                             <!-- PLUS ICON -->
@@ -173,6 +174,7 @@
                                                     <i class="ti ti-plus"></i>
                                                 </a>
                                             </td>
+                                                <td class="text-center">{{ (page() - 1) * pageSize() + idx + 1 }}</td>
 
                                             <!-- <td class="fw-semibold d-none d-md-table-cell">
                                                 {{ a.attendanceNumber }}
@@ -294,7 +296,7 @@
 
                                         @if(paginated().length === 0){
                                         <tr>
-                                            <td colspan="8" class="text-center py-4">
+                                            <td colspan="9" class="text-center py-4">
                                                 <div class="empty-table">
                                                     <i class="ti ti-calendar-off"></i>
                                                     <div>No attendance records found</div>

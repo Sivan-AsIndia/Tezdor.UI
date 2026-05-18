@@ -7,6 +7,7 @@ import { EmployeeDataClient } from '../../employee-data-client';
 import { AttendanceDataClient } from '../../attendance/attendance-data-client';
 import { AttendanceType } from '../../attendance/attendance-line';
 import { ToastNotifier } from '../../../../core/services/toast';
+import { MasterDataClient } from '../../../../core/services/master-data';
 import { SalaryComponentType } from '../salary-component';
 import { CommonModule } from '@angular/common';
 import { SearchDropdownComponent } from "../../../../shared/components/search-dropdown/search-dropdown";
@@ -25,6 +26,7 @@ export class SalaryCreateComponent {
   private readonly employeeService = inject(EmployeeDataClient);
   private readonly attendanceService = inject(AttendanceDataClient);
   private readonly toast = inject(ToastNotifier);
+  private readonly master = inject(MasterDataClient);
   errors = signal<Record<string, string>>({});
 
   private readonly route = inject(ActivatedRoute);
@@ -61,10 +63,9 @@ export class SalaryCreateComponent {
 
   // ================= MOCK DATA =================
 
-  branches = signal([
-    { id: 'B1', name: 'Head Office' },
-    { id: 'B2', name: 'Chennai Branch' }
-  ]);
+  branches = computed(() =>
+    this.master.branches().map(b => ({ id: b.branchId, name: b.branchName }))
+  );
 
   periods = this.attendanceService.periods;
 
@@ -340,7 +341,8 @@ export class SalaryCreateComponent {
   }
 
   getEmployeeName(id: string): string {
-    return id; // integrate EmployeeDataClient later
+    const emp = this.employeeService.getById(id);
+    return emp ? `${emp.firstName} ${emp.lastName}` : id;
   }
 
   getPeriodName(id: string): string {

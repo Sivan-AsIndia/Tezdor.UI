@@ -133,6 +133,7 @@
 
                                         <tr style="background:#8080800d;">
                                             <th class="d-xl-none" style="width:40px"></th>
+                                            <th style="width:50px">#</th>
                                             <th style="width:220px;">
                                                 Shift
                                             </th>
@@ -166,7 +167,8 @@
 
                                         @for(
                                         shift of paginatedShifts();
-                                        track shift.shiftId
+                                        track shift.shiftId;
+                                        let idx = $index
                                         ){
 
                                         <tr>
@@ -177,6 +179,7 @@
                                                     <i class="ti ti-plus"></i>
                                                 </a>
                                             </td>
+                                                <td class="text-center">{{ (page() - 1) * pageSize() + idx + 1 }}</td>
                                             <!-- SHIFT -->
                                             <td>
 <div class="d-flex align-items-center gap-2">

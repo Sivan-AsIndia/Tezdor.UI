@@ -3,6 +3,7 @@ import { Router, RouterModule } from '@angular/router';
 import { Salary, SalaryStatus } from '../salary';
 import { CommonModule } from '@angular/common';
 import { SalaryDataClient } from '../salary-data-client';
+import { MasterDataClient, MASTER_BRANCH_MAP } from '../../../../core/services/master-data';
 import { ConfirmModalComponent } from "../../../../shared/components/confirm-modal/confirm-modal";
 import { ToastNotifier } from '../../../../core/services/toast';
 
@@ -217,7 +218,7 @@ resetFilters() {
   // ===== HELPERS =====
 
   getBranchName(id: string): string {
-    return id; // TODO: replace with BranchService
+    return MASTER_BRANCH_MAP[id] ?? id;
   }
 
   formatAmount(val?: number): string {

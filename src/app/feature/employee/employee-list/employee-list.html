@@ -138,6 +138,7 @@
                                         <thead>
                                             <tr style="background: #8080800d;">
                                                 <th class="d-xl-none" style="width:40px"></th>
+                                                <th style="width:50px">#</th>
                                                 <th (click)="sortBy('employeeName')" style="width:220px"
                                                     class="sortable">
                                                     Employee
@@ -182,7 +183,7 @@
                                         </thead>
 
                                         <tbody>
-                                            @for(emp of paginatedEmployees(); track emp.employeeId){
+                                            @for(emp of paginatedEmployees(); track emp.employeeId; let idx = $index){
 
                                             <tr>
 
@@ -195,6 +196,7 @@
                                                         <i class="ti ti-plus"></i>
                                                     </a>
                                                 </td>
+                                                <td class="text-center">{{ (page() - 1) * pageSize() + idx + 1 }}</td>
                                                 <td>
                                                     <div class="d-flex align-items-center gap-2">
                                                         <div class="avatar "
@@ -305,7 +307,7 @@
 
                                             @if(paginatedEmployees().length === 0){
                                             <tr>
-                                                <td colspan="6" class="text-center py-4">
+                                                <td colspan="7" class="text-center py-4">
 
                                                     <div class="empty-table">
 
