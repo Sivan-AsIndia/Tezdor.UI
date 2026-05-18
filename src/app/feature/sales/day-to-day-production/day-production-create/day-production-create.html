@@ -1,0 +1,405 @@
+<div class="dpc-page" [formGroup]="productionForm">
+
+  <!-- ══════════ PAGE HEADER ══════════ -->
+  <div class="dpc-header">
+    <div class="dpc-header__left">
+      <div>
+        <h4 class="dpc-header__title">{{ pageTitle() }}</h4>
+        <p class="dpc-header__sub">Record shop-floor output and material consumption against an active Work Order.</p>
+      </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="arrow-steps d-none d-md-flex">
+      <ul id="breadcrumb">
+        <li><a routerLink="/dashboard"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+        <li><a routerLink="/day-production"><span class="fa fa-industry"></span>&nbsp;Production</a></li>
+        <li><a><span class="fa fa-plus-circle"></span>&nbsp;{{ editMode() ? 'Edit' : 'New' }}</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════ BODY ══════════ -->
+  <div class="dpc-body">
+
+    <!-- ─────────────────────────────────────────
+         SECTION 1 — Production Header
+    ───────────────────────────────────────── -->
+    <div class="dpc-card">
+      <div class="dpc-card__head">
+        <div class="dpc-card__head-icon dpc-card__head-icon--blue">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+            <rect x="9" y="3" width="6" height="4" rx="1"/>
+            <path d="M9 12h6M9 16h4"/>
+          </svg>
+        </div>
+        <div>
+          <div class="dpc-card__title">Production Header</div>
+          <div class="dpc-card__sub">Selecting a Work Order pre-loads its BOM into the consumption table.</div>
+        </div>
+        <!-- <span class="dpc-section-badge">1 of 2</span> -->
+      </div>
+
+      <div class="dpc-card__body">
+
+        <!-- Row 1: Production No · Date · Shift · Line -->
+        <div class="dpc-grid dpc-grid--4">
+
+          <div class="dpc-field">
+            <label class="dpc-label">Production No.</label>
+            <div class="dpc-input-wrap">
+              <input class="dpc-input dpc-input--readonly" formControlName="productionNo" readonly />
+              <span class="dpc-badge-auto">Auto</span>
+            </div>
+          </div>
+
+          <div class="dpc-field">
+            <label class="dpc-label dpc-label--req">Production Date</label>
+            <input type="date" class="dpc-input" formControlName="productionDate"
+              [class.dpc-input--error]="hasError('productionDate')" />
+            @if (hasError('productionDate')) {
+              <span class="dpc-error">Production date is required.</span>
+            }
+          </div>
+
+          <div class="dpc-field">
+            <label class="dpc-label">Shift</label>
+            <select class="dpc-select" formControlName="shift">
+              <option value="">-- Select shift --</option>
+              @for (s of shiftOptions; track s.value) {
+                <option [value]="s.value">{{ s.label }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="dpc-field">
+            <label class="dpc-label">Production Line</label>
+            <select class="dpc-select" formControlName="productionLine">
+              <option value="">-- Select line --</option>
+              @for (l of lineOptions; track l.value) {
+                <option [value]="l.value">{{ l.label }}</option>
+              }
+            </select>
+          </div>
+
+        </div>
+
+        <!-- Divider -->
+        <div class="dpc-divider"></div>
+
+        <!-- Row 2: Work Order · Product · Supervisor -->
+        <div class="dpc-grid dpc-grid--3">
+
+          <div class="dpc-field">
+            <label class="dpc-label dpc-label--req">Work Order</label>
+            <select class="form-select" formControlName="workOrderId"
+              [class.dpc-input--error]="hasError('workOrderId')"
+              (change)="onWorkOrderChange($any($event.target).value)">
+              <option value="" selected>-- Select Work Order --</option>
+              @for (wo of workOrderOptions(); track wo.workOrderId) {
+                <option [value]="wo.workOrderId">
+                  {{ wo.workOrderNo }} — {{ wo.pendingQuantity }} pending
+                </option>
+              }
+            </select>
+            @if (hasError('workOrderId')) {
+              <span class="dpc-error">Work Order is required.</span>
+            }
+          </div>
+
+          <div class="dpc-field">
+            <label class="dpc-label">Product (auto-filled)</label>
+            <div class="dpc-autofill-wrap">
+              @if (selectedWorkOrder()) {
+                <span class="dpc-autofill-val">
+                  {{ getProductName(selectedWorkOrder()?.productId) || '—' }}
+                </span>
+              } @else {
+                <span class="dpc-autofill-placeholder">Select a Work Order first</span>
+              }
+            </div>
+          </div>
+
+          <div class="dpc-field">
+            <label class="dpc-label">Supervisor</label>
+            <select class="dpc-select" formControlName="supervisorId">
+              <option value="">-- Select supervisor --</option>
+              @for (s of supervisorOptions; track s.value) {
+                <option [value]="s.value">{{ s.label }}</option>
+              }
+            </select>
+          </div>
+
+        </div>
+
+        <!-- Divider -->
+        <div class="dpc-divider"></div>
+
+        <!-- Row 3: Quantities -->
+        <div class="dpc-grid dpc-grid--4">
+
+          <div class="dpc-field">
+            <label class="dpc-label dpc-label--req">Produced Qty</label>
+            <div class="dpc-input-unit">
+              <input type="number" class="dpc-input" min="0.001" step="0.001"
+                formControlName="producedQty"
+                [class.dpc-input--error]="hasError('producedQty')"
+               />
+              <span class="dpc-unit">{{ selectedWorkOrder()?.uom || 'Nos' }}</span>
+            </div>
+            @if (hasError('producedQty')) {
+              <span class="dpc-error">Produced qty must be &gt; 0.</span>
+            }
+          </div>
+
+          <div class="dpc-field">
+            <label class="dpc-label">Rejected (pre-QC)</label>
+            <div class="dpc-input-unit">
+              <input type="number" class="dpc-input" min="0" step="0.001"
+                formControlName="rejectedQty"  />
+              <span class="dpc-unit">{{ selectedWorkOrder()?.uom || 'Nos' }}</span>
+            </div>
+            <span class="dpc-hint">Physically damaged before QC.</span>
+          </div>
+
+          <!-- Good Qty — highlighted computed box -->
+          <div class="dpc-field">
+            <label class="dpc-label">Good Qty <span class="dpc-computed-tag">computed</span></label>
+            <div class="dpc-good-qty-box">
+              <span class="dpc-good-qty-val">{{ goodQty() | number:'1.3-3' }}</span>
+              <span class="dpc-good-qty-uom">{{ selectedWorkOrder()?.uom || 'Nos' }}</span>
+            </div>
+            <span class="dpc-hint">Produced − Rejected.</span>
+          </div>
+
+          <div class="dpc-field">
+            <label class="dpc-label">Worker Count</label>
+            <input type="number" class="dpc-input" min="1" step="1" formControlName="workerCount" />
+          </div>
+
+        </div>
+
+        <!-- Divider -->
+        <div class="dpc-divider"></div>
+
+        <!-- Row 4: Time + Downtime -->
+        <div class="dpc-grid dpc-grid--4">
+          <div class="dpc-field">
+            <label class="dpc-label">Start Time</label>
+            <input type="time" class="dpc-input" formControlName="startTime" />
+          </div>
+          <div class="dpc-field">
+            <label class="dpc-label">End Time</label>
+            <input type="time" class="dpc-input" formControlName="endTime" />
+          </div>
+          <div class="dpc-field">
+            <label class="dpc-label">Downtime (min)</label>
+            <input type="number" class="dpc-input" min="0" step="1" formControlName="downtimeMinutes" />
+          </div>
+          <div class="dpc-field">
+            <label class="dpc-label">Downtime Reason</label>
+            <input type="text" class="dpc-input" placeholder="e.g. Pneumatic stapler jam"
+              formControlName="downtimeReason" />
+          </div>
+        </div>
+
+        <!-- Row 5: Remarks -->
+        <div class="dpc-field" style="margin-top:14px">
+          <label class="dpc-label">Remarks / Notes</label>
+          <textarea class="dpc-textarea" rows="3"
+            placeholder="Operator notes, observations, special material usage…"
+            formControlName="remarks"></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────
+         SECTION 2 — Material Consumption
+    ───────────────────────────────────────── -->
+    <div class="dpc-card">
+      <div class="dpc-card__head">
+        <div class="dpc-card__head-icon dpc-card__head-icon--amber">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
+            <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
+          </svg>
+        </div>
+        <div>
+          <div class="dpc-card__title">Material Consumption</div>
+          <div class="dpc-card__sub">Pre-populated from BOM. Adjust Actual qty and add extra items as used.</div>
+        </div>
+        <!-- <div class="dpc-card__actions">
+          <button type="button" class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3
+" (click)="resetToPlanned()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+            </svg>
+            Reset
+          </button>
+          <button type="button" class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
+" (click)="addExtraItem()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Add
+          </button>
+        </div> -->
+        <!-- <span class="dpc-section-badge">2 of 2</span> -->
+      </div>
+
+      @if (consumptionRows().length > 0) {
+        <div class="dpc-table-wrap">
+          <table class="dpc-table">
+            <thead>
+              <tr>
+                <th class="dpc-th dpc-th--num">#</th>
+                <th class="dpc-th">Material</th>
+                <th class="dpc-th">Code</th>
+                <th class="dpc-th dpc-th--r">Planned</th>
+                <th class="dpc-th dpc-th--r">Actual <span style="color:#ef4444">*</span></th>
+                <th class="dpc-th dpc-th--r">Variance</th>
+                <th class="dpc-th">UOM</th>
+                <th class="dpc-th">Batch / Lot</th>
+                <th class="dpc-th">Warehouse</th>
+                <th class="dpc-th">Remarks</th>
+                <th class="dpc-th"></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of consumptionRows(); track row.id; let i = $index) {
+                <tr class="dpc-tr"
+                  [class.dpc-tr--extra]="row.isExtra"
+                  [class.dpc-tr--over]="getVariance(row) > 0"
+                  [class.dpc-tr--under]="getVariance(row) < 0">
+
+                  <td class="dpc-td dpc-td--num">{{ i + 1 }}</td>
+
+                  <td class="dpc-td">
+                    <div class="dpc-mat-name">{{ row.materialName }}</div>
+                    @if (row.isExtra) {
+                      <span class="dpc-extra-badge">Extra</span>
+                    }
+                  </td>
+
+                  <td class="dpc-td">
+                    <span class="dpc-code-chip">{{ row.materialCode || '—' }}</span>
+                  </td>
+
+                  <td class="dpc-td dpc-td--r dpc-td--muted">
+                    {{ row.plannedQty !== null ? (row.plannedQty | number:'1.3-3') : '—' }}
+                  </td>
+
+                  <td class="dpc-td dpc-td--r">
+                    <input type="number" class="dpc-qty-input" min="0" step="0.001"
+                      [value]="row.actualQty"
+                      (change)="updateActualQty(row.id, +$any($event.target).value)" />
+                  </td>
+
+                  <td class="dpc-td dpc-td--r">
+                    @if (row.plannedQty !== null) {
+                      <span [class]="getVariance(row) > 0 ? 'dpc-var dpc-var--over' : getVariance(row) < 0 ? 'dpc-var dpc-var--under' : 'dpc-var dpc-var--zero'">
+                        {{ getVariance(row) > 0 ? '+' : '' }}{{ getVariance(row) | number:'1.3-3' }}
+                      </span>
+                    } @else {
+                      <span class="dpc-var dpc-var--zero">+{{ row.actualQty | number:'1.3-3' }}</span>
+                    }
+                  </td>
+
+                  <td class="dpc-td dpc-td--muted">{{ row.uomName }}</td>
+
+                  <td class="dpc-td">
+                    <input type="text" class="dpc-cell-input" placeholder="Batch no."
+                      [value]="row.batchNo || ''"
+                      (change)="updateRowField(row.id, 'batchNo', $any($event.target).value)" />
+                  </td>
+
+                  <td class="dpc-td">
+                    <input type="text" class="dpc-cell-input" placeholder="Warehouse"
+                      [value]="row.warehouseCode || ''"
+                      (change)="updateRowField(row.id, 'warehouseCode', $any($event.target).value)" />
+                  </td>
+
+                  <td class="dpc-td">
+                    <input type="text" class="dpc-cell-input" placeholder="Note…"
+                      [value]="row.remarks || ''"
+                      (change)="updateRowField(row.id, 'remarks', $any($event.target).value)" />
+                  </td>
+
+                  <td class="dpc-td">
+                    @if (row.isExtra) {
+                      <button type="button" class="dpc-del-btn" title="Remove" (click)="removeExtraItem(row.id)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                          <polyline points="3 6 5 6 21 6"/>
+                          <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+                          <path d="M10 11v6M14 11v6"/>
+                        </svg>
+                      </button>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Consumption footer -->
+        <div class="dpc-cons-footer">
+          <div class="dpc-cons-footer__info">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            On approval, raw material stock is debited and
+            <strong>{{ goodQty() | number:'1.3-3' }} {{ selectedWorkOrder()?.uom || 'Nos' }}</strong>
+            credited to FG warehouse.
+            @if (overUseCount() > 0) {
+              <span class="dpc-over-warn">
+                &nbsp;⚠ {{ overUseCount() }} over-use variance{{ overUseCount() > 1 ? 's' : '' }} — supervisor sign-off required.
+              </span>
+            }
+          </div>
+          @if (netVarianceValue() !== 0) {
+            <div class="dpc-net-variance" [class.dpc-net-variance--pos]="netVarianceValue() > 0">
+              Net variance: <strong>{{ netVarianceValue() > 0 ? '+' : '' }}₹{{ netVarianceValue() | number:'1.2-2' }}</strong>
+            </div>
+          }
+        </div>
+
+      } @else {
+        <div class="dpc-empty">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.2">
+            <path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
+            <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
+            <line x1="12" y1="12" x2="12" y2="16"/><circle cx="12" cy="18" r=".5" fill="#cbd5e1"/>
+          </svg>
+          <p>No material rows loaded</p>
+          <small>Select a Work Order above to pre-load BOM consumption lines.</small>
+        </div>
+      }
+    </div>
+
+  </div><!-- /dpc-body -->
+
+  <!-- ══════════ FOOTER ACTIONS ══════════ -->
+  <div class="dpc-footer-actions">
+    <button type="button" class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3
+" (click)="onCancel()">
+      Cancel
+    </button>
+    <button type="button" class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3
+" (click)="onSaveDraft()">
+   
+      Save as Draft
+    </button>
+    <button type="button" class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
+" (click)="onSave()">
+  
+      Submit for Approval
+    </button>
+  </div>
+
+</div>
+

@@ -1,14 +1,19 @@
-
 import {
-  MASTER_CATEGORIES, MASTER_BRANDS, MASTER_UNITS, MASTER_TAX_OPTIONS,
-  MASTER_TAX_MAP, MASTER_PRODUCT_TYPES, MASTER_DISCOUNT_OPTIONS,
-  MASTER_TEMPLATE_OPTIONS, SelectOption
+  MASTER_CATEGORIES,
+  MASTER_BRANDS,
+  MASTER_UNITS,
+  MASTER_TAX_OPTIONS,
+  MASTER_TAX_MAP,
+  MASTER_PRODUCT_TYPES,
+  MASTER_DISCOUNT_OPTIONS,
+  MASTER_TEMPLATE_OPTIONS,
+  SelectOption,
 } from '../../core/services/master-data';
 
 export type ProductStatus = 'active' | 'inactive' | 'discontinued';
-export type DiscountType  = 'none' | 'percentage' | 'fixed';
-export type TabId         = 'general' | 'advanced'| 'bom';
-export type ProductType         = 'Goods' | 'Service (labour, delivery)';
+export type DiscountType = 'none' | 'percentage' | 'fixed';
+export type TabId = 'general' | 'advanced' | 'bom';
+export type ProductType = 'Goods' | 'Service (labour, delivery)';
 
 export interface ProductImage {
   id?: number;
@@ -16,35 +21,44 @@ export interface ProductImage {
   isPrimary?: boolean;
 }
 export interface Product {
-  id: number;       
-ProductId: string;
-TenantId :string;
-CompanyId :string;
-  productCode: string;   
-  productName: string; 
-  images: ProductImage[]; 
-  categoryId: number;  
-  categoryName:string;
-  subCategoryId:number;
-  subCategoryName:string;
-  brandId?: number;  
-  unitId: number;     
-  barcode?: string;  
-  costPrice: number;   
-  sellingPrice: number; 
-  taxId?: number;     
-  isInclusiveTax: boolean;  
-   discountType: DiscountType;
+  id: number;
+  ProductId: string;
+  TenantId: string;
+  CompanyId: string;
+  productCode: string;
+  productName: string;
+  images: ProductImage[];
+  categoryId: number;
+  categoryName: string;
+  subCategoryId: number;
+  subCategoryName: string;
+  brandId?: number;
+  unitId: number;
+  unitName?: string;
+  unitCode?: string;
+  barcode?: string;
+  costPrice: number;
+  sellingPrice: number;
+  warrantyMonths?: number;
+  hsnCode?: string;
+  dimensions?: string;
+  weightKg?: number;
+  minStockLevel?: number;
+  leadTimeDays?: number;
+  autoExpandBom?: boolean;
+  taxId?: number;
+  isInclusiveTax: boolean;
+  discountType: DiscountType;
   discountValue: number | null;
-  reorderLevel?: number;   
-  maxStockLevel?: number;   
-  currentStock: number;    
-  description?: string;  
+  reorderLevel?: number;
+  maxStockLevel?: number;
+  currentStock: number;
+  description?: string;
   metaTagTitle: string;
   metaTagDescription: string;
   isPhysical: boolean;
-  productTemplate: string;  
-  ProductType :ProductType     
+  productTemplate: string;
+  ProductType: ProductType;
   status: ProductStatus;
   createdAt?: string;
   updatedAt?: string;
@@ -65,9 +79,6 @@ export interface IDiscountOption extends ISelectOption {
   value: DiscountType;
 }
 
-// ═══════════════════════════════════════════════════════
-// Re-exported from centralized master-data.ts
-// ═══════════════════════════════════════════════════════
 export const CATEGORY_OPTIONS: ISelectOption[] = MASTER_CATEGORIES as ISelectOption[];
 
 export const BRAND_OPTIONS: ISelectOption[] = MASTER_BRANDS as ISelectOption[];
@@ -102,9 +113,12 @@ export interface ProductSummary {
   vendorCode: string;
   vendorName: string;
   totalIn: number;
-  unitId:number;
+  unitId: number;
   totalOut: number;
   closingStock: number;
   transactionCount: number;
 }
-export interface DropdownOption { value: string | number; label: string; }
+export interface DropdownOption {
+  value: string | number;
+  label: string;
+}

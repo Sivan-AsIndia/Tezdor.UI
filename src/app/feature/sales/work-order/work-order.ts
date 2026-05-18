@@ -1,93 +1,54 @@
 import { WorkOrderBomLine } from "./work-order-bom";
 
 
-
 export interface WorkOrder {
-
-
   workOrderId?: string;
-
   workOrderNo: string;
-
   workOrderDate: string;
-
 
   productId: string | null;
 
-
+  uom: string;
   orderedQuantity: number;
-
   producedQuantity: number;
-
   pendingQuantity: number;
-
 
   priority: WorkOrderPriority;
 
-
-
   plannedStartDate: string;
-
   plannedEndDate: string;
 
   actualStartDate?: string | null;
-
   actualEndDate?: string | null;
 
-
   salesOrderId?: string | null;
-
   customerId?: string | null;
-
   warehouseId?: string | null;
-
 
   remarks?: string;
 
-
   status: WorkOrderStatus;
 
-
   confirmedBy?: string | null;
-
   confirmedByName?: string;
-
   confirmedDate?: string | null;
 
-
   cancelledBy?: string | null;
-
   cancelledByName?: string;
-
   cancelledDate?: string | null;
-
   cancellationReason?: string;
 
-  /* ========= SYSTEM FLAGS ================= */
-
   isActive?: boolean;
-
   isCancelled?: boolean;
-
   isCompleted?: boolean;
-
   isProductionStarted?: boolean;
 
-
-
   createdBy?: string | null;
-
   createdOn?: string | null;
-
   updatedBy?: string | null;
-
   updatedOn?: string | null;
 
-
-  /* ========= CHILDREN ========== */
-
   bomLines?: WorkOrderBomLine[];
-
 }
 
 export enum WorkOrderStatus {

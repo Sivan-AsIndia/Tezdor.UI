@@ -1,11 +1,7 @@
 export interface WorkOrderBomLine {
-
-
   workOrderBomLineId?: string;
 
   workOrderId: string;
-
-
 
   productStructureId: string;
 
@@ -13,23 +9,24 @@ export interface WorkOrderBomLine {
 
   itemName: string;
 
-
   level: number;
-
+  materialCode: string;
+  materialName: string;
   rawMaterialId?: string | null;
 
+  rawMaterialName?: string;
+  rawMaterialCode?: string;
+
+  unitName?: string;
+
   requiredQuantity: number;
-
   consumedQuantity: number;
-
   pendingQuantity: number;
 
   wastagePercentage?: number;
 
- 
   unitOfMeasureId: string;
 
   createdOn?: string;
-
   updatedOn?: string;
 }
