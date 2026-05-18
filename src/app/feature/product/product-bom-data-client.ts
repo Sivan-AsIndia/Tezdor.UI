@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
-import { BomNode } from './bom';
-import { INITIAL_BOM_NODES, INITIAL_BOM_NEXT_ID } from './bom.seed';
+import { BomNode } from './product-bom';
+import { INITIAL_BOM_NODES, INITIAL_BOM_NEXT_ID } from './product-bom.seed';
 
 @Injectable({
   providedIn: 'root',

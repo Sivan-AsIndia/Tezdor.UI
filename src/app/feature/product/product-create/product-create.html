@@ -4,61 +4,48 @@
 
       <!-- ══════════ Top Header ══════════ -->
       <div class="mb-2">
-        <div class="v-card__loader">
-          <div class="v-progress-linear v-theme--BLUE_THEME v-locale--is-ltr" role="progressbar" aria-hidden="true"
-            aria-valuemin="0" aria-valuemax="100" style="top: 0px; height: 0px; --v-progress-linear-height: 2px;">
-            <div class="v-progress-linear__background"></div>
-            <div class="v-progress-linear__buffer" style="width: 0%;"></div>
-            <div class="v-progress-linear__indeterminate">
-              <div class="v-progress-linear__indeterminate long"></div>
-              <div class="v-progress-linear__indeterminate short"></div>
-            </div>
-          </div>
-        </div>
-
         <div class="v-card-text p-0">
           <div class="d-flex justify-content-between align-items-center" id="TopHeading">
             <div>
               <h4 class="fw-bold mb-1 mainheading">{{ pageTitle() }}</h4>
               <small class="text-muted subdescription">{{ pageSubtitle() }}</small>
             </div>
-
-            <!-- Arrow Breadcrumb -->
             <div class="arrow-steps d-none d-md-flex">
               <ul id="breadcrumb">
                 <li><a routerLink="/dashboard"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a></li>
-                <li><a href="products"><span class="fa fa-list"></span>&nbsp;&nbsp;Product List</a></li>
+                <li><a routerLink="/products"><span class="fa fa-list"></span>&nbsp;&nbsp;Product List</a></li>
                 <li><a><span class="fa fa-plus-circle"></span>&nbsp;&nbsp;{{ pageCrumb() }}</a></li>
               </ul>
             </div>
           </div>
         </div>
-        <span class="v-card__underlay"></span>
       </div>
 
       <!-- ══════════ Tabs ══════════ -->
       <div class="pf-tabs">
         <button class="pf-tab" [class.pf-tab--active]="activeTab() === 'general'" (click)="setTab('general')">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="2" y="7" width="20" height="14" rx="2" />
-            <path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z" />
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2"/>
+            <path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z"/>
           </svg>
           General
         </button>
         <button class="pf-tab" [class.pf-tab--active]="activeTab() === 'advanced'" (click)="setTab('advanced')">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="12" y1="1" x2="12" y2="23" />
-            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
           </svg>
           Advanced
         </button>
-
-           <button class="pf-tab" [class.pf-tab--active]="activeTab() === 'bom'" (click)="setTab('bom')">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="12" y1="1" x2="12" y2="23" />
-            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+        <button class="pf-tab" [class.pf-tab--active]="activeTab() === 'bom'" (click)="setTab('bom')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/>
+            <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
           </svg>
           BOM
+          @if (bomNodes().length > 0) {
+            <span class="pf-tab-badge">{{ bomNodes().length }}</span>
+          }
         </button>
       </div>
 
@@ -74,468 +61,308 @@
 
             <!-- ── Section 1: Product Identity ── -->
             <div class="card">
-              <div class="pf-card__header">
-                <h2 class="cardheader">Product Identity</h2>
-                <span class="pf-section-badge">Section 1 of 3</span>
+              <div class="card__head">
+                <div class="card__head-left">
+                  <div class="card__title">Product Identity</div>
+                  <div class="card__sub">Code, name and category — appear on every downstream document</div>
+                </div>
+                <!-- <span class="badge badge--neutral">Section 1 of 3</span> -->
               </div>
+              <div class="card__body">
 
-              <!-- Row 1: Product Code + Product Name -->
-              <div class="form-row">
-
-                <!-- Product Code -->
-                <div class="form-group" style="flex: 0 0 220px;">
-                  <label class="form-label required cardlabel">Product Code</label>
-                  <input
-                    type="text"
-                    class="form-input form-control"
-                    placeholder="e.g. PRD-00001"
-                    formControlName="productCode"
-                    maxlength="50"
-                    [class.error]="hasError('productCode')" />
-                  <span class="form-hint">Auto-generated (PRD-XXXXX); alphanumeric and hyphen only.</span>
-                  @if (getError('productCode', 'required')) {
-                    <span class="form-error">Product code is required.</span>
-                  }
-                  @if (getError('productCode', 'maxlength')) {
-                    <span class="form-error">Max 50 characters.</span>
-                  }
-                  @if (getError('productCode', 'productCodePattern')) {
-                    <span class="form-error">Only letters, numbers, and hyphens allowed.</span>
-                  }
-                </div>
-
-                <!-- Product Name -->
-                <div class="form-group flex-1">
-                  <label class="form-label required cardlabel">Product Name</label>
-                  <input
-                    type="text"
-                    class="form-input form-control"
-                    placeholder="e.g. Yashika 3+1+1 Sofa Set"
-                    formControlName="productName"
-                    maxlength="200"
-                    [class.error]="hasError('productName')" />
-                  <span class="form-hint">Min 3 chars, max 200. Must be unique and descriptive.</span>
-                  @if (getError('productName', 'required')) {
-                    <span class="form-error">Product name is required.</span>
-                  }
-                  @if (getError('productName', 'minlength')) {
-                    <span class="form-error">Product name must be at least 3 characters.</span>
-                  }
-                  @if (getError('productName', 'maxlength')) {
-                    <span class="form-error">Max 200 characters allowed.</span>
-                  }
-                  @if (getError('productName', 'pattern')) {
-                    <span class="form-error">Product name cannot be only whitespace.</span>
-                  }
-                </div>
-
-              </div>
-
-              <!-- Row 2: Category + Sub-category + Brand + Warranty -->
-              <div class="form-row">
-
-                <!-- Category -->
-                <div class="form-group flex-1">
-                  <label class="form-label required cardlabel">Category</label>
-                  <app-search-dropdown
-                    [items]="categoryDropdownItems()"
-                    [selectedId]="productForm.controls['categoryId'].value ?? null"
-                    [invalid]="hasError('categoryId')"
-                    placeholder="-- Select category --"
-                    (selectedIdChange)="productForm.controls['categoryId'].setValue($event)">
-                  </app-search-dropdown>
-                  <span class="form-hint">Select a product category.</span>
-                  @if (hasError('categoryId')) {
-                    <span class="form-error">Category is required.</span>
-                  }
-                </div>
-
-                <!-- Sub-category -->
-                <div class="form-group flex-1">
-                  <label class="form-label cardlabel">
-                    Sub-category <span class="form-label--optional">(optional)</span>
-                  </label>
-                  <select class="form-select" formControlName="subCategoryId"
-                    [disabled]="!productForm.get('categoryId')?.value">
-                    <option value="">
-                      {{ productForm.get('categoryId')?.value ? '-- Select sub-category --' : '-- Select category first --' }}
-                    </option>
-                    @for (sc of subCategoryOptions(); track sc.value) {
-                      <option [value]="sc.value">{{ sc.label }}</option>
-                    }
-                  </select>
-                </div>
-
-                <!-- Brand -->
-                <div class="form-group flex-1">
-                  <label class="form-label cardlabel">
-                    Brand <span class="form-label--optional">(optional)</span>
-                  </label>
-                  <app-search-dropdown
-                    [items]="brandDropdownItems()"
-                    [selectedId]="productForm.controls['brandId'].value ?? null"
-                    placeholder="-- Select brand --"
-                    (selectedIdChange)="productForm.controls['brandId'].setValue($event)">
-                  </app-search-dropdown>
-                </div>
-
-                <!-- Warranty -->
-                <div class="form-group" style="flex: 0 0 200px;">
-                  <label class="form-label cardlabel">
-                    Warranty <span class="form-label--optional">(months)</span>
-                  </label>
-                  <input
-                    type="number"
-                    class="form-input form-control"
-                    placeholder="e.g. 24"
-                    min="0"
-                    formControlName="warrantyMonths"
-                    [class.error]="hasError('warrantyMonths')" />
-                  <span class="form-hint">0 = No warranty. Common: 12 / 24 / 36.</span>
-                  @if (getError('warrantyMonths', 'min')) {
-                    <span class="form-error">Warranty months cannot be negative.</span>
-                  }
-                </div>
-
-              </div>
-
-              <!-- Row 3: Product Type + HSN Code + Unit of Measure + Barcode/SKU -->
-              <div class="form-row">
-
-                <!-- Product Type -->
-                <div class="form-group flex-1">
-                  <label class="form-label cardlabel">Product Type</label>
-                  <select class="form-select" formControlName="productType">
-                    <option value="">-- Select Type --</option>
-                    @for (p of ProductType; track p.value) {
-                      <option [value]="p.value">{{ p.label }}</option>
-                    }
-                  </select>
-                </div>
-
-                <!-- HSN Code -->
-                <div class="form-group flex-1">
-                  <label class="form-label cardlabel">
-                    HSN Code <span class="form-label--optional">(optional)</span>
-                  </label>
-                  <input
-                    type="text"
-                    class="form-input form-control"
-                    placeholder="e.g. 9401"
-                    formControlName="hsnCode"
-                    maxlength="8"
-                    [class.error]="hasError('hsnCode')" />
-                  <span class="form-hint">4–8 alphanumeric chars for GST classification.</span>
-                  @if (getError('hsnCode', 'hsnPattern')) {
-                    <span class="form-error">HSN code must be 4–8 alphanumeric characters.</span>
-                  }
-                  @if (getError('hsnCode', 'maxlength')) {
-                    <span class="form-error">Max 8 characters.</span>
-                  }
-                </div>
-
-                <!-- Unit of Measure -->
-                <div class="form-group flex-1">
-                  <label class="form-label required cardlabel">Unit of Measure</label>
-                  <select
-                    class="form-select"
-                    formControlName="unitId"
-                    [class.error]="hasError('unitId')">
-                    <option value="">Select unit</option>
-                    @for (u of unitOptions; track u.value) {
-                      <option [value]="u.value">{{ u.label }}</option>
-                    }
-                  </select>
-                  <span class="form-hint">e.g. Pcs, Kg, Litre, Box, Set</span>
-                  @if (hasError('unitId')) {
-                    <span class="form-error">Unit of Measure is required.</span>
-                  }
-                </div>
-
-                <!-- Barcode / SKU -->
-                <div class="form-group flex-1">
-                  <label class="form-label cardlabel">
-                    Barcode / SKU <span class="form-label--optional">(optional)</span>
-                  </label>
-                  <div class="input-scanner-wrap">
-                    <input
-                      type="text"
-                      class="form-input form-control"
-                      placeholder="EAN-13 / QR / SKU"
-                      formControlName="barcode"
-                      maxlength="50"
-                      [class.error]="hasError('barcode')" />
+                <!-- Row 1: Product Name -->
+                <div class="grid grid--3 mb-14">
+                  <div class="fld">
+                    <label class="fld__lbl">Product Name<span class="req">*</span></label>
+                    <input type="text" class="input" placeholder="e.g. Yashika 3+1+1 Sofa Set"
+                      formControlName="productName" maxlength="200"
+                      [class.is-error]="hasError('productName')"/>
+                    <span class="fld__hint">Min 3 chars · max 200 · must be unique and descriptive.</span>
+                    @if (getError('productName','required'))  { <span class="fld__err">Product name is required.</span> }
+                    @if (getError('productName','minlength')) { <span class="fld__err">At least 3 characters required.</span> }
+                    @if (getError('productName','maxlength')) { <span class="fld__err">Max 200 characters allowed.</span> }
+                    @if (getError('productName','pattern'))   { <span class="fld__err">Cannot be only whitespace.</span> }
                   </div>
-                  <span class="form-hint">Unique if provided. Read-only after hardware scan.</span>
-                  @if (getError('barcode', 'maxlength')) {
-                    <span class="form-error">Max 50 characters.</span>
-                  }
+
+                     <div class="fld">
+                    <label class="fld__lbl">Category<span class="req">*</span></label>
+                    <app-search-dropdown
+                      [items]="categoryDropdownItems()"
+                      [selectedId]="productForm.controls['categoryId'].value ?? null"
+                      [invalid]="hasError('categoryId')"
+                      placeholder="-- Select category --"
+                      (selectedIdChange)="productForm.controls['categoryId'].setValue($event)">
+                    </app-search-dropdown>
+                    <span class="fld__hint">Select a product category.</span>
+                    @if (hasError('categoryId')) { <span class="fld__err">Category is required.</span> }
+                  </div>
+
+                  <div class="fld">
+                    <label class="fld__lbl">Sub-category <span class="fld__opt">(optional)</span></label>
+                    <select class="form-select" formControlName="subCategoryId"
+                      [attr.disabled]="!productForm.get('categoryId')?.value ? true : null">
+                      <option value="">{{ productForm.get('categoryId')?.value ? '-- Select sub-category --' : '-- Select category first --' }}</option>
+                      @for (sc of subCategoryOptions(); track sc.value) {
+                        <option [value]="sc.value">{{ sc.label }}</option>
+                      }
+                    </select>
+                  </div>
+
+
                 </div>
 
-              </div>
+                 
 
-              <!-- Description -->
-              <div class="form-group">
-                <label class="form-label cardlabel">Description</label>
-                <div class="rich-editor-wrapper">
-                  <form [formGroup]="editorForm">
-                    @if (showEditor()) {
-                      <ngx-editor-menu [editor]="descriptionEditor" [toolbar]="toolbar"></ngx-editor-menu>
-                      <div class="ngx-overflow">
-                        <ngx-editor
-                          [editor]="descriptionEditor"
-                          formControlName="description"
-                          placeholder="Long product description — printed on Invoice / Purchase Order.">
-                        </ngx-editor>
-                      </div>
-                    }
-                  </form>
+
+
+                <!-- Row 2: Category + Sub-category + Brand + Warranty -->
+                <div class="grid grid--3 mb-14">
+               
+
+                  <div class="fld">
+                    <label class="fld__lbl">Brand <span class="fld__opt">(optional)</span></label>
+                    <app-search-dropdown
+                      [items]="brandDropdownItems()"
+                      [selectedId]="productForm.controls['brandId'].value ?? null"
+                      placeholder="-- Select brand --"
+                      (selectedIdChange)="productForm.controls['brandId'].setValue($event)">
+                    </app-search-dropdown>
+                  </div>
+
+                  <div class="fld">
+                    <label class="fld__lbl">Warranty <span class="fld__opt">(months)</span></label>
+                    <input type="number" class="input" placeholder="e.g. 24" min="0"
+                      formControlName="warrantyMonths" [class.is-error]="hasError('warrantyMonths')"/>
+                    <span class="fld__hint">0 = No warranty.</span>
+                    @if (getError('warrantyMonths','min')) { <span class="fld__err">Cannot be negative.</span> }
+                  </div>
+
+                    <div class="fld">
+                    <label class="fld__lbl">Product Type</label>
+                    <select class="form-select" formControlName="productType">
+                      <option value="">-- Select Type --</option>
+                      @for (p of ProductType; track p.value) {
+                        <option [value]="p.value">{{ p.label }}</option>
+                      }
+                    </select>
+                  </div>
+
                 </div>
-                <span class="form-hint">Max 1000 chars. Printed on Invoice &amp; Purchase Orders.</span>
+
+                <!-- Row 3: Product Type + HSN + Unit + Barcode -->
+                <div class="grid grid--3 mb-14">
+                
+
+                  <div class="fld">
+                    <label class="fld__lbl">HSN Code <span class="fld__opt">(optional)</span></label>
+                    <input type="text" class="input" placeholder="e.g. 9401"
+                      formControlName="hsnCode" maxlength="8"
+                      [class.is-error]="hasError('hsnCode')"/>
+                    <span class="fld__hint">4–8 alphanumeric chars for GST.</span>
+                    @if (getError('hsnCode','hsnPattern')) { <span class="fld__err">Must be 4–8 alphanumeric chars.</span> }
+                  </div>
+
+                  <div class="fld">
+                    <label class="fld__lbl">Unit of Measure<span class="req">*</span></label>
+                    <select class="form-select" formControlName="unitId"
+                      [class.is-error]="hasError('unitId')">
+                      <option value="">Select unit</option>
+                      @for (u of unitOptions; track u.value) {
+                        <option [value]="u.value">{{ u.label }}</option>
+                      }
+                    </select>
+                    <span class="fld__hint">e.g. Pcs, Kg, Litre, Box, Set</span>
+                    @if (hasError('unitId')) { <span class="fld__err">Unit of Measure is required.</span> }
+                  </div>
+
+                  <div class="fld">
+                    <label class="fld__lbl">Barcode / SKU <span class="fld__opt">(optional)</span></label>
+                    <input type="text" class="input" placeholder="EAN-13 / QR / SKU"
+                      formControlName="barcode" maxlength="50"
+                      [class.is-error]="hasError('barcode')"/>
+                    <span class="fld__hint">Unique if provided.</span>
+                    @if (getError('barcode','maxlength')) { <span class="fld__err">Max 50 characters.</span> }
+                  </div>
+                </div>
+
+                <!-- Description -->
+                <div class="fld">
+                  <label class="fld__lbl">Description</label>
+                  <div class="rich-editor-wrapper">
+                    <form [formGroup]="editorForm">
+                      @if (showEditor()) {
+                        <ngx-editor-menu [editor]="descriptionEditor" [toolbar]="toolbar"></ngx-editor-menu>
+                        <div class="ngx-overflow">
+                          <ngx-editor [editor]="descriptionEditor" formControlName="description"
+                            placeholder="Long product description — printed on Invoice / Purchase Order.">
+                          </ngx-editor>
+                        </div>
+                      }
+                    </form>
+                  </div>
+                  <span class="fld__hint">Max 1000 chars. Printed on Invoice &amp; Purchase Orders.</span>
+                </div>
+
               </div>
             </div>
             <!-- /Section 1 -->
 
             <!-- ── Section 2: Pricing & Stock Controls ── -->
             <div class="card">
-              <div class="pf-card__header">
-                <h2 class="cardheader">Pricing &amp; Stock Controls</h2>
-                <span class="pf-section-badge">Section 2 of 3</span>
+              <div class="card__head">
+                <div class="card__head-left">
+                  <div class="card__title">Pricing &amp; Stock Controls</div>
+                  <div class="card__sub">Costing reference and reorder thresholds for inventory planning</div>
+                </div>
+                <!-- <span class="badge badge--neutral">Section 2 of 3</span> -->
               </div>
+              <div class="card__body">
 
-              <!-- Cost Price + Selling Price + Reorder Qty + Lead Time -->
-              <div class="form-row">
-
-                <!-- Cost Price -->
-                <div class="form-group flex-1">
-                  <label class="form-label cardlabel">
-                    Cost Price <span class="form-label--optional">(optional)</span>
-                  </label>
-                  <div class="input-prefix-wrap">
-                    <input
-                      type="number"
-                      class="form-input form-input--prefixed form-control"
-                      placeholder="0.00"
-                      min="0"
-                      step="0.01"
-                      formControlName="costPrice"
-                      [class.error]="hasError('costPrice')" />
-                  </div>
-                  <span class="form-hint">Purchase cost — used for inventory valuation.</span>
-                  @if (getError('costPrice', 'min')) {
-                    <span class="form-error">Cost price cannot be negative.</span>
-                  }
-                </div>
-
-                <!-- Selling Price -->
-                <div class="form-group flex-1">
-                  <label class="form-label cardlabel">
-                    Selling Price (MRP) <span class="form-label--optional">(optional)</span>
-                  </label>
-                  <div class="input-prefix-wrap">
-                    <input
-                      type="number"
-                      class="form-input form-input--prefixed form-control"
-                      placeholder="0.00"
-                      min="0"
-                      step="0.01"
-                      formControlName="sellingPrice"
-                      [class.error]="hasError('sellingPrice')" />
-                  </div>
-                  <span class="form-hint">Default price pre-filled in Invoice line items.</span>
-                  @if (getError('sellingPrice', 'min')) {
-                    <span class="form-error">Selling price cannot be negative.</span>
-                  }
-                  @if (sellingPriceWarn()) {
-                    <span class="form-warn">⚠ Selling Price is below Cost Price.</span>
-                  }
-                </div>
-
-                <!-- Reorder Qty -->
-                <div class="form-group flex-1">
-                  <label class="form-label cardlabel">Reorder Qty</label>
-                  <input
-                    type="number"
-                    class="form-input form-control"
-                    placeholder="0"
-                    min="0"
-                    step="1"
-                    formControlName="reorderLevel"
-                    [class.error]="hasError('reorderLevel')" />
-                  <span class="form-hint">Low-stock alert when Current Stock ≤ Reorder Qty.</span>
-                  @if (getError('reorderLevel', 'min')) {
-                    <span class="form-error">Reorder qty cannot be negative.</span>
-                  }
-                </div>
-
-                <!-- Lead Time -->
-                <div class="form-group flex-1">
-                  <label class="form-label cardlabel">Lead Time (days)</label>
-                  <input
-                    type="number"
-                    class="form-input form-control"
-                    placeholder="0"
-                    min="0"
-                    formControlName="leadTimeDays"
-                    [class.error]="hasError('leadTimeDays')" />
-                  <span class="form-hint">Supplier lead time for procurement planning.</span>
-                  @if (getError('leadTimeDays', 'min')) {
-                    <span class="form-error">Lead time cannot be negative.</span>
-                  }
-                </div>
-
-              </div>
-
-              <!-- Min Stock + Max Stock + Weight + Dimensions -->
-              <div class="form-row">
-
-                <!-- Min Stock -->
-                <div class="form-group flex-1">
-                  <label class="form-label cardlabel">Min Stock Level</label>
-                  <input
-                    type="number"
-                    class="form-input form-control"
-                    placeholder="0"
-                    min="0"
-                    step="0.001"
-                    formControlName="minStockLevel"
-                    [class.error]="hasError('minStockLevel') || stockLevelError" />
-                  <span class="form-hint">Safety stock floor for procurement alerts.</span>
-                  @if (getError('minStockLevel', 'min')) {
-                    <span class="form-error">Min stock cannot be negative.</span>
-                  }
-                </div>
-
-                <!-- Max Stock -->
-                <div class="form-group flex-1">
-                  <label class="form-label cardlabel">Max Stock Level</label>
-                  <input
-                    type="number"
-                    class="form-input form-control"
-                    placeholder="0"
-                    min="0"
-                    step="0.001"
-                    formControlName="maxStockLevel"
-                    [class.error]="hasError('maxStockLevel') || stockLevelError" />
-                  <span class="form-hint">Upper limit hint for procurement planning.</span>
-                  @if (getError('maxStockLevel', 'min')) {
-                    <span class="form-error">Max stock cannot be negative.</span>
-                  }
-                  @if (stockLevelError) {
-                    <span class="form-error">Max stock must be ≥ Min stock level.</span>
-                  }
-                </div>
-
-                <!-- Weight -->
-                <div class="form-group flex-1">
-                  <label class="form-label cardlabel">
-                    Weight (kg) <span class="form-label--optional">(optional)</span>
-                  </label>
-                  <input
-                    type="number"
-                    class="form-input form-control"
-                    placeholder="0.000"
-                    min="0"
-                    step="0.001"
-                    formControlName="weightKg"
-                    [class.error]="hasError('weightKg')" />
-                  @if (getError('weightKg', 'min')) {
-                    <span class="form-error">Weight cannot be negative.</span>
-                  }
-                </div>
-
-                <!-- Dimensions -->
-                <div class="form-group flex-1">
-                  <label class="form-label cardlabel">
-                    Dimensions (L×W×H, cm) <span class="form-label--optional">(optional)</span>
-                  </label>
-                  <input
-                    type="text"
-                    class="form-input form-control"
-                    placeholder="e.g. 220 × 90 × 95"
-                    formControlName="dimensions"
-                    maxlength="100"
-                    [class.error]="hasError('dimensions')" />
-                  @if (getError('dimensions', 'maxlength')) {
-                    <span class="form-error">Max 100 characters.</span>
-                  }
-                </div>
-
-              </div>
-
-              <!-- Tax + Inclusive -->
-              <div class="form-row">
-                <div class="form-group flex-1">
-                  <label class="form-label cardlabel">Tax / GST</label>
-                  <select class="form-select" formControlName="taxId">
-                    @for (t of taxOptions; track t.value) {
-                      <option [value]="t.value">{{ t.label }}</option>
-                    }
-                  </select>
-                  <span class="form-hint">Default tax rate applied in Invoice / Purchase Invoice.</span>
-                </div>
-                <div class="form-group flex-1">
-                  <label class="form-label cardlabel">Tax Inclusive</label>
-                  <label class="checkbox-option">
-                    <input type="checkbox" formControlName="isInclusiveTax" />
-                    <span class="checkbox-label">Selling Price already includes tax</span>
-                  </label>
-                </div>
-              </div>
-
-              <!-- Discount Type -->
-              <div class="form-row">
-                <div class="form-group flex-1">
-                  <label class="form-label cardlabel">Discount Type</label>
-                  <select class="form-select" formControlName="discountType">
-                    @for (d of discountTypes; track d.value) {
-                      <option [value]="d.value">{{ d.label }}</option>
-                    }
-                  </select>
-                </div>
-
-                <!-- Discount Value (conditional) -->
-                @if (showDiscountValue()) {
-                  <div class="form-group flex-1">
-                    <label class="form-label cardlabel">
-                      Discount Value
-                      {{ productForm.get('discountType')?.value === 'percentage' ? '(%)' : '(₹)' }}
-                    </label>
-                    <input
-                      type="number"
-                      class="form-input form-control"
-                      placeholder="0"
-                      min="0"
-                      formControlName="discountValue"
-                      [class.error]="hasError('discountValue')" />
-                    @if (getError('discountValue', 'min')) {
-                      <span class="form-error">Discount value cannot be negative.</span>
-                    }
-                  </div>
-                }
-              </div>
-
-              <!-- BOM auto-expand toggle -->
-              <div class="pf-toggle-row">
-                <div class="pf-toggle-item">
-                  <div>
-                    <div class="pf-toggle-label">Auto-expand BOM in Sales / Work Orders</div>
-                    <div class="pf-toggle-hint">
-                      When ON, selecting this product loads its full BOM tree automatically.
+                <!-- Cost + Selling + Reorder + Lead -->
+                <div class="grid grid--4 mb-14">
+                  <div class="fld">
+                    <label class="fld__lbl">Standard Cost Price</label>
+                    <div class="input-wrap">
+                      <span class="input-wrap__prefix">₹</span>
+                      <input type="number" class="input input--prefix" placeholder="0.00"
+                        min="0" step="0.01" formControlName="costPrice"
+                        [class.is-error]="hasError('costPrice')"/>
                     </div>
+                    <span class="fld__hint">Used for inventory valuation.</span>
+                    @if (getError('costPrice','min')) { <span class="fld__err">Cannot be negative.</span> }
                   </div>
-                  <label class="pf-switch">
-                    <input type="checkbox" formControlName="autoExpandBom" />
-                    <span class="pf-switch__track"></span>
+
+                  <div class="fld">
+                    <label class="fld__lbl">Selling Price (MRP)</label>
+                    <div class="input-wrap">
+                      <span class="input-wrap__prefix">₹</span>
+                      <input type="number" class="input input--prefix" placeholder="0.00"
+                        min="0" step="0.01" formControlName="sellingPrice"
+                        [class.is-error]="hasError('sellingPrice')"/>
+                    </div>
+                    <span class="fld__hint">Default price in Invoice line items.</span>
+                    @if (getError('sellingPrice','min')) { <span class="fld__err">Cannot be negative.</span> }
+                    @if (sellingPriceWarn()) { <span class="fld__warn">⚠ Below Cost Price.</span> }
+                  </div>
+
+                  <div class="fld">
+                    <label class="fld__lbl">Reorder Qty</label>
+                    <input type="number" class="input" placeholder="0"
+                      min="0" step="1" formControlName="reorderLevel"
+                      [class.is-error]="hasError('reorderLevel')"/>
+                    <span class="fld__hint">Alert when stock ≤ this qty.</span>
+                    @if (getError('reorderLevel','min')) { <span class="fld__err">Cannot be negative.</span> }
+                  </div>
+
+                  <div class="fld">
+                    <label class="fld__lbl">Lead Time (days)</label>
+                    <input type="number" class="input" placeholder="0"
+                      min="0" formControlName="leadTimeDays"
+                      [class.is-error]="hasError('leadTimeDays')"/>
+                    <span class="fld__hint">Supplier procurement lead time.</span>
+                    @if (getError('leadTimeDays','min')) { <span class="fld__err">Cannot be negative.</span> }
+                  </div>
+                </div>
+
+                <!-- Min + Max + Weight + Dimensions -->
+                <div class="grid grid--4 mb-14">
+                  <div class="fld">
+                    <label class="fld__lbl">Min Stock Level</label>
+                    <input type="number" class="input" placeholder="0"
+                      min="0" step="0.001" formControlName="minStockLevel"
+                      [class.is-error]="hasError('minStockLevel') || stockLevelError"/>
+                    <span class="fld__hint">Safety stock floor.</span>
+                    @if (getError('minStockLevel','min')) { <span class="fld__err">Cannot be negative.</span> }
+                  </div>
+
+                  <div class="fld">
+                    <label class="fld__lbl">Max Stock Level</label>
+                    <input type="number" class="input" placeholder="0"
+                      min="0" step="0.001" formControlName="maxStockLevel"
+                      [class.is-error]="hasError('maxStockLevel') || stockLevelError"/>
+                    <span class="fld__hint">Upper limit for planning.</span>
+                    @if (getError('maxStockLevel','min')) { <span class="fld__err">Cannot be negative.</span> }
+                    @if (stockLevelError) { <span class="fld__err">Max must be ≥ Min stock.</span> }
+                  </div>
+
+                  <div class="fld">
+                    <label class="fld__lbl">Weight (kg) <span class="fld__opt">(optional)</span></label>
+                    <input type="number" class="input" placeholder="0.000"
+                      min="0" step="0.001" formControlName="weightKg"
+                      [class.is-error]="hasError('weightKg')"/>
+                    @if (getError('weightKg','min')) { <span class="fld__err">Cannot be negative.</span> }
+                  </div>
+
+                  <div class="fld">
+                    <label class="fld__lbl">Dimensions (L×W×H, cm) <span class="fld__opt">(optional)</span></label>
+                    <input type="text" class="input" placeholder="e.g. 220 × 90 × 95"
+                      formControlName="dimensions" maxlength="100"
+                      [class.is-error]="hasError('dimensions')"/>
+                    @if (getError('dimensions','maxlength')) { <span class="fld__err">Max 100 characters.</span> }
+                  </div>
+                </div>
+
+                <!-- Tax + Inclusive + Discount -->
+                <div class="grid grid--4 mb-14">
+                  <div class="fld">
+                    <label class="fld__lbl">Tax / GST</label>
+                    <select class="form-select" formControlName="taxId">
+                      @for (t of taxOptions; track t.value) {
+                        <option [value]="t.value">{{ t.label }}</option>
+                      }
+                    </select>
+                    <span class="fld__hint">Default tax on Invoice / Purchase Invoice.</span>
+                  </div>
+
+                
+                  <div class="fld">
+                    <label class="fld__lbl">Discount Type</label>
+                    <select class="form-select" formControlName="discountType">
+                      @for (d of discountTypes; track d.value) {
+                        <option [value]="d.value">{{ d.label }}</option>
+                      }
+                    </select>
+                  </div>
+
+                    <div class="fld">
+                    <label class="fld__lbl">Tax Inclusive</label>
+                    <label class="cb" style="margin-top:8px">
+                      <input type="checkbox" formControlName="isInclusiveTax" style="accent-color:var(--acc)"/>
+                      <span>Selling Price already includes tax</span>
+                    </label>
+                  </div>
+
+
+                  @if (showDiscountValue()) {
+                    <div class="fld">
+                      <label class="fld__lbl">
+                        Discount Value {{ productForm.get('discountType')?.value === 'percentage' ? '(%)' : '(₹)' }}
+                      </label>
+                      <input type="number" class="input" placeholder="0" min="0"
+                        formControlName="discountValue"
+                        [class.is-error]="hasError('discountValue')"/>
+                      @if (getError('discountValue','min')) { <span class="fld__err">Cannot be negative.</span> }
+                    </div>
+                  }
+                </div>
+
+                <!-- Auto-expand BOM toggle -->
+                <div class="switch-row" style="cursor:pointer" (click)="toggleAutoExpandBom()">
+                  <div>
+                    <div class="switch-row__title">Auto-expand BOM in Sales / Work Orders</div>
+                    <div class="switch-row__hint">When ON, selecting this product loads its full BOM tree automatically.</div>
+                  </div>
+                  <label class="switch" (click)="$event.stopPropagation()">
+                    <input type="checkbox" formControlName="autoExpandBom" style="display:none"/>
+                    <span class="switch__track"
+                      [style.background]="productForm.get('autoExpandBom')?.value ? 'var(--acc)' : ''">
+                    </span>
                   </label>
                 </div>
-              </div>
 
+              </div>
             </div>
             <!-- /Section 2 -->
-
-        
-            <!-- /Section 3: BOM -->
 
           </ng-container>
           }
@@ -545,71 +372,59 @@
           @if (activeTab() === 'advanced') {
           <ng-container>
 
-            <!-- ── Shipping ── -->
             <div class="card">
-              <div class="pf-card__header">
-                <h2 class="cardheader">Shipping</h2>
+              <div class="card__head">
+                <div class="card__title">Shipping</div>
               </div>
-              <label class="checkbox-option">
-                <input type="checkbox" formControlName="isPhysical" />
-                <span class="checkbox-label">This is a physical product</span>
-              </label>
-              <span class="form-hint">
-                Physical products may require shipping. Digital items skip shipping.
-              </span>
+              <div class="card__body">
+                <label class="cb">
+                  <input type="checkbox" formControlName="isPhysical" style="accent-color:var(--acc)"/>
+                  <span>This is a physical product</span>
+                </label>
+                <p class="fld__hint" style="margin-top:6px">Physical products may require shipping. Digital items skip shipping.</p>
+              </div>
             </div>
 
-            <!-- ── Meta Options ── -->
             <div class="card">
-              <div class="pf-card__header">
-                <h2 class="cardheader">Meta Options</h2>
+              <div class="card__head">
+                <div class="card__title">Meta Options</div>
               </div>
-              <div class="form-group">
-                <label class="form-label cardlabel">Meta Tag Title</label>
-                <input
-                  type="text"
-                  class="form-input form-control"
-                  placeholder="Meta tag name"
-                  formControlName="metaTagTitle" />
-                <span class="form-hint">Recommended to be simple and precise keywords.</span>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label cardlabel">Meta Tag Description</label>
-                <div class="rich-editor-wrapper">
-                  <form [formGroup]="editorForm">
-                    @if (showEditor()) {
-                      <ngx-editor-menu [editor]="metaDescriptionEditor" [toolbar]="toolbar"></ngx-editor-menu>
-                      <div class="ngx-overflow">
-                        <ngx-editor
-                          [editor]="metaDescriptionEditor"
-                          formControlName="metaTagDescription"
-                          placeholder="Enter meta description">
-                        </ngx-editor>
-                      </div>
-                    }
-                  </form>
+              <div class="card__body">
+                <div class="fld mb-14">
+                  <label class="fld__lbl">Meta Tag Title</label>
+                  <input type="text" class="input" placeholder="Meta tag name" formControlName="metaTagTitle"/>
+                  <span class="fld__hint">Recommended to be simple and precise keywords.</span>
                 </div>
-                <span class="form-hint">Set a meta tag description to increase SEO ranking.</span>
+                <div class="fld">
+                  <label class="fld__lbl">Meta Tag Description</label>
+                  <div class="rich-editor-wrapper">
+                    <form [formGroup]="editorForm">
+                      @if (showEditor()) {
+                        <ngx-editor-menu [editor]="metaDescriptionEditor" [toolbar]="toolbar"></ngx-editor-menu>
+                        <div class="ngx-overflow">
+                          <ngx-editor [editor]="metaDescriptionEditor" formControlName="metaTagDescription"
+                            placeholder="Enter meta description">
+                          </ngx-editor>
+                        </div>
+                      }
+                    </form>
+                  </div>
+                  <span class="fld__hint">Set a meta tag description to increase SEO ranking.</span>
+                </div>
               </div>
             </div>
 
-            <!-- ── Current Stock — Read-only ── -->
             <div class="card">
-              <div class="pf-card__header">
-                <h2 class="cardheader">Stock Balance</h2>
+              <div class="card__head">
+                <div class="card__title">Stock Balance</div>
               </div>
-              <div class="form-group">
-                <label class="form-label cardlabel">Current Stock</label>
-                <input
-                  type="text"
-                  class="form-input form-control form-input--readonly"
-                  readonly
-                  formControlName="currentStock"
-                  style="background: #f8fafc;" />
-                <span class="form-hint">
-                  Live balance from Stock Maintain module — not editable here.
-                </span>
+              <div class="card__body">
+                <div class="fld">
+                  <label class="fld__lbl">Current Stock</label>
+                  <input type="text" class="input" readonly formControlName="currentStock"
+                    style="background:#f8fafc;cursor:not-allowed;color:#98a2b3"/>
+                  <span class="fld__hint">Live balance from Stock Maintain module — not editable here.</span>
+                </div>
               </div>
             </div>
 
@@ -617,36 +432,42 @@
           }
           <!-- /ADVANCED TAB -->
 
-     @if (activeTab() === 'bom') {
-
-              <!-- ── Section 3: Bill of Materials (BOM) ── -->
+          <!-- ═══════ BOM TAB ═══════ -->
+          @if (activeTab() === 'bom') {
             <div class="card">
-              <div class="pf-card__header" style="flex-direction: column; align-items: flex-start; gap: 4px;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
-                  <div>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                      <h2 class="cardheader">Bill of Materials (BOM)</h2>
-                      <span class="pf-section-badge">Section 3 of 3</span>
-                    </div>
-                    <small class="text-muted" style="font-size: 12px; display: block; margin-top: 3px; max-width: 560px; line-height: 1.5;">
-                      Self-referencing tree — unlimited nesting. At least one Level-1 component is required to mark this product production-ready.
-                    </small>
+              <div class="card__head">
+                <div class="card__head-left">
+                  <div class="card__title">Bill of Materials (BOM)</div>
+                  <div class="card__sub">
+                    Self-referencing tree — unlimited nesting. At least one Level-1 component required for production-ready status.
                   </div>
-                  <div style="display: flex; gap: 8px; flex-shrink: 0; margin-top: 2px;">
-                    <!-- <button type="button" class="bom-btn bom-btn--ghost">
-                      Clone from another product
-                    </button> -->
-                    <button type="button" class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
-" (click)="addComponent()">
-                      + Add Component
-                    </button>
-                  </div>
+                </div>
+                <div class="card__actions">
+                  <button type="button" class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
+"
+                    [disabled]="hasUnsavedBomRows()"
+                    [title]="hasUnsavedBomRows() ? 'Save all open rows before adding a new component' : ''"
+                    (click)="addComponent()">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Add Component
+                  </button>
                 </div>
               </div>
 
-              @if (bomNodes().length > 0) {
+              @if (hasUnsavedBomRows()) {
+                <div class="bom-unsaved-banner mt-3 mb-3">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  Save all open rows (✓) before adding a new component or sub-component.
+                </div>
+              }
 
-                <!-- BOM Table -->
+              @if (bomNodes().length > 0) {
                 <div class="bom-table-wrap">
                   <table class="bom-table">
                     <thead>
@@ -656,28 +477,28 @@
                         <th class="bom-th">RAW MATERIAL</th>
                         <th class="bom-th bom-th--num">QTY</th>
                         <th class="bom-th bom-th--num">UOM</th>
-                        <th class="bom-th bom-th--num">WASTAGE</th>
+                        <th class="bom-th bom-th--num">WASTAGE %</th>
                         <th class="bom-th bom-th--num">COST/UNIT</th>
-                        <th class="bom-th" style="width: 55px; text-align: center;">OPT?</th>
                         <th class="bom-th bom-th--actions"></th>
                       </tr>
                     </thead>
                     <tbody>
                       @for (node of flatBomTree; track node.id) {
                         <tr class="bom-row"
+                          [class.bom-row--l1]="node.level === 1"
                           [class.bom-row--selected]="selectedBomNodeId() === node.id"
                           [class.bom-row--error]="node.hasError"
+                          [class.bom-row--editing]="node.isEditing"
                           (click)="selectBomNode(node.id)">
 
                           <!-- Item / Component -->
-                          <td class="bom-td bom-td--item" [style.padding-left.px]="16 + (node.level - 1) * 24">
-                            <div style="display: flex; align-items: center; gap: 6px;">
-
+                          <td class="bom-td bom-td--item" [style.padding-left.px]="14 + (node.level - 1) * 22">
+                            <div class="bom-item-cell">
                               <!-- Expand toggle -->
                               @if (hasChildren(node.id)) {
                                 <button type="button" class="bom-expand-btn"
                                   (click)="toggleExpand(node.id); $event.stopPropagation()">
-                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2.5">
                                     @if (node.isExpanded) {
                                       <polyline points="18 15 12 9 6 15"/>
@@ -687,27 +508,22 @@
                                   </svg>
                                 </button>
                               } @else {
-                                <span style="width: 20px; flex-shrink: 0;"></span>
+                                <span class="bom-expand-placeholder"></span>
                               }
 
                               <!-- Level badge -->
-                              <span class="bom-level-badge" [class]="'bom-level-badge--l' + node.level">
-                                L{{ node.level }}
-                              </span>
+                              <span class="bom-level-badge bom-level-badge--l{{ node.level }}">L{{ node.level }}</span>
 
-                              <!-- Name -->
+                              <!-- Name input / display -->
                               @if (node.isEditing) {
-                                <input
-                                  type="text"
-                                  class="bom-inline-input"
+                                <input type="text" class="bom-inline-input bom-inline-input--name"
                                   placeholder="Item name *"
                                   [value]="node.itemName"
+                                  [class.bom-inline-input--error]="node.hasError && !node.itemName.trim()"
                                   (input)="updateBomNode(node.id, { itemName: $any($event.target).value })"
-                                  (click)="$event.stopPropagation()"
-                                  style="min-width: 140px;" />
+                                  (click)="$event.stopPropagation()"/>
                               } @else {
-                                <span class="bom-item-name"
-                                  [style.font-weight]="node.level === 1 ? '600' : '400'">
+                                <span class="bom-item-name" [style.font-weight]="node.level === 1 ? '600' : '400'">
                                   {{ node.itemName || '—' }}
                                 </span>
                               }
@@ -720,7 +536,7 @@
                               <input type="text" class="bom-inline-input" placeholder="e.g. CMP-001"
                                 [value]="node.itemCode"
                                 (input)="updateBomNode(node.id, { itemCode: $any($event.target).value })"
-                                (click)="$event.stopPropagation()" style="width: 110px;" />
+                                (click)="$event.stopPropagation()" style="width:106px"/>
                             } @else {
                               <span class="bom-code">{{ node.itemCode || '—' }}</span>
                             }
@@ -729,17 +545,17 @@
                           <!-- Raw Material -->
                           <td class="bom-td">
                             @if (node.isEditing) {
-                              <select class="bom-inline-input bom-select"
+                              <select class="bom-inline-select"
                                 [value]="node.rawMaterialId || ''"
                                 (change)="onRawMaterialChange(node.id, $any($event.target).value)"
-                                (click)="$event.stopPropagation()" style="width: 160px;">
-                                <option value="">--Select--</option>
+                                (click)="$event.stopPropagation()" style="width:152px">
+                                <option value="">-- Select --</option>
                                 @for (rm of masterData.rawMaterials(); track rm.id) {
                                   <option [value]="rm.id">{{ rm.name }}</option>
                                 }
                               </select>
                             } @else {
-                              <span>{{ node.rawMaterialName || '—' }}</span>
+                              <span class="bom-cell-text">{{ node.rawMaterialName || '—' }}</span>
                             }
                           </td>
 
@@ -749,80 +565,64 @@
                               <input type="number" class="bom-inline-input bom-inline-input--num"
                                 placeholder="1 *"
                                 [value]="node.quantity"
+                                [class.bom-inline-input--error]="node.hasError && !(node.quantity > 0)"
                                 (input)="updateBomNode(node.id, { quantity: +$any($event.target).value })"
-                                (click)="$event.stopPropagation()" min="0.0001" step="0.0001"
-                                style="width: 72px;" />
+                                (click)="$event.stopPropagation()" min="0.0001" step="0.0001" style="width:68px"/>
                             } @else {
                               <span>{{ node.quantity ?? '—' }}</span>
                             }
                           </td>
 
-                          <!-- UOM -->
+                          <!-- UOM  ← FIX: bind by value, show label -->
                           <td class="bom-td bom-td--num">
                             @if (node.isEditing) {
                               <select class="bom-inline-select"
+                                [class.bom-inline-select--error]="node.hasError && !node.unitId"
                                 [value]="node.unitId"
-                                (change)="updateBomNode(node.id, { unitId: $any($event.target).value })"
-                                (click)="$event.stopPropagation()">
-                                <option value="">— *</option>
+                                (change)="onBomUomChange(node.id, $any($event.target).value)"
+                                (click)="$event.stopPropagation()" style="width:80px">
+                                <option value="">None</option>
                                 @for (u of unitOptions; track u.value) {
                                   <option [value]="u.value">{{ u.label }}</option>
                                 }
                               </select>
                             } @else {
-                              <span>{{ node.unitId || '—' }}</span>
+                              <!-- ✅ FIX: show label, not raw id -->
+                              <span>{{ getUomLabel(node.unitId) }}</span>
                             }
                           </td>
 
-                          <!-- Wastage -->
+                          <!-- Wastage % -->
                           <td class="bom-td bom-td--num">
                             @if (node.isEditing) {
                               <input type="number" class="bom-inline-input bom-inline-input--num"
                                 placeholder="0"
                                 [value]="node.wastagePercent"
                                 (input)="updateBomNode(node.id, { wastagePercent: +$any($event.target).value })"
-                                (click)="$event.stopPropagation()" min="0" max="100" step="0.01"
-                                style="width: 60px;" />
+                                (click)="$event.stopPropagation()" min="0" max="100" step="0.01" style="width:60px"/>
                             } @else {
                               <span>{{ node.wastagePercent ? node.wastagePercent + '%' : '—' }}</span>
                             }
                           </td>
 
-                          <!-- Cost Per Unit -->
+                          <!-- Cost / Unit -->
                           <td class="bom-td bom-td--num">
                             @if (node.isEditing) {
                               <input type="number" class="bom-inline-input bom-inline-input--num"
                                 placeholder="0.00"
                                 [value]="node.costPerUnit ?? ''"
                                 (input)="updateBomNode(node.id, { costPerUnit: $any($event.target).value === '' ? null : +$any($event.target).value })"
-                                (click)="$event.stopPropagation()" min="0" step="0.01"
-                                style="width: 80px;" />
+                                (click)="$event.stopPropagation()" min="0" step="0.01" style="width:76px"/>
                             } @else {
                               <span>{{ node.costPerUnit != null ? '₹' + node.costPerUnit : '—' }}</span>
                             }
                           </td>
 
-                          <!-- Is Optional -->
-                          <td class="bom-td" style="text-align: center;">
-                            @if (node.isEditing) {
-                              <input type="checkbox"
-                                [checked]="node.isOptional"
-                                (change)="updateBomNode(node.id, { isOptional: $any($event.target).checked })"
-                                (click)="$event.stopPropagation()"
-                                style="width: 15px; height: 15px; cursor: pointer;" />
-                            } @else {
-                              @if (node.isOptional) {
-                                <span class="bom-optional-badge">Opt</span>
-                              } @else {
-                                <span style="color: #d1d5db; font-size: 12px;">—</span>
-                              }
-                            }
-                          </td>
-
-                          <!-- Actions -->
+                          <!-- Actions — ✅ FIX: delete always visible, add-sub blocked when unsaved -->
                           <td class="bom-td bom-td--actions" (click)="$event.stopPropagation()">
                             <div class="bom-actions">
                               @if (node.isEditing) {
+                                <!-- Save (commit) -->
                                 <button type="button" class="bom-action-btn bom-action-btn--save"
                                   title="Save row" (click)="commitBomNode(node.id)">
                                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
@@ -830,8 +630,19 @@
                                     <polyline points="20 6 9 17 4 12"/>
                                   </svg>
                                 </button>
+                                <!-- Delete (always visible even in edit mode) -->
+                                <button type="button" class="bom-action-btn bom-action-btn--danger"
+                                  title="Delete row" (click)="requestDeleteBomNode(node.id)">
+                                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"/>
+                                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                                    <path d="M10 11v6M14 11v6"/>
+                                  </svg>
+                                </button>
                               } @else {
-                                <button type="button" class="bom-action-btn" title="Edit"
+                                <!-- Edit -->
+                                <button type="button" class="bom-action-btn" title="Edit row"
                                   (click)="toggleEdit(node.id)">
                                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2">
@@ -839,7 +650,10 @@
                                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                                   </svg>
                                 </button>
-                                <button type="button" class="bom-action-btn" title="Add sub-component"
+                                <!-- Add sub-component — ✅ FIX: disabled when any row is unsaved -->
+                                <button type="button" class="bom-action-btn"
+                                  title="{{ hasUnsavedBomRows() ? 'Save all open rows first' : 'Add sub-component' }}"
+                                  [disabled]="hasUnsavedBomRows()"
                                   (click)="addSubComponent(node.id)">
                                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2">
@@ -847,6 +661,7 @@
                                     <line x1="5" y1="12" x2="19" y2="12"/>
                                   </svg>
                                 </button>
+                                <!-- Delete (always visible) -->
                                 <button type="button" class="bom-action-btn bom-action-btn--danger"
                                   title="Delete" (click)="requestDeleteBomNode(node.id)">
                                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
@@ -859,6 +674,7 @@
                               }
                             </div>
                           </td>
+
                         </tr>
                       }
                     </tbody>
@@ -873,54 +689,52 @@
                     &nbsp;·&nbsp; {{ bomLineCount() }} lines
                     &nbsp;·&nbsp; {{ bomDepth() }} levels deep
                   </span>
-                  <button type="button" class="bom-btn bom-btn--ghost"
-                    [disabled]="!selectedBomNodeId()"
+                  <button type="button" class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3"
+                    [disabled]="!selectedBomNodeId() || hasUnsavedBomRows()"
+                    [title]="hasUnsavedBomRows() ? 'Save all open rows first' : '+ Add Sub-Component to selected'"
                     (click)="addSubComponent()">
-                    + Add Sub-Component to selected
+                    + Add Sub-Component
                   </button>
                 </div>
 
               } @else {
-
-                <!-- Empty state -->
+                <!-- Empty State -->
                 <div class="bom-empty">
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="1.2" style="color: #cbd5e1;">
+                  <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.2" style="color:#cbd5e1">
                     <rect x="2" y="3" width="20" height="14" rx="2"/>
                     <path d="M8 21h8M12 17v4"/>
                   </svg>
-                  <p style="margin: 8px 0 4px; font-weight: 500; color: #64748b;">No components added yet</p>
-                  <p style="margin: 0; font-size: 13px; color: #94a3b8;">
-                    Click <strong>+ Add Component</strong> to build the BOM tree.
+                  <p style="margin:10px 0 4px;font-weight:500;color:#64748b;font-size:13px">No components added yet</p>
+                  <p style="margin:0;font-size:12px;color:#94a3b8">
+                    Click <strong>+ Add Component</strong> above to build the BOM tree.
                   </p>
                 </div>
-
               }
             </div>
           }
+          <!-- /BOM TAB -->
 
         </div>
         <!-- /main-column -->
 
+        
         <!-- ────────── Right Sidebar ────────── -->
         <div class="sidebar-column">
 
           <!-- ── Product Images ── -->
           <div class="pf-card">
-            <div class="pf-card__header d-flex justify-content-between">
+            <div class="pf-card__header">
               <h3 class="cardheader">Product Images</h3>
               <span class="pf-img-count">{{ imagePreviews().length }} / {{ maxImages }}</span>
             </div>
 
-            <!-- Slider -->
             <div class="pf-slider" (mousedown)="onDragStart($event)" (mouseup)="onDragEnd($event)">
               @if (imagePreviews().length > 0) {
-                <img [src]="imagePreviews()[currentIndex()]" class="pf-slider__img" alt="Product image" />
-
+                <img [src]="imagePreviews()[currentIndex()]" class="pf-slider__img" alt="Product image"/>
                 @if (currentIndex() === primaryIndex()) {
                   <span class="pf-primary-badge">★ Primary</span>
                 }
-
                 @if (imagePreviews().length > 1) {
                   <button class="pf-slider__arr pf-slider__arr--left"
                     [disabled]="currentIndex() === 0" (click)="prev()">‹</button>
@@ -930,14 +744,12 @@
               } @else {
                 <div class="pf-slider__empty" (click)="fileInput.click()"
                   [class.pf-slider__empty--drag]="isDragging()"
-                  (dragover)="onDragOver($event)"
-                  (dragleave)="onDragLeave()"
-                  (drop)="onDrop($event)">
+                  (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDrop($event)">
                   <div class="pf-upload-icon">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                      <polyline points="16 16 12 12 8 16" />
-                      <line x1="12" y1="12" x2="12" y2="21" />
-                      <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <polyline points="16 16 12 12 8 16"/>
+                      <line x1="12" y1="12" x2="12" y2="21"/>
+                      <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
                     </svg>
                   </div>
                   <p class="pf-upload-text">Click or drag images here</p>
@@ -946,7 +758,6 @@
               }
             </div>
 
-            <!-- Dots -->
             @if (imagePreviews().length > 1) {
               <div class="pf-dots">
                 @for (img of imagePreviews(); track $index; let i = $index) {
@@ -955,31 +766,25 @@
               </div>
             }
 
-            <!-- Thumbnails -->
             @if (imagePreviews().length > 0) {
               <div class="pf-thumbs">
                 @for (img of imagePreviews(); track $index; let i = $index) {
                   <div class="pf-thumb-wrap"
                     [class.pf-thumb-wrap--active]="i === currentIndex()"
                     [class.pf-thumb-wrap--primary]="i === primaryIndex()">
-                    <img [src]="img" class="pf-thumb" (click)="goTo(i)" alt="thumb" />
+                    <img [src]="img" class="pf-thumb" (click)="goTo(i)" alt="thumb"/>
                     <button class="pf-thumb__remove" (click)="removeImage(i, $event)">✕</button>
-                    @if (i === primaryIndex()) {
-                      <span class="pf-thumb__star">★</span>
-                    }
+                    @if (i === primaryIndex()) { <span class="pf-thumb__star">★</span> }
                   </div>
                 }
-
                 @if (imagePreviews().length < maxImages) {
                   <div class="pf-thumb-add" (click)="fileInput.click()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <line x1="12" y1="5" x2="12" y2="19" />
-                      <line x1="5" y1="12" x2="19" y2="12" />
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                     </svg>
                   </div>
                 }
               </div>
-
               @if (currentIndex() !== primaryIndex()) {
                 <button type="button" class="pf-set-primary-btn" (click)="setPrimary()">
                   Set Image {{ currentIndex() + 1 }} as Primary
@@ -988,7 +793,7 @@
             }
 
             <input #fileInput type="file" multiple accept="image/*" class="pf-hidden-input"
-              (change)="onMultipleSelect($event)" />
+              (change)="onMultipleSelect($event)"/>
           </div>
 
           <!-- ── Status ── -->
@@ -996,12 +801,11 @@
             <div class="pf-card__header">
               <h3 class="cardheader">Status</h3>
             </div>
-
             <div class="pf-status-options">
               @for (s of statusOptions; track s.value) {
                 <label class="pf-status-option"
                   [class.pf-status-option--active]="productForm.get('status')?.value === s.value">
-                  <input type="radio" [value]="s.value" formControlName="status" class="pf-status-radio" />
+                  <input type="radio" [value]="s.value" formControlName="status" class="pf-status-radio"/>
                   <div class="pf-status-option__body">
                     <span class="pf-status-option__label">{{ s.label }}</span>
                     <span class="pf-status-option__hint">{{ s.hint }}</span>
@@ -1009,9 +813,8 @@
                 </label>
               }
             </div>
-
-            <p class="form-hint" style="margin-top: 8px; padding: 0 4px;">
-              ⚠ Status cannot be set to Inactive while open Work Orders exist for this product.
+            <p class="fld__hint" style="margin-top:8px;padding:0 2px">
+              ⚠ Cannot set Inactive while open Work Orders exist for this product.
             </p>
           </div>
 
@@ -1022,15 +825,13 @@
       <!-- /content-layout -->
 
       <!-- ══════════ Footer Actions ══════════ -->
-      <div class="d-flex mb-md-0 mb-3 gap-3" style="justify-content: flex-end;">
-        <button type="button"
-          class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated bg-secondary px-3"
-          (click)="onCancel()">
+      <div class="form-footer mt-4">
+        <button type="button" class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3
+" (click)="onCancel()">
           Cancel
         </button>
-        <button type="button"
-          class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
-          (click)="onSave()">
+        <button type="button" class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated
+" (click)="onSave()">
           {{ editMode() ? 'Update' : 'Create' }}
         </button>
       </div>
@@ -1041,123 +842,93 @@
 
 <!-- ══════════ Primary Image Delete Modal ══════════ -->
 <div class="modal fade" id="primaryDeleteModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
+  <div class="modal-dialog modal-dialog-centered" style="max-width:420px">
     <div class="modal-content pdc-modal">
-
-      <!-- Header -->
       <div class="pdc-header">
         <div class="pdc-header-left">
           <div class="pdc-icon-wrap">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-              <line x1="12" y1="9" x2="12" y2="13" />
-              <line x1="12" y1="17" x2="12.01" y2="17" />
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
             </svg>
           </div>
           <div>
             <h6 class="pdc-title">Delete primary image?</h6>
-            <p class="pdc-desc">
-              This image is currently set as the <strong>primary</strong> product image.
-              Deleting it will remove it permanently.
-            </p>
+            <p class="pdc-desc">This image is currently set as the <strong>primary</strong> product image. Deleting it will remove it permanently.</p>
           </div>
         </div>
-        <button type="button" class="pdc-close" data-bs-dismiss="modal" aria-label="Close">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
+        <button type="button" class="pdc-close" data-bs-dismiss="modal">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
         </button>
       </div>
-
-      <!-- Image Preview Strip -->
       <div class="pdc-preview">
         <div class="pdc-thumb">
           @if (imagePreviews()[primaryIndex()]) {
-            <img [src]="imagePreviews()[primaryIndex()]" alt="Primary image" />
+            <img [src]="imagePreviews()[primaryIndex()]" alt="Primary image"/>
           } @else {
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
-              <rect x="3" y="3" width="18" height="18" rx="3" />
-              <circle cx="8.5" cy="8.5" r="1.5" />
-              <polyline points="21 15 16 10 5 21" />
+              <rect x="3" y="3" width="18" height="18" rx="3"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
             </svg>
           }
         </div>
         <div class="pdc-img-info">
           <span class="pdc-primary-tag">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
-              <polygon
-                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
             </svg>
             Primary image
           </span>
           <p class="pdc-img-meta">Image {{ primaryIndex() + 1 }} of {{ imagePreviews().length }}</p>
         </div>
       </div>
-
       <div class="pdc-divider"></div>
-
-      <!-- Footer -->
       <div class="pdc-footer">
         <button type="button" class="pdc-btn pdc-btn-cancel" data-bs-dismiss="modal">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
           Cancel
         </button>
-        <button type="button" class="pdc-btn pdc-btn-danger" data-bs-dismiss="modal"
-          (click)="confirmDeletePrimary()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="3 6 5 6 21 6" />
-            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
-            <path d="M10 11v6M14 11v6" />
+        <button type="button" class="pdc-btn pdc-btn-danger" data-bs-dismiss="modal" (click)="confirmDeletePrimary()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+            <path d="M10 11v6M14 11v6"/>
           </svg>
           Delete anyway
         </button>
       </div>
-
     </div>
   </div>
 </div>
 
-<!-- ══════════ BOM Delete — Cascade or Promote Modal ══════════ -->
+<!-- ══════════ BOM Delete Cascade Modal ══════════ -->
 @if (showBomDeletePrompt()) {
   <div class="bom-modal-overlay" (click)="closeBomDeletePrompt()">
     <div class="bom-modal" (click)="$event.stopPropagation()">
-
       <div class="bom-modal__header">
         <div class="bom-modal__header-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
-            <line x1="12" y1="9" x2="12" y2="13"/>
-            <line x1="12" y1="17" x2="12.01" y2="17"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
           </svg>
         </div>
         <span>This component has sub-components</span>
         <button type="button" class="bom-modal__close" (click)="closeBomDeletePrompt()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"/>
-            <line x1="6" y1="6" x2="18" y2="18"/>
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
         </button>
       </div>
-
-      <p class="bom-modal__body">
-        What should happen to the child rows when this node is deleted?
-      </p>
-
+      <p class="bom-modal__body">What should happen to the child rows when this node is deleted?</p>
       <div class="bom-modal__actions">
-        <button type="button" class="bom-modal__btn bom-modal__btn--cancel"
-          (click)="closeBomDeletePrompt()">
+        <button type="button" class="bom-modal__btn bom-modal__btn--cancel" (click)="closeBomDeletePrompt()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"/>
-            <line x1="6" y1="6" x2="18" y2="18"/>
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
           Cancel — keep node
         </button>
@@ -1178,7 +949,6 @@
           Delete all children too
         </button>
       </div>
-
     </div>
   </div>
 }

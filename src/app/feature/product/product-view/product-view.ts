@@ -1,5 +1,5 @@
 import { Component, inject, input, signal, computed, effect } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ProductDataClient } from '../product-data-client';
 import { Product } from '../product';
 import { CommonModule, DecimalPipe } from '@angular/common';
@@ -9,7 +9,7 @@ import { TooltipDirective } from '../../../shared/components/tooltip-ui/tooltip'
 @Component({
   selector: 'app-product-view',
   standalone: true,
-  imports: [CommonModule, DecimalPipe,TooltipDirective],
+  imports: [CommonModule, DecimalPipe,TooltipDirective,RouterLink],
   templateUrl: './product-view.html',
   styleUrl: './product-view.css',
 })

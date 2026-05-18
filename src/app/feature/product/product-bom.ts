@@ -8,7 +8,7 @@ export interface BomNode {
   rawMaterialId: string | null;
   rawMaterialName: string | null;
   quantity: number;
-  unitId: string;
+  unitId: number;
   unitName: string;
   wastagePercent: number;
   costPerUnit: number | null;

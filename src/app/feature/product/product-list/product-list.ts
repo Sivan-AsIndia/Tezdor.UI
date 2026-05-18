@@ -1,9 +1,11 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ProductDataClient } from '../product-data-client';
 import { CommonModule } from '@angular/common';
 import { Product } from '../product';
 import { RouterLink } from '@angular/router';
 import { ResponsiveTable } from '../../../shared/components/responsive/responsive-table';
+import { BomNode } from '../product-bom';
+import { getBomByProductId, rolledUpBomCost } from '../product-bom.seed';
 
 @Component({
   selector: 'app-product-list',
@@ -11,7 +13,11 @@ import { ResponsiveTable } from '../../../shared/components/responsive/responsiv
   templateUrl: './product-list.html',
   styleUrl: './product-list.css',
 })
-export class ProductListComponent {
+export class ProductListComponent implements OnInit{
+  ngOnInit(): void {
+    console.log(this.paginatedProducts());
+    
+  }
 
   showFilter      = signal(false);
   service         = inject(ProductDataClient);
@@ -24,8 +30,8 @@ visiblePages = computed(() => {
   const total = this.totalPages();
   if (total <= 1) return [1];
 
-  const start = current;                        // current page
-  const end = Math.min(total, current + 1);     // next page
+  const start = current;                     
+  const end = Math.min(total, current + 1);     
 
   const pages: number[] = [];
   for (let i = start; i <= end; i++) {
@@ -54,7 +60,6 @@ visiblePages = computed(() => {
     return [...new Set(all)].sort() as string[];
   });
 
-  // ── Filtered Products ─────────────────────────────
   filteredProducts = computed(() => {
     const search = this.searchValue().toLowerCase().trim();
     const f      = this.filters();
@@ -145,13 +150,11 @@ applyFilters(): void {
   this.closeFilter();
 }
 
-  // ── Search ────────────────────────────────────────
   clearSearch(): void {
     this.searchValue.set('');
     this.currentPage.set(1);
   }
 
-  // ── Pagination Actions ────────────────────────────
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages()) {
       this.currentPage.set(page);
@@ -163,7 +166,6 @@ applyFilters(): void {
     this.currentPage.set(1);
   }
 
-  // ── Delete ────────────────────────────────────────
   DeletePopupView(product: Product): void {
     this.selectedProduct.set(product);
   }
@@ -176,13 +178,10 @@ applyFilters(): void {
     }
   }
 
-  // ── Helpers ───────────────────────────────────────
-  // 'active' → 'Active' for display
   capitalize(val: string): string {
     return val.charAt(0).toUpperCase() + val.slice(1);
   }
 
-  // CSS class per status for colored chips
   statusChipClass(s: string): string {
     switch (s.toLowerCase()) {
       case 'active':       return 'chip-active';
@@ -191,4 +190,96 @@ applyFilters(): void {
       default:             return '';
     }
   }
+
+bomModalOpen = signal(false);
+bomProduct   = signal<Product | null>(null);
+bomNodes     = signal<BomNode[]>([]); 
+bomRolledUpCost = computed(() => {
+  const p = this.bomProduct();
+  return p ? rolledUpBomCost(p.id) : 0;  
+});
+bomStats = computed(() => {
+  const nodes = this.bomNodes();
+  const levels = nodes.length ? Math.max(...nodes.map(n => n.level)) : 0;
+  return { lines: nodes.length, levels };
+});
+ 
+
+ collapsedNodes = signal<Set<number>>(new Set());
+ bomVisibleNodes = computed(() => {
+  const nodes     = this.bomNodes();
+  const collapsed = this.collapsedNodes();
+  if (!collapsed.size) return nodes;
+ 
+  const hiddenIds = new Set<number>();
+ 
+  for (const node of nodes) {
+    let parentId = node.parentId;
+    let hidden   = false;
+    while (parentId !== null) {
+      if (collapsed.has(parentId)) { hidden = true; break; }
+      const parent = nodes.find(n => n.id === parentId);
+      parentId = parent?.parentId ?? null;
+    }
+    if (hidden) hiddenIds.add(node.id);
+  }
+ 
+  return nodes.filter(n => !hiddenIds.has(n.id));
+});
+ 
+hasChildren(nodeId: number): boolean {
+  return this.bomNodes().some(n => n.parentId === nodeId);
+}
+ 
+isCollapsed(nodeId: number): boolean {
+  return this.collapsedNodes().has(nodeId);
+}
+ 
+toggleBomNode(nodeId: number, event: Event): void {
+  event.stopPropagation();
+  this.collapsedNodes.update(set => {
+    const next = new Set(set);
+    next.has(nodeId) ? next.delete(nodeId) : next.add(nodeId);
+    return next;
+  });
+}
+ 
+expandAllBom(): void {
+  this.collapsedNodes.set(new Set());
+}
+ 
+collapseAllBom(): void {
+  const parentIds = new Set(
+    this.bomNodes()
+      .filter(n => this.hasChildren(n.id))
+      .map(n => n.id)
+  );
+  this.collapsedNodes.set(parentIds);
+}
+ 
+openBomModal(product: Product): void {
+  this.bomProduct.set(product);
+  this.bomNodes.set(getBomByProductId(product.id));
+  this.collapsedNodes.set(new Set()); 
+  this.bomModalOpen.set(true);
+  document.body.style.overflow = 'hidden';
+}
+ 
+closeBomModal(): void {
+  this.bomModalOpen.set(false);
+  this.bomProduct.set(null);
+  this.bomNodes.set([]);
+  this.collapsedNodes.set(new Set());
+  document.body.style.overflow = '';
+}
+ 
+getChildCount(nodeId: number): number {
+  const nodes = this.bomNodes();
+  const directChildren = nodes.filter(n => n.parentId === nodeId);
+  const countDescendants = (id: number): number => {
+    const children = nodes.filter(n => n.parentId === id);
+    return children.reduce((sum, c) => sum + 1 + countDescendants(c.id), 0);
+  };
+  return directChildren.reduce((sum, c) => sum + 1 + countDescendants(c.id), 0);
+}
 }
