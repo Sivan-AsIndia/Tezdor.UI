@@ -310,12 +310,39 @@ export const routes: Routes = [
           import('./feature/sales/work-order/work-order-create/work-order-create')
             .then(m => m.WorkOrderCreateComponent),
       },
+
+      // Day - To - Day Production
+
+      {
+        path: 'day-production',
+        loadComponent: () =>
+          import('./feature/sales/day-to-day-production/day-production-list/day-production-list')
+            .then(m => m.DayProductionListComponent),
+      },
+      {
+        path: 'day-production/create',
+        loadComponent: () =>
+          import('./feature/sales/day-to-day-production/day-production-create/day-production-create')
+            .then(m => m.DayProductionCreateComponent),
+      },
+      {
+        path: 'day-production/edit/:id',
+        loadComponent: () =>
+          import('./feature/sales/day-to-day-production/day-production-create/day-production-create')
+            .then(m => m.DayProductionCreateComponent),
+      },
+      {
+        path: 'day-production/:id',
+        loadComponent: () =>
+          import('./feature/sales/day-to-day-production/day-production-view/day-production-view')
+            .then(m => m.DayProductionViewComponent),
+      },
       {
         path: 'work-order/:id',
         loadComponent: () =>
           import('./feature/sales/work-order/work-order-view/work-order-view')
             .then(m => m.WorkOrderViewComponent),
-      },
+      }
     ],
   },
 

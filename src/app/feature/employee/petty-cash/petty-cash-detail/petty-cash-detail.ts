@@ -357,6 +357,31 @@ export class PettyCashDetailComponent {
     return this.expenseLedgerAccounts().find(a => a.accountId === id)?.accountName || '-';
   }
 
+  getBranchName(id?: string): string {
+    if (!id) return '-';
+    return this.master.branches().find(b => b.branchId === id)?.branchName ?? id;
+  }
+
+  getDepartmentName(id?: string): string {
+    if (!id) return '-';
+    return this.master.departments().find(d => d.id === id)?.name ?? id;
+  }
+
+  getCostCenterName(id?: string): string {
+    if (!id) return '-';
+    return this.master.costCenters().find(c => c.costCenterId === id)?.costCenterName ?? id;
+  }
+
+  getProjectName(id?: string): string {
+    if (!id) return '-';
+    return this.master.projects().find(p => p.projectId === id)?.projectName ?? id;
+  }
+
+  getCurrencyName(id?: string): string {
+    if (!id) return '-';
+    return this.master.currencies().find(c => c.currencyId === id)?.currencyCode ?? id;
+  }
+
   employeeMap = computed(() => {
     const map: Record<string, any> = {};
     this.employees().forEach(e => {

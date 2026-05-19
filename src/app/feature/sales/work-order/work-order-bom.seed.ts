@@ -1,320 +1,143 @@
-import {
-  WorkOrderBomLine
-} from './work-order-bom';
+import { WorkOrderBomLine } from './work-order-bom';
 
 export const WORK_ORDER_BOM_SEED: WorkOrderBomLine[] = [
 
-  /* =====================================================
-     LAPTOP
-  ===================================================== */
-
   {
+    workOrderBomLineId: crypto.randomUUID(),
+    workOrderId: 'WO-2026-00001',
+    productStructureId: 'PS-YASH-001',
+    parentLineId: null,
 
-    workOrderBomLineId:
-      crypto.randomUUID(),
+    itemName: 'Wooden Frame – Teak',
+    materialCode: 'G111',
+    materialName: 'dsd',
 
-    workOrderId:
-      'WO-2026-00001',
+    level: 1,
+    rawMaterialId: 'RM-WOOD-001',
+   Warehouse:' Finished Goods – Coimbatore ',
+    requiredQuantity: 75,
+    consumedQuantity: 30,
+    pendingQuantity: 45,
 
-    productStructureId:
-      'PS-LAP-001',
+    wastagePercentage: 3,
+    unitOfMeasureId: 'UOM-CFT',
 
-    parentLineId:
-      null,
-
-    itemName:
-      'Laptop Motherboard',
-
-    level:
-      1,
-
-    rawMaterialId:
-      'RM-MB-001',
-
-    requiredQuantity:
-      25,
-
-    consumedQuantity:
-      10,
-
-    pendingQuantity:
-      15,
-
-    wastagePercentage:
-      2,
-
-    unitOfMeasureId:
-      'UOM-NOS',
-
-    createdOn:
-      '2026-05-10T10:00:00'
-
+    createdOn: '2026-05-10T10:00:00'
   },
 
   {
+    workOrderBomLineId: crypto.randomUUID(),
+    workOrderId: 'WO-2026-00001',
+    productStructureId: 'PS-YASH-002',
+    parentLineId: null,
 
-    workOrderBomLineId:
-      crypto.randomUUID(),
+    itemName: 'Commercial Plywood 18mm',
+    materialCode: 'G111',
+    materialName: 'dsd',
+   Warehouse:' Finished Goods – Coimbatore ',
+    level: 1,
+    rawMaterialId: 'RM-PLY-001',
 
-    workOrderId:
-      'WO-2026-00001',
+    requiredQuantity: 50,
+    consumedQuantity: 20,
+    pendingQuantity: 30,
 
-    productStructureId:
-      'PS-LAP-002',
+    wastagePercentage: 2,
+    unitOfMeasureId: 'UOM-SHT',
 
-    parentLineId:
-      null,
-
-    itemName:
-      '16GB RAM Module',
-
-    level:
-      1,
-
-    rawMaterialId:
-      'RM-RAM-016',
-
-    requiredQuantity:
-      50,
-
-    consumedQuantity:
-      20,
-
-    pendingQuantity:
-      30,
-
-    wastagePercentage:
-      1,
-
-    unitOfMeasureId:
-      'UOM-NOS',
-
-    createdOn:
-      '2026-05-10T10:00:00'
-
+    createdOn: '2026-05-10T10:00:00'
   },
 
   {
+    workOrderBomLineId: crypto.randomUUID(),
+    workOrderId: 'WO-2026-00001',
+    productStructureId: 'PS-YASH-003',
+    parentLineId: null,
+   Warehouse:' Finished Goods – Coimbatore ',
+    itemName: 'HR Foam 40D – Seat',
+    materialCode: 'G111',
+    materialName: 'dsd',
 
-    workOrderBomLineId:
-      crypto.randomUUID(),
+    level: 1,
+    rawMaterialId: 'RM-FOAM-001',
 
-    workOrderId:
-      'WO-2026-00001',
+    requiredQuantity: 100,
+    consumedQuantity: 40,
+    pendingQuantity: 60,
 
-    productStructureId:
-      'PS-LAP-003',
+    wastagePercentage: 5,
+    unitOfMeasureId: 'UOM-KG',
 
-    parentLineId:
-      null,
-
-    itemName:
-      '512GB SSD',
-
-    level:
-      1,
-
-    rawMaterialId:
-      'RM-SSD-512',
-
-    requiredQuantity:
-      25,
-
-    consumedQuantity:
-      10,
-
-    pendingQuantity:
-      15,
-
-    wastagePercentage:
-      0,
-
-    unitOfMeasureId:
-      'UOM-NOS',
-
-    createdOn:
-      '2026-05-10T10:00:00'
-
-  },
-
-  /* =====================================================
-     MOUSE
-  ===================================================== */
-
-  {
-
-    workOrderBomLineId:
-      crypto.randomUUID(),
-
-    workOrderId:
-      'WO-2026-00002',
-
-    productStructureId:
-      'PS-MSE-001',
-
-    parentLineId:
-      null,
-
-    itemName:
-      'Mouse Sensor PCB',
-
-    level:
-      1,
-
-    rawMaterialId:
-      'RM-PCB-001',
-
-    requiredQuantity:
-      100,
-
-    consumedQuantity:
-      100,
-
-    pendingQuantity:
-      0,
-
-    wastagePercentage:
-      1,
-
-    unitOfMeasureId:
-      'UOM-NOS',
-
-    createdOn:
-      '2026-05-14T09:00:00'
-
+    createdOn: '2026-05-10T10:00:00'
   },
 
   {
+    workOrderBomLineId: crypto.randomUUID(),
+    workOrderId: 'WO-2026-00001',
+    productStructureId: 'PS-YASH-004',
+    parentLineId: null,
 
-    workOrderBomLineId:
-      crypto.randomUUID(),
+    itemName: 'Chenille Fabric – Beige',
+    materialCode: 'G111',
+    materialName: 'dsd',
+   Warehouse:' Finished Goods – Coimbatore ',
+    level: 1,
+    rawMaterialId: 'RM-FAB-001',
 
-    workOrderId:
-      'WO-2026-00002',
+    requiredQuantity: 200,
+    consumedQuantity: 80,
+    pendingQuantity: 120,
 
-    productStructureId:
-      'PS-MSE-002',
+    wastagePercentage: 8,
+    unitOfMeasureId: 'UOM-MTR',
 
-    parentLineId:
-      null,
-
-    itemName:
-      'Wireless Module',
-
-    level:
-      1,
-
-    rawMaterialId:
-      'RM-WLS-002',
-
-    requiredQuantity:
-      100,
-
-    consumedQuantity:
-      100,
-
-    pendingQuantity:
-      0,
-
-    wastagePercentage:
-      0,
-
-    unitOfMeasureId:
-      'UOM-NOS',
-
-    createdOn:
-      '2026-05-14T09:00:00'
-
-  },
-
-  /* =====================================================
-     TSHIRT
-  ===================================================== */
-
-  {
-
-    workOrderBomLineId:
-      crypto.randomUUID(),
-
-    workOrderId:
-      'WO-2026-00003',
-
-    productStructureId:
-      'PS-TSH-001',
-
-    parentLineId:
-      null,
-
-    itemName:
-      'Blue Cotton Fabric',
-
-    level:
-      1,
-
-    rawMaterialId:
-      'RM-FAB-BLUE',
-
-    requiredQuantity:
-      400,
-
-    consumedQuantity:
-      0,
-
-    pendingQuantity:
-      400,
-
-    wastagePercentage:
-      5,
-
-    unitOfMeasureId:
-      'UOM-MTR',
-
-    createdOn:
-      '2026-05-18T11:00:00'
-
+    createdOn: '2026-05-10T10:00:00'
   },
 
   {
+    workOrderBomLineId: crypto.randomUUID(),
+    workOrderId: 'WO-2026-00001',
+    productStructureId: 'PS-YASH-005',
+    parentLineId: null,
 
-    workOrderBomLineId:
-      crypto.randomUUID(),
+    itemName: 'Zigzag Springs',
+    materialCode: 'G111',
+    materialName: 'dsd',
+   Warehouse:' Finished Goods – Coimbatore ',
+    level: 1,
+    rawMaterialId: 'RM-SPR-001',
 
-    workOrderId:
-      'WO-2026-00003',
+    requiredQuantity: 150,
+    consumedQuantity: 60,
+    pendingQuantity: 90,
 
-    productStructureId:
-      'PS-TSH-002',
+    wastagePercentage: 1,
+    unitOfMeasureId: 'UOM-NOS',
 
-    parentLineId:
-      null,
+    createdOn: '2026-05-10T10:00:00'
+  },
 
-    itemName:
-      'T-Shirt Neck Label',
+  {
+    workOrderBomLineId: crypto.randomUUID(),
+    workOrderId: 'WO-2026-00001',
+    productStructureId: 'PS-YASH-006',
+    parentLineId: null,
 
-    level:
-      2,
+    itemName: 'Wood Screws 2.5 inch',
+    materialCode: 'G111',
+    materialName: 'dsd',
 
-    rawMaterialId:
-      'RM-LBL-001',
+    level: 2,
+    rawMaterialId: 'RM-SCR-001',
+   Warehouse:' Finished Goods – Coimbatore ',
+    requiredQuantity: 500,
+    consumedQuantity: 200,
+    pendingQuantity: 300,
 
-    requiredQuantity:
-      200,
+    wastagePercentage: 2,
+    unitOfMeasureId: 'UOM-NOS',
 
-    consumedQuantity:
-      0,
-
-    pendingQuantity:
-      200,
-
-    wastagePercentage:
-      0,
-
-    unitOfMeasureId:
-      'UOM-NOS',
-
-    createdOn:
-      '2026-05-18T11:00:00'
-
+    createdOn: '2026-05-10T10:00:00'
   }
 
 ];

@@ -48,7 +48,7 @@ visiblePages = computed(() => {
 
   searchValue = signal('');
   page = signal(1);
-  pageSize = signal(5);
+  pageSize = signal(10);
   showFilter = signal(false);
 
   // ===== FILTER =====

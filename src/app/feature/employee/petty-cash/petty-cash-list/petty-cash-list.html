@@ -116,6 +116,7 @@
                                 <thead>
                                     <tr style="background:#8080800d;">
                                         <th class="d-xl-none" style="width:40px"></th>
+                                                <th style="width:50px">#</th>
                                         <th (click)="sortBy('custodianEmployeeId')">Custodian
                                             <i class="sort-icon"
                                                 [class.asc]="sortColumn() === 'custodianEmployeeId' && sortDirection() === 'asc'"
@@ -155,7 +156,7 @@
 
                                 <tbody>
 
-                                    @for(pc of paginated(); track pc.pettyCashId){
+                                    @for(pc of paginated(); track pc.pettyCashId; let idx = $index){
 
                                     <tr>
                                         <!-- PLUS ICON -->
@@ -165,6 +166,7 @@
                                                 <i class="ti ti-plus"></i>
                                             </a>
                                         </td>
+                                        <td class="text-center">{{ (page() - 1) * pageSize() + idx + 1 }}</td>
                                         <td>{{ getEmployeeName(pc.custodianEmployeeId) }}</td>
 
                                         <td class="d-none d-md-table-cell">{{ pc.transactionDate | date:'dd MMM yyyy' }}
@@ -254,7 +256,7 @@
 
                                     @if(paginated().length === 0){
                                     <tr>
-                                        <td colspan="8" class="text-center py-4">
+                                        <td colspan="9" class="text-center py-4">
                                             No petty cash records found
                                         </td>
                                     </tr>

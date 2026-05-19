@@ -17,6 +17,8 @@ export class ProductDataClient {
   addProduct(data: Omit<Product, 'id'>) {
     const newProduct: Product = { id: this.nextId++, ...data };
     this.products.update(list => [...list, newProduct]);
+    console.log(this.products());
+    
   }
 
   getById(id: number) {

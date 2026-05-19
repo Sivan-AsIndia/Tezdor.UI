@@ -14,10 +14,11 @@ import {
 } from '../product';
 import { Router, RouterLink } from '@angular/router';
 import { ProductDataClient } from '../product-data-client';
-import { BomDataClient } from '../bom-data-client';         // ← NEW
+import { BomDataClient } from '../product-bom-data-client';         // ← NEW
+import { MasterDataClient } from '../../../core/services/master-data';
 import { SearchDropdownComponent } from '../../../shared/components/search-dropdown/search-dropdown';
 import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
-import { BomNode } from '../bom';
+import { BomNode } from '../product-bom';
 
 declare var bootstrap: any;
 
@@ -59,6 +60,7 @@ export class ProductCreateComponent {
   private cdr        = inject(ChangeDetectorRef);
   service            = inject(ProductDataClient);
   private bomService = inject(BomDataClient);   // ← NEW
+  masterData         = inject(MasterDataClient);
 
   id       = input<string>();
   editMode = computed(() => !!this.id());
@@ -145,6 +147,8 @@ export class ProductCreateComponent {
       brandId:        [''],
       productType:    [''],
       hsnCode:        ['', [Validators.maxLength(8), hsnPatternValidator()]],
+      sacCode:        ['', [Validators.maxLength(8), hsnPatternValidator()]],
+
       unitId:         ['', Validators.required],
       barcode:        ['', Validators.maxLength(50)],
       warrantyMonths: [null, [Validators.min(0)]],
@@ -305,63 +309,17 @@ export class ProductCreateComponent {
     return this.bomNodes().some(n => n.parentId === id);
   }
 
-  addComponent(): void {
-    const siblings = this.bomNodes().filter(n => n.parentId === null);
-    const node: BomNode = {
-      id:             this.nextBomId++,
-      productId:      this.editId() || 0,  
-      parentId:       null,
-      level:          1,
-      itemName:       '',
-      itemCode:       '',
-      rawMaterialId:  null,
-      rawMaterialName:null,
-      quantity:       1,
-      unitId:         '',
-      unitName:       '',
-      wastagePercent: 0,
-      costPerUnit:    null,
-      isOptional:     false,
-      processingNotes:'',
-      sortOrder:      siblings.length,
-      isExpanded:     true,
-      isEditing:      true,
-      hasError:       false,
-    };
-    this.bomNodes.update(arr => [...arr, node]);
-    this.selectedBomNodeId.set(node.id);
-  }
 
-  addSubComponent(parentId?: number): void {
-    const pid    = parentId ?? this.selectedBomNodeId();
-    if (pid === null || pid === undefined) return;
-    const parent = this.bomNodes().find(n => n.id === pid);
-    if (!parent) return;
-    const siblings = this.bomNodes().filter(n => n.parentId === pid);
-    const node: BomNode = {
-      id:              this.nextBomId++,
-      productId:       parent.productId,
-      parentId:        pid,
-      level:           parent.level + 1,
-      itemName:        '',
-      itemCode:        '',
-      rawMaterialId:   null,
-      rawMaterialName: null,
-      quantity:        1,
-      unitId:          '',
-      unitName:        '',
-      wastagePercent:  0,
-      costPerUnit:     null,
-      isOptional:      false,
-      processingNotes: '',
-      sortOrder:       siblings.length,
-      isExpanded:      true,
-      isEditing:       true,
-      hasError:        false,
-    };
-    this.bomNodes.update(arr => [...arr, node]);
-    this.updateBomNode(pid, { isExpanded: true });
-    this.selectedBomNodeId.set(node.id);
+  onRawMaterialChange(nodeId: number, rmId: string): void {
+    if (!rmId) {
+      this.updateBomNode(nodeId, { rawMaterialId: null, rawMaterialName: null });
+      return;
+    }
+    const rm = this.masterData.rawMaterials().find(r => r.id === rmId);
+    this.updateBomNode(nodeId, {
+      rawMaterialId: rmId,
+      rawMaterialName: rm?.name ?? null
+    });
   }
 
   updateBomNode(id: number, changes: Partial<BomNode>): void {
@@ -562,7 +520,11 @@ export class ProductCreateComponent {
       return;
     }
 
+
     const formVal = this.productForm.getRawValue();
+    const category = this.categoryOptions.find(
+  c => c.value == formVal.categoryId
+);
     const images  = this.buildImagesPayload();
     const bom     = this.bomNodes();
 
@@ -572,6 +534,7 @@ export class ProductCreateComponent {
         ...existing,
         ...formVal,
         images,
+            categoryName: category?.label ?? '',
         updatedAt: new Date().toISOString(),
       };
       this.service.updateProduct(updated as any);
@@ -582,6 +545,7 @@ export class ProductCreateComponent {
         ...formVal,
         images,
         currentStock: 0,
+            categoryName: category?.label ?? '',
         createdAt:    new Date().toISOString(),
         updatedAt:    new Date().toISOString(),
       };
@@ -589,11 +553,117 @@ export class ProductCreateComponent {
       const savedProduct = this.service.products().at(-1);
       if (savedProduct?.id) {
         this.bomService.saveBomForProduct(savedProduct.id, bom);
+        console.log(savedProduct);
+        
       }
     }
 
     this.router.navigate(['/products']);
   }
+
+  toggleAutoExpandBom(): void {
+  const control = this.productForm.get('autoExpandBom');
+
+  if (control) {
+    control.setValue(!control.value);
+  }
+}
+
+hasUnsavedBomRows = computed(() =>
+  this.bomNodes().some(n => n.isEditing)
+);
+onBomUomChange(nodeId: number, unitValue: number): void {
+  const unit = this.unitOptions.find(
+    u => u.value === unitValue
+  );
+
+  this.updateBomNode(nodeId, {
+    unitId: unitValue,
+    unitName: unit?.label ?? '',
+  });
+}
+
+ getUomLabel(unitId: string | number | undefined): string {
+  if (!unitId) return '—';
+  const match = this.unitOptions.find(
+    u => u.value == unitId || String(u.value) === String(unitId)
+  );
+  return match ? match.label : String(unitId);
+}
+ addComponent(): void {
+  // Block if any row is still in edit mode
+  if (this.hasUnsavedBomRows()) return;
+ 
+  const siblings = this.bomNodes().filter(n => n.parentId === null);
+  const node: BomNode = {
+    id:              this.nextBomId++,
+    productId:       this.editId() || 0,
+    parentId:        null,
+    level:           1,
+    itemName:        '',
+    itemCode:        '',
+    rawMaterialId:   null,
+    rawMaterialName: null,
+    quantity:        1,
+    unitId:          0,
+    unitName:        '',
+    wastagePercent:  0,
+    costPerUnit:     null,
+    isOptional:      false,
+    processingNotes: '',
+    sortOrder:       siblings.length,
+    isExpanded:      true,
+    isEditing:       true,   // opens in edit mode immediately
+    hasError:        false,
+  };
+  this.bomNodes.update(arr => [...arr, node]);
+  this.selectedBomNodeId.set(node.id);
+}
+ 
+ 
+// ─────────────────────────────────────────────
+// 5. GUARD — addSubComponent() — block if unsaved rows exist
+//    ✅ Replace existing addSubComponent() with this:
+// ─────────────────────────────────────────────
+addSubComponent(parentId?: number): void {
+  // Block if any row is still in edit mode
+  if (this.hasUnsavedBomRows()) return;
+ 
+  const pid = parentId ?? this.selectedBomNodeId();
+  if (pid === null || pid === undefined) return;
+  const parent = this.bomNodes().find(n => n.id === pid);
+  if (!parent) return;
+ 
+  const siblings = this.bomNodes().filter(n => n.parentId === pid);
+  const node: BomNode = {
+    id:              this.nextBomId++,
+    productId:       parent.productId,
+    parentId:        pid,
+    level:           parent.level + 1,
+    itemName:        '',
+    itemCode:        '',
+    rawMaterialId:   null,
+    rawMaterialName: null,
+    quantity:        1,
+    unitId:          0,
+    unitName:        '',
+    wastagePercent:  0,
+    costPerUnit:     null,
+    isOptional:      false,
+    processingNotes: '',
+    sortOrder:       siblings.length,
+    isExpanded:      true,
+    isEditing:       true,
+    hasError:        false,
+  };
+  this.bomNodes.update(arr => [...arr, node]);
+  this.updateBomNode(pid, { isExpanded: true });
+  this.selectedBomNodeId.set(node.id);
+}
+ 
+ 
+
+ 
 
   onCancel() { this.router.navigate(['/products']); }
 }

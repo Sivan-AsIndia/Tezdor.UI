@@ -164,6 +164,7 @@ export class WorkOrderCreateComponent {
       null as number | null,
       [Validators.required]
     ],
+    
 
     orderedQuantity: [
       0,
@@ -179,6 +180,7 @@ export class WorkOrderCreateComponent {
       '',
       Validators.required
     ],
+     uom: ['Nos'], 
 
     plannedEndDate: [
       '',
@@ -657,143 +659,56 @@ export class WorkOrderCreateComponent {
 
     }
 
-    /* ========= MODEL =========== */
+const data: WorkOrder = {
+  workOrderId: this.workOrderId || '',
+  workOrderNo: this.form.value.workOrderNo || '',
+  workOrderDate: this.form.value.workOrderDate || '',
+  uom: this.form.value.uom || 'Nos',
+  productId: this.form.value.productId || null,
+  orderedQuantity: Number(this.form.value.orderedQuantity),
+  producedQuantity: this.producedQty(),
+  pendingQuantity: this.pendingQty(),
 
-    const data: WorkOrder = {
+  priority: this.form.value.priority!,
+  plannedStartDate: this.form.value.plannedStartDate || '',
+  plannedEndDate: this.form.value.plannedEndDate || '',
 
-      workOrderId:
-        this.workOrderId || '',
+  actualStartDate: this.form.value.actualStartDate || null,
+  actualEndDate: this.form.value.actualEndDate || null,
 
-      workOrderNo:
-        this.form.value
-          .workOrderNo || '',
+  salesOrderId: this.form.value.salesOrderId || null,
+  customerId: this.form.value.customerId || null,
+  warehouseId: this.form.value.warehouseId || null,
 
-      workOrderDate:
-        this.form.value
-          .workOrderDate || '',
+  remarks: this.form.value.remarks || '',
 
-      productId:
-        this.form.value
-          .productId || null,
+  status,
 
-      orderedQuantity:
-        Number(
-          this.form.value
-            .orderedQuantity
-        ),
+  confirmedBy:
+    status === WorkOrderStatus.Confirmed ? 'admin' : null,
 
-      producedQuantity:
-        this.producedQty(),
+  confirmedByName:
+    status === WorkOrderStatus.Confirmed ? 'Production Manager' : undefined,
 
-      pendingQuantity:
-        this.pendingQty(),
+  confirmedDate:
+    status === WorkOrderStatus.Confirmed ? new Date().toISOString() : null,
 
-      priority:
-        this.form.value
-          .priority!,
+  isActive: true,
+  isCancelled: status === WorkOrderStatus.Cancelled,
+  isCompleted: status === WorkOrderStatus.Completed,
+  isProductionStarted:
+    status === WorkOrderStatus.InProgress || this.producedQty() > 0,
 
-      plannedStartDate:
-        this.form.value
-          .plannedStartDate || '',
+  createdBy: 'admin',
+  createdOn: new Date().toISOString(),
+  updatedBy: 'admin',
+  updatedOn: new Date().toISOString(),
 
-      plannedEndDate:
-        this.form.value
-          .plannedEndDate || '',
-
-      actualStartDate:
-        this.form.value
-          .actualStartDate || null,
-
-      actualEndDate:
-        this.form.value
-          .actualEndDate || null,
-
-      salesOrderId:
-        this.form.value
-          .salesOrderId || null,
-
-      customerId:
-        this.form.value
-          .customerId || null,
-
-      warehouseId:
-        this.form.value
-          .warehouseId || null,
-
-      remarks:
-        this.form.value
-          .remarks || '',
-
-      status,
-
-      confirmedBy:
-
-        status ===
-          WorkOrderStatus.Confirmed
-
-          ? 'admin'
-
-          : null,
-
-      confirmedByName:
-
-        status ===
-          WorkOrderStatus.Confirmed
-
-          ? 'Production Manager'
-
-          : undefined,
-
-      confirmedDate:
-
-        status ===
-          WorkOrderStatus.Confirmed
-
-          ? new Date()
-            .toISOString()
-
-          : null,
-
-      isActive: true,
-
-      estimatedLeadTime: this.estimatedLeadTime(),
-
-      isCancelled:
-
-        status ===
-        WorkOrderStatus.Cancelled,
-
-      isCompleted:
-
-        status ===
-        WorkOrderStatus.Completed,
-
-      isProductionStarted:
-
-        status ===
-        WorkOrderStatus.InProgress ||
-
-        this.producedQty() > 0,
-
-      createdBy:
-        'admin',
-
-      createdOn:
-        new Date()
-          .toISOString(),
-
-      updatedBy:
-        'admin',
-
-      updatedOn:
-        new Date()
-          .toISOString(),
-
-      bomLines: []
-
-    };
-
-    /* ======== SAVE ============= */
+  bomLines: structuredClone(this.bomLines())
+};
+    /* ===============================================
+       SAVE
+    =============================================== */
 
     if (this.isEdit) {
 

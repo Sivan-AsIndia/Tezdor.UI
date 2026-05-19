@@ -1,0 +1,465 @@
+<div class="max-w-full">
+  <div class="full-container">
+    <div class="v-container v-container--fluid v-locale--is-ltr rounded-xl p-0">
+      <!-- ══ HEADER ══════════════════════════════════════════════ -->
+      <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+        <div>
+          <h4 class="fw-bold mb-1 mainheading">Production Entry</h4>
+          <small class="text-muted subdescription">
+            View, manage, and track all shift-level production records against Work Orders.
+          </small>
+        </div>
+        <div class="arrow-steps d-none d-md-flex">
+          <ul id="breadcrumb">
+            <li>
+              <a routerLink="/dashboard"><span class="fa fa-home"></span>&nbsp;&nbsp;Home</a>
+            </li>
+            <li>
+              <a><span class="fa fa-industry"></span>&nbsp;&nbsp;Production</a>
+            </li>
+            <!-- <li><a><span class="fa fa-list"></span>&nbsp;&nbsp;Entries</a></li> -->
+          </ul>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <div class="card-body-inner">
+          <div class="table-topbar">
+            <div class="table-title-badge">
+              <h5 class="tableheading">Production Summary</h5>
+              <span class="count-badge">{{ filteredCount() }}</span>
+            </div>
+
+            <div class="topbar-actions">
+              <!-- Search -->
+              <div class="search-box">
+                <input
+                  type="text"
+                  placeholder="Search production no, work order, product…"
+                  [value]="searchValue()"
+                  (input)="onSearch($any($event.target).value)"
+                />
+                @if (!searchValue()) {
+                  <button class="icon-clear" type="button">
+                    <i class="bi bi-search"></i>
+                  </button>
+                }
+                @if (searchValue()) {
+                  <button class="icon-clear" type="button" (click)="clearSearch()">
+                    <i class="bi bi-x"></i>
+                  </button>
+                }
+              </div>
+
+              <!-- FILTER BUTTON -->
+              <div class="filter-wrapper">
+                <button class="filter-btn" style="width: 35px" (click)="toggleFilter()">
+                  <i class="ti ti-filter fs-5"></i>
+                  @if (activeFilterCount() > 0) {
+                    <span class="filter-dot">{{ activeFilterCount() }}</span>
+                  }
+                </button>
+              </div>
+
+              @if (showFilter()) {
+                <div class="filter-overlay" (click)="closeFilter()"></div>
+
+                <div class="filter-panel" [style.top.px]="filterTop" [style.right.px]="filterRight">
+                  <!-- HEADER -->
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0">Filter</h5>
+                    <button
+                      class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3"
+                      (click)="resetFilters()"
+                    >
+                      Reset
+                    </button>
+                  </div>
+                  <!-- STATUS -->
+                  <div class="mb-3">
+                    <label class="fw-semibold mb-2 d-block">Status</label>
+                    <div class="chip-group">
+                      @for (s of statuses(); track s) {
+                        <span
+                          class="filter-chip {{ statusChipClass(s) }}"
+                          [class.active]="tempFilters().status === s"
+                          (click)="selectStatus(s)"
+                        >
+                          {{ capitalize(s) }}
+                        </span>
+                      }
+                    </div>
+                  </div>
+
+                  <!-- SHIFT -->
+                  <div class="mb-3">
+                    <label class="fw-semibold mb-2 d-block">Shift</label>
+                    <div class="chip-group">
+                      @for (sh of shifts(); track sh) {
+                        <span
+                          class="filter-chip"
+                          [class.active]="tempFilters().shift === sh"
+                          (click)="selectShift(sh)"
+                        >
+                          {{ sh }}
+                        </span>
+                      }
+                    </div>
+                  </div>
+
+                  <!-- DATE RANGE -->
+                  <div class="mb-3">
+                    <label class="fw-semibold mb-2 d-block">Date Range</label>
+                    <div class="d-flex gap-2 flex-wrap">
+                      <input
+                        type="date"
+                        class="form-control form-control-sm"
+                        [value]="tempFilters().dateFrom"
+                        (change)="setDateFrom($any($event.target).value)"
+                      />
+                      <input
+                        type="date"
+                        class="form-control form-control-sm"
+                        [value]="tempFilters().dateTo"
+                        (change)="setDateTo($any($event.target).value)"
+                      />
+                    </div>
+                  </div>
+                  <!-- ACTIONS -->
+                  <div class="d-flex gap-2 mt-4">
+                    <button
+                      class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated bg-secondary px-3"
+                      (click)="closeFilter()"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                      (click)="applyFilters()"
+                    >
+                      Apply
+                    </button>
+                  </div>
+                </div>
+              }
+
+              <!-- Add button -->
+              <a
+                routerLink="/day-production/create"
+                class="v-btn v-btn--elevated v-theme--BLUE_THEME bg-primary v-btn--density-default v-btn--size-default v-btn--variant-elevated"
+                style="text-transform: capitalize; letter-spacing: 0; padding: 0 14px"
+              >
+                <i class="mdi mdi-plus-circle-outline v-icon mr-2"></i> New
+              </a>
+            </div>
+          </div>
+
+          <!-- ── TABLE ─────────────────────────────────────────── -->
+          <div class="border-table">
+            <div class="v-table v-theme--BLUE_THEME v-table--density-default">
+              <div class="v-table__wrapper">
+                <table appResponsiveTable [hidePriority]="[5, 3, 6, 2]" [stickyLastCol]="true">
+                  <thead>
+                    <tr style="background: #8080800d">
+                      <th class="text-subtitle-1 font-weight-semibold">#</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Work Order</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Product</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Date / Shift</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Produced</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Rejected</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Good Qty</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Supervisor</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Status</th>
+                      <th class="text-subtitle-1 font-weight-semibold">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @if (pagedEntries().length === 0) {
+                      <tr>
+                        <td colspan="11" class="sil-empty-cell">
+                          <div class="sil-empty">
+                            <i class="ti ti-clipboard-off"></i>
+                            <p>No production entries found</p>
+                          </div>
+                        </td>
+                      </tr>
+                    }
+
+                    @for (pe of pagedEntries(); track pe.id; let i = $index) {
+                      <tr
+                        [class.pe-tr--draft]="pe.status === 'draft'"
+                        [class.pe-tr--rejected]="pe.status === 'rejected'"
+                      >
+                        <!-- # -->
+                        <td class="sil-td-num">{{ entryStart() + i }}</td>
+
+                        <!-- Work Order -->
+                        <td>
+                          <a
+                            class="pe-wo-link"
+                            [routerLink]="['/work-orders', pe.workOrderId]"
+                            title="View Work Order"
+                          >
+                            {{ pe.workOrderNo }}
+                          </a>
+                          <div class="sil-customer-gstin">{{ pe.productionLine || '—' }}</div>
+                        </td>
+
+                        <!-- Product -->
+                        <td>
+                          <div class="sil-customer-name">{{ pe.productName }}</div>
+                          <div class="sil-customer-gstin">{{ pe.productCode }}</div>
+                        </td>
+
+                        <!-- Date / Shift -->
+                        <td class="sil-td-date">
+                          <div>{{ pe.productionDate | date: 'dd MMM yyyy' }}</div>
+                          @if (pe.shift) {
+                            <div class="pe-shift-badge">{{ pe.shift }}</div>
+                          }
+                        </td>
+
+                        <!-- Produced -->
+                        <td class="sil-td-amt">
+                          {{ pe.producedQty | number: '1.0-2' }}
+                          <span class="pe-uom">{{ pe.uom }}</span>
+                        </td>
+
+                        <!-- Rejected -->
+                        <td class="sil-td-amt">
+                          @if (pe.rejectedQty > 0) {
+                            <span class="pe-rejected-val">
+                              {{ pe.rejectedQty | number: '1.0-2' }}
+                            </span>
+                          } @else {
+                            <span class="sil-dash">—</span>
+                          }
+                        </td>
+
+                        <!-- Good Qty -->
+                        <td class="sil-td-amt">
+                          <strong class="pe-good-qty">
+                            {{ pe.goodQty | number: '1.0-2' }}
+                          </strong>
+                          <span class="pe-uom">{{ pe.uom }}</span>
+                        </td>
+
+                        <!-- Supervisor -->
+                        <td>
+                          <div class="sil-customer-name">{{ pe.supervisorName || '—' }}</div>
+                        </td>
+
+                        <!-- Status -->
+                        <td>
+                          <span class="sil-status-badge pe-status-{{ pe.status }} rounded-2">
+                            {{ statusLabel(pe.status) }}
+                          </span>
+                        </td>
+
+                        <!-- Actions -->
+                        <td>
+                          <div class="d-flex align-center gap-1">
+                            <!-- View -->
+                            <a
+                              [routerLink]="['/day-production', pe.id]"
+                              class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                              title="View"
+                            >
+                              <span class="v-btn__content">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  class="icon-tabler icon-tabler-eye text-info"
+                                  width="20"
+                                  height="20"
+                                  viewBox="0 0 24 24"
+                                  stroke-width="1.5"
+                                  stroke="currentColor"
+                                  fill="none"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                  <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                  <path
+                                    d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"
+                                  />
+                                </svg>
+                              </span>
+                            </a>
+
+                            <!-- Edit — only Draft or Rejected -->
+                            @if (pe.status === 'draft' || pe.status === 'rejected') {
+                              <a
+                                [routerLink]="['/day-production/edit', pe.id]"
+                                class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                                title="Edit"
+                              >
+                                <span class="v-btn__content">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="icon-tabler icon-tabler-pencil text-primary"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    fill="none"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  >
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
+                                    <path d="M13.5 6.5l4 4" />
+                                  </svg>
+                                </span>
+                              </a>
+                            }
+
+                         
+
+                            <!-- Delete — only Draft -->
+                            @if (pe.status === 'draft') {
+                              <button
+                                type="button"
+                                title="Delete"
+                                class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteModal"
+                                (click)="openDelete(pe)"
+                              >
+                                <span class="v-btn__content">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="icon-tabler icon-tabler-trash text-error"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    fill="none"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  >
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M4 7l16 0" />
+                                    <path d="M10 11l0 6" />
+                                    <path d="M14 11l0 6" />
+                                    <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                  </svg>
+                                </span>
+                              </button>
+                            }
+                          </div>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- end table -->
+
+          <hr
+            class="v-divider v-theme--BLUE_THEME"
+            aria-orientation="horizontal"
+            role="separator"
+            style="border-style: solid"
+          />
+
+          <!-- ── PAGINATION ────────────────────────────────────── -->
+          <div class="d-sm-flex justify-md-space-between align-center Pagination">
+            <!-- Rows per page -->
+            <div class="d-flex align-items-center fs-13 gap-2">
+              <span style="font-size: 12px">Rows Per Page</span>
+              <select
+                class="form-select form-select-sm w-auto"
+                [value]="pageSize()"
+                (change)="onPageSizeChange($any($event.target).value)"
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+
+            <!-- Page buttons -->
+            <nav
+              class="v-pagination v-theme--BLUE_THEME text-subtitle-1 text-grey100"
+              role="navigation"
+              aria-label="Pagination Navigation"
+            >
+              <ul class="pagination-list">
+                <li>
+                  <button class="page-btn" [disabled]="currentPage() === 1" (click)="prevPage()">
+                    <span class="mdi mdi-chevron-left" style="font-size: 26px"></span>
+                  </button>
+                </li>
+
+                @for (p of visiblePages(); track $index) {
+                  <li>
+                    <button
+                      class="page-btn"
+                      [class.active]="currentPage() === p"
+                      (click)="goPage(p)"
+                    >
+                      {{ p }}
+                    </button>
+                  </li>
+                }
+
+                <li>
+                  <button
+                    class="page-btn"
+                    [disabled]="currentPage() === totalPages()"
+                    (click)="nextPage()"
+                  >
+                    <span class="mdi mdi-chevron-right" style="font-size: 26px"></span>
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <!-- end pagination -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DELETE MODAL ═══════════════════════════════════════════ -->
+<div
+  class="modal fade"
+  id="deleteModal"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content custom-box text-center p-4">
+      <div class="icon-wrapper">
+        <i class="ti ti-trash"></i>
+      </div>
+
+      <h2>Delete Production Entry</h2>
+
+      <p>
+        Are you sure you want to delete
+        <strong>{{ deleteTarget()?.productionNo }}</strong>
+        for Work Order <strong>{{ deleteTarget()?.workOrderNo }}</strong
+        >? This action cannot be undone.
+      </p>
+
+      <div class="btn-group justify-content-center gap-3">
+        <button class="cancel-btn bg-secondary" data-bs-dismiss="modal" (click)="cancelDelete()">
+          Cancel
+        </button>
+        <button class="delete-btn" data-bs-dismiss="modal" (click)="confirmDelete()">
+          Yes, Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

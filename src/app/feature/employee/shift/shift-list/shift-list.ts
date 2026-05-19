@@ -62,7 +62,7 @@ export class ShiftListComponent {
     signal(1);
 
   readonly pageSize =
-    signal(5);
+    signal(10);
 
   /* =====================================================
      FILTER

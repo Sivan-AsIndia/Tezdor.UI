@@ -7,9 +7,8 @@ import {
 export const WORK_ORDER_SEED: WorkOrder[] = [
 
   /* =====================================================
-     LAPTOP ASSEMBLY
+     YASHIKA 3+1+1 SOFA SET
   ===================================================== */
-
   {
 
     workOrderId:
@@ -96,14 +95,13 @@ export const WORK_ORDER_SEED: WorkOrder[] = [
     updatedOn:
       '2026-05-14T11:00:00',
 
-    bomLines: []
+    bomLines: [],
 
   },
 
   /* =====================================================
-     MOUSE
+     ROYAL SINGLE RECLINER
   ===================================================== */
-
   {
 
     workOrderId:
@@ -192,9 +190,8 @@ export const WORK_ORDER_SEED: WorkOrder[] = [
   },
 
   /* =====================================================
-     TSHIRT
+     MILANO L-SHAPE SOFA
   ===================================================== */
-
   {
 
     workOrderId:

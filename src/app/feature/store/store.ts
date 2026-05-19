@@ -1,3 +1,7 @@
+import {
+  MASTER_VENDORS, MASTER_UNITS, VendorOption, UnitOption
+} from '../../core/services/master-data';
+
 export interface StoreMaintain {
   id: number;
   sNo?: number;
@@ -53,17 +57,8 @@ export interface ITransactionOption {
   color: string;
 }
 export const WAREHOUSE_OPTIONS: StoreWarehouse[] = [
-
-  {
-    id: 'WH01',
-    name: 'Main Warehouse'
-  },
-
-  {
-    id: 'WH02',
-    name: 'Secondary Store'
-  }
-
+  { id: 'WH01', name: 'Main Warehouse' },
+  { id: 'WH02', name: 'Secondary Store' }
 ];
 
 export const TRANSACTION_TYPES: ITransactionOption[] = [
@@ -93,23 +88,11 @@ export type TransactionType = 'IN' | 'OUT' | 'ADJUSTMENT' | 'RETURN' | 'TRANSFER
 export type ReferenceType = 'Invoice' | 'Purchase Invoice' | 'Purchase Order' | 'Manual' | null;
 export interface StoreProduct  { code: string; name: string; unitName: string; }
 export interface StoreWarehouse { id: string; name: string; }
-export interface ITransactionOption {
-  value: TransactionType;
-  label: string;
-  desc: string;
-  icon: string;
-  color: string;
-}
 
-export const UNIT_OPTIONS: { value: number; label: string }[] = [
-  { value: 1, label: 'Sheets' },
-  { value: 2, label: 'Kg'     },
-  { value: 3, label: 'Ton'    },
-  { value: 4, label: 'Mtr'    },
-  { value: 5, label: 'Box'    },
-  { value: 6, label: 'Bag'    },
-  { value: 7, label: 'Nos'    },
-];
+// ═══════════════════════════════════════════════════════
+// Re-exported from centralized master-data.ts (no hardcoded data)
+// ═══════════════════════════════════════════════════════
+export const UNIT_OPTIONS: { value: number; label: string }[] = MASTER_UNITS;
 
 export type StepId = 1 | 2 | 3;
 
@@ -176,9 +159,8 @@ export const ADJUSTMENT_REASONS = [
   { value: 'other',    label: 'Other'                },
 ];
 
-export const VENDOR_OPTIONS = [
-  { code: 'VEN001', name: 'Krishna Timber'  },
-  { code: 'VEN002', name: 'Metro Steel'     },
-  { code: 'VEN003', name: 'PipeMart Co'     },
-  { code: 'VEN004', name: 'BuildMart'       },
-];
+// Vendor options now come from centralized master-data (all 6 vendors)
+export const VENDOR_OPTIONS = MASTER_VENDORS.map((v: VendorOption) => ({
+  code: v.code,
+  name: v.name
+}));

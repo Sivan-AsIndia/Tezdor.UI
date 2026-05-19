@@ -41,7 +41,7 @@ visiblePages = computed(() => {
 
   searchValue = signal('');
   page = signal(1);
-  pageSize = signal(5);
+  pageSize = signal(10);
 
   filterTop = 0;
   filterRight = 0;
@@ -59,7 +59,7 @@ visiblePages = computed(() => {
 
   showFilter = signal(false);
 
-  sourceOptions = ['JournalEntry', 'Invoice', 'Payment', 'Receipt', 'PettyCash'];
+  sourceOptions = ['PurchaseInvoice', 'SalesInvoice', 'CustomerPayment', 'VendorPayment', 'JournalEntry', 'PettyCash', 'SalaryPayment'];
 
   // ===== FILTER =====
   filteredEntries = computed(() => {

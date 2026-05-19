@@ -2,429 +2,410 @@ import { Shift } from "./shift";
 
 export const SHIFT_SEED_DATA: Shift[] = [
 
-  /* =====================================================
+  /* ===================================================== 1
      GENERAL SHIFT
   ===================================================== */
   {
-    shiftId:
-      crypto.randomUUID(),
-
-    shiftCode:
-      'SHIFT-GEN',
-
-    shiftName:
-      'General Shift',
-
-    description:
-      'Standard office working shift',
-
-    startTime:
-      '09:00',
-
-    endTime:
-      '18:00',
-
-    breakStartTime:
-      '13:00',
-
-    breakEndTime:
-      '14:00',
-
-    breakMinutes:
-      60,
-
-    workingHours:
-      8,
-
-    minimumHoursForHalfDay:
-      4,
-
-    minimumHoursForFullDay:
-      8,
-
-    lateGraceMinutes:
-      15,
-
-    earlyOutGraceMinutes:
-      10,
-
-    allowOvertime:
-      true,
-
-    minimumOvertimeMinutes:
-      30,
-
-    isNightShift:
-      false,
-
-    isFlexibleShift:
-      false,
-
-    isActive:
-      true,
-
-    isSundayOff:
-      true,
-
-    isMondayOff:
-      false,
-
-    isTuesdayOff:
-      false,
-
-    isWednesdayOff:
-      false,
-
-    isThursdayOff:
-      false,
-
-    isFridayOff:
-      false,
-
-    isSaturdayOff:
-      false,
+    shiftId: 'shift-001',
+    shiftCode: 'SHIFT-GEN',
+    shiftName: 'General Shift',
+    description: 'Standard office working shift',
+    startTime: '09:00',
+    endTime: '18:00',
+    breakStartTime: '13:00',
+    breakEndTime: '14:00',
+    breakMinutes: 60,
+    workingHours: 8,
+    minimumHoursForHalfDay: 4,
+    minimumHoursForFullDay: 8,
+    lateGraceMinutes: 15,
+    earlyOutGraceMinutes: 10,
+    allowOvertime: true,
+    minimumOvertimeMinutes: 30,
+    isNightShift: false,
+    isFlexibleShift: false,
+    isActive: true,
+    isSundayOff: true,
+    isMondayOff: false,
+    isTuesdayOff: false,
+    isWednesdayOff: false,
+    isThursdayOff: false,
+    isFridayOff: false,
+    isSaturdayOff: false,
     isDefault: true,
     isAllowMultipleEntry: false,
   },
 
-  /* =====================================================
+  /* ===================================================== 2
      MORNING SHIFT
   ===================================================== */
   {
-    shiftId:
-      crypto.randomUUID(),
-
-    shiftCode:
-      'SHIFT-MORN',
-
-    shiftName:
-      'Morning Shift',
-
-    description:
-      'Factory morning production shift',
-
-    startTime:
-      '06:00',
-
-    endTime:
-      '14:00',
-
-    breakStartTime:
-      '10:00',
-
-    breakEndTime:
-      '10:30',
-
-    breakMinutes:
-      30,
-
-    workingHours:
-      7.5,
-
-    minimumHoursForHalfDay:
-      4,
-
-    minimumHoursForFullDay:
-      7.5,
-
-    lateGraceMinutes:
-      10,
-
-    earlyOutGraceMinutes:
-      5,
-
-    allowOvertime:
-      true,
-
-    minimumOvertimeMinutes:
-      30,
-
-    isNightShift:
-      false,
-
-    isFlexibleShift:
-      false,
-
-    isActive:
-      true,
-
-    isSundayOff:
-      true,
-
-    isMondayOff:
-      false,
-
-    isTuesdayOff:
-      false,
-
-    isWednesdayOff:
-      false,
-
-    isThursdayOff:
-      false,
-
-    isFridayOff:
-      false,
-
-    isSaturdayOff:
-      false,
+    shiftId: 'shift-002',
+    shiftCode: 'SHIFT-MORN',
+    shiftName: 'Morning Shift',
+    description: 'Factory morning production shift',
+    startTime: '06:00',
+    endTime: '14:00',
+    breakStartTime: '10:00',
+    breakEndTime: '10:30',
+    breakMinutes: 30,
+    workingHours: 7.5,
+    minimumHoursForHalfDay: 4,
+    minimumHoursForFullDay: 7.5,
+    lateGraceMinutes: 10,
+    earlyOutGraceMinutes: 5,
+    allowOvertime: true,
+    minimumOvertimeMinutes: 30,
+    isNightShift: false,
+    isFlexibleShift: false,
+    isActive: true,
+    isSundayOff: true,
+    isMondayOff: false,
+    isTuesdayOff: false,
+    isWednesdayOff: false,
+    isThursdayOff: false,
+    isFridayOff: false,
+    isSaturdayOff: false,
     isDefault: false,
     isAllowMultipleEntry: false,
   },
 
-  /* =====================================================
+  /* ===================================================== 3
      EVENING SHIFT
   ===================================================== */
   {
-    shiftId:
-      crypto.randomUUID(),
-
-    shiftCode:
-      'SHIFT-EVE',
-
-    shiftName:
-      'Evening Shift',
-
-    description:
-      'Evening operational shift',
-
-    startTime:
-      '14:00',
-
-    endTime:
-      '22:00',
-
-    breakStartTime:
-      '18:00',
-
-    breakEndTime:
-      '18:30',
-
-    breakMinutes:
-      30,
-
-    workingHours:
-      7.5,
-
-    minimumHoursForHalfDay:
-      4,
-
-    minimumHoursForFullDay:
-      7.5,
-
-    lateGraceMinutes:
-      10,
-
-    earlyOutGraceMinutes:
-      5,
-
-    allowOvertime:
-      true,
-
-    minimumOvertimeMinutes:
-      30,
-
-    isNightShift:
-      false,
-
-    isFlexibleShift:
-      false,
-
-    isActive:
-      true,
-
-    isSundayOff:
-      true,
-
-    isMondayOff:
-      false,
-
-    isTuesdayOff:
-      false,
-
-    isWednesdayOff:
-      false,
-
-    isThursdayOff:
-      false,
-
-    isFridayOff:
-      false,
-
-    isSaturdayOff:
-      false,
+    shiftId: 'shift-003',
+    shiftCode: 'SHIFT-EVE',
+    shiftName: 'Evening Shift',
+    description: 'Evening operational shift',
+    startTime: '14:00',
+    endTime: '22:00',
+    breakStartTime: '18:00',
+    breakEndTime: '18:30',
+    breakMinutes: 30,
+    workingHours: 7.5,
+    minimumHoursForHalfDay: 4,
+    minimumHoursForFullDay: 7.5,
+    lateGraceMinutes: 10,
+    earlyOutGraceMinutes: 5,
+    allowOvertime: true,
+    minimumOvertimeMinutes: 30,
+    isNightShift: false,
+    isFlexibleShift: false,
+    isActive: true,
+    isSundayOff: true,
+    isMondayOff: false,
+    isTuesdayOff: false,
+    isWednesdayOff: false,
+    isThursdayOff: false,
+    isFridayOff: false,
+    isSaturdayOff: false,
     isDefault: false,
     isAllowMultipleEntry: false,
   },
 
-  /* =====================================================
+  /* ===================================================== 4
      NIGHT SHIFT
   ===================================================== */
   {
-    shiftId:
-      crypto.randomUUID(),
-
-    shiftCode:
-      'SHIFT-NIGHT',
-
-    shiftName:
-      'Night Shift',
-
-    description:
-      'Night production and support shift',
-
-    startTime:
-      '22:00',
-
-    endTime:
-      '06:00',
-
-    breakStartTime:
-      '02:00',
-
-    breakEndTime:
-      '02:30',
-
-    breakMinutes:
-      30,
-
-    workingHours:
-      7.5,
-
-    minimumHoursForHalfDay:
-      4,
-
-    minimumHoursForFullDay:
-      7.5,
-
-    lateGraceMinutes:
-      10,
-
-    earlyOutGraceMinutes:
-      5,
-
-    allowOvertime:
-      true,
-
-    minimumOvertimeMinutes:
-      30,
-
-    isNightShift:
-      true,
-
-    isFlexibleShift:
-      false,
-
-    isActive:
-      true,
-
-    isSundayOff:
-      true,
-
-    isMondayOff:
-      false,
-
-    isTuesdayOff:
-      false,
-
-    isWednesdayOff:
-      false,
-
-    isThursdayOff:
-      false,
-
-    isFridayOff:
-      false,
-
-    isSaturdayOff:
-      false,
+    shiftId: 'shift-004',
+    shiftCode: 'SHIFT-NIGHT',
+    shiftName: 'Night Shift',
+    description: 'Night production and support shift',
+    startTime: '22:00',
+    endTime: '06:00',
+    breakStartTime: '02:00',
+    breakEndTime: '02:30',
+    breakMinutes: 30,
+    workingHours: 7.5,
+    minimumHoursForHalfDay: 4,
+    minimumHoursForFullDay: 7.5,
+    lateGraceMinutes: 10,
+    earlyOutGraceMinutes: 5,
+    allowOvertime: true,
+    minimumOvertimeMinutes: 30,
+    isNightShift: true,
+    isFlexibleShift: false,
+    isActive: true,
+    isSundayOff: true,
+    isMondayOff: false,
+    isTuesdayOff: false,
+    isWednesdayOff: false,
+    isThursdayOff: false,
+    isFridayOff: false,
+    isSaturdayOff: false,
     isDefault: false,
     isAllowMultipleEntry: false,
   },
 
-  /* =====================================================
+  /* ===================================================== 5
      FLEXIBLE SHIFT
   ===================================================== */
   {
-    shiftId:
-      crypto.randomUUID(),
-
-    shiftCode:
-      'SHIFT-FLEX',
-
-    shiftName:
-      'Flexible Shift',
-
-    description:
-      'Flexible timing shift for management',
-
-    startTime:
-      '09:00',
-
-    endTime:
-      '18:00',
-
-    breakStartTime:
-      '13:00',
-
-    breakEndTime:
-      '14:00',
-
-    breakMinutes:
-      60,
-
-    workingHours:
-      8,
-
-    minimumHoursForHalfDay:
-      4,
-
-    minimumHoursForFullDay:
-      8,
-
-    lateGraceMinutes:
-      60,
-
-    earlyOutGraceMinutes:
-      30,
-
-    allowOvertime:
-      false,
-
-    minimumOvertimeMinutes:
-      0,
-
-    isNightShift:
-      false,
-
-    isFlexibleShift:
-      true,
-
-    isActive:
-      true,
-
-    isSundayOff:
-      true,
-
-    isMondayOff:
-      false,
-
-    isTuesdayOff:
-      false,
-
-    isWednesdayOff:
-      false,
-
-    isThursdayOff:
-      false,
-
-    isFridayOff:
-      false,
-
-    isSaturdayOff:
-      false,
+    shiftId: 'shift-005',
+    shiftCode: 'SHIFT-FLEX',
+    shiftName: 'Flexible Shift',
+    description: 'Flexible timing shift for management',
+    startTime: '09:00',
+    endTime: '18:00',
+    breakStartTime: '13:00',
+    breakEndTime: '14:00',
+    breakMinutes: 60,
+    workingHours: 8,
+    minimumHoursForHalfDay: 4,
+    minimumHoursForFullDay: 8,
+    lateGraceMinutes: 60,
+    earlyOutGraceMinutes: 30,
+    allowOvertime: false,
+    minimumOvertimeMinutes: 0,
+    isNightShift: false,
+    isFlexibleShift: true,
+    isActive: true,
+    isSundayOff: true,
+    isMondayOff: false,
+    isTuesdayOff: false,
+    isWednesdayOff: false,
+    isThursdayOff: false,
+    isFridayOff: false,
+    isSaturdayOff: false,
     isDefault: false,
     isAllowMultipleEntry: false,
-  }
+  },
+
+  /* ===================================================== 6
+     WEEKEND SHIFT
+  ===================================================== */
+  {
+    shiftId: 'shift-006',
+    shiftCode: 'SHIFT-WKND',
+    shiftName: 'Weekend Shift',
+    description: 'Weekend support and operations shift',
+    startTime: '10:00',
+    endTime: '18:00',
+    breakStartTime: '13:30',
+    breakEndTime: '14:00',
+    breakMinutes: 30,
+    workingHours: 7.5,
+    minimumHoursForHalfDay: 4,
+    minimumHoursForFullDay: 7.5,
+    lateGraceMinutes: 15,
+    earlyOutGraceMinutes: 10,
+    allowOvertime: true,
+    minimumOvertimeMinutes: 30,
+    isNightShift: false,
+    isFlexibleShift: false,
+    isActive: true,
+    isSundayOff: false,
+    isMondayOff: true,
+    isTuesdayOff: true,
+    isWednesdayOff: false,
+    isThursdayOff: false,
+    isFridayOff: true,
+    isSaturdayOff: false,
+    isDefault: false,
+    isAllowMultipleEntry: false,
+  },
+
+  /* ===================================================== 7
+     ROTATIONAL SHIFT A
+  ===================================================== */
+  {
+    shiftId: 'shift-007',
+    shiftCode: 'SHIFT-ROTA',
+    shiftName: 'Rotational Shift A',
+    description: 'Rotating weekly shift for warehouse staff',
+    startTime: '07:00',
+    endTime: '15:00',
+    breakStartTime: '11:00',
+    breakEndTime: '11:30',
+    breakMinutes: 30,
+    workingHours: 7.5,
+    minimumHoursForHalfDay: 4,
+    minimumHoursForFullDay: 7.5,
+    lateGraceMinutes: 10,
+    earlyOutGraceMinutes: 5,
+    allowOvertime: true,
+    minimumOvertimeMinutes: 15,
+    isNightShift: false,
+    isFlexibleShift: false,
+    isActive: true,
+    isSundayOff: true,
+    isMondayOff: false,
+    isTuesdayOff: false,
+    isWednesdayOff: true,
+    isThursdayOff: false,
+    isFridayOff: false,
+    isSaturdayOff: false,
+    isDefault: false,
+    isAllowMultipleEntry: false,
+  },
+
+  /* ===================================================== 8
+     ROTATIONAL SHIFT B
+  ===================================================== */
+  {
+    shiftId: 'shift-008',
+    shiftCode: 'SHIFT-ROTB',
+    shiftName: 'Rotational Shift B',
+    description: 'Alternate rotation for warehouse team B',
+    startTime: '15:00',
+    endTime: '23:00',
+    breakStartTime: '19:00',
+    breakEndTime: '19:30',
+    breakMinutes: 30,
+    workingHours: 7.5,
+    minimumHoursForHalfDay: 4,
+    minimumHoursForFullDay: 7.5,
+    lateGraceMinutes: 10,
+    earlyOutGraceMinutes: 5,
+    allowOvertime: true,
+    minimumOvertimeMinutes: 15,
+    isNightShift: false,
+    isFlexibleShift: false,
+    isActive: true,
+    isSundayOff: true,
+    isMondayOff: false,
+    isTuesdayOff: false,
+    isWednesdayOff: false,
+    isThursdayOff: true,
+    isFridayOff: false,
+    isSaturdayOff: false,
+    isDefault: false,
+    isAllowMultipleEntry: false,
+  },
+
+  /* ===================================================== 9
+     HALF-DAY SHIFT
+  ===================================================== */
+  {
+    shiftId: 'shift-009',
+    shiftCode: 'SHIFT-HALF',
+    shiftName: 'Half-Day Shift',
+    description: 'Part-time / half-day shift for interns',
+    startTime: '09:00',
+    endTime: '13:00',
+    breakMinutes: 0,
+    workingHours: 4,
+    minimumHoursForHalfDay: 3,
+    minimumHoursForFullDay: 4,
+    lateGraceMinutes: 10,
+    earlyOutGraceMinutes: 5,
+    allowOvertime: false,
+    minimumOvertimeMinutes: 0,
+    isNightShift: false,
+    isFlexibleShift: false,
+    isActive: true,
+    isSundayOff: true,
+    isMondayOff: false,
+    isTuesdayOff: false,
+    isWednesdayOff: false,
+    isThursdayOff: false,
+    isFridayOff: false,
+    isSaturdayOff: true,
+    isDefault: false,
+    isAllowMultipleEntry: false,
+  },
+
+  /* ===================================================== 10
+     SECURITY SHIFT (24-Hour Rotation)
+  ===================================================== */
+  {
+    shiftId: 'shift-010',
+    shiftCode: 'SHIFT-SEC',
+    shiftName: 'Security Shift',
+    description: '12-hour security guard rotation',
+    startTime: '06:00',
+    endTime: '18:00',
+    breakStartTime: '12:00',
+    breakEndTime: '13:00',
+    breakMinutes: 60,
+    workingHours: 11,
+    minimumHoursForHalfDay: 6,
+    minimumHoursForFullDay: 11,
+    lateGraceMinutes: 5,
+    earlyOutGraceMinutes: 0,
+    allowOvertime: false,
+    minimumOvertimeMinutes: 0,
+    isNightShift: false,
+    isFlexibleShift: false,
+    isActive: true,
+    isSundayOff: false,
+    isMondayOff: false,
+    isTuesdayOff: false,
+    isWednesdayOff: false,
+    isThursdayOff: false,
+    isFridayOff: false,
+    isSaturdayOff: false,
+    isDefault: false,
+    isAllowMultipleEntry: false,
+  },
+
+  /* ===================================================== 11
+     REMOTE / WFH SHIFT (Inactive)
+  ===================================================== */
+  {
+    shiftId: 'shift-011',
+    shiftCode: 'SHIFT-WFH',
+    shiftName: 'Remote / WFH Shift',
+    description: 'Work-from-home shift (discontinued)',
+    startTime: '10:00',
+    endTime: '19:00',
+    breakStartTime: '13:00',
+    breakEndTime: '14:00',
+    breakMinutes: 60,
+    workingHours: 8,
+    minimumHoursForHalfDay: 4,
+    minimumHoursForFullDay: 8,
+    lateGraceMinutes: 30,
+    earlyOutGraceMinutes: 15,
+    allowOvertime: false,
+    minimumOvertimeMinutes: 0,
+    isNightShift: false,
+    isFlexibleShift: true,
+    isActive: false,
+    isSundayOff: true,
+    isMondayOff: false,
+    isTuesdayOff: false,
+    isWednesdayOff: false,
+    isThursdayOff: false,
+    isFridayOff: false,
+    isSaturdayOff: true,
+    isDefault: false,
+    isAllowMultipleEntry: false,
+  },
+
+  /* ===================================================== 12
+     SPLIT SHIFT (Inactive)
+  ===================================================== */
+  {
+    shiftId: 'shift-012',
+    shiftCode: 'SHIFT-SPLT',
+    shiftName: 'Split Shift',
+    description: 'Split working hours (morning + evening) - discontinued',
+    startTime: '08:00',
+    endTime: '20:00',
+    breakStartTime: '12:00',
+    breakEndTime: '16:00',
+    breakMinutes: 240,
+    workingHours: 8,
+    minimumHoursForHalfDay: 4,
+    minimumHoursForFullDay: 8,
+    lateGraceMinutes: 10,
+    earlyOutGraceMinutes: 10,
+    allowOvertime: false,
+    minimumOvertimeMinutes: 0,
+    isNightShift: false,
+    isFlexibleShift: false,
+    isActive: false,
+    isSundayOff: true,
+    isMondayOff: false,
+    isTuesdayOff: false,
+    isWednesdayOff: false,
+    isThursdayOff: false,
+    isFridayOff: false,
+    isSaturdayOff: true,
+    isDefault: false,
+    isAllowMultipleEntry: false,
+  },
 
 ];

@@ -1,11 +1,15 @@
 import { Salary, SalaryStatus } from "./salary";
 
 export const SALARY_SEED: Salary[] = [
+
+  // ────────────────────────────────────────────────────────────────────
+  // STATUS: Draft (3 records)
+  // ────────────────────────────────────────────────────────────────────
   {
     salaryId: 'SAL001',
     salaryNumber: 'SAL-2026-APR-001',
     status: SalaryStatus.Draft,
-    branchId: 'BR001',
+    branchId: 'B1',
     payrollPeriodId: 'APR-2026',
     fromDate: '2026-04-01',
     toDate: '2026-04-30',
@@ -16,16 +20,15 @@ export const SALARY_SEED: Salary[] = [
     totalGrossAmount: 95000,
     totalDeductionAmount: 8000,
     totalNetSalary: 87000,
-    expenseAccountId: 'EXP001',
-    payableAccountId: 'PAY001',
-    salaryLines: [] // filled below
+    expenseAccountId: 'acc-006',
+    payableAccountId: 'acc-013',
+    salaryLines: []
   },
-
   {
     salaryId: 'SAL002',
     salaryNumber: 'SAL-2026-MAY-001',
-    status: SalaryStatus.Processed,
-    branchId: 'BR001',
+    status: SalaryStatus.Draft,
+    branchId: 'B1',
     payrollPeriodId: 'MAY-2026',
     fromDate: '2026-05-01',
     toDate: '2026-05-31',
@@ -36,46 +39,217 @@ export const SALARY_SEED: Salary[] = [
     totalGrossAmount: 140000,
     totalDeductionAmount: 12000,
     totalNetSalary: 128000,
-    expenseAccountId: 'EXP001',
-    payableAccountId: 'PAY001'
+    expenseAccountId: 'acc-006',
+    payableAccountId: 'acc-013'
   },
-
   {
     salaryId: 'SAL003',
     salaryNumber: 'SAL-2026-JUN-001',
-    status: SalaryStatus.Approved,
-    branchId: 'BR002',
+    status: SalaryStatus.Draft,
+    branchId: 'B2',
     payrollPeriodId: 'JUN-2026',
     fromDate: '2026-06-01',
     toDate: '2026-06-30',
     salaryDate: '2026-07-01',
     salaryMonth: 'JUN-2026',
     paymentDate: '2026-07-05',
-    totalEmployees: 5,
-    totalGrossAmount: 180000,
-    totalDeductionAmount: 15000,
-    totalNetSalary: 165000,
-    expenseAccountId: 'EXP001',
-    payableAccountId: 'PAY001'
+    totalEmployees: 3,
+    totalGrossAmount: 105000,
+    totalDeductionAmount: 9200,
+    totalNetSalary: 95800,
+    expenseAccountId: 'acc-006',
+    payableAccountId: 'acc-013'
   },
 
-  // remaining sample (simplified for length)
-  ...Array.from({ length: 9 }, (_, i) => ({
-    salaryId: `SAL00${i + 4}`,
-    salaryNumber: `SAL-2026-${i + 4}`,
-    status: SalaryStatus.Draft,
-    branchId: 'BR001',
-    payrollPeriodId: `PER-${i + 4}`,
+  // ────────────────────────────────────────────────────────────────────
+  // STATUS: Processed (3 records)
+  // ────────────────────────────────────────────────────────────────────
+  {
+    salaryId: 'SAL004',
+    salaryNumber: 'SAL-2026-JAN-001',
+    status: SalaryStatus.Processed,
+    branchId: 'B1',
+    payrollPeriodId: 'JAN-2026',
     fromDate: '2026-01-01',
     toDate: '2026-01-31',
     salaryDate: '2026-02-01',
     salaryMonth: 'JAN-2026',
     paymentDate: '2026-02-05',
+    totalEmployees: 5,
+    totalGrossAmount: 215000,
+    totalDeductionAmount: 18500,
+    totalNetSalary: 196500,
+    expenseAccountId: 'acc-006',
+    payableAccountId: 'acc-013'
+  },
+  {
+    salaryId: 'SAL005',
+    salaryNumber: 'SAL-2026-FEB-001',
+    status: SalaryStatus.Processed,
+    branchId: 'B2',
+    payrollPeriodId: 'FEB-2026',
+    fromDate: '2026-02-01',
+    toDate: '2026-02-28',
+    salaryDate: '2026-03-01',
+    salaryMonth: 'FEB-2026',
+    paymentDate: '2026-03-05',
+    totalEmployees: 4,
+    totalGrossAmount: 168000,
+    totalDeductionAmount: 14200,
+    totalNetSalary: 153800,
+    expenseAccountId: 'acc-006',
+    payableAccountId: 'acc-013'
+  },
+  {
+    salaryId: 'SAL006',
+    salaryNumber: 'SAL-2026-MAR-001',
+    status: SalaryStatus.Processed,
+    branchId: 'B1',
+    payrollPeriodId: 'MAR-2026',
+    fromDate: '2026-03-01',
+    toDate: '2026-03-31',
+    salaryDate: '2026-04-01',
+    salaryMonth: 'MAR-2026',
+    paymentDate: '2026-04-05',
+    totalEmployees: 6,
+    totalGrossAmount: 248000,
+    totalDeductionAmount: 21000,
+    totalNetSalary: 227000,
+    expenseAccountId: 'acc-006',
+    payableAccountId: 'acc-013'
+  },
+
+  // ────────────────────────────────────────────────────────────────────
+  // STATUS: Approved (2 records)
+  // ────────────────────────────────────────────────────────────────────
+  {
+    salaryId: 'SAL007',
+    salaryNumber: 'SAL-2025-NOV-001',
+    status: SalaryStatus.Approved,
+    branchId: 'B1',
+    payrollPeriodId: 'NOV-2025',
+    fromDate: '2025-11-01',
+    toDate: '2025-11-30',
+    salaryDate: '2025-12-01',
+    salaryMonth: 'NOV-2025',
+    paymentDate: '2025-12-05',
+    totalEmployees: 5,
+    totalGrossAmount: 210000,
+    totalDeductionAmount: 17800,
+    totalNetSalary: 192200,
+    expenseAccountId: 'acc-006',
+    payableAccountId: 'acc-013'
+  },
+  {
+    salaryId: 'SAL008',
+    salaryNumber: 'SAL-2025-DEC-001',
+    status: SalaryStatus.Approved,
+    branchId: 'B2',
+    payrollPeriodId: 'DEC-2025',
+    fromDate: '2025-12-01',
+    toDate: '2025-12-31',
+    salaryDate: '2026-01-02',
+    salaryMonth: 'DEC-2025',
+    paymentDate: '2026-01-05',
+    totalEmployees: 4,
+    totalGrossAmount: 172000,
+    totalDeductionAmount: 14600,
+    totalNetSalary: 157400,
+    expenseAccountId: 'acc-006',
+    payableAccountId: 'acc-013'
+  },
+
+  // ────────────────────────────────────────────────────────────────────
+  // STATUS: Posted (2 records)
+  // ────────────────────────────────────────────────────────────────────
+  {
+    salaryId: 'SAL009',
+    salaryNumber: 'SAL-2025-SEP-001',
+    status: SalaryStatus.Posted,
+    branchId: 'B1',
+    payrollPeriodId: 'SEP-2025',
+    fromDate: '2025-09-01',
+    toDate: '2025-09-30',
+    salaryDate: '2025-10-01',
+    salaryMonth: 'SEP-2025',
+    paymentDate: '2025-10-05',
+    totalEmployees: 5,
+    totalGrossAmount: 200000,
+    totalDeductionAmount: 17000,
+    totalNetSalary: 183000,
+    isPosted: true,
+    postedOn: new Date('2025-10-02'),
+    postedBy: 'admin',
+    expenseAccountId: 'acc-006',
+    payableAccountId: 'acc-013'
+  },
+  {
+    salaryId: 'SAL010',
+    salaryNumber: 'SAL-2025-OCT-001',
+    status: SalaryStatus.Posted,
+    branchId: 'B2',
+    payrollPeriodId: 'OCT-2025',
+    fromDate: '2025-10-01',
+    toDate: '2025-10-31',
+    salaryDate: '2025-11-01',
+    salaryMonth: 'OCT-2025',
+    paymentDate: '2025-11-05',
     totalEmployees: 3,
-    totalGrossAmount: 90000,
-    totalDeductionAmount: 7000,
-    totalNetSalary: 83000,
-    expenseAccountId: 'EXP001',
-    payableAccountId: 'PAY001'
-  }))
+    totalGrossAmount: 126000,
+    totalDeductionAmount: 10800,
+    totalNetSalary: 115200,
+    isPosted: true,
+    postedOn: new Date('2025-11-02'),
+    postedBy: 'admin',
+    expenseAccountId: 'acc-006',
+    payableAccountId: 'acc-013'
+  },
+
+  // ────────────────────────────────────────────────────────────────────
+  // STATUS: Paid (2 records)
+  // ────────────────────────────────────────────────────────────────────
+  {
+    salaryId: 'SAL011',
+    salaryNumber: 'SAL-2025-JUL-001',
+    status: SalaryStatus.Paid,
+    branchId: 'B1',
+    payrollPeriodId: 'JUL-2025',
+    fromDate: '2025-07-01',
+    toDate: '2025-07-31',
+    salaryDate: '2025-08-01',
+    salaryMonth: 'JUL-2025',
+    paymentDate: '2025-08-05',
+    totalEmployees: 5,
+    totalGrossAmount: 195000,
+    totalDeductionAmount: 16500,
+    totalNetSalary: 178500,
+    isPosted: true,
+    postedOn: new Date('2025-08-02'),
+    postedBy: 'admin',
+    expenseAccountId: 'acc-006',
+    payableAccountId: 'acc-013',
+    paymentAccountId: 'acc-005'
+  },
+  {
+    salaryId: 'SAL012',
+    salaryNumber: 'SAL-2025-AUG-001',
+    status: SalaryStatus.Paid,
+    branchId: 'B1',
+    payrollPeriodId: 'AUG-2025',
+    fromDate: '2025-08-01',
+    toDate: '2025-08-31',
+    salaryDate: '2025-09-01',
+    salaryMonth: 'AUG-2025',
+    paymentDate: '2025-09-05',
+    totalEmployees: 6,
+    totalGrossAmount: 240000,
+    totalDeductionAmount: 20400,
+    totalNetSalary: 219600,
+    isPosted: true,
+    postedOn: new Date('2025-09-02'),
+    postedBy: 'admin',
+    expenseAccountId: 'acc-006',
+    payableAccountId: 'acc-013',
+    paymentAccountId: 'acc-005'
+  },
 ];
