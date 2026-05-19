@@ -185,7 +185,7 @@
                       </tr>
                     }
 
-                    @for (pe of pagedEntries(); track pe.id; let i = $index) {
+                    @for (pe of pagedEntries(); track pe.workOrderId; let i = $index) {
                       <tr
                         [class.pe-tr--draft]="pe.status === 'draft'"
                         [class.pe-tr--rejected]="pe.status === 'rejected'"
@@ -196,8 +196,7 @@
                         <!-- Work Order -->
                         <td>
                           <a
-                            class="pe-wo-link"
-                            [routerLink]="['/work-orders', pe.workOrderId]"
+                            class="pe-wo-link" 
                             title="View Work Order"
                           >
                             {{ pe.workOrderNo }}

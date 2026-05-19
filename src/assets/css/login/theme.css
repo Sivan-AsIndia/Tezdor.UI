@@ -12255,6 +12255,42 @@ background: rgba(255, 255, 255, 0.13) !important;
 [data-bs-theme="dark"] .bom-sum-item__val,[data-bs-theme="dark"] .bom-item-name{
   color: white !important;
 }
+
+[data-bs-theme="dark"] .wo-page{
+   background: transparent !important;
+}
+[data-bs-theme="dark"] .wo-card{
+  background: #111c2d !important;
+}
+[data-bs-theme="dark"] .wo-section-title{
+color:white !important
+}
+[data-bs-theme="dark"] .wo-alert-row{
+ background: #111c2d !important;
+ color:white !important
+}
+[data-bs-theme="dark"]  .status-draft{
+ background: #111c2d !important;
+ border:none !important; 
+  color:white !important
+}
+[data-bs-theme="dark"] .wo-view-page{
+ background: transparent !important;
+}
+[data-bs-theme="dark"] .wo-hero-card,[data-bs-theme="dark"] .wo-panel-card,[data-bs-theme="dark"] .wo-stat-box,[data-bs-theme="dark"] .wo-timeline-item{
+  background: #111c2d !important; 
+  border:1px solid white
+}
+[data-bs-theme="dark"] .text-warning-emphasis,[data-bs-theme="dark"] .wo-product-title,[data-bs-theme="dark"] .wo-progress-label{
+ color:white !important
+}
+[data-bs-theme="dark"] .wo-total-cost,[data-bs-theme="dark"] .wo-stat-number,[data-bs-theme="dark"] .wo-timeline-value,[data-bs-theme="dark"] .wo-panel-title,
+[data-bs-theme="dark"] .wo-info-data,[data-bs-theme="dark"] .wo-total-label{
+ color:white !important
+}
+[data-bs-theme="dark"] .wo-progress-bar,[data-bs-theme="dark"] .wo-total-footer{
+ background: #ffffff1c !important;
+}
 input[type="checkbox"] {
 accent-color: var(--color-primary);
     background: transparent;
