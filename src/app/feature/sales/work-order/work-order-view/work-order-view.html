@@ -1,0 +1,1055 @@
+<div class="wo-view-page">
+
+    <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+
+        <div>
+
+            <h4 class="fw-bold mb-1 mainheading">
+
+                Work Order Details
+
+            </h4>
+
+            <small class="text-muted subdescription">
+
+                View work order, production progress,
+                BOM details, and manufacturing status.
+
+            </small>
+
+        </div>
+
+        <div class="arrow-steps d-none d-md-flex">
+
+            <ul id="breadcrumb">
+
+                <li>
+
+                    <a routerLink="/dashboard">
+
+                        <span class="fa fa-home me-1"></span>
+
+
+                        Home
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a routerLink="/work-orders">
+
+                        <span class="fa fa-industry me-1"></span>
+
+
+                        Work Order
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a>
+
+                        <span class="fa fa-eye me-1"></span>
+
+                        View
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+    <!-- <div class="d-flex justify-content-between align-items-center flex-wrap gap-3" id="TopHeading">
+
+        <div>
+
+            <div class="wo-mini-badge">
+
+                Manufacturing • Work Order
+
+            </div>
+
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+
+            <button class="btn wo-btn-light">
+
+                <i class="fa fa-print me-2"></i>
+                Print
+
+            </button>
+
+
+        </div>
+
+    </div> -->
+
+    @if (workOrder(); as wo) {
+
+    <!-- HERO CARD -->
+
+    <div class="wo-hero-card">
+
+        <div class="row g-4 align-items-center">
+
+            <!-- LEFT -->
+
+            <div class="col-xl-8">
+
+                <div class="d-flex flex-wrap align-items-start gap-3">
+
+                    <div class="wo-icon-box">
+
+                        <i class="fa fa-industry"></i>
+
+                    </div>
+
+                    <div>
+
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+
+                            <span class="wo-order-chip">
+
+                                {{ wo.workOrderNo }}
+
+                            </span>
+
+                            <span class="wo-status-chip" [class]="getStatusClass(wo.status)">
+
+                                {{ wo.status }}
+
+                            </span>
+
+                            <span class="wo-priority-chip" [class]="getPriorityClass(wo.priority)">
+
+                                {{ wo.priority }}
+
+                            </span>
+
+                        </div>
+
+                        <h1 class="wo-product-title">
+
+                            {{ getProductName(wo.productId) }}
+
+                        </h1>
+
+                        <div class="wo-product-subtitle">
+
+                            Product ID:
+                            {{ getProductCode(wo.productId) }}
+
+                            •
+
+                            Created on
+                            {{
+                            wo.createdOn
+                            | date:'dd MMM yyyy'
+                            }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- PROGRESS -->
+
+                <div class="wo-progress-area">
+
+                    <div class="d-flex justify-content-between mb-2">
+
+                        <span class="wo-progress-label">
+
+                            Production Completion
+
+                        </span>
+
+                        <span class="wo-progress-percent">
+
+                            {{ progress() }}%
+
+                        </span>
+
+                    </div>
+
+                    <div class="progress wo-progress-bar">
+
+                        <div class="progress-bar" [style.width.%]="progress()">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT STATS -->
+
+            <div class="col-xl-4">
+
+                <div class="row g-3">
+
+                    <div class="col-4">
+
+                        <div class="wo-stat-box">
+
+                            <div class="wo-stat-icon blue">
+
+                                <i class="fa fa-box"></i>
+
+                            </div>
+
+                            <div class="wo-stat-number">
+
+                                {{ wo.orderedQuantity }}
+
+                            </div>
+
+                            <div class="wo-stat-text">
+
+                                Ordered
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-4">
+
+                        <div class="wo-stat-box success">
+
+                            <div class="wo-stat-icon green">
+
+                                <i class="fa fa-check"></i>
+
+                            </div>
+
+                            <div class="wo-stat-number">
+
+                                {{ wo.producedQuantity }}
+
+                            </div>
+
+                            <div class="wo-stat-text">
+
+                                Produced
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-4">
+
+                        <div class="wo-stat-box warning">
+
+                            <div class="wo-stat-icon orange">
+
+                                <i class="fa fa-clock"></i>
+
+                            </div>
+
+                            <div class="wo-stat-number">
+
+                                {{ wo.pendingQuantity }}
+
+                            </div>
+
+                            <div class="wo-stat-text">
+
+                                Pending
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- TIMELINE -->
+
+        <div class="wo-timeline-grid">
+
+            <div class="wo-timeline-item">
+
+                <div class="wo-timeline-label">
+
+                    Planned Start
+
+                </div>
+
+                <div class="wo-timeline-value">
+
+                    {{
+                    wo.plannedStartDate
+                    | date:'dd MMM yyyy'
+                    }}
+
+                </div>
+
+            </div>
+
+            <div class="wo-timeline-item">
+
+                <div class="wo-timeline-label">
+
+                    Planned End
+
+                </div>
+
+                <div class="wo-timeline-value">
+
+                    {{
+                    wo.plannedEndDate
+                    | date:'dd MMM yyyy'
+                    }}
+
+                </div>
+
+            </div>
+
+            <div class="wo-timeline-item">
+
+                <div class="wo-timeline-label">
+
+                    Actual Start
+
+                </div>
+
+                <div class="wo-timeline-value">
+
+                    {{
+                    wo.actualStartDate || '-'
+                    }}
+
+                </div>
+
+            </div>
+
+            <div class="wo-timeline-item">
+
+                <div class="wo-timeline-label">
+
+                    Actual End
+
+                </div>
+
+                <div class="wo-timeline-value">
+
+                    {{
+                    wo.actualEndDate || '-'
+                    }}
+
+                </div>
+
+            </div>
+
+            <div class="wo-timeline-item">
+
+                <div class="wo-timeline-label">
+
+                    Warehouse
+
+                </div>
+
+                <div class="wo-timeline-value">
+
+                    {{ wo.warehouseId || '-' }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- INFO GRID -->
+
+    <div class="row g-4 mt-1">
+
+        <!-- REFERENCES -->
+
+        <div class="col-xl-6">
+
+            <div class="wo-panel-card h-100">
+
+                <div class="wo-panel-header">
+
+                    <div>
+
+                        <div class="wo-panel-title">
+
+                            References
+
+                        </div>
+
+                        <div class="wo-panel-subtitle">
+
+                            Linked transactional references
+
+                        </div>
+
+                    </div>
+
+                    <div class="wo-panel-icon">
+
+                        <i class="fa fa-link"></i>
+
+                    </div>
+
+                </div>
+
+                <div class="wo-info-grid">
+
+                    <div class="wo-info-item">
+
+                        <div class="wo-info-name">
+
+                            Sales Order
+
+                        </div>
+
+                        <div class="wo-info-data">
+
+                            {{ wo.salesOrderId || '-' }}
+
+                        </div>
+
+                    </div>
+
+                    <div class="wo-info-item">
+
+                        <div class="wo-info-name">
+
+                            Customer
+
+                        </div>
+
+                        <div class="wo-info-data">
+
+                            {{ wo.customerId || '-' }}
+
+                        </div>
+
+                    </div>
+
+                    <div class="wo-info-item full">
+
+                        <div class="wo-info-name">
+
+                            Remarks
+
+                        </div>
+
+                        <div class="wo-info-data">
+
+                            {{ wo.remarks || '-' }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CONFIRMATION -->
+
+        <div class="col-xl-6">
+
+            <div class="wo-panel-card h-100">
+
+                <div class="wo-panel-header">
+
+                    <div>
+
+                        <div class="wo-panel-title">
+
+                            Approval & Confirmation
+
+                        </div>
+
+                        <div class="wo-panel-subtitle">
+
+                            Workflow verification details
+
+                        </div>
+
+                    </div>
+
+                    <div class="wo-panel-icon purple">
+
+                        <i class="fas fa-shield-alt"></i>
+
+                    </div>
+
+                </div>
+
+                <div class="wo-info-grid">
+
+                    <div class="wo-info-item">
+
+                        <div class="wo-info-name">
+
+                            Confirmed By
+
+                        </div>
+
+                        <div class="wo-info-data">
+
+                            {{ wo.confirmedByName || '-' }}
+
+                        </div>
+
+                    </div>
+
+                    <div class="wo-info-item">
+
+                        <div class="wo-info-name">
+
+                            Confirmed On
+
+                        </div>
+
+                        <div class="wo-info-data">
+
+                            {{
+                            wo.confirmedDate
+                            ? (wo.confirmedDate | date:'dd MMM yyyy')
+                            : '-'
+                            }}
+
+                        </div>
+
+                    </div>
+
+                    <div class="wo-info-item full">
+
+                        <div class="wo-info-name">
+
+                            Last Updated
+
+                        </div>
+
+                        <div class="wo-info-data">
+
+                            {{
+                            wo.updatedOn
+                            | date:'dd MMM yyyy'
+                            }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- BOM -->
+
+    <div class="wo-panel-card mt-4">
+
+        <div class="wo-panel-header mb-4">
+
+            <div>
+
+                <div class="wo-panel-title">
+
+                    Bill Of Materials
+
+                </div>
+
+                <div class="wo-panel-subtitle">
+
+                    Material requirement and production consumption
+
+                </div>
+
+            </div>
+
+            <div class="wo-count-badge">
+
+                {{ bomLines().length }}
+                BOM Lines
+
+            </div>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table wo-table align-middle mb-0">
+
+                <thead>
+
+                    <tr>
+                        <th class="d-xl-none" style="width:40px"></th>
+                        <th>Item</th>
+                        <th class="d-none d-xl-table-cell">Level</th>
+                        <th class="d-none d-md-table-cell">Required</th>
+                        <th class="d-none d-md-table-cell">Consumed</th>
+                        <th class="d-none d-lg-table-cell">Pending</th>
+                        <th class="d-none d-lg-table-cell">Wastage</th>
+                        <th class="d-none d-xl-table-cell">UOM</th>
+                        <th class="d-none d-md-table-cell">Total Cost</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @for (
+                    line of bomLines();
+                    track line.workOrderBomLineId
+                    ) {
+
+                    <tr [class.parent-row]="line.level === 1" [class.child-row]="line.level > 1">
+                        <!-- MOBILE EXPAND -->
+                        <td class="d-xl-none text-center" style="padding-left:15px;">
+                            <a href="javascript:void(0);" class="TablePlus" data-bs-toggle="modal"
+                                data-bs-target="#rowDetailsModal" (click)="openRowDetails(line)">
+                                <i class="ti ti-plus"></i>
+                            </a>
+                        </td>
+
+                        <td>
+
+                            <div class="wo-bom-item" [style.padding-left.px]="
+                (line.level - 1) * 28
+              ">
+
+                                <!-- LEVEL BADGE -->
+
+                                <span class="wo-level-badge" [ngClass]="{
+
+                    'l1': line.level === 1,
+                    'l2': line.level === 2,
+                    'l3': line.level >= 3
+
+                  }">
+
+                                    L{{ line.level }}
+
+                                </span>
+
+                                <!-- CONNECTOR -->
+
+                                @if(line.level > 1){
+
+                                <span class="wo-tree-line"></span>
+
+                                }
+
+                                <!-- CONTENT -->
+
+                                <div class="wo-item-content">
+
+                                    <div class="wo-item-name">
+
+                                        {{ line.itemName }}
+
+                                    </div>
+
+                                    <div class="wo-item-sub">
+
+                                        {{ line.productStructureId }}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td class="d-none d-xl-table-cell">
+
+                            {{ line.level }}
+
+                        </td>
+
+
+                        <td class="fw-semibold d-none d-md-table-cell">
+
+                            {{ line.requiredQuantity }}
+
+                        </td>
+
+
+                        <td class="text-success fw-semibold d-none d-md-table-cell">
+
+                            {{ line.consumedQuantity }}
+
+                        </td>
+
+
+                        <td class="text-warning fw-semibold d-none d-lg-table-cell">
+
+                            {{ line.pendingQuantity }}
+
+                        </td>
+
+                        <td class="d-none d-lg-table-cell">
+
+                            {{ line.wastagePercentage || 0 }}%
+
+                        </td>
+
+
+                        <td class="d-none d-xl-table-cell">
+
+                            {{
+                            getUnitName(
+                            line.unitOfMeasureId
+                            )
+                            }}
+
+                        </td>
+
+
+                        <td class="fw-bold text-primary d-none d-md-table-cell">
+
+                            {{
+                            formatCurrency(
+                            line.requiredQuantity * 100
+                            )
+                            }}
+
+                        </td>
+
+                    </tr>
+
+                    }
+
+
+                    @if (
+                    bomLines().length === 0
+                    ) {
+
+                    <tr>
+
+                        <td colspan="8" class="text-center py-5 text-muted">
+
+                            No BOM Lines Available
+
+                        </td>
+
+                    </tr>
+
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- TOTAL FOOTER  -->
+
+        <div class="wo-total-footer">
+
+            <div class="wo-total-label">
+
+                Total Material Cost
+
+            </div>
+
+            <div class="wo-total-value">
+
+                {{
+                formatCurrency(
+                totalMaterialCost()
+                )
+                }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    }
+
+</div>
+
+<!-- =====================================================
+     ROW DETAILS MODAL
+====================================================== -->
+
+<div
+  class="modal fade"
+  id="rowDetailsModal"
+  tabindex="-1"
+  aria-hidden="true">
+
+  <div
+    class="modal-dialog modal-dialog-centered modal-lg">
+
+    <div class="modal-content wo-row-modal">
+
+      <!-- =====================================================
+           HEADER
+      ====================================================== -->
+
+      <div class="modal-header wo-row-modal-header">
+
+        <div>
+
+          <div class="wo-row-modal-title">
+
+            BOM Line Details
+
+          </div>
+
+          <div class="wo-row-modal-subtitle">
+
+            Material requirement and production data
+
+          </div>
+
+        </div>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal">
+
+        </button>
+
+      </div>
+
+      <!-- =====================================================
+           BODY
+      ====================================================== -->
+
+      <div
+        class="modal-body"
+        *ngIf="selectedBomLine() as line">
+
+        <!-- =====================================================
+             TOP ITEM
+        ====================================================== -->
+
+        <div class="wo-row-item-top">
+
+          <div class="d-flex align-items-center gap-3">
+
+            <span
+              class="wo-level-badge"
+              [ngClass]="{
+
+                'l1': line.level === 1,
+                'l2': line.level === 2,
+                'l3': line.level >= 3
+
+              }">
+
+              L{{ line.level }}
+
+            </span>
+
+            <div>
+
+              <div class="wo-row-item-name">
+
+                {{ line.itemName }}
+
+              </div>
+
+              <div class="wo-row-item-code">
+
+                {{ line.productStructureId }}
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- =====================================================
+             GRID
+        ====================================================== -->
+
+        <div class="row g-3 mt-1">
+
+          <!-- REQUIRED -->
+
+          <div class="col-6">
+
+            <div class="wo-detail-card">
+
+              <div class="wo-detail-label">
+
+                Required Qty
+
+              </div>
+
+              <div class="wo-detail-value">
+
+                {{ line.requiredQuantity }}
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- CONSUMED -->
+
+          <div class="col-6">
+
+            <div class="wo-detail-card success">
+
+              <div class="wo-detail-label">
+
+                Consumed Qty
+
+              </div>
+
+              <div class="wo-detail-value text-success">
+
+                {{ line.consumedQuantity }}
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- PENDING -->
+
+          <div class="col-6">
+
+            <div class="wo-detail-card warning">
+
+              <div class="wo-detail-label">
+
+                Pending Qty
+
+              </div>
+
+              <div class="wo-detail-value text-warning">
+
+                {{ line.pendingQuantity }}
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- WASTAGE -->
+
+          <div class="col-6">
+
+            <div class="wo-detail-card">
+
+              <div class="wo-detail-label">
+
+                Wastage
+
+              </div>
+
+              <div class="wo-detail-value">
+
+                {{
+                  line.wastagePercentage || 0
+                }}%
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- UOM -->
+
+          <div class="col-6">
+
+            <div class="wo-detail-card">
+
+              <div class="wo-detail-label">
+
+                Unit Of Measure
+
+              </div>
+
+              <div class="wo-detail-value">
+
+                {{
+                  getUnitName(
+                    line.unitOfMeasureId
+                  )
+                }}
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- COST -->
+
+          <div class="col-6">
+
+            <div class="wo-detail-card primary">
+
+              <div class="wo-detail-label">
+
+                Total Cost
+
+              </div>
+
+              <div class="wo-detail-value text-primary">
+
+                {{
+                  formatCurrency(
+                    line.requiredQuantity * 100
+                  )
+                }}
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

@@ -22,7 +22,7 @@ export const WORK_ORDER_SEED: WorkOrder[] = [
       '2026-05-10',
 
     productId:
-      'prod-001',
+      1,
 
     orderedQuantity:
       25,
@@ -116,7 +116,7 @@ export const WORK_ORDER_SEED: WorkOrder[] = [
       '2026-05-14',
 
     productId:
-      'prod-002',
+      2,
 
     orderedQuantity:
       100,
@@ -207,7 +207,7 @@ export const WORK_ORDER_SEED: WorkOrder[] = [
       '2026-05-18',
 
     productId:
-      'prod-003',
+      3,
 
     orderedQuantity:
       200,

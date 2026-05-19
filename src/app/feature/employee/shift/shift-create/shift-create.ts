@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Shift } from '../shift';
 import { ShiftDataClient } from '../shift-data-client';
 import { ToastNotifier } from '../../../../core/services/toast';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 export interface AccordionSection {
 
@@ -414,54 +415,59 @@ private readonly route =
 
       isSaturdayOff: [true],
 
-      isDefault:[false]
+      isDefault: [false],
+
+      isAllowMultipleEntry: [false]
 
     });
 
-  /* =====================================================
-     COMPUTED
-  ===================================================== */
 
-  readonly calculatedHours =
-    computed(() => {
 
-      const s =
-        this.form.controls
-          .startTime.value;
+calculatedHours(): string {
 
-      const e =
-        this.form.controls
-          .endTime.value;
+  const s =
+    this.form.controls
+      .startTime
+      .value;
 
-      if (!s || !e)
-        return '0h 00m';
+  const e =
+    this.form.controls
+      .endTime
+      .value;
 
-      const [sh, sm] =
-        s.split(':').map(Number);
+  if (!s || !e) {
+    return '0h 00m';
+  }
 
-      const [eh, em] =
-        e.split(':').map(Number);
+  const [sh, sm] =
+    s.split(':').map(Number);
 
-      let mins =
+  const [eh, em] =
+    e.split(':').map(Number);
 
-        (eh * 60 + em)
+  let mins =
 
-        -
+    (eh * 60 + em)
 
-        (sh * 60 + sm);
+    -
 
-      if (mins < 0)
-        mins += 1440;
+    (sh * 60 + sm);
 
-      const h =
-        Math.floor(mins / 60);
+  if (mins < 0) {
+    mins += 1440;
+  }
 
-      const m =
-        mins % 60;
+  const h =
+    Math.floor(mins / 60);
 
-      return `${h}h ${m.toString().padStart(2, '0')}m`;
+  const m =
+    mins % 60;
 
-    });
+  return `${h}h ${m
+    .toString()
+    .padStart(2, '0')}m`;
+
+}
 
   readonly offDaysCount =
     computed(() =>
@@ -615,13 +621,6 @@ toggleDay(
 
 }
 
-  /* =====================================================
-     SAVE
-  ===================================================== */
-
-/* =====================================================
-   SAVE
-===================================================== */
 
 onSave() {
 
@@ -749,6 +748,8 @@ onSave() {
       value.isSaturdayOff,
 
       isDefault:value.isDefault,
+
+      isAllowMultipleEntry : value.isAllowMultipleEntry,
 
     /* AUDIT */
     createdOn:
@@ -964,9 +965,7 @@ catch (error: any) {
 
   }
 
-  /* =====================================================
-   FIELD ERROR
-===================================================== */
+  /* ======= FIELD ERROR ======= */
 
 hasError(
   field: string
@@ -987,6 +986,80 @@ hasError(
     )
 
   );
+
+}
+
+getShiftType(): string {
+
+  const start =
+    this.form.controls
+      .startTime
+      .value;
+
+  const end =
+    this.form.controls
+      .endTime
+      .value;
+
+  if (!start || !end) {
+    return 'No shift';
+  }
+
+  const [sh] =
+    start.split(':').map(Number);
+
+  const [eh] =
+    end.split(':').map(Number);
+
+  /* ===== NIGHT SHIFT ======= */
+
+  if (
+    sh >= 22 ||
+    sh < 6 ||
+    eh < sh
+  ) {
+
+    return 'Night shift';
+
+  }
+
+  /* ===== EVENING SHIFT ======= */
+
+  if (
+    sh >= 14 &&
+    sh < 22
+  ) {
+
+    return 'Evening shift';
+
+  }
+
+  /* ========== MORNING SHIFT ========== */
+
+  return 'Day shift';
+
+}
+
+getShiftIcon(): string {
+
+  const shift =
+    this.getShiftType();
+
+  switch (shift) {
+
+    case 'Night shift':
+      return 'dark_mode';
+
+    case 'Evening shift':
+      return 'nightlight';
+
+    case 'Day shift':
+      return 'wb_sunny';
+
+    default:
+      return 'schedule';
+
+  }
 
 }
 

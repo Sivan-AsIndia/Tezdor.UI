@@ -2,6 +2,8 @@ import {Injectable,computed, signal} from '@angular/core';
 
 import { WorkOrder, WorkOrderStatus } from './work-order';
 import { WORK_ORDER_SEED } from './work-order.seed';
+import { WorkOrderBomLine } from './work-order-bom';
+import { WORK_ORDER_BOM_SEED } from './work-order-bom.seed';
 
 
 
@@ -148,9 +150,9 @@ export class WorkOrderDataClient {
      ADD
   ===================================================== */
 
-  add(
-    data: WorkOrder
-  ) {
+add(
+  data: WorkOrder
+): WorkOrder{
 
     const maxNo =
 
@@ -242,6 +244,7 @@ export class WorkOrderDataClient {
       ...list
 
     ]);
+    return newData;
 
   }
 
@@ -611,5 +614,81 @@ export class WorkOrderDataClient {
     );
 
   }
+
+  /* =====================================================
+   GET BOM LINES BY WORK ORDER ID
+===================================================== */
+
+/* =====================================================
+   GET BOM LINES BY WORK ORDER ID
+===================================================== */
+
+getBomLinesByWorkOrderId(
+  workOrderId: string
+): WorkOrderBomLine[] {
+
+  return structuredClone(
+
+    WORK_ORDER_BOM_SEED.filter(x =>
+
+      x.workOrderId === workOrderId
+
+    )
+
+  );
+
+}
+
+
+/* =====================================================
+   ADD BOM LINES
+===================================================== */
+
+addBomLines(
+  lines: WorkOrderBomLine[]
+): void {
+
+  WORK_ORDER_BOM_SEED.push(
+
+    ...structuredClone(lines)
+
+  );
+
+}
+
+/* =====================================================
+   UPDATE BOM LINES
+===================================================== */
+
+updateBomLines(
+  workOrderId: string,
+  lines: WorkOrderBomLine[]
+): void {
+
+  /* REMOVE OLD */
+
+  const filtered =
+
+    WORK_ORDER_BOM_SEED.filter(x =>
+
+      x.workOrderId !== workOrderId
+
+    );
+
+  /* CLEAR */
+
+  WORK_ORDER_BOM_SEED.length = 0;
+
+  /* ADD BACK */
+
+  WORK_ORDER_BOM_SEED.push(
+
+    ...filtered,
+
+    ...structuredClone(lines)
+
+  );
+
+}
 
 }

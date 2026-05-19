@@ -310,6 +310,12 @@ export const routes: Routes = [
           import('./feature/sales/work-order/work-order-create/work-order-create')
             .then(m => m.WorkOrderCreateComponent),
       },
+      {
+        path: 'work-order/:id',
+        loadComponent: () =>
+          import('./feature/sales/work-order/work-order-view/work-order-view')
+            .then(m => m.WorkOrderViewComponent),
+      },
     ],
   },
 

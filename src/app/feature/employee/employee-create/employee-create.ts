@@ -10,7 +10,7 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastNotifier } from '../../../core/services/toast';
-import { EmployeeStatus, EmploymentType, Gender, Employee, PaymentMode } from '../employee';
+import { EmployeeStatus, EmploymentType, Gender, Employee, PaymentMode, MaritalStatus } from '../employee';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { EmployeeDataClient } from '../employee-data-client';
 import { MasterDataClient } from '../../../core/services/master-data';
@@ -99,6 +99,10 @@ export class EmployeeCreateComponent {
   readonly bloodGroups = signal<string[]>([
     'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'
   ]);
+
+    readonly maritalStatus = signal<MaritalStatus[]>(
+    Object.values(MaritalStatus)
+  );
 
   // ===== MAIN FORM =====
   form = this.fb.group({
@@ -278,6 +282,10 @@ export class EmployeeCreateComponent {
 
     probationEndDate: this.fb.control<string | null>(null),
     bloodGroup: this.fb.control('', { nonNullable: true }),
+    maritalStatus: this.fb.control<MaritalStatus | ''>('', {
+      nonNullable: true,
+      validators: [Validators.required]
+    }),
     permanentAddress: this.fb.group({
       addressLine1: this.fb.control<string | null>(null, {
         validators: [Validators.required, Validators.maxLength(150)],
@@ -410,6 +418,7 @@ export class EmployeeCreateComponent {
       sameAsPresentAddress: emp.sameAsPresentAddress ?? false,
       probationEndDate: this.toDateInput(emp.probationEndDate),
       bloodGroup: emp.bloodGroup ?? '',
+      maritalStatus: emp.maritalStatus ,
     });
 
     // ===== PATCH ADDRESS =====
@@ -633,6 +642,7 @@ copyAddress() {
 
       gender: data.gender || Gender.Other,
       bloodGroup: data.bloodGroup || undefined,
+      maritalStatus: data.maritalStatus || MaritalStatus.Single,
 
       personalmobileNumber: data.personalmobileNumber,
       workPhoneNumber: data.workPhoneNumber,

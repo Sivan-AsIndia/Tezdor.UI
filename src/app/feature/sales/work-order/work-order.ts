@@ -12,7 +12,7 @@ export interface WorkOrder {
   workOrderDate: string;
 
 
-  productId: string | null;
+  productId: number | null;
 
 
   orderedQuantity: number;
@@ -73,6 +73,7 @@ export interface WorkOrder {
 
   isProductionStarted?: boolean;
 
+   estimatedLeadTime?:number;
 
 
   createdBy?: string | null;

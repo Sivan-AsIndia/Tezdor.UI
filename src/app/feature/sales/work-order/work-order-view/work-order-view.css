@@ -1,0 +1,984 @@
+.wo-view-page {
+    background:
+        linear-gradient(180deg,
+            #f8fafc 0%,
+            #f1f5f9 100%);
+
+    min-height: 100vh;
+    /* padding: 24px; */
+}
+
+/* =======================================================
+   TOP
+======================================================= */
+
+.wo-mini-badge {
+    display: inline-flex;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: #e0e7ff;
+    color: #4338ca;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.wo-page-title {
+    font-size: 34px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    color: #0f172a;
+}
+
+.wo-page-subtitle {
+    color: #64748b;
+    font-size: 15px;
+}
+
+/* =======================================================
+   BUTTONS
+======================================================= */
+
+.wo-btn-light {
+    border-radius: 14px;
+    height: 46px;
+    padding: 0 20px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    font-weight: 600;
+}
+
+.wo-btn-primary {
+    border-radius: 14px;
+    height: 46px;
+    padding: 0 20px;
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #4f46e5);
+
+    color: white;
+    border: none;
+    font-weight: 600;
+}
+
+/* =======================================================
+   HERO
+======================================================= */
+
+.wo-hero-card {
+    margin-top: 24px;
+    background: white;
+    border-radius: 28px;
+    padding: 32px;
+    border: 1px solid #e2e8f0;
+    box-shadow:
+        0 10px 40px rgba(15, 23, 42, 0.05);
+}
+
+.wo-icon-box {
+    width: 74px;
+    height: 74px;
+    border-radius: 22px;
+
+    background:
+        linear-gradient(135deg,
+            var(--bs-primary) 0%,
+            color-mix(in srgb,
+                var(--bs-primary) 70%,
+                #000 30%) 100%);
+
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 28px;
+}
+
+.wo-order-chip {
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: var(--bs-primary-bg-subtle);
+    color: var(--bs-primary);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.wo-status-chip,
+.wo-priority-chip {
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    background:
+        color-mix(in srgb,
+            var(--bs-primary) 12%,
+            white 88%);
+
+    color:
+        var(--bs-primary);
+    font-weight: 700;
+}
+
+/* =======================================================
+   PRIORITY PILLS
+======================================================= */
+
+.wo-priority-chip {
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid transparent;
+}
+
+/* =======================================================
+   HIGH
+======================================================= */
+
+.priority-high {
+
+    background:
+        color-mix(in srgb,
+            #ef4444 12%,
+            white 88%);
+
+    color:
+        #dc2626;
+
+    border-color:
+        color-mix(in srgb,
+            #ef4444 18%,
+            white 82%);
+
+}
+
+/* =======================================================
+   MEDIUM
+======================================================= */
+
+.priority-medium {
+
+    background:
+        color-mix(in srgb,
+            #f59e0b 12%,
+            white 88%);
+
+    color:
+        #d97706;
+
+    border-color:
+        color-mix(in srgb,
+            #f59e0b 18%,
+            white 82%);
+
+}
+
+/* =======================================================
+   LOW
+======================================================= */
+
+.priority-low {
+
+    background:
+        color-mix(in srgb,
+            #10b981 12%,
+            white 88%);
+
+    color:
+        #059669;
+
+    border-color:
+        color-mix(in srgb,
+            #10b981 18%,
+            white 82%);
+
+}
+
+/* =======================================================
+   URGENT
+======================================================= */
+
+.priority-urgent {
+
+    background:
+        linear-gradient(135deg,
+            #fff1f2 0%,
+            #ffe4e6 100%);
+
+    color:
+        #be123c;
+
+    border:
+        1px solid #fecdd3;
+
+    box-shadow:
+        0 4px 12px rgba(225, 29, 72, 0.08);
+
+}
+
+.wo-product-title {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: #0f172a;
+}
+
+.wo-product-subtitle {
+    color: #64748b;
+    font-size: 14px;
+}
+
+/* =======================================================
+   STATS
+======================================================= */
+
+.wo-stat-box {
+    background: #f8fafc;
+    border-radius: 22px;
+    padding: 22px;
+    border: 1px solid #eef2f7;
+}
+
+.wo-stat-box.success {
+    background: #f0fdf4;
+}
+
+.wo-stat-box.warning {
+    background: #fff7ed;
+}
+
+.wo-stat-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 16px;
+}
+
+.wo-stat-icon.blue {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.wo-stat-icon.green {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.wo-stat-icon.orange {
+    background: #fed7aa;
+    color: #ea580c;
+}
+
+.wo-stat-number {
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1;
+    color: #0f172a;
+}
+
+.wo-stat-text {
+    margin-top: 8px;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* =======================================================
+   PROGRESS
+======================================================= */
+
+.wo-progress-area {
+    margin-top: 30px;
+}
+
+.wo-progress-label {
+    font-weight: 700;
+}
+
+.wo-progress-percent {
+    font-weight: 700;
+    color: var(--bs-primary);
+}
+
+.wo-progress-bar {
+    height: 14px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: #e2e8f0;
+}
+
+.wo-progress-bar .progress-bar {
+    border-radius: 999px;
+
+    background:
+        linear-gradient(90deg,
+
+            color-mix(in srgb,
+                var(--bs-primary) 92%,
+                white 8%) 0%,
+
+            color-mix(in srgb,
+                var(--bs-primary) 78%,
+                black 22%) 100%);
+}
+
+/* =======================================================
+   TIMELINE
+======================================================= */
+
+.wo-timeline-grid {
+    margin-top: 30px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(180px, 1fr));
+
+    gap: 18px;
+}
+
+.wo-timeline-item {
+    background: #f8fafc;
+    border-radius: 18px;
+    padding: 18px;
+}
+
+.wo-timeline-label {
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.wo-timeline-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* =======================================================
+   PANEL
+======================================================= */
+
+.wo-panel-card {
+    background: white;
+    border-radius: 24px;
+    padding: 28px;
+    border: 1px solid #e2e8f0;
+    box-shadow:
+        0 6px 24px rgba(15, 23, 42, 0.04);
+}
+
+.wo-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wo-panel-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.wo-panel-subtitle {
+    color: #64748b;
+    margin-top: 4px;
+    font-size: 13px;
+}
+
+.wo-panel-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 18px;
+    background: #eff6ff;
+    color: #2563eb;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wo-panel-icon.purple {
+    background: #ede9fe;
+    color: #7c3aed;
+}
+
+/* =======================================================
+   INFO
+======================================================= */
+
+.wo-info-grid {
+    margin-top: 24px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 18px;
+}
+
+.wo-info-item.full {
+    grid-column: span 2;
+}
+
+.wo-info-name {
+    color: #94a3b8;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.wo-info-data {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* =======================================================
+   FLAGS
+======================================================= */
+
+.wo-flag {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.wo-flag.green {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.wo-flag.blue {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.wo-flag.red {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.wo-flag.orange {
+    background: #fed7aa;
+    color: #ea580c;
+}
+
+/* =======================================================
+   TABLE
+======================================================= */
+
+.wo-count-badge {
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #f1f5f9;
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+}
+
+.wo-table thead th {
+    border-bottom: 1px solid #e2e8f0;
+    color: #94a3b8;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 16px 12px;
+}
+
+.wo-table tbody td {
+    padding: 18px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.wo-level-badge {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    background: #dbeafe;
+    color: #2563eb;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* =======================================================
+   STATUS
+======================================================= */
+
+.status-confirmed {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status-progress {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.status-completed {
+    background: #ede9fe;
+    color: #7c3aed;
+}
+
+.priority-high {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.priority-urgent {
+    background: #fed7aa;
+    color: #ea580c;
+}
+
+.priority-normal {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+/* =======================================================
+   MOBILE
+======================================================= */
+
+@media (max-width: 768px) {
+
+    .wo-view-page {
+        /* padding: 16px; */
+    }
+
+    .wo-page-title {
+        font-size: 28px;
+    }
+
+    .wo-product-title {
+        font-size: 26px;
+    }
+
+    .wo-hero-card,
+    .wo-panel-card {
+        padding: 22px;
+        border-radius: 22px;
+    }
+
+    .wo-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .wo-info-item.full {
+        grid-column: auto;
+    }
+
+}
+
+/* =======================================================
+   TOTAL FOOTER
+======================================================= */
+
+.wo-total-footer {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 28px;
+
+    border-top: 1px solid #eef2f7;
+
+    background:
+        linear-gradient(180deg,
+            #ffffff 0%,
+            #f8fafc 100%);
+
+}
+
+.wo-total-label {
+
+    font-size: 15px;
+    font-weight: 700;
+    color: #64748b;
+
+    text-transform: uppercase;
+    letter-spacing: .5px;
+
+}
+
+.wo-total-value {
+
+    font-size: 28px;
+    font-weight: 800;
+
+    color:
+        var(--bs-primary);
+
+}
+
+
+.wo-table thead th {
+
+    white-space: nowrap;
+
+}
+
+.wo-table tbody td {
+
+    vertical-align: middle;
+
+}
+
+.wo-table tbody tr:hover {
+
+    background:
+        rgba(var(--bs-primary-rgb), 0.02);
+
+}
+
+
+
+.parent-row {
+
+  background: #ffffff;
+
+}
+
+.child-row {
+
+  background: #fcfdff;
+
+}
+
+
+
+.wo-bom-item {
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  position: relative;
+
+  min-height: 58px;
+
+}
+
+
+.wo-tree-line {
+
+  width: 18px;
+  height: 1px;
+
+  background: #cbd5e1;
+
+  display: inline-block;
+
+}
+
+
+
+.wo-item-content {
+
+  display: flex;
+  flex-direction: column;
+
+}
+
+.wo-item-name {
+
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+
+}
+
+.wo-item-sub {
+
+  margin-top: 2px;
+
+  font-size: 12px;
+  color: #94a3b8;
+
+}
+
+
+
+.wo-level-badge {
+
+  min-width: 34px;
+  height: 34px;
+
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 12px;
+  font-weight: 800;
+
+}
+
+
+
+.wo-level-badge.l1 {
+
+  background:
+    linear-gradient(
+      135deg,
+      #1e3a8a,
+      #172554
+    );
+
+  color: white;
+
+}
+
+
+
+.wo-level-badge.l2 {
+
+  background:
+    #dbeafe;
+
+  color:
+    #2563eb;
+
+}
+
+
+
+.wo-level-badge.l3 {
+
+  background:
+    #fef3c7;
+
+  color:
+    #d97706;
+
+}
+
+
+
+.wo-table tbody tr {
+
+  border-bottom:
+    1px solid #eef2f7;
+
+}
+
+.wo-table tbody td {
+
+  padding-top: 18px;
+  padding-bottom: 18px;
+
+  vertical-align: middle;
+
+}
+
+.wo-table tbody tr:hover {
+
+  background:
+    rgba(
+      var(--bs-primary-rgb),
+      0.02
+    );
+
+}
+
+/* =======================================================
+   ROW DETAILS MODAL
+======================================================= */
+
+.wo-row-modal {
+
+  border: none;
+  border-radius: 28px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 24px 80px rgba(15, 23, 42, 0.18);
+
+}
+
+/* =======================================================
+   HEADER
+======================================================= */
+
+.wo-row-modal-header {
+
+  padding: 24px 28px;
+
+  border-bottom:
+    1px solid #eef2f7;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #f8fafc 100%
+    );
+
+}
+
+.wo-row-modal-title {
+
+  font-size: 22px;
+  font-weight: 800;
+
+  color:
+    #0f172a;
+
+}
+
+.wo-row-modal-subtitle {
+
+  margin-top: 4px;
+
+  color:
+    #64748b;
+
+  font-size: 13px;
+
+}
+
+/* =======================================================
+   TOP ITEM
+======================================================= */
+
+.wo-row-item-top {
+
+  padding: 18px 20px;
+
+  border-radius: 20px;
+
+  background:
+    #f8fafc;
+
+  border:
+    1px solid #eef2f7;
+
+}
+
+.wo-row-item-name {
+
+  font-size: 18px;
+  font-weight: 700;
+
+  color:
+    #0f172a;
+
+}
+
+.wo-row-item-code {
+
+  margin-top: 3px;
+
+  font-size: 13px;
+
+  color:
+    #94a3b8;
+
+}
+
+/* =======================================================
+   DETAIL CARDS
+======================================================= */
+
+.wo-detail-card {
+
+  background:
+    #ffffff;
+
+  border:
+    1px solid #eef2f7;
+
+  border-radius: 20px;
+
+  padding: 18px;
+
+  height: 100%;
+
+}
+
+.wo-detail-card.success {
+
+  background:
+    #f0fdf4;
+
+}
+
+.wo-detail-card.warning {
+
+  background:
+    #fff7ed;
+
+}
+
+.wo-detail-card.primary {
+
+  background:
+    color-mix(
+      in srgb,
+      var(--bs-primary) 6%,
+      white 94%
+    );
+
+}
+
+.wo-detail-label {
+
+  font-size: 12px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  color:
+    #94a3b8;
+
+  margin-bottom: 8px;
+
+}
+
+.wo-detail-value {
+
+  font-size: 22px;
+  font-weight: 800;
+
+  color:
+    #0f172a;
+
+}
+
+.TablePlus {
+    background: var(--bs-primary);
+    color: white !important;
+    border-radius: 10px;
+    border: 2px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    box-shadow: var(--bs-primary) 0px 3px 8px;
+}
