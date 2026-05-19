@@ -8,13 +8,12 @@ import { VENDOR_OPTIONS, WAREHOUSE_OPTIONS } from '../../../store/store';
 import { INITIAL_PRODUCTS } from '../../../product/product.seed';
 import { Product } from '../../../product/product';
 import { WorkOrderBomLine } from '../work-order-bom';
-import { WORK_ORDER_BOM_SEED } from '../work-order-bom.seed';
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 import { SearchDropdownComponent } from '../../../../shared/components/search-dropdown/search-dropdown';
-import { getBomByProductId } from '../../../product/bom.seed';
 import { ToastNotifier } from '../../../../core/services/toast';
 import { MasterDataClient } from '../../../../core/services/master-data';
+import { getBomByProductId } from '../../../product/product-bom.seed';
 
 @Component({
   selector: 'app-work-order-create',
@@ -699,16 +698,26 @@ const data: WorkOrder = {
   isProductionStarted:
     status === WorkOrderStatus.InProgress || this.producedQty() > 0,
 
-  createdBy: 'admin',
-  createdOn: new Date().toISOString(),
-  updatedBy: 'admin',
-  updatedOn: new Date().toISOString(),
 
-  bomLines: structuredClone(this.bomLines())
-};
-    /* ===============================================
-       SAVE
-    =============================================== */
+      createdBy:
+        'admin',
+
+      createdOn:
+        new Date()
+          .toISOString(),
+
+      updatedBy:
+        'admin',
+
+      updatedOn:
+        new Date()
+          .toISOString(),
+
+      bomLines: []
+
+    };
+
+    /* ======== SAVE ============= */
 
     if (this.isEdit) {
 
@@ -956,14 +965,15 @@ const data: WorkOrder = {
           wastagePercentage:
             wastage,
 
-          unitOfMeasureId:
-            line.unitId,
+          // unitOfMeasureId:
+          //   line.unitId,
 
           createdOn:
             new Date().toISOString(),
 
           updatedOn:
-            new Date().toISOString()
+            new Date().toISOString(),
+
 
         };
 

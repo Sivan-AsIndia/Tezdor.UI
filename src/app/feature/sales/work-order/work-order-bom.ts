@@ -10,8 +10,8 @@ export interface WorkOrderBomLine {
   itemName: string;
 Warehouse?:string;
   level: number;
-  materialCode: string;
-  materialName: string;
+  materialCode?: string;
+  materialName?: string;
   rawMaterialId?: string | null;
 
   rawMaterialName?: string;
@@ -25,7 +25,7 @@ Warehouse?:string;
 
   wastagePercentage?: number;
 
-  unitOfMeasureId: string;
+  unitOfMeasureId?: string;
 
   createdOn?: string;
   updatedOn?: string;
