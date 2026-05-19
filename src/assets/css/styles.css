@@ -19512,7 +19512,15 @@ body {
     text-align: var(--bs-body-text-align);
     background-color: var(--bs-body-bg);
     -webkit-text-size-adjust: 100%;
+     font-weight:var(--font-weight-base) !important;
     -webkit-tap-highlight-color: transparent
+}
+span{
+     font-weight:var(--font-weight-base) !important
+
+}
+.text-subtitle-1{
+     font-weight:var(--font-weight-base) !important
 }
 
 hr {
@@ -19539,7 +19547,8 @@ h6 {
     margin-bottom: .5rem;
     font-weight: 600;
     line-height: 1.2;
-    color: var(--bs-heading-color)
+    color: var(--bs-heading-color);
+     font-weight:var(--font-weight-base) !important
 }
 
 .h1,
@@ -30464,7 +30473,7 @@ background-color: var(--color-primary) !important;
 }
 
 .fw-bold {
-    font-weight: 600 !important
+ font-weight:var(--font-weight-base) !important
 }
 
 .fw-bolder {
@@ -39904,6 +39913,7 @@ background-color: var(--color-primary) !important;
 
 body {
    font-family: var( --font-other) !important;
+   font-weight: var(--font-weight-base);
 }
 
 

@@ -11773,6 +11773,9 @@ color:white !important
 [data-bs-theme="dark"] .sv-date-d{
   color: white !important;
 }
+[data-bs-theme="dark"] .menu-production iconify-icon,[data-bs-theme="dark"] .has-arrow{
+color: white !important; 
+}
 [data-bs-theme="dark"] .sil-tr-overdue td{
   background: rgba(255, 255, 255, 0.192) !important;
   color: white !important;

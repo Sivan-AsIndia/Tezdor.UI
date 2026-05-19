@@ -95,12 +95,15 @@ input::placeholder {
 #TopHeading {
     padding: 0 !important;
     margin-bottom: 10px;
+    
 }
 
 .mainheading {
     font-size: 22px !important; 
   font-size: var(--font-size-heading) !important;
       color: var(--heading-color);
+      font-family: var( --font-heading);
+         font-weight: var(--font-weight-base) !important;
 }
 
 .subdescription {

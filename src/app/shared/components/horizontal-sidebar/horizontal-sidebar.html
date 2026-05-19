@@ -1,4 +1,6 @@
 <style>
+
+  
   /* ═══ BASE NAV ITEM ═══ */
   #sidebarnav > .sidebar-item > .sidebar-link {
     display: flex;
@@ -25,11 +27,11 @@
     position: absolute;
     top: calc(100% + 4px);
     left: 0;
-    min-width: 200px;
+    min-width: 210px;
     background: #fff;
     border: 1px solid #e2e8f0;
     border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.10);
     padding: 4px;
     z-index: 9999;
     animation: dropFade 0.15s ease;
@@ -66,6 +68,22 @@
     background: #cbd5e1;
     flex-shrink: 0;
     transition: background 0.15s;
+  }
+
+  /* ════ SECTION LABEL inside dropdown ════ */
+  .first-level .dropdown-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: #94a3b8;
+    padding: 8px 14px 4px;
+    display: block;
+  }
+  .first-level .dropdown-divider {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 4px 8px;
   }
 
   /* ════════════════════════════════
@@ -148,6 +166,23 @@
     background: var(--color-error) !important;
   }
 
+  /* PRODUCTION */
+  #sidebarnav > .sidebar-item > .sidebar-link.menu-production:hover,
+  #sidebarnav > .sidebar-item > .sidebar-link.menu-production.active-parent {
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent) !important;
+    color: var(--color-primary) !important;
+    font-weight: 600;
+  }
+  .first-level .sidebar-link.menu-production:hover,
+  .first-level .sidebar-link.menu-production.active-submenu {
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent) !important;
+    color: var(--color-primary) !important;
+  }
+  .first-level .sidebar-link.menu-production:hover .sidebar-icon,
+  .first-level .sidebar-link.menu-production.active-submenu .sidebar-icon {
+    background: var(--color-primary) !important;
+  }
+
   /* EMPLOYEES */
   #sidebarnav > .sidebar-item > .sidebar-link.menu-employee:hover,
   #sidebarnav > .sidebar-item > .sidebar-link.menu-employee.active-parent {
@@ -214,15 +249,22 @@
   [data-bs-theme="dark"] .first-level .sidebar-link .sidebar-icon {
     background: #475569;
   }
+  [data-bs-theme="dark"] .first-level .dropdown-section-label {
+    color: #64748b;
+  }
+  [data-bs-theme="dark"] .first-level .dropdown-divider {
+    background: #334155;
+  }
 </style>
 
-<aside class="left-sidebar with-horizontal" >
+<aside class="left-sidebar with-horizontal">
   <div>
-    <nav id="sidebarnavh" class="sidebar-nav scroll-sidebar"   [class.container-fluid]="containerMode() === 'fluid'"
-  [class.container]="containerMode() === 'fixed'">
+    <nav id="sidebarnavh" class="sidebar-nav scroll-sidebar"
+      [class.container-fluid]="containerMode() === 'fluid'"
+      [class.container]="containerMode() === 'fixed'">
       <ul id="sidebarnav" class="gap-2">
 
-        <!-- DASHBOARD -->
+        <!-- ── DASHBOARD ── -->
         <li class="sidebar-item">
           <a routerLink="/dashboard"
             routerLinkActive="active-parent"
@@ -233,20 +275,18 @@
           </a>
         </li>
 
-        <!-- PRODUCTS (direct link, no dropdown) -->
+        <!-- ── PRODUCTS (direct) ── -->
         <li class="sidebar-item">
           <a class="sidebar-link menu-product"
             routerLink="/products"
             routerLinkActive="active-parent"
-            [routerLinkActiveOptions]="{ exact: false }"
-            [class.active-parent]="isParentActive('productMenu')"
-            (click)="toggle('productMenu')">
+            [routerLinkActiveOptions]="{ exact: false }">
             <iconify-icon icon="solar:box-line-duotone" class="fs-6"></iconify-icon>
             <span class="hide-menu">Products</span>
           </a>
         </li>
 
-        <!-- STORE (direct link) -->
+        <!-- ── STORE (direct) ── -->
         <li class="sidebar-item">
           <a class="sidebar-link menu-store"
             routerLink="/store"
@@ -257,7 +297,7 @@
           </a>
         </li>
 
-        <!-- PURCHASE (dropdown: Order + Invoice) -->
+        <!-- ── PURCHASE (dropdown) ── -->
         <li class="sidebar-item">
           <a class="sidebar-link menu-purchase has-arrow"
             href="javascript:void(0)"
@@ -290,7 +330,7 @@
           </ul>
         </li>
 
-        <!-- SALES (direct link) -->
+        <!-- ── SALES (direct) ── -->
         <li class="sidebar-item">
           <a class="sidebar-link menu-sales"
             routerLink="/sales-invoice"
@@ -301,7 +341,40 @@
           </a>
         </li>
 
-        <!-- EMPLOYEES (dropdown) -->
+        <!-- ── MANUFACTURING (dropdown: Work Order + Day Production) ── -->
+        <li class="sidebar-item">
+          <a class="sidebar-link menu-production has-arrow"
+            href="javascript:void(0)"
+            [class.active-parent]="isParentActive('productionMenu')"
+            (click)="toggle('productionMenu')">
+            <iconify-icon icon="solar:buildings-2-line-duotone" class="fs-6"></iconify-icon>
+            <span class="hide-menu">Manufacturing</span>
+          </a>
+          <ul class="collapse first-level" [class.show]="isOpen('productionMenu')">
+            <li class="sidebar-item">
+              <a routerLink="/work-order"
+                routerLinkActive="active-submenu"
+                [routerLinkActiveOptions]="{ exact: false }"
+                class="sidebar-link menu-production"
+                (click)="openMenu.set(null)">
+                <span class="sidebar-icon"></span>
+                <span class="hide-menu">Work Orders</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a routerLink="/day-production"
+                routerLinkActive="active-submenu"
+                [routerLinkActiveOptions]="{ exact: false }"
+                class="sidebar-link menu-production"
+                (click)="openMenu.set(null)">
+                <span class="sidebar-icon"></span>
+                <span class="hide-menu">Day-To-Day Production</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- ── EMPLOYEES (dropdown) ── -->
         <li class="sidebar-item">
           <a class="sidebar-link menu-employee has-arrow"
             href="javascript:void(0)"
@@ -365,7 +438,7 @@
               <a routerLink="/petty-cash"
                 routerLinkActive="active-submenu"
                 [routerLinkActiveOptions]="{ exact: true }"
-                class="sidebar-link menu-employee"
+                class="sidebar-link menu-petty"
                 (click)="openMenu.set(null)">
                 <span class="sidebar-icon"></span>
                 <span class="hide-menu">Petty Cash</span>
@@ -374,7 +447,7 @@
           </ul>
         </li>
 
-        <!-- LEDGER (dropdown) -->
+        <!-- ── LEDGER (dropdown) ── -->
         <li class="sidebar-item">
           <a class="sidebar-link menu-ledger has-arrow"
             href="javascript:void(0)"
