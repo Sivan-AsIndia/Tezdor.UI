@@ -42,6 +42,8 @@ export interface Shift {
 
   isFlexibleShift: boolean;
 
+  isAllowMultipleEntry: boolean;
+
   isDefault: boolean;
 
   isActive: boolean;

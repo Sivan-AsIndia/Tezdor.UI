@@ -8,22 +8,22 @@ import { VENDOR_OPTIONS, WAREHOUSE_OPTIONS } from '../../../store/store';
 import { INITIAL_PRODUCTS } from '../../../product/product.seed';
 import { Product } from '../../../product/product';
 import { WorkOrderBomLine } from '../work-order-bom';
-import { WORK_ORDER_BOM_SEED } from '../work-order-bom.seed';
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 import { SearchDropdownComponent } from '../../../../shared/components/search-dropdown/search-dropdown';
+import { ToastNotifier } from '../../../../core/services/toast';
+import { MasterDataClient } from '../../../../core/services/master-data';
+import { getBomByProductId } from '../../../product/product-bom.seed';
 
 @Component({
   selector: 'app-work-order-create',
-  imports: [RouterModule, CommonModule, SearchDropdownComponent,NgxEditorModule,ReactiveFormsModule,MatDatepickerModule],
+  imports: [RouterModule, CommonModule, SearchDropdownComponent, NgxEditorModule, ReactiveFormsModule, MatDatepickerModule],
   templateUrl: './work-order-create.html',
   styleUrl: './work-order-create.css',
 })
 export class WorkOrderCreateComponent {
 
-  /* =====================================================
-     INJECT
-  ===================================================== */
+  /* ====INJECT ===== */
 
   private readonly fb =
     inject(FormBuilder);
@@ -36,10 +36,10 @@ export class WorkOrderCreateComponent {
 
   private readonly service =
     inject(WorkOrderDataClient);
+  private readonly toast = inject(ToastNotifier);
+  private readonly masterData = inject(MasterDataClient);
 
-  /* =====================================================
-     MODE
-  ===================================================== */
+  /* === MODE ======= */
 
   workOrderId =
     this.route.snapshot
@@ -54,9 +54,7 @@ export class WorkOrderCreateComponent {
       .toISOString()
       .substring(0, 10);
 
-  /* =====================================================
-     ENUMS
-  ===================================================== */
+  /* ===  ENUMS ========= */
 
   priorityOptions =
     Object.values(
@@ -68,9 +66,9 @@ export class WorkOrderCreateComponent {
       WorkOrderStatus
     );
 
-  /* =====================================================
-     OPTIONS
-  ===================================================== */
+  WorkOrderStatus = WorkOrderStatus;
+
+  /* ===== OPTIONS ============ */
 
   vendorOptions =
     VENDOR_OPTIONS;
@@ -83,73 +81,69 @@ export class WorkOrderCreateComponent {
       INITIAL_PRODUCTS
     );
 
-    editor!: Editor;   
+  editor!: Editor;
 
-readonly editorForm = new FormGroup({
+  readonly editorForm = new FormGroup({
 
-  remarks:
-    new FormControl('')
+    remarks:
+      new FormControl('')
 
-});
+  });
 
-showEditor =
-  signal(false);
-    private readonly cdr =
-  inject(ChangeDetectorRef);
+  showEditor =
+    signal(false);
+  private readonly cdr =
+    inject(ChangeDetectorRef);
 
-readonly toolbar: Toolbar = [
+  readonly toolbar: Toolbar = [
 
-  ['bold', 'italic', 'underline'],
+    ['bold', 'italic', 'underline'],
 
-  ['strike'],
+    ['strike'],
 
-  ['code', 'blockquote'],
+    ['code', 'blockquote'],
 
-  [
-    {
-      heading: [
-        'h1',
-        'h2',
-        'h3',
-        'h4',
-        'h5',
-        'h6'
-      ]
-    }
-  ],
+    [
+      {
+        heading: [
+          'h1',
+          'h2',
+          'h3',
+          'h4',
+          'h5',
+          'h6'
+        ]
+      }
+    ],
 
-  ['ordered_list', 'bullet_list'],
+    ['ordered_list', 'bullet_list'],
 
-  ['link', 'image'],
+    ['link', 'image'],
 
-  ['text_color', 'background_color'],
+    ['text_color', 'background_color'],
 
-  ['horizontal_rule'],
+    ['horizontal_rule'],
 
-  ['undo', 'redo']
+    ['undo', 'redo']
 
-];
+  ];
 
-  /* =====================================================
-     BOM
-  ===================================================== */
+  /* ==========  BOM ========= */
 
   bomLines =
     signal<WorkOrderBomLine[]>([]);
 
-    isBomGenerated =
-computed(() =>
+  isBomGenerated =
+    computed(() =>
 
-  this.bomLines().length > 0
+      this.bomLines().length > 0
 
-);
+    );
 
-estimatedLeadTime =
-signal<number>(0);
+  estimatedLeadTime =
+    signal<number>(0);
 
-  /* =====================================================
-     FORM
-  ===================================================== */
+  /* ====== FORM ========== */
 
   form = this.fb.group({
 
@@ -166,8 +160,8 @@ signal<number>(0);
     ],
 
     productId: [
-      null as string | null,
-      Validators.required
+      null as number | null,
+      [Validators.required]
     ],
     
 
@@ -210,71 +204,35 @@ signal<number>(0);
 
   });
 
-  /* =====================================================
-     COMPUTED
-  ===================================================== */
+  onProductChange(
+    value: string | null
+  ) {
 
-  selectedProduct =
-    computed(() => {
+    this.form.controls.productId.setValue(
 
-      return this.products()
+      value
+        ? Number(value)
+        : null
 
-        .find(x =>
+    );
+    this.bomLines.set([]);
 
-          x.ProductId ===
-          this.form.value.productId
+  }
 
-        );
+  /* ==== COMPUTED ============ */
 
-    });
+  getSelectedProduct() {
 
-  selectedWorkOrderBomSeed =
-    computed(() => {
+    const productId =
+      this.form.controls.productId.value;
 
-      const productId =
-        this.form.value.productId;
+    return this.products().find(
 
-      if (!productId) {
-        return [];
-      }
+      x => x.id === productId
 
-      let templateWorkOrderId = '';
+    ) ?? null;
 
-      switch (productId) {
-
-        case 'prd-sofa-yashika-3-1-1':
-
-          templateWorkOrderId =
-            'WO-2026-00001';
-
-          break;
-
-        case 'prd-dining-chair-premium':
-
-          templateWorkOrderId =
-            'WO-2026-00002';
-
-          break;
-
-        case 'prd-office-table':
-
-          templateWorkOrderId =
-            'WO-2026-00003';
-
-          break;
-
-      }
-
-      return WORK_ORDER_BOM_SEED
-
-        .filter(x =>
-
-          x.workOrderId ===
-          templateWorkOrderId
-
-        );
-
-    });
+  }
 
   orderedQty =
     computed(() =>
@@ -333,20 +291,20 @@ signal<number>(0);
 
   constructor() {
 
-  afterNextRender(() => {
-    requestAnimationFrame(() => {
-      this.editor = new Editor();   // init here first
+    afterNextRender(() => {
+      requestAnimationFrame(() => {
+        this.editor = new Editor();   // init here first
 
-      // subscribe AFTER editor is created
-      // this.editorForm.controls['remarks']
-      //   .valueChanges.subscribe(value => {
-      //     this.update('remarks', value || '');
-      //   });
+        // subscribe AFTER editor is created
+        // this.editorForm.controls['remarks']
+        //   .valueChanges.subscribe(value => {
+        //     this.update('remarks', value || '');
+        //   });
 
-      this.showEditor.set(true);
-      this.cdr.detectChanges();
+        this.showEditor.set(true);
+        this.cdr.detectChanges();
+      });
     });
-  });
 
     if (!this.isEdit) {
 
@@ -365,9 +323,7 @@ signal<number>(0);
 
     }
 
-    /* ===============================================
-       EDIT LOAD
-    =============================================== */
+    /* ======== EDIT LOAD ========== */
 
     if (this.isEdit) {
 
@@ -375,6 +331,8 @@ signal<number>(0);
         this.service.getById(
           this.workOrderId!
         );
+
+      console.log('EDIT DATA', data);
 
       if (data) {
 
@@ -427,129 +385,252 @@ signal<number>(0);
 
         });
 
-        if (data.bomLines?.length) {
+        /* LOAD EXISTING BOM */
 
-          this.bomLines.set(
-            structuredClone(
-              data.bomLines
-            )
+        setTimeout(() => {
+
+          this.loadBomFromWorkOrder(
+            this.workOrderId!
           );
 
-        }
+          console.log(
+            'LOADED BOM',
+            this.bomLines()
+          );
+
+        });
 
       }
 
     }
+    // effect(() => {
 
-    /* ===============================================
-       PRODUCT + QTY EFFECT
-    =============================================== */
-effect(() => {
+    //   const productId =
+    //     this.form.controls.productId.value;
 
-  const product =
-    this.selectedProduct();
+    //   const qty =
+    //     this.form.controls.orderedQuantity.value;
 
-  if (!product) {
+    //   if (productId && qty) {
 
-    this.bomLines.set([]);
+    //     this.generateBom();
 
-    return;
+    //   }
+
+    // });
+
+    /* ========PRODUCT + QTY EFFECT ============== */
+    // effect(() => {
+
+    //   const product =
+    //     this.getSelectedProduct();
+
+    //   if (!product) {
+
+    //     this.bomLines.set([]);
+
+    //     return;
+
+    //   }
+
+    // });
 
   }
 
-});
+  /* ===== LOAD BOM FROM WORK ORDER ===== */
+
+  loadBomFromWorkOrder(
+    workOrderId: string
+  ): void {
+
+    const bomLines =
+
+      this.service
+        .getBomLinesByWorkOrderId(
+          workOrderId
+        );
+
+    if (!bomLines.length) {
+
+      this.bomLines.set([]);
+
+      return;
+
+    }
+
+    /* BIND EXISTING BOM */
+
+    this.bomLines.set(
+
+      structuredClone(
+        bomLines
+      )
+
+    );
 
   }
 
-  /* =====================================================
-     SAVE DRAFT
-  ===================================================== */
+  /* ======= SAVE DRAFT ================ */
 
   saveDraft() {
 
-    this.save(
-      WorkOrderStatus.Draft
-    );
+    try {
+      this.save(
+        WorkOrderStatus.Draft
+      );
+    } catch (err: any) {
+      this.toast.error(err.message);
+      return;
+    }
+
+
 
   }
 
-  /* =====================================================
-     SAVE CONFIRM
-  ===================================================== */
+  /* ======= SAVE CONFIRM ========== */
 
   saveConfirm() {
 
-    this.save(
-      WorkOrderStatus.Confirmed
+
+
+    try {
+      this.save(
+        WorkOrderStatus.Confirmed
+      );
+    } catch (err: any) {
+      this.toast.error(err.message);
+      return;
+    }
+
+  }
+
+  /* ===== APPROVE ===== */
+
+  approveWorkOrder(): void {
+
+    if (!this.workOrderId) {
+
+      this.toast.warning(
+        'Invalid Work Order'
+      );
+
+      return;
+
+    }
+
+    const existing =
+      this.service.getById(
+        this.workOrderId
+      );
+
+    if (!existing) {
+
+      this.toast.error(
+        'Work Order not found'
+      );
+
+      return;
+
+    }
+
+    const updated: WorkOrder = {
+
+      ...existing,
+
+      status:
+        WorkOrderStatus.Confirmed,
+
+      confirmedBy:
+        'emp-admin',
+
+      confirmedByName:
+        'Admin',
+
+      confirmedDate:
+        new Date().toISOString(),
+
+      updatedOn:
+        new Date().toISOString()
+
+    };
+
+    this.service.update(updated);
+
+    this.toast.success(
+      'Work Order approved successfully'
     );
+
+    this.router.navigate([
+
+      '/work-orders'
+
+    ]);
 
   }
 
 
   calculateLeadTime() {
 
-  const start =
-    this.form.value
-      .plannedStartDate;
+    const start =
+      this.form.value
+        .plannedStartDate;
 
-  const end =
-    this.form.value
-      .plannedEndDate;
+    const end =
+      this.form.value
+        .plannedEndDate;
 
-  if (!start || !end) {
+    if (!start || !end) {
 
-    this.estimatedLeadTime.set(0);
+      this.estimatedLeadTime.set(0);
 
-    return;
+      return;
 
-  }
+    }
 
-  const startDate =
-    new Date(start);
+    const startDate =
+      new Date(start);
 
-  const endDate =
-    new Date(end);
+    const endDate =
+      new Date(end);
 
-  const diffTime =
+    const diffTime =
 
-    endDate.getTime()
+      endDate.getTime()
 
-    -
+      -
 
-    startDate.getTime();
+      startDate.getTime();
 
-  const diffDays =
+    const diffDays =
 
-    Math.ceil(
+      Math.ceil(
 
-      diffTime /
+        diffTime /
 
-      (
-        1000 *
-        60 *
-        60 *
-        24
-      )
+        (
+          1000 *
+          60 *
+          60 *
+          24
+        )
+
+      );
+
+    this.estimatedLeadTime.set(
+
+      diffDays > 0
+        ? diffDays
+        : 0
 
     );
 
-  this.estimatedLeadTime.set(
+  }
 
-    diffDays > 0
-      ? diffDays
-      : 0
-
-  );
-
-}
-
-  /* =====================================================
-     SAVE
-  ===================================================== */
+  /* ========== SAVE ============ */
 
   save(
     status:
-    WorkOrderStatus
+      WorkOrderStatus
   ) {
 
     if (
@@ -557,14 +638,12 @@ effect(() => {
     ) {
 
       this.form.markAllAsTouched();
-
+      this.toast.error('Please fix validation errors');
       return;
 
     }
 
-    /* ===============================================
-       VALIDATION
-    =============================================== */
+    /* ========= VALIDATION ======= */
 
     if (
 
@@ -572,9 +651,8 @@ effect(() => {
 
     ) {
 
-      alert(
-        'Produced quantity cannot exceed ordered quantity'
-      );
+      this.toast.error('Produced quantity cannot exceed ordered quantity');
+
 
       return;
 
@@ -620,46 +698,78 @@ const data: WorkOrder = {
   isProductionStarted:
     status === WorkOrderStatus.InProgress || this.producedQty() > 0,
 
-  createdBy: 'admin',
-  createdOn: new Date().toISOString(),
-  updatedBy: 'admin',
-  updatedOn: new Date().toISOString(),
 
-  bomLines: structuredClone(this.bomLines())
-};
-    /* ===============================================
-       SAVE
-    =============================================== */
+      createdBy:
+        'admin',
+
+      createdOn:
+        new Date()
+          .toISOString(),
+
+      updatedBy:
+        'admin',
+
+      updatedOn:
+        new Date()
+          .toISOString(),
+
+      bomLines: []
+
+    };
+
+    /* ======== SAVE ============= */
 
     if (this.isEdit) {
 
       this.service.update(
         data
       );
+      this.service.updateBomLines(
+
+        data.workOrderId!,
+
+        this.bomLines()
+
+      );
+      this.toast.success(
+        'Work Order updated successfully'
+      );
 
     } else {
 
-      this.service.add(
-        data
-      );
+      const savedWorkOrder =
 
+        this.service.add(
+          data
+        );
+
+      const bomLines: WorkOrderBomLine[] =
+
+        this.bomLines().map(x => ({
+
+          ...x,
+
+          workOrderId:
+            savedWorkOrder.workOrderId!
+
+        }));
+
+      this.service.addBomLines(
+        bomLines
+      );
     }
 
-    /* ===============================================
-       NAVIGATE
-    =============================================== */
+    /* ============ NAVIGATE ========== */
 
     this.router.navigate([
 
-      '/manufacturing/work-order/list'
+      '/work-orders'
 
     ]);
 
   }
 
-  /* =====================================================
-     CANCEL
-  ===================================================== */
+  /* =============== CANCEL ============ */
 
   onCancel() {
 
@@ -671,9 +781,7 @@ const data: WorkOrder = {
 
   }
 
-  /* =====================================================
-     HELPERS
-  ===================================================== */
+  /* ==== HELPERS ==== */
 
   getLevelClass(
     level: number
@@ -743,128 +851,228 @@ const data: WorkOrder = {
 
   }
 
-  generateBom() {
 
-  const product =
-    this.selectedProduct();
+  generateBom(): void {
 
-  const qty =
-    this.orderedQty();
 
-  const bomSeed =
-    this.selectedWorkOrderBomSeed();
+    const selectedProduct =
+      this.getSelectedProduct();
 
-  if (!product) {
 
-    this.bomLines.set([]);
+    if (!selectedProduct) {
 
-    return;
+      this.bomLines.set([]);
+
+      return;
+
+    }
+
+    const productId =
+      selectedProduct.id;
+
+    if (
+      (this.form.controls
+        .orderedQuantity
+        .value ?? 0) <= 0
+    ) {
+
+      this.toast.error(
+        'Order Quantity must be greater than 0'
+      );
+
+      return;
+
+    }
+
+    const qty =
+      Number(
+        this.form.controls
+          .orderedQuantity.value || 0
+      );
+
+
+    const bomSeed =
+      getBomByProductId(productId);
+
+    console.log(
+      'BOM SEED',
+      bomSeed
+    );
+
+    if (!bomSeed?.length) {
+
+      this.bomLines.set([]);
+
+      return;
+
+    }
+
+    const lines: WorkOrderBomLine[] =
+
+      bomSeed.map(line => {
+
+        const bomQty =
+          Number(line.quantity || 0);
+
+        const wastage =
+          Number(line.wastagePercent || 0);
+
+        const requiredQty =
+          bomQty *
+          qty *
+          (
+            1 + (wastage / 100)
+          );
+
+        return {
+
+          workOrderBomLineId:
+            crypto.randomUUID(),
+
+          workOrderId:
+            this.workOrderId || '',
+
+          productStructureId:
+            String(line.id),
+
+          parentLineId:
+            line.parentId
+              ? String(line.parentId)
+              : null,
+
+          itemName:
+            line.itemName,
+
+          level:
+            line.level,
+
+          rawMaterialId:
+            line.rawMaterialId,
+
+          requiredQuantity:
+            Number(
+              requiredQty.toFixed(2)
+            ),
+
+          consumedQuantity:
+            0,
+
+          pendingQuantity:
+            Number(
+              requiredQty.toFixed(2)
+            ),
+
+          wastagePercentage:
+            wastage,
+
+          // unitOfMeasureId:
+          //   line.unitId,
+
+          createdOn:
+            new Date().toISOString(),
+
+          updatedOn:
+            new Date().toISOString(),
+
+
+        };
+
+      });
+
+    console.log(
+      'FINAL BOM LINES',
+      lines
+    );
+
+    this.bomLines.set(lines);
+
+  }
+  readonly productDropdownItems =
+    computed(() =>
+
+      this.products().map(p => ({
+
+        id: p.id.toString(),
+
+        name:
+          `${p.productCode} - ${p.productName}`,
+
+        data: p
+
+      }))
+
+    );
+
+  readonly customerDropdownItems =
+    computed(() =>
+
+      this.vendorOptions.map(c => ({
+
+        id:
+          c.code,
+
+        name:
+          `${c.code} - ${c.name}`,
+
+        data:
+          c
+
+      }))
+
+    );
+
+
+  hasError(
+    controlName: string
+  ): boolean {
+
+    const control =
+      this.form.get(controlName);
+
+    return !!(
+      control &&
+      control.invalid &&
+      (
+        control.touched ||
+        control.dirty
+      )
+    );
 
   }
 
-  const lines: WorkOrderBomLine[] =
+  getUnitName(
+    unitId: string | null | undefined
+  ): string {
 
-    bomSeed.map(line => {
+    return this.masterData.getUnitById(
+      unitId
+    )?.unitName || '-';
 
-      const requiredQty =
+  }
 
-        (
-          Number(
-            line.requiredQuantity
-          )
+  getStatusClass(
+    status?: string
+  ) {
 
-          / 20
-        )
+    return {
 
-        * qty;
+      'status-draft':
+        status === 'Draft',
 
-      const consumedQty =
+      'status-confirmed':
+        status === 'Confirmed',
 
-        (
-          Number(
-            line.consumedQuantity
-          )
+      'status-progress':
+        status === 'InProgress',
 
-          / 20
-        )
+      'status-completed':
+        status === 'Completed',
 
-        * qty;
+      'status-cancelled':
+        status === 'Cancelled'
 
-      return {
+    };
 
-        ...line,
-
-        workOrderBomLineId:
-          crypto.randomUUID(),
-
-        workOrderId:
-          this.workOrderId || '',
-
-        requiredQuantity:
-          Number(
-            requiredQty.toFixed(2)
-          ),
-
-        consumedQuantity:
-          Number(
-            consumedQty.toFixed(2)
-          ),
-
-        pendingQuantity:
-
-          Number(
-            (
-              requiredQty -
-              consumedQty
-            ).toFixed(2)
-          ),
-
-        updatedOn:
-          new Date()
-            .toISOString()
-
-      };
-
-    });
-
-  this.bomLines.set(lines);
-
-}
-
-readonly productDropdownItems =
-  computed(() =>
-
-    this.products().map(p => ({
-
-      id:
-        p.ProductId,
-
-      name:
-        `${p.productCode} - ${p.productName}`,
-
-      data:
-        p
-
-    }))
-
-  );
-
-readonly customerDropdownItems =
-  computed(() =>
-
-    this.vendorOptions.map(c => ({
-
-      id:
-        c.code,
-
-      name:
-        `${c.code} - ${c.name}`,
-
-      data:
-        c
-
-    }))
-
-  );
+  }
 
 }

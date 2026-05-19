@@ -674,6 +674,7 @@
 
 
                                                         <!-- Edit -->
+                                                         @if(wo.status === WorkOrderStatus.Draft){
                                                         <a (click)="onEdit(wo)" style="cursor: pointer;"
                                                             class="v-btn v-btn--flat v-btn--icon v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated"
                                                             title="Edit">
@@ -690,6 +691,7 @@
                                                                 </svg>
                                                             </span>
                                                         </a>
+                                                    }
 
                                                         @if(wo.status=== WorkOrderStatus.Draft){
                                                         <button type="button" title="Delete" (click)="onDelete(wo)"

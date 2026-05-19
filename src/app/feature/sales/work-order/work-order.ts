@@ -6,9 +6,10 @@ export interface WorkOrder {
   workOrderNo: string;
   workOrderDate: string;
 
-  productId: string | null;
 
-  uom: string;
+  productId: number | null;
+
+  uom?: string;
   orderedQuantity: number;
   producedQuantity: number;
   pendingQuantity: number;
@@ -42,6 +43,9 @@ export interface WorkOrder {
   isCancelled?: boolean;
   isCompleted?: boolean;
   isProductionStarted?: boolean;
+
+   estimatedLeadTime?:number;
+
 
   createdBy?: string | null;
   createdOn?: string | null;

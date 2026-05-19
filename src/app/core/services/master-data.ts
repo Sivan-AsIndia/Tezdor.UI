@@ -288,7 +288,105 @@ export class MasterDataClient {
 
   readonly units = signal<UnitOption[]>(MASTER_UNITS);
 
+  readonly unitOptions = signal([
+
+  {
+    unitId: 'nos',
+    unitName: 'Nos'
+  },
+
+  {
+    unitId: 'kg',
+    unitName: 'Kg'
+  },
+
+  {
+    unitId: 'g',
+    unitName: 'Gram'
+  },
+
+  {
+    unitId: 'ltr',
+    unitName: 'Litre'
+  },
+
+  {
+    unitId: 'ml',
+    unitName: 'mL'
+  },
+
+  {
+    unitId: 'mtr',
+    unitName: 'Meter'
+  },
+
+  {
+    unitId: 'cm',
+    unitName: 'Centimeter'
+  },
+
+  {
+    unitId: 'box',
+    unitName: 'Box'
+  },
+
+  {
+    unitId: 'doz',
+    unitName: 'Dozen'
+  },
+
+  {
+    unitId: 'set',
+    unitName: 'Set'
+  },
+
+  {
+    unitId: 'hr',
+    unitName: 'Hour'
+  },
+
+  {
+    unitId: 'min',
+    unitName: 'Minute'
+  },
+
+  {
+    unitId: 'sheet',
+    unitName: 'Sheet'
+  },
+
+  {
+    unitId: 'pack',
+    unitName: 'Pack'
+  },
+
+  {
+    unitId: 'pair',
+    unitName: 'Pair'
+  }
+
+]);
+
+getUnitById(
+  unitId: string | null | undefined
+) {
+
+  if (!unitId) {
+    return null;
+  }
+
+  return this.unitOptions()
+
+    .find(x =>
+
+      x.unitId === unitId
+
+    ) || null;
+
+}
   readonly categories = signal<SelectOption[]>(MASTER_CATEGORIES);
+  // 🔹 Product Categories
+
 
   readonly brands = signal<SelectOption[]>(MASTER_BRANDS);
 

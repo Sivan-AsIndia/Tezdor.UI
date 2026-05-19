@@ -262,7 +262,7 @@ onWorkOrderChange(workOrderId: string): void {
           ? resolveMaterialCode(this.products, line.rawMaterialId)
           : '');
 
-      const uomName       = resolveUomLabel(line.unitOfMeasureId);
+      const uomName       = resolveUomLabel(line.unitOfMeasureId!);
       const warehouseCode = resolveWarehouseCode(line);
 
       return {

@@ -346,11 +346,11 @@
 
                             <span class="material-icons" style="font-size:14px">
 
-                                wb_sunny
+                                {{ getShiftIcon() }}
 
                             </span>
 
-                            Day shift
+                            {{ getShiftType() }}
 
                         </span>
 
@@ -892,19 +892,19 @@
 
                 <div class="acc-body">
 
-                                        <div class="toggle-row">
+                    <div class="toggle-row">
 
                         <div class="toggle-info">
 
                             <div class="toggle-label">
 
-                               Default Shift
+                                Default Shift
 
                             </div>
 
                             <div class="toggle-desc">
 
-                                 Automatically assigned when no specific shift is mapped
+                                Automatically assigned when no specific shift is mapped
 
                             </div>
 
@@ -975,6 +975,34 @@
                         </label>
 
                     </div>
+
+                    <!-- <div class="toggle-row">
+
+                        <div class="toggle-info">
+
+                            <div class="toggle-label">
+
+                                Allow Multiple Entry
+
+                            </div>
+
+                            <div class="toggle-desc">
+
+                                Employee can clock in and out multiple times within the same day
+
+                            </div>
+
+                        </div>
+
+                        <label class="toggle-switch">
+
+                            <input type="checkbox" formControlName="isAllowMultipleEntry" />
+
+                            <span class="toggle-track"></span>
+
+                        </label>
+
+                    </div> -->
 
                     <div class="toggle-row">
 

@@ -6,6 +6,8 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { ConfirmModalComponent } from '../../../../shared/components/confirm-modal/confirm-modal';
+import { Product } from '../../../product/product';
+import { INITIAL_PRODUCTS } from '../../../product/product.seed';
 
 @Component({
   selector: 'app-work-order-list',
@@ -54,6 +56,11 @@ sortDirection =
   signal<WorkOrder | null>(
     null
   );
+
+    products =
+      signal<Product[]>(
+        INITIAL_PRODUCTS
+      );
 
   WorkOrderStatus = WorkOrderStatus;
 
@@ -510,7 +517,7 @@ sort(field: string){
 }
 
 onView(wo:WorkOrder){
-
+this.router.navigate(['/work-order/', wo.workOrderId]);
 }
 
 onEdit(wo:WorkOrder){
@@ -562,27 +569,23 @@ getProgress(wo: WorkOrder){
 }
 
 getProductName(
-  productId: string | null
+  productId: number | null
 ): string {
 
   if (!productId) {
     return '-';
   }
 
-  const map: Record<string, string> = {
+  const product =
+    this.products()
+      .find(x =>
+        x.id === productId
+      );
 
-    'prd-sofa-yashika-3-1-1':
-      'Yashika 3+1+1 Sofa Set',
+  return product
+    ? `${product.productCode} - ${product.productName}`
+    : '-';
 
-    'prd-dining-chair-premium':
-      'Premium Dining Chair',
-
-    'prd-office-table':
-      'Office Table'
-
-  };
-
-  return map[productId] || productId;
 }
 
 getCustomerName(
