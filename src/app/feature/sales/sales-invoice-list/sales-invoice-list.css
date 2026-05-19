@@ -70,12 +70,13 @@
 .sil-dash { color: #cbd5e1; }
 
 /* Overdue row */
-.sil-tr-overdue td { background: #fff9f9 !important; }
+.sil-tr-overdue td { background: #fff9f9 ; }
 .sil-overdue-date { color: #dc2626; font-weight: 600; }
 .sil-overdue-days {
   font-size: 10px; color: #dc2626; font-weight: 600;
   margin-top: 2px;
 }
+
 
 /* Invoice number link */
 .sil-inv-no {

@@ -331,8 +331,12 @@ export const routes: Routes = [
           import('./feature/sales/day-to-day-production/day-production-create/day-production-create')
             .then(m => m.DayProductionCreateComponent),
       },
-
-
+ {
+        path: 'day-production/:id',
+        loadComponent: () =>
+          import('./feature/sales/day-to-day-production/day-production-view/day-production-view')
+            .then(m => m.DayProductionViewComponent),
+      },
     ],
   },
 

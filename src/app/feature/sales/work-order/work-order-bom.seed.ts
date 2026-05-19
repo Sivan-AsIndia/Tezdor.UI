@@ -14,7 +14,7 @@ export const WORK_ORDER_BOM_SEED: WorkOrderBomLine[] = [
 
     level: 1,
     rawMaterialId: 'RM-WOOD-001',
-
+   Warehouse:' Finished Goods – Coimbatore ',
     requiredQuantity: 75,
     consumedQuantity: 30,
     pendingQuantity: 45,
@@ -34,7 +34,7 @@ export const WORK_ORDER_BOM_SEED: WorkOrderBomLine[] = [
     itemName: 'Commercial Plywood 18mm',
     materialCode: 'G111',
     materialName: 'dsd',
-
+   Warehouse:' Finished Goods – Coimbatore ',
     level: 1,
     rawMaterialId: 'RM-PLY-001',
 
@@ -53,7 +53,7 @@ export const WORK_ORDER_BOM_SEED: WorkOrderBomLine[] = [
     workOrderId: 'WO-2026-00001',
     productStructureId: 'PS-YASH-003',
     parentLineId: null,
-
+   Warehouse:' Finished Goods – Coimbatore ',
     itemName: 'HR Foam 40D – Seat',
     materialCode: 'G111',
     materialName: 'dsd',
@@ -80,7 +80,7 @@ export const WORK_ORDER_BOM_SEED: WorkOrderBomLine[] = [
     itemName: 'Chenille Fabric – Beige',
     materialCode: 'G111',
     materialName: 'dsd',
-
+   Warehouse:' Finished Goods – Coimbatore ',
     level: 1,
     rawMaterialId: 'RM-FAB-001',
 
@@ -103,7 +103,7 @@ export const WORK_ORDER_BOM_SEED: WorkOrderBomLine[] = [
     itemName: 'Zigzag Springs',
     materialCode: 'G111',
     materialName: 'dsd',
-
+   Warehouse:' Finished Goods – Coimbatore ',
     level: 1,
     rawMaterialId: 'RM-SPR-001',
 
@@ -129,7 +129,7 @@ export const WORK_ORDER_BOM_SEED: WorkOrderBomLine[] = [
 
     level: 2,
     rawMaterialId: 'RM-SCR-001',
-
+   Warehouse:' Finished Goods – Coimbatore ',
     requiredQuantity: 500,
     consumedQuantity: 200,
     pendingQuantity: 300,

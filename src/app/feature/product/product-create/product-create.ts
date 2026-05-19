@@ -147,6 +147,8 @@ export class ProductCreateComponent {
       brandId:        [''],
       productType:    [''],
       hsnCode:        ['', [Validators.maxLength(8), hsnPatternValidator()]],
+      sacCode:        ['', [Validators.maxLength(8), hsnPatternValidator()]],
+
       unitId:         ['', Validators.required],
       barcode:        ['', Validators.maxLength(50)],
       warrantyMonths: [null, [Validators.min(0)]],

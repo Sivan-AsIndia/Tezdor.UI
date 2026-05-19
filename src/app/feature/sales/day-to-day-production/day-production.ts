@@ -8,33 +8,23 @@ export type ProductionStatus =
   | 'approved'
   | 'rejected';
 
-export interface ConsumptionRow {
+
+  export interface ConsumptionRow {
   id: number;
-
   materialId: string;
-
   materialName: string;
-
   materialCode: string;
-
   plannedQty: number | null;
-
   actualQty: number;
-
   uomId: string;
-
   uomName: string;
-
   batchNo: string;
-
-  warehouseCode: string;
-
+  warehouseCode: string; 
   remarks: string;
-
   isExtra: boolean;
-
   costPerUnit: number | null;
 }
+
 
 export interface ProductionEntry {
 

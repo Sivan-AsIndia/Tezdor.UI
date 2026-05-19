@@ -8,7 +8,7 @@ export interface WorkOrderBomLine {
   parentLineId?: string | null;
 
   itemName: string;
-
+Warehouse?:string;
   level: number;
   materialCode: string;
   materialName: string;

@@ -430,8 +430,9 @@ export const MASTER_BRANDS: SelectOption[] = [
 ];
 
 export const MASTER_PRODUCT_TYPES: SelectOption[] = [
-  { value: '1', label: 'Goods' },
-  { value: '2', label: 'Service (labour, delivery)' },
+  { value: '1', label: 'Raw Material' },
+  { value: '2', label: 'Goods' },
+  { value: '3', label: 'Service (labour, delivery)' },
 ];
 
 export const MASTER_PAYMENT_TERMS: SelectOption[] = [

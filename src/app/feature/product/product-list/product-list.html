@@ -155,9 +155,9 @@
                                                 </td>
                                             </tr>
                                             }
-                                            @for (p of paginatedProducts(); track p.id) {
+                                            @for (p of paginatedProducts(); track p.id;let i = $index) {
                                             <tr>
-                                                <td class="text-subtitle-1 textSecondary">{{ p.id }}</td>
+                                                <td class="text-subtitle-1 textSecondary">{{ i+1}}</td>
                                                 <!-- <td class="text-subtitle-1 textSecondary text-no-wrap">
                                                     <strong>{{ p.productCode }}</strong>
                                                 </td> -->
@@ -453,7 +453,7 @@
 
 <div class="bom-modal" role="dialog" aria-modal="true" aria-labelledby="bomModalTitle">
 
-  <!-- ── Modal Header ── -->
+  <!-- ── Header ── -->
   <div class="bom-modal__head">
     <div class="bom-modal__head-left">
       <div class="bom-modal__icon">
@@ -490,26 +490,24 @@
       }
     </div>
 
-    <!-- Expand / Collapse all buttons -->
+    <!-- Expand / Collapse -->
     <div class="bom-expand-btns">
       <button class="bom-expand-btn" (click)="expandAllBom()" title="Expand all">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <polyline points="7 13 12 18 17 13"/>
-          <polyline points="7 6 12 11 17 6"/>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/>
         </svg>
-        Expand all
+        Expand
       </button>
       <button class="bom-expand-btn" (click)="collapseAllBom()" title="Collapse all">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <polyline points="7 11 12 6 17 11"/>
-          <polyline points="7 18 12 13 17 18"/>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="7 11 12 6 17 11"/><polyline points="7 18 12 13 17 18"/>
         </svg>
-        Collapse all
+        Collapse
       </button>
     </div>
 
     <button class="bom-modal__close" (click)="closeBomModal()" aria-label="Close">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
       </svg>
     </button>
@@ -541,8 +539,9 @@
     </div>
   </div>
 
-  <!-- ── BOM Tree ── -->
+  <!-- ── BOM Table ── -->
   <div class="bom-modal__body">
+
     @if (bomNodes().length === 0) {
       <div class="bom-empty">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.2">
@@ -557,81 +556,138 @@
         <p>No BOM components defined for this product.</p>
         <small>Add components from the Product Edit screen.</small>
       </div>
+
     } @else {
 
-      <!-- Tree column headers -->
-      <div class="bom-tree-head">
-        <span class="bom-tree-head__item">Component / Item</span>
-        <span class="bom-tree-head__item">Code</span>
-        <span class="bom-tree-head__item bom-tree-head__item--r">Qty</span>
-        <span class="bom-tree-head__item">UOM</span>
-        <span class="bom-tree-head__item bom-tree-head__item--r">Wastage %</span>
-        <span class="bom-tree-head__item bom-tree-head__item--r">Cost / Unit</span>
-      </div>
+      <div class="bom-table-wrap">
+        <table class="bom-table">
 
-      <!-- Tree rows — only visible nodes -->
-      @for (line of bomVisibleNodes(); track line.id) {
-        <div class="bom-tree-row"
-          [class.bom-tree-row--l1]="line.level === 1"
-          [class.bom-tree-row--l2]="line.level === 2"
-          [class.bom-tree-row--l3]="line.level >= 3"
-          [style.padding-left.px]="(line.level - 1) * 28 + 8">
+          <!-- Sticky thead -->
+          <thead>
+            <tr>
+              <th class="bom-th bom-th--name">Component / Item</th>
+              <th class="bom-th">Code</th>
+              <th class="bom-th">Raw Material</th>
+              <th class="bom-th bom-th--r">Qty</th>
+              <th class="bom-th">UOM</th>
+              <th class="bom-th bom-th--r">Wastage %</th>
+              <th class="bom-th bom-th--r">Cost / Unit</th>
+            </tr>
+          </thead>
 
-          <!-- Arrow + Level pill + Name -->
-          <span class="bom-tree-row__name">
+          <tbody>
+            @for (line of bomVisibleNodes(); track line.id) {
+              <tr class="bom-tr"
+                [class.bom-tr--l1]="line.level === 1"
+                [class.bom-tr--l2]="line.level === 2"
+                [class.bom-tr--l3]="line.level >= 3">
 
-            <!-- Expand/collapse arrow (only for parent nodes) -->
-            @if (hasChildren(line.id)) {
-              <button class="bom-caret" (click)="toggleBomNode(line.id, $event)"
-                [class.bom-caret--collapsed]="isCollapsed(line.id)"
-                [title]="isCollapsed(line.id) ? 'Expand' : 'Collapse'">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="6 9 12 15 18 9"/>
+                <!-- Component / Item name — indented by level -->
+                <td class="bom-td bom-td--name"
+                  [style.padding-left.px]="(line.level - 1) * 24 + 12">
+                  <div class="bom-name-cell">
+
+                    <!-- Caret -->
+                    @if (hasChildren(line.id)) {
+                      <button class="bom-caret"
+                        [class.bom-caret--collapsed]="isCollapsed(line.id)"
+                        [title]="isCollapsed(line.id) ? 'Expand' : 'Collapse'"
+                        (click)="toggleBomNode(line.id, $event)">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                      </button>
+                    } @else {
+                      <span class="bom-caret-spacer"></span>
+                    }
+
+                    <!-- Level pill -->
+                    @if (line.level === 1) {
+                      <span class="bom-lvl bom-lvl--1">L1</span>
+                    } @else if (line.level === 2) {
+                      <span class="bom-lvl bom-lvl--2">L2</span>
+                    } @else {
+                      <span class="bom-lvl bom-lvl--3">L{{ line.level }}</span>
+                    }
+
+                    <!-- Name -->
+                    <span class="bom-item-name"
+                      [class.bom-item-name--parent]="hasChildren(line.id)">
+                      {{ line.itemName }}
+                    </span>
+
+                    @if (line.isOptional) {
+                      <span class="bom-opt-tag">opt</span>
+                    }
+
+                    <!-- Collapsed count -->
+                    @if (hasChildren(line.id) && isCollapsed(line.id)) {
+                      <span class="bom-collapsed-count">+{{ getChildCount(line.id) }}</span>
+                    }
+
+                  </div>
+                </td>
+
+                <!-- Code -->
+                <td class="bom-td">
+                  <span class="bom-code-chip">{{ line.itemCode || '—' }}</span>
+                </td>
+
+                <!-- Raw Material -->
+                <td class="bom-td bom-td--muted">
+                  {{ line.rawMaterialName || '—' }}
+                </td>
+
+                <!-- Qty -->
+                <td class="bom-td bom-td--r bom-td--num">{{ line.quantity }}</td>
+
+                <!-- UOM -->
+                <td class="bom-td bom-td--muted">{{ line.unitName || '—' }}</td>
+
+                <!-- Wastage % -->
+                <td class="bom-td bom-td--r">
+                  @if (line.wastagePercent) {
+                    <span class="bom-wastage-chip">{{ line.wastagePercent }}%</span>
+                  } @else {
+                    <span class="bom-td--muted">—</span>
+                  }
+                </td>
+
+                <!-- Cost / Unit -->
+                <td class="bom-td bom-td--r">
+                  @if (line.costPerUnit !== null) {
+                    <span class="bom-cost-val">₹{{ line.costPerUnit | number:'1.2-2' }}</span>
+                  } @else {
+                    <span class="bom-td--muted">—</span>
+                  }
+                </td>
+
+              </tr>
+            }
+          </tbody>
+
+          <!-- Totals row -->
+          <tfoot>
+            <tr class="bom-tfoot-row">
+              <td class="bom-tfoot-td" colspan="3">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="1" x2="12" y2="23"/>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                 </svg>
-              </button>
-            } @else {
-              <!-- Leaf node spacer -->
-              <span class="bom-caret-spacer"></span>
-            }
+                Rolled-up BOM cost
+              </td>
+              <td class="bom-tfoot-td bom-tfoot-td--meta" colspan="3">
+                {{ bomStats().lines }} lines &nbsp;·&nbsp; {{ bomStats().levels }} levels deep
+              </td>
+              <td class="bom-tfoot-td bom-tfoot-td--val">
+                ₹{{ bomRolledUpCost() | number:'1.2-2' }}
+              </td>
+            </tr>
+          </tfoot>
 
-            <!-- Level pill -->
-            @if (line.level === 1) {
-              <span class="bom-lvl-pill bom-lvl-pill--1">L1</span>
-            } @else if (line.level === 2) {
-              <span class="bom-lvl-pill bom-lvl-pill--2">L2</span>
-            } @else {
-              <span class="bom-lvl-pill bom-lvl-pill--3">L{{ line.level }}</span>
-            }
-
-            <span class="bom-tree-row__item-name"
-              [class.bom-tree-row__item-name--parent]="hasChildren(line.id)">
-              {{ line.itemName }}
-            </span>
-
-            @if (line.isOptional) {
-              <span class="bom-opt-badge">optional</span>
-            }
-
-            <!-- Child count badge (when collapsed) -->
-            @if (hasChildren(line.id) && isCollapsed(line.id)) {
-              <span class="bom-child-count">
-                +{{ getChildCount(line.id) }} items
-              </span>
-            }
-          </span>
-
-          <span class="bom-tree-row__cell bom-tree-row__cell--code">{{ line.itemCode || '—' }}</span>
-          <span class="bom-tree-row__cell bom-tree-row__cell--r">{{ line.quantity }}</span>
-          <span class="bom-tree-row__cell">{{ line.unitName || '—' }}</span>
-          <span class="bom-tree-row__cell bom-tree-row__cell--r">
-            {{ line.wastagePercent ? (line.wastagePercent + '%') : '—' }}
-          </span>
-          <span class="bom-tree-row__cell bom-tree-row__cell--r">
-            {{ line.costPerUnit ? ('₹' + (line.costPerUnit | number:'1.2-2')) : '—' }}
-          </span>
-        </div>
-      }
+        </table>
+      </div>
 
     }
   </div>
@@ -639,19 +695,13 @@
   <!-- ── Footer ── -->
   <div class="bom-modal__foot">
     <span class="bom-modal__foot-info">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2">
-        <circle cx="12" cy="12" r="10"/>
-        <line x1="12" y1="8" x2="12" y2="12"/>
-        <line x1="12" y1="16" x2="12.01" y2="16"/>
-      </svg>
-      Rolled-up BOM cost: <strong>₹{{ bomRolledUpCost() | number:'1.2-2' }}</strong>
-      &nbsp;·&nbsp; {{ bomStats().lines }} lines · {{ bomStats().levels }} levels deep
+      {{ bomStats().lines }} BOM lines &nbsp;·&nbsp; {{ bomStats().levels }} levels deep
     </span>
     <div style="display:flex;gap:8px">
       <a [routerLink]="['/products/edit', bomProduct()?.id]"
         class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated bg-secondary px-3"
         style="font-size:12px" (click)="closeBomModal()">
-        Edit Product
+        Edit
       </a>
       <button type="button"
         class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated px-3"
@@ -663,5 +713,3 @@
 
 </div>
 }
-<!-- ══════════ /BOM Modal ══════════ -->
-

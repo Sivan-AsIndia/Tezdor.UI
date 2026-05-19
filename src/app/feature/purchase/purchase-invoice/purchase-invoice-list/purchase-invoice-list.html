@@ -171,9 +171,9 @@
                         </tr>
                       }
 
-                      @for (inv of paginatedInvoices(); track inv.id) {
+                      @for (inv of paginatedInvoices(); track inv.id;let i = $index) {
                         <tr>
-                          <td class="text-subtitle-1 textSecondary">{{ inv.id }}</td>
+                          <td class="text-subtitle-1 textSecondary">{{ i+1}}</td>
 
                           <!-- <td class="text-subtitle-1 textSecondary text-no-wrap">
                             <strong>{{ inv.invoiceNo }}</strong>

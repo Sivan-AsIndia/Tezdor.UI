@@ -11732,17 +11732,37 @@ color: white !important;
 }
 
 [data-bs-theme="dark"] .pf-status-option--active .pf-status-option__label{
-color: black !important;
+color: white !important;
 }
 [data-bs-theme="dark"] .pf-status-option:hover .pf-status-option__label{
   color: white !important;
 }
-
+[data-bs-theme="dark"] .dpc-card,[data-bs-theme="dark"] .dpc-card__head{
+ background:#111c2d !important; 
+ color:white
+}
+[data-bs-theme="dark"] .dpc-card__title,[data-bs-theme="dark"] .dpc-mat-name{
+color:white !important
+}
 [data-bs-theme="dark"] .layout-card{
     background: transparent;
 }
 [data-bs-theme="dark"] .layout-preview{
   background: #ffffff4f;
+}
+[data-bs-theme="dark"] .dpc-cons-footer{
+  background: #fafbfc1c !important;
+  color:white !important
+}
+[data-bs-theme="dark"] .dpc-cons-footer__info{
+ color:white !important 
+}
+[data-bs-theme="dark"] .dpc-autofill-wrap{
+   background: #fafbfc1c !important;
+   color: white !important;
+}
+[data-bs-theme="dark"] .dpc-autofill-val{
+    color: white !important; 
 }
 [data-bs-theme="dark"] .rt-popup,[data-bs-theme="dark"] .rt-popup div{
   background:#111c2d !important; 
@@ -11753,18 +11773,65 @@ color: black !important;
 [data-bs-theme="dark"] .sv-date-d{
   color: white !important;
 }
+[data-bs-theme="dark"] .sil-tr-overdue td{
+  background: rgba(255, 255, 255, 0.192) !important;
+  color: white !important;
+}
+[data-bs-theme="dark"] .sil-tr-overdue  .sil-customer-name{
+    color: white !important;
+}
 [data-bs-theme="dark"] .line-card{
  background:#111c2d !important; 
 }
-
+[data-bs-theme="dark"] .dpv-header,[data-bs-theme="dark"] .dpv-kpi{
+ background:#111c2d !important; 
+}
+[data-bs-theme="dark"] .dpv-title{
+    color: white !important;
+}
 [data-bs-theme="dark"] .ng-select .ng-select-container{
  background:#111c2d !important; 
  color: white;
 }
+[data-bs-theme="dark"] .dpv-kpi__val{
+  color:white !important
+}
+[data-bs-theme="dark"] .dpv-card{
+   background:#111c2d !important; 
+   border: 1px solid rgba(255, 255, 255, 0.397)  !important;
+}
+[data-bs-theme="dark"] .dpv-card__head{
+   background:#111c2d !important; 
+}
 [data-bs-theme="dark"] .si-paper{
    background:#111c2d !important; 
 }
-
+[data-bs-theme="dark"] .dpv-field__val{
+  color: white !important;
+   background:#111c2d !important; 
+}
+[data-bs-theme="dark"] .dpv-card__title{
+  color:white !important
+}
+[data-bs-theme="dark"] .dpv-qty-block,[data-bs-theme="dark"] .dpv-qty-block--minus,[data-bs-theme="dark"] .dpv-cons-footer{
+  background: #15263a !important;
+}
+[data-bs-theme="dark"] .dpv-qty-block__val{
+color:white !important
+}
+[data-bs-theme="dark"] .dpv-cons-footer__info{
+  color: white;
+}
+[data-bs-theme="dark"] .dpv-warn-banner{
+ background: rgba(255, 255, 255, 0.144) !important;
+ color:white !important
+}
+[data-bs-theme="dark"] .dpv-mat-name,[data-bs-theme="dark"] .dpv-tl-label{
+  color:white !important
+}
+[data-bs-theme="dark"] .dpv-tl-line{
+ background:rgba(255, 255, 255, 0.541) !important
+}
 [data-bs-theme="dark"] select,[data-bs-theme="dark"] .si-inp-wrap,[data-bs-theme="dark"] .si-textarea{
    background:#111c2d !important; 
    color: white !important;
@@ -12140,7 +12207,51 @@ color: rgb(112, 157, 255) !important;
 [data-bs-theme="dark"]  #deleteModal{
 background: rgba(255, 255, 255, 0.199);
 }
+[data-bs-theme="dark"] .bom-modal,[data-bs-theme="dark"] .bom-modal__head{
 
+background: #111c2d !important;
+color: white !important;
+}
+[data-bs-theme="dark"] .bom-modal__title{
+  color: white !important;
+}
+[data-bs-theme="dark"] .bom-modal__summary{
+background: #111c2d !important;
+color: white !important;
+}
+[data-bs-theme="dark"] .bom-modal__foot{
+  background: #111c2d !important;
+  border-top: none !important;
+}
+[data-bs-theme="dark"] .bom-backdrop{
+background: rgba(255, 255, 255, 0.13) !important;
+}
+[data-bs-theme="dark"] .card__head{
+  background: #111c2d !important;
+
+}
+
+[data-bs-theme=dark] input[type=number]{
+    color: white !important;
+    background-color: #111c2d !important;
+}
+[data-bs-theme=dark] .form-select {
+    color: white !important;
+    background: #111c2d !important;
+}
+[data-bs-theme=dark] .bom-footer{
+  background: #111c2d !important;
+  color: white;
+}
+[data-bs-theme=dark] .bom-footer__summary,[data-bs-theme=dark] .bom-cell-text{
+  color:white !important
+}
+[data-bs-theme="dark"] .card__title,[data-bs-theme="dark"] .card__sub{
+  color: white !important;
+}
+[data-bs-theme="dark"] .bom-sum-item__val,[data-bs-theme="dark"] .bom-item-name{
+  color: white !important;
+}
 input[type="checkbox"] {
 accent-color: var(--color-primary);
     background: transparent;

@@ -1,0 +1,528 @@
+<div class="dpv-page">
+         <!-- HEADER -->
+                <div class="d-flex justify-content-between align-items-center" id="TopHeading">
+
+                    <div>
+                        <h4 class="fw-bold mb-1 mainheading">Production Entry</h4>
+                        <small class="text-muted subdescription">   Create, track, and manage daily production activities and output efficiently.
+
+                        </small>
+                    </div>
+                    <!-- 🔷 ARROW BREADCRUMB -->
+                    <div class="arrow-steps d-none d-md-flex">
+
+
+                        <ul id="breadcrumb">
+                        <li><a routerLink="/dashboard"><span class="fa fa-home"> </span>&nbsp;&nbsp;Home</a></li>
+  <li>
+              <a routerLink="/day-production"><span class="fa fa-industry"></span>&nbsp;&nbsp;Production</a>
+            </li>
+                            <li><a><span class="fa fa-eye"> </span>&nbsp;&nbsp;Details</a></li>
+                        </ul>
+
+                    </div>
+
+
+                </div>
+
+  <!-- ══════════ PAGE HEADER ══════════ -->
+  <div class="dpv-header">
+    
+    <div class="dpv-header__left">
+ 
+      <div class="dpv-title-row">
+        <h4 class="dpv-title mb-2">    {{ entry()?.productName }}</h4>
+        <span class="dpv-status-pill" [class]="'dpv-status-pill--' + entry()?.status">
+          <!-- <span class="dpv-status-pill__dot"></span> -->
+          {{ statusLabel() }}
+        </span>
+      </div>
+
+      <div class="dpv-meta">
+        <span class="dpv-meta__chip">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          {{ entry()?.workOrderNo }}
+        </span>
+        <span class="dpv-meta__sep">·</span>
+        <span>{{ shiftLabel() }} shift</span>
+        <span class="dpv-meta__sep">·</span>
+        <span>{{ entry()?.productionLine || 'No line' }}</span>
+        <span class="dpv-meta__sep">·</span>
+        <span>{{ entry()?.supervisorName || '—' }}</span>
+        <span class="dpv-meta__sep">·</span>
+        <span>{{ formatDate(entry()?.createdAt) }}</span>
+      </div>
+    </div>
+
+    <div class="dpv-header__actions">
+      <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated" (click)="onPrint()">
+        Print
+      </button>
+      @if (entry()?.status === 'draft' || entry()?.status === 'rejected') {
+        <button class="v-btn v-btn--flat v-theme--BLUE_THEME bg-primary v-btn--density-default rounded-md v-btn--size-default v-btn--variant-elevated" (click)="onEdit()">
+          Edit
+        </button>
+      }
+      @if (entry()?.status === 'submitted') {
+        <button class="dpv-btn dpv-btn--approve" (click)="onApprove()">
+          Approve
+        </button>
+        <button class="dpv-btn dpv-btn--reject" (click)="onReject()">
+          Reject
+        </button>
+      }
+
+     <button class="v-btn v-btn--elevated v-theme--BLUE_THEME v-btn--density-default rounded-md v-btn--size-default bg-secondary px-3" (click)="onCancel()">
+      Back
+    </button>
+
+    </div>
+  </div>
+
+  @if (entry(); as e) {
+
+    <!-- ══════════ KPI STRIP ══════════ -->
+    <div class="dpv-kpi-strip">
+
+      <div class="dpv-kpi dpv-kpi--produced">
+        <div class="dpv-kpi__icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+        </div>
+        <div class="dpv-kpi__body">
+          <div class="dpv-kpi__label">Produced</div>
+          <div class="dpv-kpi__val">{{ e.producedQty | number:'1.0-3' }}<span class="dpv-kpi__uom">{{ e.uom || 'Nos' }}</span></div>
+        </div>
+      </div>
+
+      <div class="dpv-kpi dpv-kpi--good">
+        <div class="dpv-kpi__icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="dpv-kpi__body">
+          <div class="dpv-kpi__label">Good Qty</div>
+          <div class="dpv-kpi__val">{{ e.goodQty | number:'1.0-3' }}<span class="dpv-kpi__uom">{{ e.uom || 'Nos' }}</span></div>
+          <div class="dpv-kpi__sub">{{ yieldPct() | number:'1.1-1' }}% yield</div>
+        </div>
+      </div>
+
+      <div class="dpv-kpi dpv-kpi--reject">
+        <div class="dpv-kpi__icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        </div>
+        <div class="dpv-kpi__body">
+          <div class="dpv-kpi__label">Rejected</div>
+          <div class="dpv-kpi__val">{{ e.rejectedQty | number:'1.0-3' }}<span class="dpv-kpi__uom">{{ e.uom || 'Nos' }}</span></div>
+          <div class="dpv-kpi__sub">pre-QC</div>
+        </div>
+      </div>
+
+      <div class="dpv-kpi dpv-kpi--workers">
+        <div class="dpv-kpi__icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div class="dpv-kpi__body">
+          <div class="dpv-kpi__label">Workers</div>
+          <div class="dpv-kpi__val">{{ e.workerCount || '—' }}</div>
+          <div class="dpv-kpi__sub">on shift</div>
+        </div>
+      </div>
+
+      <div class="dpv-kpi dpv-kpi--downtime">
+        <div class="dpv-kpi__icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="dpv-kpi__body">
+          <div class="dpv-kpi__label">Downtime</div>
+          <div class="dpv-kpi__val">{{ e.downtimeMinutes || 0 }}<span class="dpv-kpi__uom">min</span></div>
+          <div class="dpv-kpi__sub">{{ e.startTime || '—' }} → {{ e.endTime || '—' }}</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══════════ SECTION 1 — Production Header ══════════ -->
+    <div class="dpv-card">
+      <div class="dpv-card__head">
+        <div class="dpv-card__head-left">
+          <div class="dpv-card__icon dpv-card__icon--blue">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div>
+            <div class="dpv-card__title">Production Header</div>
+            <div class="dpv-card__sub">Work order, schedule, quantities &amp; operator details</div>
+          </div>
+        </div>
+        <div class="dpv-card__section-no">01</div>
+      </div>
+
+      <div class="dpv-card__body">
+
+        <!-- Row 1 -->
+        <div class="dpv-section-label">Identifiers &amp; Schedule</div>
+        <div class="dpv-grid dpv-grid--4">
+          <div class="dpv-field">
+            <div class="dpv-field__label">Production No.</div>
+            <div class="dpv-field__val dpv-field__val--mono dpv-field__val--highlight">{{ e.productionNo }}</div>
+          </div>
+          <div class="dpv-field">
+            <div class="dpv-field__label">Production Date</div>
+            <div class="dpv-field__val">{{ e.productionDate | date:'dd MMM yyyy' }}</div>
+          </div>
+          <div class="dpv-field">
+            <div class="dpv-field__label">Shift</div>
+            <div class="dpv-field__val">{{ shiftLabel() }}</div>
+          </div>
+          <div class="dpv-field">
+            <div class="dpv-field__label">Production Line</div>
+            <div class="dpv-field__val">{{ lineLabel() || '—' }}</div>
+          </div>
+        </div>
+
+        <div class="dpv-divider"></div>
+
+        <!-- Row 2 -->
+        <div class="dpv-section-label">Work Order &amp; Personnel</div>
+        <div class="dpv-grid dpv-grid--4">
+          <div class="dpv-field">
+            <div class="dpv-field__label">Work Order</div>
+            <div class="dpv-field__val dpv-field__val--mono">{{ e.workOrderNo }}</div>
+          </div>
+          <div class="dpv-field">
+            <div class="dpv-field__label">Product</div>
+            <div class="dpv-field__val">{{ e.productName || '—' }}</div>
+          </div>
+          <div class="dpv-field">
+            <div class="dpv-field__label">Supervisor</div>
+            <div class="dpv-field__val">{{ e.supervisorName || '—' }}</div>
+          </div>
+        </div>
+
+        <div class="dpv-divider"></div>
+
+        <!-- Row 3 — Quantities -->
+        <div class="dpv-section-label">Quantity Summary</div>
+        <div class="dpv-qty-row">
+
+          <div class="dpv-qty-block">
+            <div class="dpv-qty-block__label">Produced Qty</div>
+            <div class="dpv-qty-block__val">{{ e.producedQty | number:'1.3-3' }}</div>
+            <div class="dpv-qty-block__uom">{{ e.uom }}</div>
+          </div>
+
+          <div class="dpv-qty-arrow">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+
+          <div class="dpv-qty-block dpv-qty-block--minus">
+            <div class="dpv-qty-block__label">Rejected (pre-QC)</div>
+            <div class="dpv-qty-block__val">{{ e.rejectedQty | number:'1.3-3' }}</div>
+            <div class="dpv-qty-block__uom">{{ e.uom }}</div>
+          </div>
+
+          <div class="dpv-qty-arrow">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+
+          <div class="dpv-qty-block dpv-qty-block--good">
+            <div class="dpv-qty-block__badge">✓ Good</div>
+            <div class="dpv-qty-block__label">Good Qty</div>
+            <div class="dpv-qty-block__val">{{ e.goodQty | number:'1.3-3' }}</div>
+            <div class="dpv-qty-block__uom">{{ e.uom }} · {{ yieldPct() | number:'1.1-1' }}% yield</div>
+          </div>
+
+        </div>
+
+        <div class="dpv-divider"></div>
+
+        <!-- Row 4 — Time -->
+        <div class="dpv-section-label">Time &amp; Downtime</div>
+        <div class="dpv-grid dpv-grid--4">
+          <div class="dpv-field">
+            <div class="dpv-field__label">Start Time</div>
+            <div class="dpv-field__val">{{ e.startTime || '—' }}</div>
+          </div>
+          <div class="dpv-field">
+            <div class="dpv-field__label">End Time</div>
+            <div class="dpv-field__val">{{ e.endTime || '—' }}</div>
+          </div>
+          <div class="dpv-field">
+            <div class="dpv-field__label">Downtime</div>
+            <div class="dpv-field__val" [class.dpv-field__val--warn]="(e.downtimeMinutes ?? 0) > 0">
+              {{ e.downtimeMinutes ? (e.downtimeMinutes + ' min') : '—' }}
+            </div>
+          </div>
+          <div class="dpv-field">
+            <div class="dpv-field__label">Downtime Reason</div>
+            <div class="dpv-field__val">{{ e.downtimeReason || '—' }}</div>
+          </div>
+        </div>
+
+        @if (e.remarks) {
+          <div class="dpv-divider"></div>
+          <div class="dpv-section-label">Remarks / Notes</div>
+          <div class="dpv-remarks-box">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px;opacity:.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            {{ e.remarks }}
+          </div>
+        }
+
+      </div>
+    </div>
+
+    <!-- ══════════ SECTION 2 — Material Consumption ══════════ -->
+    <div class="dpv-card">
+      <div class="dpv-card__head">
+        <div class="dpv-card__head-left">
+          <div class="dpv-card__icon dpv-card__icon--amber">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <div class="dpv-card__title">Material Consumption</div>
+            <div class="dpv-card__sub">BOM lines — actual vs planned with variance analysis</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          @if (overUseCount() > 0) {
+            <div class="dpv-overuse-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              {{ overUseCount() }} over-use
+            </div>
+          }
+          <div class="dpv-card__section-no">02</div>
+        </div>
+      </div>
+
+      @if (overUseCount() > 0) {
+        <div class="dpv-warn-banner">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <strong>{{ overUseCount() }} over-use variance{{ overUseCount() > 1 ? 's' : '' }} detected</strong>
+          &mdash; supervisor sign-off required before approval.
+        </div>
+      }
+
+      @if (consumptions().length > 0) {
+
+        <div class="dpv-table-wrap">
+          <table class="dpv-table">
+            <thead>
+              <tr>
+                <th class="dpv-th dpv-th--num">#</th>
+                <th class="dpv-th">Material</th>
+                <th class="dpv-th">Code</th>
+                <th class="dpv-th dpv-th--r">Planned</th>
+                <th class="dpv-th dpv-th--r">Actual</th>
+                <th class="dpv-th dpv-th--r">Variance</th>
+                <th class="dpv-th">UOM</th>
+                <th class="dpv-th">Batch / Lot</th>
+                <th class="dpv-th">Warehouse</th>
+                <th class="dpv-th">Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of consumptions(); track row.id; let i = $index) {
+                <tr class="dpv-tr"
+                  [class.dpv-tr--extra]="row.isExtra"
+                  [class.dpv-tr--over]="row.plannedQty !== null && getVariance(row) > 0"
+                  [class.dpv-tr--under]="row.plannedQty !== null && getVariance(row) < 0">
+
+                  <td class="dpv-td dpv-td--num">{{ i + 1 }}</td>
+
+                  <td class="dpv-td">
+                    <div class="dpv-mat-wrap">
+                      <span class="dpv-mat-name">{{ row.materialName }}</span>
+                      @if (row.isExtra) {
+                        <span class="dpv-extra-badge">Extra</span>
+                      }
+                    </div>
+                  </td>
+
+                  <td class="dpv-td">
+                    <span class="dpv-code-chip">{{ row.materialCode || '—' }}</span>
+                  </td>
+
+                  <td class="dpv-td dpv-td--r dpv-td--muted">
+                    {{ row.plannedQty !== null ? (row.plannedQty | number:'1.3-3') : '—' }}
+                  </td>
+
+                  <td class="dpv-td dpv-td--r dpv-td--bold">
+                    {{ row.actualQty | number:'1.3-3' }}
+                  </td>
+
+                  <td class="dpv-td dpv-td--r">
+                    @if (row.plannedQty !== null) {
+                      <span class="dpv-var" [class]="getVarianceClass(row)">
+                        {{ getVariance(row) > 0 ? '+' : '' }}{{ getVariance(row) | number:'1.3-3' }}
+                      </span>
+                    } @else {
+                      <span class="dpv-var dpv-var--extra">
+                        +{{ row.actualQty | number:'1.3-3' }}
+                      </span>
+                    }
+                  </td>
+
+                  <td class="dpv-td dpv-td--muted">{{ row.uomName || '—' }}</td>
+                  <td class="dpv-td">
+                    @if (row.batchNo) {
+                      <span class="dpv-batch-chip">{{ row.batchNo }}</span>
+                    } @else {
+                      <span class="dpv-td--muted">—</span>
+                    }
+                  </td>
+                  <td class="dpv-td dpv-td--muted">{{ row.warehouseCode || '—' }}</td>
+                  <td class="dpv-td dpv-td--remark">{{ row.remarks || '—' }}</td>
+
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="dpv-cons-footer">
+          <div class="dpv-cons-footer__info">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            On approval, raw material stock debited and
+            <strong>{{ e.goodQty | number:'1.3-3' }} {{ e.uom || 'Nos' }}</strong>
+            credited to Finished Goods.
+          </div>
+          @if (netVarianceValue() !== 0) {
+            <div class="dpv-net-var" [class.dpv-net-var--pos]="netVarianceValue() < 0">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+              Net variance:
+              <strong>{{ netVarianceValue() > 0 ? '+' : '' }}₹{{ netVarianceValue() | number:'1.2-2' }}</strong>
+            </div>
+          }
+        </div>
+
+      } @else {
+        <div class="dpv-empty">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <p>No material consumption rows recorded.</p>
+        </div>
+      }
+    </div>
+
+    <!-- ══════════ SECTION 3 — Approval Trail ══════════ -->
+    <div class="dpv-card">
+      <div class="dpv-card__head">
+        <div class="dpv-card__head-left">
+          <div class="dpv-card__icon dpv-card__icon--teal">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div>
+            <div class="dpv-card__title">Approval Trail</div>
+            <div class="dpv-card__sub">Status history and sign-off record</div>
+          </div>
+        </div>
+        <div class="dpv-card__section-no">03</div>
+      </div>
+
+      <div class="dpv-card__body">
+        <div class="dpv-timeline">
+
+          <div class="dpv-tl-item dpv-tl-item--done">
+            <div class="dpv-tl-line-wrap">
+              <div class="dpv-tl-dot dpv-tl-dot--done">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="dpv-tl-line"></div>
+            </div>
+            <div class="dpv-tl-content">
+              <div class="dpv-tl-label">Created by <strong>{{ e.supervisorName || 'Operator' }}</strong></div>
+              <div class="dpv-tl-time">{{ formatDate(e.createdAt) }}</div>
+            </div>
+          </div>
+
+          @if (['submitted','approved','rejected'].includes(e.status)) {
+            <div class="dpv-tl-item dpv-tl-item--done">
+              <div class="dpv-tl-line-wrap">
+                <div class="dpv-tl-dot dpv-tl-dot--done">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div class="dpv-tl-line"></div>
+              </div>
+              <div class="dpv-tl-content">
+                <div class="dpv-tl-label">Submitted for approval</div>
+                <div class="dpv-tl-time">{{ formatDate(e.updatedAt) }}</div>
+              </div>
+            </div>
+          }
+
+          @if (e.status === 'approved') {
+            <div class="dpv-tl-item dpv-tl-item--approved">
+              <div class="dpv-tl-line-wrap">
+                <div class="dpv-tl-dot dpv-tl-dot--approved">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+              </div>
+              <div class="dpv-tl-content">
+                <div class="dpv-tl-label dpv-tl-label--approved">
+                  Approved @if (e.approvedBy) { by <strong>{{ e.approvedBy }}</strong> }
+                </div>
+                <div class="dpv-tl-time">{{ formatDate(e.approvedDate ?? e.updatedAt) }}</div>
+              </div>
+            </div>
+          }
+
+          @if (e.status === 'rejected') {
+            <div class="dpv-tl-item dpv-tl-item--rejected">
+              <div class="dpv-tl-line-wrap">
+                <div class="dpv-tl-dot dpv-tl-dot--rejected">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </div>
+              </div>
+              <div class="dpv-tl-content">
+                <div class="dpv-tl-label dpv-tl-label--rejected">
+                  Rejected @if (e.rejectedBy) { by <strong>{{ e.rejectedBy }}</strong> }
+                </div>
+                @if (e.rejectionReason) {
+                  <div class="dpv-remarks-box dpv-remarks-box--sm">"{{ e.rejectionReason }}"</div>
+                }
+                <div class="dpv-tl-time">{{ formatDate(e.updatedAt) }}</div>
+              </div>
+            </div>
+          }
+
+          @if (e.status === 'submitted') {
+            <div class="dpv-tl-item dpv-tl-item--pending">
+              <div class="dpv-tl-line-wrap">
+                <div class="dpv-tl-dot dpv-tl-dot--pending">
+                  <div class="dpv-tl-dot__pulse"></div>
+                </div>
+              </div>
+              <div class="dpv-tl-content">
+                <div class="dpv-tl-label dpv-tl-label--muted">Pending manager approval</div>
+                <div class="dpv-tl-time">Awaiting — Production Manager</div>
+              </div>
+            </div>
+          }
+
+          @if (e.status === 'draft') {
+            <div class="dpv-tl-item dpv-tl-item--pending">
+              <div class="dpv-tl-line-wrap">
+                <div class="dpv-tl-dot dpv-tl-dot--pending"></div>
+              </div>
+              <div class="dpv-tl-content">
+                <div class="dpv-tl-label dpv-tl-label--muted">Not yet submitted</div>
+                <div class="dpv-tl-time">Saved as draft</div>
+              </div>
+            </div>
+          }
+
+        </div>
+      </div>
+    </div>
+
+  } @else {
+    <div class="dpv-not-found">
+      <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="11" y2="13"/><line x1="18" y1="21" x2="23" y2="26"/></svg>
+      <p>Production entry not found.</p>
+      <button class="dpv-btn" (click)="onCancel()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to list
+      </button>
+    </div>
+  }
+
+
+
+</div>

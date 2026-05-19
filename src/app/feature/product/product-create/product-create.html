@@ -37,16 +37,37 @@
           </svg>
           Advanced
         </button>
-        <button class="pf-tab" [class.pf-tab--active]="activeTab() === 'bom'" (click)="setTab('bom')">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/>
-            <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
-          </svg>
-          BOM
-          @if (bomNodes().length > 0) {
-            <span class="pf-tab-badge">{{ bomNodes().length }}</span>
-          }
-        </button>
+ @if (productForm.get('productType')?.value !== '1') {
+
+  <button
+    class="pf-tab"
+    [class.pf-tab--active]="activeTab() === 'bom'"
+    (click)="setTab('bom')"
+  >
+
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+    >
+      <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/>
+      <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
+    </svg>
+
+    BOM
+
+    @if (bomNodes().length > 0) {
+      <span class="pf-tab-badge">
+        {{ bomNodes().length }}
+      </span>
+    }
+
+  </button>
+
+}
       </div>
 
       <!-- ══════════ Content ══════════ -->
@@ -71,13 +92,13 @@
               <div class="card__body">
 
                 <!-- Row 1: Product Name -->
-                <div class="grid grid--3 mb-14">
+                <div class="grid grid--3 mb-5">
                   <div class="fld">
                     <label class="fld__lbl">Product Name<span class="req">*</span></label>
                     <input type="text" class="input" placeholder="e.g. Yashika 3+1+1 Sofa Set"
                       formControlName="productName" maxlength="200"
                       [class.is-error]="hasError('productName')"/>
-                    <span class="fld__hint">Min 3 chars · max 200 · must be unique and descriptive.</span>
+                    <!-- <span class="fld__hint">Min 3 chars · max 200 · must be unique and descriptive.</span> -->
                     @if (getError('productName','required'))  { <span class="fld__err">Product name is required.</span> }
                     @if (getError('productName','minlength')) { <span class="fld__err">At least 3 characters required.</span> }
                     @if (getError('productName','maxlength')) { <span class="fld__err">Max 200 characters allowed.</span> }
@@ -90,10 +111,10 @@
                       [items]="categoryDropdownItems()"
                       [selectedId]="productForm.controls['categoryId'].value ?? null"
                       [invalid]="hasError('categoryId')"
-                      placeholder="-- Select category --"
+                      placeholder="Select category"
                       (selectedIdChange)="productForm.controls['categoryId'].setValue($event)">
                     </app-search-dropdown>
-                    <span class="fld__hint">Select a product category.</span>
+                    <!-- <span class="fld__hint">Select a product category.</span> -->
                     @if (hasError('categoryId')) { <span class="fld__err">Category is required.</span> }
                   </div>
 
@@ -101,7 +122,7 @@
                     <label class="fld__lbl">Sub-category <span class="fld__opt">(optional)</span></label>
                     <select class="form-select" formControlName="subCategoryId"
                       [attr.disabled]="!productForm.get('categoryId')?.value ? true : null">
-                      <option value="">{{ productForm.get('categoryId')?.value ? '-- Select sub-category --' : '-- Select category first --' }}</option>
+                      <option value="">{{ productForm.get('categoryId')?.value ? 'Select sub-category ' : 'Select category first' }}</option>
                       @for (sc of subCategoryOptions(); track sc.value) {
                         <option [value]="sc.value">{{ sc.label }}</option>
                       }
@@ -116,7 +137,7 @@
 
 
                 <!-- Row 2: Category + Sub-category + Brand + Warranty -->
-                <div class="grid grid--3 mb-14">
+                <div class="grid grid--3 mb-5">
                
 
                   <div class="fld">
@@ -124,7 +145,7 @@
                     <app-search-dropdown
                       [items]="brandDropdownItems()"
                       [selectedId]="productForm.controls['brandId'].value ?? null"
-                      placeholder="-- Select brand --"
+                      placeholder="Select brand"
                       (selectedIdChange)="productForm.controls['brandId'].setValue($event)">
                     </app-search-dropdown>
                   </div>
@@ -133,14 +154,14 @@
                     <label class="fld__lbl">Warranty <span class="fld__opt">(months)</span></label>
                     <input type="number" class="input" placeholder="e.g. 24" min="0"
                       formControlName="warrantyMonths" [class.is-error]="hasError('warrantyMonths')"/>
-                    <span class="fld__hint">0 = No warranty.</span>
+                    <!-- <span class="fld__hint">0 = No warranty.</span> -->
                     @if (getError('warrantyMonths','min')) { <span class="fld__err">Cannot be negative.</span> }
                   </div>
 
                     <div class="fld">
                     <label class="fld__lbl">Product Type</label>
                     <select class="form-select" formControlName="productType">
-                      <option value="">-- Select Type --</option>
+                      <option value="">Select Type</option>
                       @for (p of ProductType; track p.value) {
                         <option [value]="p.value">{{ p.label }}</option>
                       }
@@ -150,9 +171,10 @@
                 </div>
 
                 <!-- Row 3: Product Type + HSN + Unit + Barcode -->
-                <div class="grid grid--3 mb-14">
+                <div class="grid grid--3 mb-5">
                 
 
+                  @if (productForm.get('productType')?.value === '2') {
                   <div class="fld">
                     <label class="fld__lbl">HSN Code <span class="fld__opt">(optional)</span></label>
                     <input type="text" class="input" placeholder="e.g. 9401"
@@ -161,6 +183,19 @@
                     <span class="fld__hint">4–8 alphanumeric chars for GST.</span>
                     @if (getError('hsnCode','hsnPattern')) { <span class="fld__err">Must be 4–8 alphanumeric chars.</span> }
                   </div>
+                }
+
+                   @if (productForm.get('productType')?.value === '3') {
+                    <div class="fld">
+                    <label class="fld__lbl">SAC Code <span class="fld__opt">(optional)</span></label>
+                    <input type="text" class="input" placeholder="e.g. 940120"
+                      formControlName="sacCode" maxlength="6"
+                      [class.is-error]="hasError('sacCode')"/>
+                    <span class="fld__hint">4–6 alphanumeric chars for GST.</span>
+                    @if (getError('sacCode','sacPattern')) { <span class="fld__err">Must be 4–6 alphanumeric chars.</span> }
+                  </div>
+                }
+
 
                   <div class="fld">
                     <label class="fld__lbl">Unit of Measure<span class="req">*</span></label>
@@ -171,7 +206,7 @@
                         <option [value]="u.value">{{ u.label }}</option>
                       }
                     </select>
-                    <span class="fld__hint">e.g. Pcs, Kg, Litre, Box, Set</span>
+                    <!-- <span class="fld__hint">e.g. Pcs, Kg, Litre, Box, Set</span> -->
                     @if (hasError('unitId')) { <span class="fld__err">Unit of Measure is required.</span> }
                   </div>
 
@@ -180,7 +215,7 @@
                     <input type="text" class="input" placeholder="EAN-13 / QR / SKU"
                       formControlName="barcode" maxlength="50"
                       [class.is-error]="hasError('barcode')"/>
-                    <span class="fld__hint">Unique if provided.</span>
+                    <!-- <span class="fld__hint">Unique if provided.</span> -->
                     @if (getError('barcode','maxlength')) { <span class="fld__err">Max 50 characters.</span> }
                   </div>
                 </div>
@@ -219,7 +254,7 @@
               <div class="card__body">
 
                 <!-- Cost + Selling + Reorder + Lead -->
-                <div class="grid grid--4 mb-14">
+                <div class="grid grid--4 mb-5">
                   <div class="fld">
                     <label class="fld__lbl">Standard Cost Price</label>
                     <div class="input-wrap">
@@ -228,7 +263,7 @@
                         min="0" step="0.01" formControlName="costPrice"
                         [class.is-error]="hasError('costPrice')"/>
                     </div>
-                    <span class="fld__hint">Used for inventory valuation.</span>
+                    <!-- <span class="fld__hint">Used for inventory valuation.</span> -->
                     @if (getError('costPrice','min')) { <span class="fld__err">Cannot be negative.</span> }
                   </div>
 
@@ -240,7 +275,7 @@
                         min="0" step="0.01" formControlName="sellingPrice"
                         [class.is-error]="hasError('sellingPrice')"/>
                     </div>
-                    <span class="fld__hint">Default price in Invoice line items.</span>
+                    <!-- <span class="fld__hint">Default price in Invoice line items.</span> -->
                     @if (getError('sellingPrice','min')) { <span class="fld__err">Cannot be negative.</span> }
                     @if (sellingPriceWarn()) { <span class="fld__warn">⚠ Below Cost Price.</span> }
                   </div>
@@ -250,7 +285,7 @@
                     <input type="number" class="input" placeholder="0"
                       min="0" step="1" formControlName="reorderLevel"
                       [class.is-error]="hasError('reorderLevel')"/>
-                    <span class="fld__hint">Alert when stock ≤ this qty.</span>
+                    <!-- <span class="fld__hint">Alert when stock ≤ this qty.</span> -->
                     @if (getError('reorderLevel','min')) { <span class="fld__err">Cannot be negative.</span> }
                   </div>
 
@@ -259,19 +294,19 @@
                     <input type="number" class="input" placeholder="0"
                       min="0" formControlName="leadTimeDays"
                       [class.is-error]="hasError('leadTimeDays')"/>
-                    <span class="fld__hint">Supplier procurement lead time.</span>
+                    <!-- <span class="fld__hint">Supplier procurement lead time.</span> -->
                     @if (getError('leadTimeDays','min')) { <span class="fld__err">Cannot be negative.</span> }
                   </div>
                 </div>
 
                 <!-- Min + Max + Weight + Dimensions -->
-                <div class="grid grid--4 mb-14">
+                <div class="grid grid--4 mb-5">
                   <div class="fld">
                     <label class="fld__lbl">Min Stock Level</label>
                     <input type="number" class="input" placeholder="0"
                       min="0" step="0.001" formControlName="minStockLevel"
                       [class.is-error]="hasError('minStockLevel') || stockLevelError"/>
-                    <span class="fld__hint">Safety stock floor.</span>
+                    <!-- <span class="fld__hint">Safety stock floor.</span> -->
                     @if (getError('minStockLevel','min')) { <span class="fld__err">Cannot be negative.</span> }
                   </div>
 
@@ -280,7 +315,7 @@
                     <input type="number" class="input" placeholder="0"
                       min="0" step="0.001" formControlName="maxStockLevel"
                       [class.is-error]="hasError('maxStockLevel') || stockLevelError"/>
-                    <span class="fld__hint">Upper limit for planning.</span>
+                    <!-- <span class="fld__hint">Upper limit for planning.</span> -->
                     @if (getError('maxStockLevel','min')) { <span class="fld__err">Cannot be negative.</span> }
                     @if (stockLevelError) { <span class="fld__err">Max must be ≥ Min stock.</span> }
                   </div>
@@ -303,7 +338,7 @@
                 </div>
 
                 <!-- Tax + Inclusive + Discount -->
-                <div class="grid grid--4 mb-14">
+                <div class="grid grid--4 mb-5">
                   <div class="fld">
                     <label class="fld__lbl">Tax / GST</label>
                     <select class="form-select" formControlName="taxId">
@@ -311,7 +346,7 @@
                         <option [value]="t.value">{{ t.label }}</option>
                       }
                     </select>
-                    <span class="fld__hint">Default tax on Invoice / Purchase Invoice.</span>
+                    <!-- <span class="fld__hint">Default tax on Invoice / Purchase Invoice.</span> -->
                   </div>
 
                 
@@ -323,6 +358,13 @@
                       }
                     </select>
                   </div>
+
+  <div class="fld">
+                  <label class="fld__lbl">Current Stock</label>
+                  <input type="text" class="input" readonly formControlName="currentStock"
+                    style="background:#f8fafc;cursor:not-allowed;color:#98a2b3"/>
+                  <!-- <span class="fld__hint">Live balance from Stock Maintain module — not editable here.</span> -->
+                </div>
 
                     <div class="fld">
                     <label class="fld__lbl">Tax Inclusive</label>
@@ -347,7 +389,7 @@
                 </div>
 
                 <!-- Auto-expand BOM toggle -->
-                <div class="switch-row" style="cursor:pointer" (click)="toggleAutoExpandBom()">
+                <!-- <div class="switch-row" style="cursor:pointer" (click)="toggleAutoExpandBom()">
                   <div>
                     <div class="switch-row__title">Auto-expand BOM in Sales / Work Orders</div>
                     <div class="switch-row__hint">When ON, selecting this product loads its full BOM tree automatically.</div>
@@ -358,7 +400,7 @@
                       [style.background]="productForm.get('autoExpandBom')?.value ? 'var(--acc)' : ''">
                     </span>
                   </label>
-                </div>
+                </div> -->
 
               </div>
             </div>
@@ -372,7 +414,7 @@
           @if (activeTab() === 'advanced') {
           <ng-container>
 
-            <div class="card">
+            <!-- <div class="card">
               <div class="card__head">
                 <div class="card__title">Shipping</div>
               </div>
@@ -383,7 +425,7 @@
                 </label>
                 <p class="fld__hint" style="margin-top:6px">Physical products may require shipping. Digital items skip shipping.</p>
               </div>
-            </div>
+            </div> -->
 
             <div class="card">
               <div class="card__head">
@@ -414,7 +456,7 @@
               </div>
             </div>
 
-            <div class="card">
+            <!-- <div class="card">
               <div class="card__head">
                 <div class="card__title">Stock Balance</div>
               </div>
@@ -426,7 +468,7 @@
                   <span class="fld__hint">Live balance from Stock Maintain module — not editable here.</span>
                 </div>
               </div>
-            </div>
+            </div> -->
 
           </ng-container>
           }
@@ -516,8 +558,8 @@
 
                               <!-- Name input / display -->
                               @if (node.isEditing) {
-                                <input type="text" class="bom-inline-input bom-inline-input--name"
-                                  placeholder="Item name *"
+                                <input type="text" class="form-control"
+                                  placeholder="Item name"
                                   [value]="node.itemName"
                                   [class.bom-inline-input--error]="node.hasError && !node.itemName.trim()"
                                   (input)="updateBomNode(node.id, { itemName: $any($event.target).value })"
@@ -533,7 +575,7 @@
                           <!-- Code -->
                           <td class="bom-td">
                             @if (node.isEditing) {
-                              <input type="text" class="bom-inline-input" placeholder="e.g. CMP-001"
+                              <input type="text" class="form-control" placeholder="e.g. CMP-001"
                                 [value]="node.itemCode"
                                 (input)="updateBomNode(node.id, { itemCode: $any($event.target).value })"
                                 (click)="$event.stopPropagation()" style="width:106px"/>
@@ -543,26 +585,29 @@
                           </td>
 
                           <!-- Raw Material -->
-                          <td class="bom-td">
-                            @if (node.isEditing) {
-                              <select class="bom-inline-select"
-                                [value]="node.rawMaterialId || ''"
-                                (change)="onRawMaterialChange(node.id, $any($event.target).value)"
-                                (click)="$event.stopPropagation()" style="width:152px">
-                                <option value="">-- Select --</option>
-                                @for (rm of masterData.rawMaterials(); track rm.id) {
-                                  <option [value]="rm.id">{{ rm.name }}</option>
-                                }
-                              </select>
-                            } @else {
-                              <span class="bom-cell-text">{{ node.rawMaterialName || '—' }}</span>
-                            }
-                          </td>
+                        <td class="bom-td bom-td--material">
+  @if (node.isEditing) {
+
+    <div class="bom-material-dropdown">
+      <app-search-dropdown
+        [items]="masterData.rawMaterials()"
+        [selectedId]="node.rawMaterialId || null"
+        placeholder="Select Material"
+        (selectedIdChange)="onRawMaterialChange(node.id, $event)">
+      </app-search-dropdown>
+    </div>
+
+  } @else {
+    <span class="bom-cell-text">
+      {{ node.rawMaterialName || '—' }}
+    </span>
+  }
+</td>
 
                           <!-- QTY -->
                           <td class="bom-td bom-td--num">
                             @if (node.isEditing) {
-                              <input type="number" class="bom-inline-input bom-inline-input--num"
+                              <input type="number" class="form-control"
                                 placeholder="1 *"
                                 [value]="node.quantity"
                                 [class.bom-inline-input--error]="node.hasError && !(node.quantity > 0)"
@@ -576,7 +621,7 @@
                           <!-- UOM  ← FIX: bind by value, show label -->
                           <td class="bom-td bom-td--num">
                             @if (node.isEditing) {
-                              <select class="bom-inline-select"
+                              <select class="form-select"
                                 [class.bom-inline-select--error]="node.hasError && !node.unitId"
                                 [value]="node.unitId"
                                 (change)="onBomUomChange(node.id, $any($event.target).value)"
@@ -587,7 +632,6 @@
                                 }
                               </select>
                             } @else {
-                              <!-- ✅ FIX: show label, not raw id -->
                               <span>{{ getUomLabel(node.unitId) }}</span>
                             }
                           </td>
@@ -595,7 +639,7 @@
                           <!-- Wastage % -->
                           <td class="bom-td bom-td--num">
                             @if (node.isEditing) {
-                              <input type="number" class="bom-inline-input bom-inline-input--num"
+                              <input type="number" class="form-control"
                                 placeholder="0"
                                 [value]="node.wastagePercent"
                                 (input)="updateBomNode(node.id, { wastagePercent: +$any($event.target).value })"
@@ -608,7 +652,7 @@
                           <!-- Cost / Unit -->
                           <td class="bom-td bom-td--num">
                             @if (node.isEditing) {
-                              <input type="number" class="bom-inline-input bom-inline-input--num"
+                              <input type="number" class="form-control"
                                 placeholder="0.00"
                                 [value]="node.costPerUnit ?? ''"
                                 (input)="updateBomNode(node.id, { costPerUnit: $any($event.target).value === '' ? null : +$any($event.target).value })"
@@ -813,9 +857,9 @@
                 </label>
               }
             </div>
-            <p class="fld__hint" style="margin-top:8px;padding:0 2px">
+            <!-- <p class="fld__hint" style="margin-top:8px;padding:0 2px">
               ⚠ Cannot set Inactive while open Work Orders exist for this product.
-            </p>
+            </p> -->
           </div>
 
         </div>
